@@ -9,7 +9,12 @@
 		<filesystem name="maven-share" m2compatible="true">
 			<artifact pattern="${user.home}/repo/[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]"/>
 		</filesystem>
+		<!-- for local integration builds -->
+		<filesystem name="maven-local" m2compatible="true">
+			<artifact pattern="${user.home}/.m2/repository/[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]"/>
+		</filesystem>
 		<chain name="default">
+			<resolver ref="maven-local"/>
 			<resolver ref="joist"/>
 			<resolver ref="public"/>
 		</chain>

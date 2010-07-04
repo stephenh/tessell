@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+
+<project name="gwt-mpv-dev" default="jar" xmlns:ivy="antlib:org.apache.ivy.ant">
+
+	<target name="clean">
+		<delete dir="bin"/>
+	</target>
+
+	<target name="compile" depends="ivy-retrieve" description="compiles the project">
+		<mkdir dir="bin/main"/>
+		<javac srcdir="src/main/java" destdir="bin/main" debug="true" nowarn="yes" source="1.6" target="1.6" encoding="utf8">
+			<classpath>
+				<fileset dir="bin/lib/default/jars" includes="*.jar"/>
+			</classpath>
+		</javac>
+	</target>
+
+	<target name="jar" depends="compile" description="jars the project">
+		<mkdir dir="bin/jars"/>
+		<jar destfile="bin/jars/${ant.project.name}.jar">
+			<fileset dir="bin/main" includes="**/*.class"/>
+		</jar>
+		<mkdir dir="bin/sources"/>
+		<zip destfile="bin/sources/${ant.project.name}.jar">
+			<fileset dir="src/main/java" includes="**/*.java"/>
+		</zip>
+		<ivy:publish resolver="maven-local" conf="default,sources" forcedeliver="true" overwrite="true">
+			<artifacts pattern="bin/[type]s/[artifact].[ext]"/>
+		</ivy:publish>
+	</target>
+
+	<!-- start ivy targets -->
+	<property name="ivy.jar.version" value="2.1.0"/>
+	<property name="ivy.jar.name" value="ivy-${ivy.jar.version}.jar"/>
+	<property name="ivy.home" value="${user.home}/.ivy2"/>
+	<available property="ivy.installed" file="${ivy.home}/${ivy.jar.name}"/>
+
+	<target name="ivy-install" unless="ivy.installed">
+		<mkdir dir="${ivy.home}"/>
+		<get src="http://repo1.maven.org/maven2/org/apache/ivy/ivy/${ivy.jar.version}/${ivy.jar.name}" dest="${ivy.home}/${ivy.jar.name}"/>
+	</target>
+
+	<target name="ivy-init" depends="ivy-install">
+		<taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant" classpath="${ivy.home}/${ivy.jar.name}"/>
+	</target>
+
+	<target name="ivy-retrieve" depends="ivy-init" description="downloads jars for the project">
+		<ivy:retrieve pattern="bin/lib/[conf]/[type]s/[artifact].[ext]" conf="*" type="*"/>
+	</target>
+
+	<target name="gen-pom">
+		<ivy:makepom ivyfile="ivy.xml" pomfile="bin/poms/${ant.project.name}.pom">
+			<mapping conf="default" scope="compile"/>
+		</ivy:makepom>
+	</target>
+
+	<target name="ivy-publish" depends="jar,ivy-init,gen-pom" description="publish jar/source to maven repo mounted at ~/repo">
+		<ivy:publish status="release" resolver="maven-share" update="true" overwrite="true" forcedeliver="true" publishivy="false">
+			<artifacts pattern="bin/[type]s/[artifact].[ext]" />
+		</ivy:publish>
+	</target>
+	<!-- end ivy targets -->
+
+</project>
+

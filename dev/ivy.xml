@@ -3,8 +3,6 @@
   <configurations>
     <conf name="default"/>
     <conf name="sources"/>
-    <conf name="build" visibility="private"/>
-    <conf name="test" visibility="private"/>
   </configurations>
   <dependencies defaultconfmapping="%->default,sources()">
     <dependency org="org.gwtmpv" name="gwt-mpv-user" rev="latest.integration" conf="default"/>
