@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 1.6.4//EN" "http://google-web-toolkit.googlecode.com/svn/tags/1.6.4/distro-source/core/src/gwt-module.dtd">
+<module>
+
+  <source path="bus">
+    <exclude name="**/Stub*"/>
+  </source>
+  <source path="dispatch/client">
+    <exclude name="**/Stub*"/>
+  </source>
+  <source path="dispatch/shared">
+    <exclude name="**/Stub*"/>
+  </source>
+  <source path="place">
+    <exclude name="**/*Spec"/>
+  </source>
+  <source path="presenter">
+    <exclude name="**/*Spec"/>
+  </source>
+  <source path="model">
+    <exclude name="**/*Spec"/>
+  </source>
+  <source path="util">
+    <exclude name="**/*Spec"/>
+  </source>
+  <source path="widgets">
+    <exclude name="**/Stub*"/>
+  </source>
+  <super-source path="supersrc" />
+
+</module>

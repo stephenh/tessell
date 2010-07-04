@@ -1,0 +1,72 @@
+package org.gwtmpv.tests.presenter;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
+import org.gwtmpv.bus.DefaultEventBus;
+import org.gwtmpv.bus.EventBus;
+import org.gwtmpv.presenter.BasicPresenter;
+import org.gwtmpv.presenter.Presenter;
+import org.gwtmpv.widgets.IsWidget;
+import org.junit.Test;
+
+public class PresenterChildrenTest {
+
+  protected final EventBus testBus = new DefaultEventBus();
+
+  @Test
+  public void addingInConstructorDoesNotBindRightAway() {
+    final ChildPresenter child = new ChildPresenter();
+    final AddInConstructorPresenter p = new AddInConstructorPresenter(child);
+    assertThat(child.wasBound, is(false));
+
+    p.bind();
+    assertThat(child.wasBound, is(true));
+  }
+
+  @Test
+  public void addingInOnBindDoesBind() {
+    final ChildPresenter child = new ChildPresenter();
+    final AddInOnBindPresenter p = new AddInOnBindPresenter(child);
+    assertThat(child.wasBound, is(false));
+
+    p.bind();
+    assertThat(child.wasBound, is(true));
+  }
+
+  public class AddInConstructorPresenter extends BasicPresenter<IsWidget> {
+    public AddInConstructorPresenter(final Presenter child) {
+      super(null, testBus);
+      addPresenter(child);
+    }
+  }
+
+  public class AddInOnBindPresenter extends BasicPresenter<IsWidget> {
+    private final Presenter child;
+
+    public AddInOnBindPresenter(final Presenter child) {
+      super(null, testBus);
+      this.child = child;
+    }
+
+    @Override
+    protected void onBind() {
+      super.onBind();
+      addPresenter(child);
+    }
+  }
+
+  public class ChildPresenter extends BasicPresenter<IsWidget> {
+    public boolean wasBound = false;
+
+    public ChildPresenter() {
+      super(null, testBus);
+    }
+
+    @Override
+    public void onBind() {
+      super.onBind();
+      wasBound = true;
+    }
+  }
+}

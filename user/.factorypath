@@ -1,0 +1,4 @@
+<factorypath>
+    <factorypathentry kind="WKSPJAR" id="/gwt-mpv-user/bin/lib/build/jars/gwt-mpv-apt.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="WKSPJAR" id="/gwt-mpv-user/bin/lib/default/jars/bindgen-gwt.jar" enabled="true" runInBatchMode="false"/>
+</factorypath>

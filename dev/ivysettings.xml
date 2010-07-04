@@ -1,0 +1,17 @@
+<ivysettings>
+	<property name="revision" value="master" override="false"/>
+	<settings defaultResolver="default"/>
+	<include url="${ivy.default.settings.dir}/ivysettings-public.xml"/>
+	<resolvers>
+		<!-- for joist-util and jarjar 1.0 -->
+		<ibiblio name="joist" m2compatible="true" root="http://repo.joist.ws"/>
+		<!-- for publishing via an sshfs share -->
+		<filesystem name="maven-share" m2compatible="true">
+			<artifact pattern="${user.home}/repo/[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]"/>
+		</filesystem>
+		<chain name="default">
+			<resolver ref="joist"/>
+			<resolver ref="public"/>
+		</chain>
+	</resolvers>
+</ivysettings>
