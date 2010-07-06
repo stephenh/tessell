@@ -27,9 +27,6 @@
 		<zip destfile="bin/sources/${ant.project.name}.jar">
 			<fileset dir="src/main/java" includes="**/*.java"/>
 		</zip>
-		<ivy:publish resolver="maven-local" conf="default,sources" forcedeliver="true" overwrite="true">
-			<artifacts pattern="bin/[type]s/[artifact].[ext]"/>
-		</ivy:publish>
 	</target>
 
 	<!-- start ivy targets -->
@@ -55,11 +52,19 @@
 	<target name="gen-pom">
 		<ivy:makepom ivyfile="ivy.xml" pomfile="bin/poms/${ant.project.name}.pom">
 			<mapping conf="default" scope="compile"/>
+			<mapping conf="build" scope="provided"/>
+			<mapping conf="test" scope="test"/>
 		</ivy:makepom>
 	</target>
 
-	<target name="ivy-publish" depends="jar,ivy-init,gen-pom" description="publish jar/source to maven repo mounted at ~/repo">
-		<ivy:publish status="release" resolver="maven-share" update="true" overwrite="true" forcedeliver="true" publishivy="false">
+	<target name="ivy-publish-local" depends="jar,ivy-init,gen-pom" description="publish jar/source to maven repo mounted at ~/.m2/repository">
+		<ivy:publish resolver="maven-local-publish" forcedeliver="true" overwrite="true" publishivy="false">
+			<artifacts pattern="bin/[type]s/[artifact].[ext]"/>
+		</ivy:publish>
+	</target>
+
+	<target name="ivy-publish-share" depends="jar,ivy-init,gen-pom" description="publish jar/source to maven repo mounted at ~/repo">
+		<ivy:publish resolver="maven-share" forcedeliver="true" overwrite="true" publishivy="false">
 			<artifacts pattern="bin/[type]s/[artifact].[ext]" />
 		</ivy:publish>
 	</target>

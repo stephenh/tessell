@@ -1,9 +1,14 @@
-<ivy-module version="1.1">
-  <info organisation="org.gwtmpv" module="gwt-mpv-dev" />
+<ivy-module version="2.0" xmlns:m="http://ant.apache.org/ivy/maven">
+	<info organisation="org.gwtmpv" module="gwt-mpv-dev" revision="${revision}"/>
   <configurations>
     <conf name="default"/>
     <conf name="sources"/>
   </configurations>
+  <publications>
+    <artifact type="pom" ext="pom" conf="default"/>
+    <artifact type="jar" ext="jar" conf="default"/>
+    <artifact type="source" ext="jar" conf="sources" m:classifier="sources"/>
+  </publications>
   <dependencies defaultconfmapping="%->default,sources()">
     <dependency org="org.gwtmpv" name="gwt-mpv-user" rev="latest.integration" conf="default"/>
     <dependency org="com.google.gwt" name="gwt-dev" rev="2.0.3" conf="default"/>
