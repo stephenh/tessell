@@ -56,6 +56,10 @@
 		<ivy:publish resolver="maven-local-publish" forcedeliver="true" overwrite="true" publishivy="false">
 			<artifacts pattern="bin/[type]s/[artifact].[ext]"/>
 		</ivy:publish>
+		<!-- snapshots only exist locally, so kick the cache. -->
+		<delete>
+			<fileset dir="${ivy.cache.dir}/${ivy.organisation}/${ivy.module}" includes="**/*SNAPSHOT*"/>
+		</delete>
 	</target>
 
 	<target name="ivy-publish-share" depends="jar,ivy-init,gen-pom" description="publish jar/source to maven repo mounted at ~/repo">
