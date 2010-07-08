@@ -18,4 +18,6 @@ public interface IsPopupPanel extends IsSimplePanel, HasAnimation, HasCloseHandl
 
   void setGlassStyleName(String styleName);
 
+  boolean isShowing();
+
 }

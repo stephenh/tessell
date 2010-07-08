@@ -9,8 +9,4 @@ public enum Valid {
   /** The validation rule failed. */
   NO;
 
-  public boolean isNo() {
-    return this != YES;
-  }
-
 }

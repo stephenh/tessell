@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.google.gwt.dom.client.Style.BorderStyle;
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Unit;
@@ -107,4 +108,33 @@ public class StubIsStyle implements IsStyle {
     style.put("border-width", value + unit.getType());
   }
 
+  @Override
+  public String getDisplay() {
+    return style.get("display");
+  }
+
+  @Override
+  public void setDisplay(final Display value) {
+    style.put("display", value.getCssName());
+  }
+
+  @Override
+  public String getProperty(final String name) {
+    return style.get(name);
+  }
+
+  @Override
+  public void setProperty(final String name, final String value) {
+    style.put(name, value);
+  }
+
+  @Override
+  public void setProperty(final String name, final double value, final Unit unit) {
+    style.put(name, value + unit.getType());
+  }
+
+  @Override
+  public void setPropertyPx(final String name, final int value) {
+    style.put(name, value + Unit.PX.getType());
+  }
 }

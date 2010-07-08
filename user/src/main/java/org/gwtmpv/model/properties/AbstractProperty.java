@@ -126,11 +126,11 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
   }
 
   @Override
-  public Property<P> depends(final Property<?>... upstream) {
+  public T depends(final Property<?>... upstream) {
     for (final Property<?> other : upstream) {
       other.addDerived(this);
     }
-    return this;
+    return getThis();
   }
 
   @Override

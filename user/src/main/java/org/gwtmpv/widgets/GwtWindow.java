@@ -1,5 +1,7 @@
 package org.gwtmpv.widgets;
 
+import com.google.gwt.event.logical.shared.ResizeHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Window;
 
 public class GwtWindow implements IsWindow {
@@ -32,6 +34,11 @@ public class GwtWindow implements IsWindow {
   @Override
   public int getScrollTop() {
     return Window.getScrollTop();
+  }
+
+  @Override
+  public HandlerRegistration addResizeHandler(final ResizeHandler handler) {
+    return Window.addResizeHandler(handler);
   }
 
 }

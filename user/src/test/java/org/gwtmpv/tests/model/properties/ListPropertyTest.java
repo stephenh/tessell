@@ -11,6 +11,7 @@ import org.gwtmpv.model.events.ValueRemovedEvent;
 import org.gwtmpv.model.events.PropertyChangedEvent.PropertyChangedHandler;
 import org.gwtmpv.model.events.ValueAddedEvent.ValueAddedHandler;
 import org.gwtmpv.model.events.ValueRemovedEvent.ValueRemovedHandler;
+import org.gwtmpv.model.properties.IntegerProperty;
 import org.gwtmpv.model.properties.ListProperty;
 import org.gwtmpv.model.values.SetValue;
 import org.junit.Before;
@@ -36,6 +37,15 @@ public class ListPropertyTest {
     p.add("foo");
     assertThat(adds.count, is(1));
     assertThat(changes.count, is(1));
+  }
+
+  @Test
+  public void addingTouchesDerived() {
+    final IntegerProperty size = p.size();
+    assertThat(size.isTouched(), is(false));
+
+    p.add("foo");
+    assertThat(size.isTouched(), is(true));
   }
 
   @Test

@@ -1,5 +1,8 @@
 package org.gwtmpv.widgets;
 
+import com.google.gwt.event.logical.shared.ResizeHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
+
 public interface IsWindow {
 
   void open(String url, String name, String features);
@@ -13,5 +16,7 @@ public interface IsWindow {
   int getClientHeight();
 
   int getClientWidth();
+
+  HandlerRegistration addResizeHandler(ResizeHandler handler);
 
 }

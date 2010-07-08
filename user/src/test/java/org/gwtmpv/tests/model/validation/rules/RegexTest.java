@@ -17,6 +17,9 @@ public class RegexTest extends AbstractRuleTest {
 
     url.set("http://foo.com/n/5TBGvq1BAALzjEMAAAgYQgAAabxmMQA-A/?a-b=c-d");
     assertMessages();
+
+    url.set("http://foo.com/n/a?campaign=foo'bar");
+    assertMessages();
   }
 
   @Test

@@ -49,7 +49,8 @@ public class StubPopupPanel extends StubSimplePanel implements IsPopupPanel {
     return handlers.addHandler(CloseEvent.getType(), handler);
   }
 
-  public boolean isShown() {
+  @Override
+  public boolean isShowing() {
     return shown;
   }
 

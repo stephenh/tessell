@@ -1,6 +1,7 @@
 package org.gwtmpv.widgets;
 
 import com.google.gwt.dom.client.Style.BorderStyle;
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Unit;
@@ -42,5 +43,17 @@ public interface IsStyle {
   void setBorderStyle(BorderStyle value);
 
   void setBorderWidth(double value, Unit unit);
+
+  String getDisplay();
+
+  void setDisplay(Display value);
+
+  String getProperty(String name);
+
+  void setProperty(String name, String value);
+
+  void setProperty(String name, double value, Unit unit);
+
+  void setPropertyPx(String name, int value);
 
 }

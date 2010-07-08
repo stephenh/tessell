@@ -22,6 +22,7 @@ public class ListProperty<E> extends AbstractProperty<ArrayList<E>, ListProperty
   // not sure why addExisting exists
   public void addExisting(final E item) {
     get().add(item);
+    setTouched(true);
     fireEvent(new ValueAddedEvent<E>(this, item));
     lastValue = null; // force changed
     reassess();

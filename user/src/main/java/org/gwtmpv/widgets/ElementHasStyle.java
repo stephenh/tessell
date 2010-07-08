@@ -2,6 +2,7 @@ package org.gwtmpv.widgets;
 
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.BorderStyle;
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Unit;
@@ -102,6 +103,36 @@ public class ElementHasStyle implements IsStyle {
   @Override
   public void setBorderWidth(final double value, final Unit unit) {
     element.getStyle().setBorderWidth(value, unit);
+  }
+
+  @Override
+  public String getDisplay() {
+    return element.getStyle().getDisplay();
+  }
+
+  @Override
+  public void setDisplay(final Display value) {
+    element.getStyle().setDisplay(value);
+  }
+
+  @Override
+  public String getProperty(final String name) {
+    return element.getStyle().getProperty(name);
+  }
+
+  @Override
+  public void setProperty(final String name, final String value) {
+    element.getStyle().setProperty(name, value);
+  }
+
+  @Override
+  public void setProperty(final String name, final double value, final Unit unit) {
+    element.getStyle().setProperty(name, value, unit);
+  }
+
+  @Override
+  public void setPropertyPx(final String name, final int value) {
+    element.getStyle().setPropertyPx(name, value);
   }
 
 }
