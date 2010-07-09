@@ -5,7 +5,7 @@
 			<fileset dir="_site" includes="**/*" excludes="screencasts/*"/>
 		</jar>
 		<input message="password:" addproperty="gwtmpv.password"/>
-		<scp file="${docs.zip}" todir="root@bindgen.org:/var/gwtmpv.www" password="${gwtmpv.password}" trust="true"/>
+		<scp file="${docs.zip}" todir="root@gwtmpv.org:/var/gwtmpv.www" password="${gwtmpv.password}" trust="true"/>
 		<sshexec host="gwtmpv.org" username="root" password="${gwtmpv.password}" command="cd /var/gwtmpv.www &amp;&amp; jar xvf docs.zip" trust="true"/>
 		<delete file="${docs.zip}"/>
 	</target>
