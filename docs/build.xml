@@ -1,0 +1,13 @@
+<project name="gwtmpv-docs">
+	<target name="release-docs" description="release docs">
+		<property name="docs.zip" value="/tmp/docs.zip"/>
+		<jar destfile="${docs.zip}">
+			<fileset dir="_site" includes="**/*" excludes="screencasts/*"/>
+		</jar>
+		<input message="password:" addproperty="gwtmpv.password"/>
+		<scp file="${docs.zip}" todir="root@bindgen.org:/var/gwtmpv.www" password="${gwtmpv.password}" trust="true"/>
+		<sshexec host="gwtmpv.org" username="root" password="${gwtmpv.password}" command="cd /var/gwtmpv.www &amp;&amp; jar xvf docs.zip" trust="true"/>
+		<delete file="${docs.zip}"/>
+	</target>
+</project>
+
