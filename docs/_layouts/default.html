@@ -30,15 +30,17 @@
 			{{ content }}
 		</div>
 		<!-- syntax highlighting CSS --> 
-		<link rel="stylesheet" href="/css/shCore.css" type="text/css" />
-		<link type="text/css" rel="stylesheet" href="/css/shThemeDefault.css"></link>
+		<link rel="stylesheet" type="text/css" href="/css/shCore.css" />
+		<link rel="stylesheet" type="text/css" href="/css/shThemeDefault.css"></link>
 		<script type="text/javascript" src="/js/shCore.js"></script>
 		<script type="text/javascript" src="/js/shLegacy.js"></script>
 		<script type="text/javascript" src="/js/shBrushJava.js"></script>
 		<script type="text/javascript" src="/js/shBrushXml.js"></script>
 		<script type="text/javascript">
-			dp.SyntaxHighlighter.ClipboardSwf = '/js/clipboard.swf';
-			dp.SyntaxHighlighter.HighlightAll('code');
+			SyntaxHighlighter.defaults['toolbar'] = false;
+			SyntaxHighlighter.defaults['wrap-lines'] = false;
+			SyntaxHighlighter.ClipboardSwf = '/js/clipboard.swf';
+			SyntaxHighlighter.all();
 		</script>
 
 		<script type="text/javascript">
