@@ -72,6 +72,18 @@ public class StubFocusWidget extends StubWidget implements IsFocusWidget {
     fireEvent(new DummyMouseOutEvent());
   }
 
+  public void keyUp() {
+    fireEvent(new DummyKeyUpEvent());
+  }
+
+  public void keyDown() {
+    fireEvent(new DummyKeyDownEvent());
+  }
+
+  public void keyPress() {
+    fireEvent(new DummyKeyPressEvent());
+  }
+
   @Override
   public HandlerRegistration addClickHandler(final ClickHandler handler) {
     return handlers.addHandler(ClickEvent.getType(), handler);
@@ -172,6 +184,15 @@ public class StubFocusWidget extends StubWidget implements IsFocusWidget {
   }
 
   private class DummyFocusEvent extends FocusEvent {
+  }
+
+  private class DummyKeyDownEvent extends KeyDownEvent {
+  }
+
+  private class DummyKeyPressEvent extends KeyPressEvent {
+  }
+
+  private class DummyKeyUpEvent extends KeyUpEvent {
   }
 
 }

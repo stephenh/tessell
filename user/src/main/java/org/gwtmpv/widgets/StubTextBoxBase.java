@@ -15,6 +15,13 @@ public class StubTextBoxBase extends StubFocusWidget implements IsTextBoxBase {
     blur();
   }
 
+  public void press(final char c) {
+    keyDown();
+    this.value = this.value + c;
+    keyPress();
+    keyUp();
+  }
+
   @Override
   public void setValue(final String value, final boolean fireEvents) {
     final String oldValue = this.value;
