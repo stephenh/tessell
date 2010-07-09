@@ -178,7 +178,7 @@ So `gwt-mpv` solves this with code generation. Not GWT compile-time/deferred-bin
 
 By running `ant` or an Eclipse launch target, `gwt-mpv` will parse the `client.ui.xml` file and generate the interface, an implementation, and a stub for testing.
 
-Here is the interface:
+Here is the interface (generated):
 
     public interface IsClientView extends IsWidget {
         public Widget asWidget();
@@ -195,7 +195,7 @@ Here is the interface:
     }
 {: class=brush:java}
 
-And the implementation:
+And the implementation (generated):
 
     public class ClientView extends DelegateIsWidget implements IsClientView {
 
@@ -246,7 +246,7 @@ And the implementation:
     }
 {: class=brush:java}
 
-And the stub:
+And the stub (generated):
 
     public class StubClientView extends StubWidget implements IsClientView {
         public final StubIsElement heading = new org.gwtmpv.widgets.StubIsElement();
