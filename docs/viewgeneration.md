@@ -203,7 +203,7 @@ Here is the interface (generated):
     }
 {: class=brush:java}
 
-Note that all of `IsXxx` types are methods and so are fully mockable/stubable.
+Note that all of `IsXxx` types are interfaces and so are fully mockable/stubable.
 
 And the implementation (generated):
 
