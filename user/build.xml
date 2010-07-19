@@ -7,8 +7,11 @@
 	</target>
 
 	<target name="compile" depends="ivy-retrieve" description="compiles the project">
+		<mkdir dir="bin/apt"/>
 		<mkdir dir="bin/main"/>
 		<javac srcdir="src/main/java" destdir="bin/main" debug="true" nowarn="yes" source="1.6" target="1.6" encoding="utf8">
+			<compilerarg value="-s"/>
+			<compilerarg value="bin/apt"/>
 			<classpath>
 				<fileset dir="bin/lib/build/jars" includes="*.jar"/>
 				<fileset dir="bin/lib/default/jars" includes="*.jar"/>
@@ -22,6 +25,7 @@
 			<fileset dir="bin/main" includes="**/*.class"/>
 			<fileset dir="src/main/java" includes="**/*"/>
 			<fileset dir="src/main/super" includes="**/*"/>
+			<fileset dir="bin/apt" includes="**/*"/>
 		</jar>
 		<mkdir dir="bin/sources"/>
 		<zip destfile="bin/sources/${ant.project.name}.jar">
