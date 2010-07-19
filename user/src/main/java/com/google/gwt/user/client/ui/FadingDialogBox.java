@@ -49,10 +49,10 @@ public class FadingDialogBox extends DialogBox {
     }
 
     @Override
-    public void setState(final boolean showing) {
+    public void setState(final boolean showing, boolean isUnloading) {
       // Override merely to track our own showing variable
       this.showing = showing;
-      super.setState(showing);
+      super.setState(showing, isUnloading);
     }
 
     @Override
