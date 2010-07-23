@@ -7,6 +7,7 @@ import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Overflow;
+import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 
 public class StubIsStyle implements IsStyle {
@@ -137,4 +138,25 @@ public class StubIsStyle implements IsStyle {
   public void setPropertyPx(final String name, final int value) {
     style.put(name, value + Unit.PX.getType());
   }
+
+  @Override
+  public String getFontSize() {
+    return style.get("font-size");
+  }
+
+  @Override
+  public String getPosition() {
+    return style.get("position");
+  }
+
+  @Override
+  public void setFontSize(final double value, final Unit unit) {
+    style.put("font-size", value + unit.getType());
+  }
+
+  @Override
+  public void setPosition(final Position position) {
+    style.put("position", position.getCssName());
+  }
+
 }

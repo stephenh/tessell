@@ -4,6 +4,7 @@ import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Overflow;
+import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 
 public interface IsStyle {
@@ -55,5 +56,13 @@ public interface IsStyle {
   void setProperty(String name, double value, Unit unit);
 
   void setPropertyPx(String name, int value);
+
+  String getPosition();
+
+  void setPosition(Position position);
+
+  String getFontSize();
+
+  void setFontSize(double value, Unit unit);
 
 }

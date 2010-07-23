@@ -5,6 +5,7 @@ import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Overflow;
+import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 
 public class ElementHasStyle implements IsStyle {
@@ -133,6 +134,26 @@ public class ElementHasStyle implements IsStyle {
   @Override
   public void setPropertyPx(final String name, final int value) {
     element.getStyle().setPropertyPx(name, value);
+  }
+
+  @Override
+  public String getFontSize() {
+    return element.getStyle().getFontSize();
+  }
+
+  @Override
+  public String getPosition() {
+    return element.getStyle().getPosition();
+  }
+
+  @Override
+  public void setFontSize(final double value, final Unit unit) {
+    element.getStyle().setFontSize(value, unit);
+  }
+
+  @Override
+  public void setPosition(final Position position) {
+    element.getStyle().setPosition(position);
   }
 
 }
