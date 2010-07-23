@@ -1,9 +1,11 @@
 package org.gwtmpv.presenter.events;
 
 import org.gwtmpv.GenEvent;
+import org.gwtmpv.Param;
 import org.gwtmpv.presenter.Presenter;
 
 @GenEvent
 public class PresenterChangedEventSpec {
-  Presenter p1presenter;
+  @Param(1)
+  Presenter presenter;
 }

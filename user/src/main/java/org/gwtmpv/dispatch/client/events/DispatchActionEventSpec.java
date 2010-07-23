@@ -1,10 +1,13 @@
 package org.gwtmpv.dispatch.client.events;
 
 import org.gwtmpv.GenEvent;
+import org.gwtmpv.Param;
 import org.gwtmpv.dispatch.shared.Action;
 
 @GenEvent
 public class DispatchActionEventSpec {
-  Action<?> p1action;
-  String p2message;
+  @Param(1)
+  Action<?> action;
+  @Param(2)
+  String message;
 }

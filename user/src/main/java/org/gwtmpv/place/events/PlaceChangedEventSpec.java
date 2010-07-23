@@ -1,11 +1,14 @@
 package org.gwtmpv.place.events;
 
 import org.gwtmpv.GenEvent;
+import org.gwtmpv.Param;
 import org.gwtmpv.place.Place;
 import org.gwtmpv.place.PlaceRequest;
 
 @GenEvent
 public class PlaceChangedEventSpec {
-  Place p1place;
-  PlaceRequest p2request;
+  @Param(1)
+  Place place;
+  @Param(2)
+  PlaceRequest request;
 }
