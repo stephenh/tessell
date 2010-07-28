@@ -31,7 +31,7 @@ public interface IsListBox extends IsFocusWidget, HasChangeHandlers, HasName {
 
   void removeItem(int index);
 
-  void setItemSelected(int index, boolean selfservice);
+  void setItemSelected(int index, boolean selected);
 
   void setItemText(int index, String text);
 
