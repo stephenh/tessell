@@ -10,6 +10,7 @@ import java.util.Map.Entry;
 import org.apache.commons.lang.StringUtils;
 import org.gwtmpv.widgets.ColumnsPanel;
 import org.gwtmpv.widgets.GwtAnchor;
+import org.gwtmpv.widgets.GwtCellTable;
 import org.gwtmpv.widgets.GwtCheckBox;
 import org.gwtmpv.widgets.GwtElement;
 import org.gwtmpv.widgets.GwtFadingDialogBox;
@@ -33,6 +34,7 @@ import org.gwtmpv.widgets.GwtSubmitButton;
 import org.gwtmpv.widgets.GwtTextArea;
 import org.gwtmpv.widgets.GwtTextBox;
 import org.gwtmpv.widgets.IsAnchor;
+import org.gwtmpv.widgets.IsCellTable;
 import org.gwtmpv.widgets.IsCheckBox;
 import org.gwtmpv.widgets.IsColumnsPanel;
 import org.gwtmpv.widgets.IsElement;
@@ -61,6 +63,7 @@ import org.gwtmpv.widgets.IsTextList;
 import org.gwtmpv.widgets.IsValueListBox;
 import org.gwtmpv.widgets.RowTable;
 import org.gwtmpv.widgets.StubAnchor;
+import org.gwtmpv.widgets.StubCellTable;
 import org.gwtmpv.widgets.StubCheckBox;
 import org.gwtmpv.widgets.StubFadingDialogBox;
 import org.gwtmpv.widgets.StubFlowPanel;
@@ -94,6 +97,7 @@ import org.gwtmpv.widgets.datepicker.IsDatePicker;
 import org.gwtmpv.widgets.datepicker.StubDatePicker;
 
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.FadingDialogBox;
@@ -173,6 +177,7 @@ public class ViewGeneratorConfig {
     map(ScrollPanel.class, IsScrollPanel.class, GwtScrollPanel.class, StubScrollPanel.class);
 
     map(DatePicker.class, IsDatePicker.class, GwtDatePicker.class, StubDatePicker.class);
+    map(CellTable.class, IsCellTable.class, GwtCellTable.class, StubCellTable.class);
 
     // custom
     map(RowTable.class, IsRowTable.class, RowTable.class, StubRowTable.class);
