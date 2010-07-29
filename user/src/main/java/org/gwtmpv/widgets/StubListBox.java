@@ -1,6 +1,7 @@
 package org.gwtmpv.widgets;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
@@ -11,6 +12,14 @@ public class StubListBox extends StubFocusWidget implements IsListBox {
   private final ArrayList<Item> items = new ArrayList<Item>();
   private int visibleItems = 1;
   private String name;
+
+  public List<String> getItems() {
+    final List<String> i = new ArrayList<String>();
+    for (final Item item : items) {
+      i.add(item.item);
+    }
+    return i;
+  }
 
   @Override
   public void addItem(final String item) {
