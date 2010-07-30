@@ -6,10 +6,23 @@ import org.gwtmpv.util.UserStringable;
 import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.user.cellview.client.Column;
+import com.google.gwt.view.client.ProvidesKey;
 
 public class BoundColumn<T, C> extends Column<T, C> {
 
   private final BindingRoot<T, C> binding;
+  private String styleName;
+
+  @Override
+  public void render(final T object, final ProvidesKey<T> keyProvider, final StringBuilder sb) {
+    if (styleName != null) {
+      sb.append("<div class=\"" + styleName + "\">");
+    }
+    super.render(object, keyProvider, sb);
+    if (styleName != null) {
+      sb.append("</div>");
+    }
+  }
 
   public static <R, P> BoundColumn<R, P> of(final BindingRoot<R, P> binding, final Cell<P> cell) {
     return new BoundColumn<R, P>(binding, cell);
@@ -45,6 +58,11 @@ public class BoundColumn<T, C> extends Column<T, C> {
   @Override
   public C getValue(final T row) {
     return binding.getWithRoot(row);
+  }
+
+  public BoundColumn<T, C> styleName(final String styleName) {
+    this.styleName = styleName;
+    return this;
   }
 
 }

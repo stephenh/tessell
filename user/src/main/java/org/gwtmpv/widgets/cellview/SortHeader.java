@@ -14,6 +14,7 @@ public class SortHeader<T, U extends Comparable<U>> extends Header<String> {
   private final SortHeaders<T> headers;
   private final String name;
   private final BindingRoot<T, U> binding;
+  private String styleName;
   private Sorted sorted = Sorted.NO;
   private final Comparator<T> c = new Comparator<T>() {
     @Override
@@ -45,9 +46,15 @@ public class SortHeader<T, U extends Comparable<U>> extends Header<String> {
 
   @Override
   public void render(final StringBuilder sb) {
+    if (styleName != null) {
+      sb.append("<div style=\"" + styleName + "\">");
+    }
     super.render(sb);
     sb.append("&nbsp;");
     sb.append(sorted.icon());
+    if (styleName != null) {
+      sb.append("</div>");
+    }
   }
 
   public void unsort() {
@@ -56,6 +63,11 @@ public class SortHeader<T, U extends Comparable<U>> extends Header<String> {
 
   public void toggle() {
     sorted = sorted.toggle();
+  }
+
+  public SortHeader<T, U> styleName(final String styleName) {
+    this.styleName = styleName;
+    return this;
   }
 
   /** When the header is clicked, sort/resort the table based on this column. */
