@@ -3,7 +3,7 @@ package org.gwtmpv.widgets.cellview;
 /** Whether a column is not/is asc/is desc. */
 public enum Sorted {
 
-  NO("&nbsp;"), ASC("\u2193"), DESC("\u2191");
+  NO("&nbsp;"), ASC("\u25BE"), DESC("\u25B4");
 
   private String icon;
 
