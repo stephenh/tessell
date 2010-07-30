@@ -15,6 +15,10 @@ public interface IsCellTable<T> extends IsWidget {
 
   void setData(int start, int length, List<T> values);
 
+  void setDataSize(int size, boolean isExact);
+
+  void setPageSize(int pageSize);
+
   List<T> getDisplayedItems();
 
   void refreshFooters();

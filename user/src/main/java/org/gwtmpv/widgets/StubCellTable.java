@@ -20,6 +20,11 @@ public class StubCellTable<T> extends StubWidget implements IsCellTable<T> {
     }
   }
 
+  @Override
+  public void setDataSize(final int size, final boolean isExact) {
+    // TODO Auto-generated method stub
+  }
+
   public Header<?> getHeader(final int column) {
     return headers.get(column);
   }
@@ -76,6 +81,10 @@ public class StubCellTable<T> extends StubWidget implements IsCellTable<T> {
 
   @Override
   public void redraw() {
+  }
+
+  @Override
+  public void setPageSize(final int pageSize) {
   }
 
 }
