@@ -13,6 +13,19 @@ public class StubListBox extends StubFocusWidget implements IsListBox {
   private int visibleItems = 1;
   private String name;
 
+  public void select(final String item) {
+    setSelectedIndex(getItemIndex(item));
+  }
+
+  public int getItemIndex(final String item) {
+    for (int i = 0; i < items.size(); i++) {
+      if (items.get(i).item.equals(item)) {
+        return i;
+      }
+    }
+    throw new IllegalArgumentException("No item " + item);
+  }
+
   public List<String> getItems() {
     final List<String> i = new ArrayList<String>();
     for (final Item item : items) {
@@ -102,6 +115,7 @@ public class StubListBox extends StubFocusWidget implements IsListBox {
   @Override
   public void setItemSelected(final int index, final boolean selected) {
     items.get(index).selected = selected;
+    fireChange();
   }
 
   @Override
@@ -115,8 +129,9 @@ public class StubListBox extends StubFocusWidget implements IsListBox {
       i.selected = false;
     }
     if (index != -1) {
-      setItemSelected(index, true);
+      items.get(index).selected = true;
     }
+    fireChange();
   }
 
   @Override
@@ -144,10 +159,17 @@ public class StubListBox extends StubFocusWidget implements IsListBox {
     this.name = name;
   }
 
+  private void fireChange() {
+    fireEvent(new DummyChange());
+  }
+
   public static class Item {
     public String item;
     public String value;
     public boolean selected;
+  }
+
+  private static class DummyChange extends ChangeEvent {
   }
 
 }
