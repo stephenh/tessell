@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Position;
@@ -157,6 +158,16 @@ public class StubIsStyle implements IsStyle {
   @Override
   public void setPosition(final Position position) {
     style.put("position", position.getCssName());
+  }
+
+  @Override
+  public void clearFloat() {
+    style.remove("float");
+  }
+
+  @Override
+  public void setFloat(final Float value) {
+    style.put("float", value.getCssName());
   }
 
 }

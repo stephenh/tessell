@@ -3,6 +3,7 @@ package org.gwtmpv.widgets;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Position;
@@ -154,6 +155,16 @@ public class ElementHasStyle implements IsStyle {
   @Override
   public void setPosition(final Position position) {
     element.getStyle().setPosition(position);
+  }
+
+  @Override
+  public void clearFloat() {
+    element.getStyle().clearFloat();
+  }
+
+  @Override
+  public void setFloat(final Float value) {
+    element.getStyle().setFloat(value);
   }
 
 }

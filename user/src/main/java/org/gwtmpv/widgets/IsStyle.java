@@ -2,6 +2,7 @@ package org.gwtmpv.widgets;
 
 import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Position;
@@ -64,5 +65,9 @@ public interface IsStyle {
   String getFontSize();
 
   void setFontSize(double value, Unit unit);
+
+  void setFloat(Float value);
+
+  void clearFloat();
 
 }
