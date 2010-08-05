@@ -17,4 +17,9 @@ public class StubWidgets implements Widgets {
     return new StubInlineLabel();
   }
 
+  @Override
+  public <T> IsCellTable<T> newCellTable() {
+    return new StubCellTable<T>();
+  }
+
 }

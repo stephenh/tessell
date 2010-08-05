@@ -18,4 +18,9 @@ public class GwtWidgets implements Widgets {
     return new GwtInlineLabel();
   }
 
+  @Override
+  public <T> IsCellTable<T> newCellTable() {
+    return new GwtCellTable<T>();
+  }
+
 }

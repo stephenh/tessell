@@ -8,4 +8,6 @@ public interface Widgets {
 
   IsInlineLabel newInlineLabel();
 
+  <T> IsCellTable<T> newCellTable();
+
 }
