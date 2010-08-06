@@ -5,6 +5,13 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class GwtCellTable<T> extends CellTable<T> implements IsCellTable<T> {
 
+  public GwtCellTable() {
+  }
+
+  public GwtCellTable(int pageSize, Resources resources) {
+    super(pageSize, resources);
+  }
+
   @Override
   public Widget asWidget() {
     return this;

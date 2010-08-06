@@ -1,5 +1,7 @@
 package org.gwtmpv.widgets;
 
+import com.google.gwt.user.cellview.client.CellTable.Resources;
+
 public class StubWidgets implements Widgets {
 
   @Override
@@ -20,6 +22,11 @@ public class StubWidgets implements Widgets {
   @Override
   public <T> IsCellTable<T> newCellTable() {
     return new StubCellTable<T>();
+  }
+
+  @Override
+  public <T> IsCellTable<T> newCellTable(int pageSize, Resources resources) {
+    return new StubCellTable<T>(pageSize);
   }
 
 }

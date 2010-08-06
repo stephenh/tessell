@@ -13,6 +13,13 @@ public class StubCellTable<T> extends StubWidget implements IsCellTable<T> {
   private final List<Header<?>> footers = new ArrayList<Header<?>>();
   private final List<T> data = new ArrayList<T>();
 
+  public StubCellTable() {
+  }
+
+  public StubCellTable(int pageSize) {
+    // set page size
+  }
+
   @Override
   public void setData(final int start, final int length, final List<T> values) {
     for (int i = 0; i < length; i++) {
