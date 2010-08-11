@@ -130,8 +130,7 @@ public class ViewGenerator {
 
     private UiXmlFile(final File uiXml) {
       this.uiXml = uiXml;
-      final String className = uiXml.getAbsolutePath().replace(input.getAbsolutePath() + File.separator, "").replace(
-          ".ui.xml", "").replace("/", ".");
+      final String className = uiXml.getAbsolutePath().replace(input.getAbsolutePath() + File.separator, "").replace(".ui.xml", "").replace("/", ".");
       simpleName = StringUtils.substringAfterLast(className, ".");
       final String packageName = StringUtils.substringBeforeLast(className, ".");
       viewName = className;
@@ -234,8 +233,7 @@ public class ViewGenerator {
         debugId.body.line("{}.ensureDebugId(baseDebugId + \"-{}\");", field.name, field.name);
       }
 
-      s.getConstructor().body.line("setDebugId(\"{}\");", s.getSimpleClassNameWithoutGeneric().replaceAll("View$", "")
-          .replaceAll("^Stub", ""));
+      s.getConstructor().body.line("setDebugId(\"{}\");", s.getSimpleClassNameWithoutGeneric().replaceAll("View$", "").replaceAll("^Stub", ""));
 
       save(s);
     }
@@ -247,8 +245,7 @@ public class ViewGenerator {
     private final List<UiFieldDeclaration> uiFields = new ArrayList<UiFieldDeclaration>();
 
     @Override
-    public void startElement(final String uri, final String localName, final String qName, final Attributes attributes)
-        throws SAXException {
+    public void startElement(final String uri, final String localName, final String qName, final Attributes attributes) throws SAXException {
       if (firstTagType == null && uri.startsWith("urn:import")) {
         firstTagType = StringUtils.substringAfterLast(uri, ":") + "." + localName;
       }
