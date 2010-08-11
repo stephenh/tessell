@@ -201,9 +201,8 @@ public class ViewGenerator {
           f.type(field.type).setAccess(Access.PACKAGE).addAnnotation("@UiField");
           m.body.line("return new {}({});", subType, field.name);
         } else {
-          f.type(field.type).setFinal().setAccess(Access.PACKAGE).addAnnotation("@UiField(provided = true)")
-              .initialValue("new {}()", subType);
-          m.body.line("return ({}) {};", interfaceType, field.name);
+          f.type(subType).setFinal().setAccess(Access.PACKAGE).addAnnotation("@UiField(provided = true)").initialValue("new {}()", subType);
+          m.body.line("return {};", field.name);
         }
 
         if (field.isElement) {
