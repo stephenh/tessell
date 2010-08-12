@@ -5,11 +5,15 @@ import java.util.Iterator;
 
 public class StringUtils {
 
-  public static <T> String defaultString(final String a, final String defaultString) {
+  public static String string(Object o) {
+    return o == null ? "" : o.toString();
+  }
+
+  public static String defaultString(final String a, final String defaultString) {
     return a != null ? a : defaultString;
   }
 
-  public static <T> String emptyString(final String a, final String defaultString) {
+  public static String emptyString(final String a, final String defaultString) {
     return a != null && a.trim().length() > 0 ? a : defaultString;
   }
 
