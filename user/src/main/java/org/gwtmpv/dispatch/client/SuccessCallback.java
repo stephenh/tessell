@@ -1,4 +1,4 @@
-package org.gwtmpv.util;
+package org.gwtmpv.dispatch.client;
 
 public interface SuccessCallback<T> {
 

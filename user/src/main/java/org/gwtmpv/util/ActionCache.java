@@ -3,6 +3,7 @@ package org.gwtmpv.util;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.gwtmpv.dispatch.client.SuccessCallback;
 import org.gwtmpv.dispatch.client.util.OutstandingDispatchAsync;
 import org.gwtmpv.dispatch.shared.Action;
 import org.gwtmpv.dispatch.shared.Result;

@@ -4,13 +4,13 @@ import java.util.ArrayList;
 
 import org.gwtmpv.bus.EventBus;
 import org.gwtmpv.dispatch.client.DispatchAsync;
+import org.gwtmpv.dispatch.client.SuccessCallback;
 import org.gwtmpv.dispatch.client.events.DispatchActionEvent;
 import org.gwtmpv.dispatch.client.events.DispatchFailureEvent;
 import org.gwtmpv.dispatch.client.events.DispatchResultEvent;
 import org.gwtmpv.dispatch.client.events.DispatchUnhandledFailureEvent;
 import org.gwtmpv.dispatch.shared.Action;
 import org.gwtmpv.dispatch.shared.Result;
-import org.gwtmpv.util.SuccessCallback;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
