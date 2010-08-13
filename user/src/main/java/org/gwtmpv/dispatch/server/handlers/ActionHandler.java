@@ -5,7 +5,7 @@ import org.gwtmpv.dispatch.shared.Action;
 import org.gwtmpv.dispatch.shared.Result;
 
 /**
- * Instances of this interface will handle specific types of {@link Action} classes.
+ * Interface for handling a specific {@link Action} class {@code A} on the server.
  * 
  * @author David Peterson
  */
