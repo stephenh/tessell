@@ -5,11 +5,17 @@ import com.google.gwt.user.cellview.client.CellTable.Resources;
 
 public interface Widgets {
 
+  IsElement newElement(String tag);
+
   IsHyperlink newHyperline();
 
   IsInlineHyperlink newInlineHyperlink();
 
   IsInlineLabel newInlineLabel();
+
+  IsImage newImage();
+
+  IsFlowPanel newFlowPanel();
 
   <T> IsCellTable<T> newCellTable();
 

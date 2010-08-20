@@ -35,4 +35,19 @@ public class StubWidgets implements Widgets {
     return new StubCellList<T>(cell);
   }
 
+  @Override
+  public IsElement newElement(String tag) {
+    return new StubIsElement();
+  }
+
+  @Override
+  public IsImage newImage() {
+    return new StubImage();
+  }
+
+  @Override
+  public IsFlowPanel newFlowPanel() {
+    return new StubFlowPanel();
+  }
+
 }

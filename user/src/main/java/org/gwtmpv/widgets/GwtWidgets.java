@@ -2,6 +2,7 @@ package org.gwtmpv.widgets;
 
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.user.cellview.client.CellTable.Resources;
+import com.google.gwt.user.client.DOM;
 
 public class GwtWidgets implements Widgets {
 
@@ -33,6 +34,21 @@ public class GwtWidgets implements Widgets {
   @Override
   public <T> IsCellList<T> newCellList(Cell<T> cell) {
     return new GwtCellList<T>(cell);
+  }
+
+  @Override
+  public IsElement newElement(String tag) {
+    return new GwtElement(DOM.createElement(tag));
+  }
+
+  @Override
+  public IsImage newImage() {
+    return new GwtImage();
+  }
+
+  @Override
+  public IsFlowPanel newFlowPanel() {
+    return new GwtFlowPanel();
   }
 
 }
