@@ -9,6 +9,8 @@
 		<ibiblio name="maven-local" m2compatible="true" root="file://${user.home}/.m2/repository"/>
 		<!-- for gwt -->
 		<ibiblio name="gwt" m2compatible="true" root="http://google-web-toolkit.googlecode.com/svn/2.1.0.M2/gwt/maven"/>
+		<!-- for junit-dep -->
+		<ibiblio name="spock-ext" m2compatible="true" root="http://m2repo.spockframework.org/ext"/>
 		<!-- for publishing to local m2 since ibiblio doesn't support it -->
 		<filesystem name="maven-local-publish" m2compatible="true">
 			<artifact pattern="${user.home}/.m2/repository/[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]"/>
@@ -18,10 +20,11 @@
 			<artifact pattern="${user.home}/repo/[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]"/>
 		</filesystem>
 		<chain name="default">
+			<resolver ref="public"/>
+			<resolver ref="gwt"/>
+			<resolver ref="spock-ext"/>
 			<resolver ref="maven-local"/>
 			<resolver ref="joist"/>
-			<resolver ref="gwt"/>
-			<resolver ref="public"/>
 		</chain>
 	</resolvers>
 </ivysettings>
