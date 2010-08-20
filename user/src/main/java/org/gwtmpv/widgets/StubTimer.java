@@ -1,12 +1,27 @@
 package org.gwtmpv.widgets;
 
+/** Implements {@code IsTimer} for unit tests.
+ * 
+ * By default, stub timers run immediately without delay. The idea being that
+ * most unit tests are not testing the timer and would * rather not have to
+ * explicitly {@link #run()}.
+ *
+ * Tests that <i>do</i> want to test the timer should call {@link #doNotAutoRun()}
+ * so that they can assert against the view state both pre-timer and post-timer.
+ */
 public class StubTimer implements IsTimer {
 
-  private Runnable runnable;
+  private final Runnable runnable;
   private boolean isRepeating;
   private int delay;
   private int cancelCount = 0;
   private int scheduleCount = 0;
+  // assumes most unit tests want this timer to just fire immediately
+  private boolean autoRun = true;
+
+  public StubTimer(Runnable runnable) {
+    this.runnable = runnable;
+  }
 
   // for tests
   public void run() {
@@ -17,6 +32,14 @@ public class StubTimer implements IsTimer {
     if (!isRepeating) {
       delay = -1;
     }
+  }
+
+  /**
+   * Mark this timer instance as not auto-run, so that tests can explicitly
+   * invoke the timer logic via {@link #run()}.
+   */
+  public void doNotAutoRun() {
+    autoRun = false;
   }
 
   @Override
@@ -31,17 +54,18 @@ public class StubTimer implements IsTimer {
     scheduleCount++;
     delay = delayMillis;
     isRepeating = false;
+    if (autoRun) {
+      run();
+    }
   }
 
   @Override
   public void scheduleRepeating(final int periodMillis) {
     delay = periodMillis;
     isRepeating = true;
-  }
-
-  @Override
-  public void setRunnable(final Runnable runnable) {
-    this.runnable = runnable;
+    if (autoRun) {
+      run();
+    }
   }
 
   public boolean isRepeating() {

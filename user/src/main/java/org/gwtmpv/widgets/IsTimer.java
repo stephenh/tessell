@@ -8,6 +8,4 @@ public interface IsTimer {
 
   void scheduleRepeating(int periodMillis);
 
-  void setRunnable(Runnable runnable);
-
 }

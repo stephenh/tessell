@@ -17,6 +17,11 @@ public class GwtAnimations implements IsAnimations {
       public void run(final int delay) {
         real.run(delay);
       }
+
+      @Override
+      public void cancel() {
+        real.cancel();
+      }
     };
   }
 

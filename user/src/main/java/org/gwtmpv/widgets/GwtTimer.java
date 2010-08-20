@@ -2,16 +2,19 @@ package org.gwtmpv.widgets;
 
 import com.google.gwt.user.client.Timer;
 
+/** Implements {@code IsTimer} using the real GWT timers. */
 public class GwtTimer implements IsTimer {
 
+  private final Runnable runnable;
   private final Timer timer = new Timer() {
     public void run() {
-      if (runnable != null) {
-        runnable.run();
-      }
+      runnable.run();
     }
   };
-  private Runnable runnable;
+
+  public GwtTimer(Runnable runnable) {
+    this.runnable = runnable;
+  }
 
   @Override
   public void cancel() {
@@ -26,11 +29,6 @@ public class GwtTimer implements IsTimer {
   @Override
   public void scheduleRepeating(final int periodMillis) {
     timer.scheduleRepeating(periodMillis);
-  }
-
-  @Override
-  public void setRunnable(final Runnable runnable) {
-    this.runnable = runnable;
   }
 
 }
