@@ -31,4 +31,9 @@ public class GwtTimer implements IsTimer {
     timer.scheduleRepeating(periodMillis);
   }
 
+  @Override
+  public void doNotAutoRun() {
+    // noop
+  }
+
 }

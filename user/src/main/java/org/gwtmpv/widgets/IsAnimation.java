@@ -7,4 +7,7 @@ public interface IsAnimation {
 
   void cancel();
 
+  /** Method only applicable to stubs to tell them not to auto-finish this animation. */
+  void doNotAutoFinish();
+
 }

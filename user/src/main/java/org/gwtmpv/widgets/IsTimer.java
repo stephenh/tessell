@@ -8,4 +8,7 @@ public interface IsTimer {
 
   void scheduleRepeating(int periodMillis);
 
+  /** Method only applicable to stubs to tell them not to auto-run this timer. */
+  void doNotAutoRun();
+
 }

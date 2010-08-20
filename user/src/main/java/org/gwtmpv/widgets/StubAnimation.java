@@ -34,6 +34,7 @@ public class StubAnimation implements IsAnimation {
    * Mark this instance to not auto-finish and instead wait for a unit
    * test to explicitly {@link #tick(double)} this to completion.
    */
+  @Override
   public void doNotAutoFinish() {
     autoFinish = false;
   }

@@ -26,4 +26,9 @@ public final class GwtAnimation extends Animation implements IsAnimation {
     logic.onUpdate(progress);
   }
 
+  @Override
+  public void doNotAutoFinish() {
+    // noop
+  }
+
 }

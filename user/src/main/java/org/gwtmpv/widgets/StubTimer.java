@@ -38,6 +38,7 @@ public class StubTimer implements IsTimer {
    * Mark this timer instance as not auto-run, so that tests can explicitly
    * invoke the timer logic via {@link #run()}.
    */
+  @Override
   public void doNotAutoRun() {
     autoRun = false;
   }
