@@ -2,14 +2,12 @@ package org.gwtmpv.model.validation.rules;
 
 import java.util.ArrayList;
 
-import org.bindgen.Binding;
 import org.gwtmpv.model.properties.Property;
 import org.gwtmpv.model.validation.Valid;
 import org.gwtmpv.model.validation.events.RuleTriggeredEvent;
-import org.gwtmpv.model.validation.events.RuleUntriggeredEvent;
 import org.gwtmpv.model.validation.events.RuleTriggeredEvent.RuleTriggeredHandler;
+import org.gwtmpv.model.validation.events.RuleUntriggeredEvent;
 import org.gwtmpv.model.validation.events.RuleUntriggeredEvent.RuleUntriggeredHandler;
-import org.gwtmpv.model.values.BoundValue;
 import org.gwtmpv.model.values.Value;
 
 import com.google.gwt.event.shared.GwtEvent;
@@ -94,11 +92,6 @@ public abstract class AbstractRule<T, U extends AbstractRule<T, U>> implements R
   public U onlyIf(final Property<Boolean> other) {
     this.onlyIf.add(other.getValue());
     other.addDownstream(this.property);
-    return getThis();
-  }
-
-  public U onlyIf(final Binding<Boolean> binding) {
-    this.onlyIf.add(new BoundValue<Boolean>(binding));
     return getThis();
   }
 
