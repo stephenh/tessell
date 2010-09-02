@@ -5,7 +5,19 @@ import java.util.ArrayList;
 import org.gwtmpv.model.properties.Property;
 import org.gwtmpv.model.validation.events.RuleTriggeredEvent;
 import org.gwtmpv.model.validation.events.RuleUntriggeredEvent;
+import org.gwtmpv.widgets.TextList;
 
+/**
+ * For keeping track of custom, controlled-based errors that later need to be cleared
+ * on the next AJAX request to the server.
+ *
+ * When a message is added, a {@link RuleTriggeredEvent} event is fired against
+ * the property, and so any {@link TextList} components listening for errors will
+ * pick it up and show the error.
+ * 
+ * When {@link #clear()} is called, a {@link RuleUntriggeredEvent} event is fired
+ * to remove the message while the server is re-consulted about the error state.
+ */
 public class ServerErrors {
 
   private final ArrayList<Message> messages = new ArrayList<Message>();
@@ -15,6 +27,8 @@ public class ServerErrors {
     m.fire();
     messages.add(m);
   }
+
+  // If there some sort of of "ServerCall" object, this clear could be called automatically 
 
   public void clear() {
     for (final Message m : messages) {
