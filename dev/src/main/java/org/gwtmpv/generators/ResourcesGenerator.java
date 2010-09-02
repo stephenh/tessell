@@ -29,7 +29,7 @@ import com.google.gwt.resources.client.TextResource;
 /** A utility class for generating resource interfaces from files in directory. */
 public class ResourcesGenerator {
 
-  /** Args: inputDirectory (src/com/app/resources), packageName (com.app.resources), outputDirectory (gen). */
+  /** Args: {@code --inputDirectory src/main/java --packageName com.app.resources --outputDirectory target/gen}. */
   public static void main(final String[] args) throws Exception {
     final Map<String, String> settings = GenUtils.parseArgs(args);
     final File inputDirectory = new File(settings.get("inputDirectory"));
