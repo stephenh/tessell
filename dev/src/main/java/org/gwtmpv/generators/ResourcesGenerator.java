@@ -1,6 +1,7 @@
 package org.gwtmpv.generators;
 
 import java.io.File;
+import java.util.Collection;
 import java.util.Map;
 
 import joist.sourcegen.GClass;
@@ -15,9 +16,9 @@ import org.gwtmpv.widgets.StubTextResource;
 
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
+import com.google.gwt.resources.client.CssResource.NotStrict;
 import com.google.gwt.resources.client.DataResource;
 import com.google.gwt.resources.client.TextResource;
-import com.google.gwt.resources.client.CssResource.NotStrict;
 
 /** A utility class for generating resource interfaces from files in directory. */
 public class ResourcesGenerator {
@@ -49,17 +50,18 @@ public class ResourcesGenerator {
     appResources.setInterface().baseClass(ClientBundle.class);
     stubResources.implementsInterface(appResources.getFullClassName());
 
-    for (final File file : inputDirectory.listFiles()) {
+    for (final File file : getFilesInInputDirectory()) {
       if (file.isDirectory()) {
         continue;
       }
+
       if (file.getName().endsWith(".notstrict.css")) {
         addNotStrictCss(file);
       } else if (file.getName().endsWith(".css")) {
         addCss(file);
       } else if (file.getName().endsWith(".png") || file.getName().endsWith(".gif") || file.getName().endsWith(".jpg")) {
         addImage(file);
-      } else if (file.getName().endsWith(".html")) {
+      } else if (file.getName().endsWith(".html") || file.getName().endsWith("js")) {
         addText(file);
       }
       System.out.println(file);
@@ -72,7 +74,7 @@ public class ResourcesGenerator {
   private void addNotStrictCss(final File cssFile) throws Exception {
     final String methodName = GenUtils.toMethodName(cssFile.getName().replace(".notstrict.css", ""));
     final GMethod m = appResources.getMethod(methodName).returnType(CssResource.class);
-    m.addAnnotation("@Source(\"" + cssFile.getName() + "\")");
+    m.addAnnotation("@Source(\"" + getRelativePath(cssFile) + "\")");
     m.addAnnotation("@NotStrict");
     appResources.addImports(NotStrict.class.getName().replace("$", "."));
 
@@ -85,7 +87,7 @@ public class ResourcesGenerator {
     final String stubName = packageName + ".Stub" + Inflector.capitalize(methodName);
 
     final GMethod m = appResources.getMethod(methodName).returnType(newInterfaceName);
-    m.addAnnotation("@Source(\"" + cssFile.getName() + "\")");
+    m.addAnnotation("@Source(\"" + getRelativePath(cssFile) + "\")");
 
     // stub
     final GField sf = stubResources.getField(methodName).type(stubName).setFinal();
@@ -100,7 +102,7 @@ public class ResourcesGenerator {
     final String methodName = GenUtils.toMethodName(StringUtils.substringBeforeLast(imageFile.getName(), "."));
 
     final GMethod m = appResources.getMethod(methodName).returnType(DataResource.class);
-    m.addAnnotation("@Source(\"{}\")", imageFile.getName());
+    m.addAnnotation("@Source(\"{}\")", getRelativePath(imageFile));
 
     // stub
     final GField sf = stubResources.getField(methodName).type(DataResource.class).setFinal();
@@ -113,13 +115,23 @@ public class ResourcesGenerator {
     final String methodName = GenUtils.toMethodName(StringUtils.substringBeforeLast(textFile.getName(), "."));
 
     final GMethod m = appResources.getMethod(methodName).returnType(TextResource.class);
-    m.addAnnotation("@Source(\"{}\")", textFile.getName());
+    m.addAnnotation("@Source(\"{}\")", getRelativePath(textFile));
 
     // stub
     final GField sf = stubResources.getField(methodName).type(TextResource.class).setFinal();
     sf.initialValue("new StubTextResource(\"{}\", \"{}\")", methodName, textFile.getName());
     stubResources.getMethod(methodName).returnType(TextResource.class).body.line("return {};", methodName);
     stubResources.addImports(StubTextResource.class);
+  }
+
+  private String getRelativePath(File file) {
+    return file.getAbsolutePath().replace(inputDirectory.getAbsolutePath() + "/", "");
+  }
+
+  @SuppressWarnings("unchecked")
+  private Collection<File> getFilesInInputDirectory() {
+    String[] exts = new String[] { "css", "png", "gif", "jpg", "html", "js" };
+    return FileUtils.listFiles(inputDirectory, exts, true);
   }
 
 }
