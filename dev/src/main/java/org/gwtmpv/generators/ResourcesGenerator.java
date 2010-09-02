@@ -1,8 +1,14 @@
 package org.gwtmpv.generators;
 
+import static org.apache.commons.lang.StringUtils.substringBeforeLast;
+
 import java.io.File;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import joist.sourcegen.GClass;
 import joist.sourcegen.GField;
@@ -32,6 +38,7 @@ public class ResourcesGenerator {
     new ResourcesGenerator(inputDirectory, packageName, outputDirectory).run();
   }
 
+  private static final Pattern urlPattern = Pattern.compile("url\\(([^\\)]+)\\)");
   private final File inputDirectory;
   private final String packageName;
   private final File outputDirectory;
@@ -59,7 +66,10 @@ public class ResourcesGenerator {
         addNotStrictCss(file);
       } else if (file.getName().endsWith(".css")) {
         addCss(file);
-      } else if (file.getName().endsWith(".png") || file.getName().endsWith(".gif") || file.getName().endsWith(".jpg")) {
+      } else if (file.getName().endsWith(".png")
+        || file.getName().endsWith(".gif")
+        || file.getName().endsWith(".jpg")
+        || file.getName().endsWith("htc")) {
         addImage(file);
       } else if (file.getName().endsWith(".html") || file.getName().endsWith("js")) {
         addText(file);
@@ -86,8 +96,12 @@ public class ResourcesGenerator {
     final String newInterfaceName = packageName + "." + Inflector.capitalize(methodName);
     final String stubName = packageName + ".Stub" + Inflector.capitalize(methodName);
 
+    // Copy the file and do any url(...) => @url replacement
+    File cssFileCopy = fileInOutputDirectory(cssFile, ".css", ".gen.css");
+    doUrlSubstitution(cssFile, cssFileCopy);
+
     final GMethod m = appResources.getMethod(methodName).returnType(newInterfaceName);
-    m.addAnnotation("@Source(\"" + getRelativePath(cssFile) + "\")");
+    m.addAnnotation("@Source(\"" + getRelativePath(cssFileCopy) + "\")");
 
     // stub
     final GField sf = stubResources.getField(methodName).type(stubName).setFinal();
@@ -96,6 +110,39 @@ public class ResourcesGenerator {
 
     new CssGenerator(cssFile, newInterfaceName, outputDirectory).run();
     new CssStubGenerator(cssFile, newInterfaceName, outputDirectory).run();
+  }
+
+  /** @return a file in the same package as {@code file} but in the output (generated) directory */
+  private File fileInOutputDirectory(File file, String extMatch, String extReplace) {
+    return new File(//
+      file.getAbsolutePath()//
+        .replace(inputDirectory.getAbsolutePath(), outputDirectory.getAbsolutePath())
+        .replace(extMatch, extReplace));
+  }
+
+  /** Finds {@code url(...)} in the css and replaces it with GWT @url declarations. */
+  private void doUrlSubstitution(File original, File gen) throws Exception {
+    // keep track of urls we've already defined so we don't redefine them
+    Set<String> defined = new HashSet<String>();
+    // buffer for @url definitions, to be prepended at the end
+    StringBuffer defs = new StringBuffer();
+    // buffer to hold the transformed css, to be appended at the end
+    StringBuffer sb = new StringBuffer();
+
+    Matcher m = urlPattern.matcher(FileUtils.readFileToString(original));
+    while (m.find()) {
+      String path = m.group(1);
+      String methodName = GenUtils.toMethodName(substringBeforeLast(new File(path).getName(), "."));
+      String aliasName = methodName + "Url";
+      if (defined.add(aliasName)) {
+        defs.append("@url " + aliasName + " " + methodName + ";\n");
+      }
+      m.appendReplacement(sb, aliasName);
+    }
+    m.appendTail(sb);
+
+    String content = defs.toString() + sb.toString();
+    FileUtils.writeStringToFile(gen, content);
   }
 
   public void addImage(final File imageFile) throws Exception {
@@ -125,12 +172,17 @@ public class ResourcesGenerator {
   }
 
   private String getRelativePath(File file) {
-    return file.getAbsolutePath().replace(inputDirectory.getAbsolutePath() + "/", "");
+    String path = file.getAbsolutePath();
+    if (path.contains(inputDirectory.getAbsolutePath())) {
+      return path.replace(inputDirectory.getAbsolutePath() + "/" + packageName.replace(".", "/") + "/", "");
+    } else {
+      return path.replace(outputDirectory.getAbsolutePath() + "/" + packageName.replace(".", "/") + "/", "");
+    }
   }
 
   @SuppressWarnings("unchecked")
   private Collection<File> getFilesInInputDirectory() {
-    String[] exts = new String[] { "css", "png", "gif", "jpg", "html", "js" };
+    String[] exts = new String[] { "css", "png", "gif", "jpg", "html", "js", "htc" };
     return FileUtils.listFiles(inputDirectory, exts, true);
   }
 
