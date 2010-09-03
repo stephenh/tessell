@@ -58,10 +58,6 @@ public class ResourcesGenerator {
     stubResources.implementsInterface(appResources.getFullClassName());
 
     for (final File file : getFilesInInputDirectory()) {
-      if (file.isDirectory()) {
-        continue;
-      }
-
       if (file.getName().endsWith(".notstrict.css")) {
         addNotStrictCss(file);
       } else if (file.getName().endsWith(".css")) {
