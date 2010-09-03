@@ -18,6 +18,8 @@ public interface IsStyle {
 
   void setHeight(double value, Unit unit);
 
+  void clearHeight();
+
   void setFontWeight(FontWeight value);
 
   void setColor(String value);
@@ -49,6 +51,8 @@ public interface IsStyle {
   String getDisplay();
 
   void setDisplay(Display value);
+
+  void clearDisplay();
 
   String getProperty(String name);
 

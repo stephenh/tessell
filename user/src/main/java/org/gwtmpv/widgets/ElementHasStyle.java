@@ -167,4 +167,14 @@ public class ElementHasStyle implements IsStyle {
     element.getStyle().setFloat(value);
   }
 
+  @Override
+  public void clearDisplay() {
+    element.getStyle().clearDisplay();
+  }
+
+  @Override
+  public void clearHeight() {
+    element.getStyle().clearHeight();
+  }
+
 }

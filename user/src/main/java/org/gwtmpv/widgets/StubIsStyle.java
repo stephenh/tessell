@@ -170,4 +170,14 @@ public class StubIsStyle implements IsStyle {
     style.put("float", value.getCssName());
   }
 
+  @Override
+  public void clearDisplay() {
+    style.remove("display");
+  }
+
+  @Override
+  public void clearHeight() {
+    style.remove("height");
+  }
+
 }
