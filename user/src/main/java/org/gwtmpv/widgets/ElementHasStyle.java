@@ -177,4 +177,14 @@ public class ElementHasStyle implements IsStyle {
     element.getStyle().clearHeight();
   }
 
+  @Override
+  public String getWidth() {
+    return element.getStyle().getWidth();
+  }
+
+  @Override
+  public String getHeight() {
+    return element.getStyle().getHeight();
+  }
+
 }

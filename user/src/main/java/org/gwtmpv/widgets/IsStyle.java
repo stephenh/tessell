@@ -14,7 +14,11 @@ public interface IsStyle {
 
   void setOpacity(double value);
 
+  String getWidth();
+
   void setWidth(double value, Unit unit);
+
+  String getHeight();
 
   void setHeight(double value, Unit unit);
 

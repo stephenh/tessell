@@ -180,4 +180,14 @@ public class StubIsStyle implements IsStyle {
     style.remove("height");
   }
 
+  @Override
+  public String getWidth() {
+    return style.get("width");
+  }
+
+  @Override
+  public String getHeight() {
+    return style.get("height");
+  }
+
 }
