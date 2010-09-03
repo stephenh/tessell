@@ -30,6 +30,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -88,7 +89,7 @@ public class ViewGenerator {
         withs.add("this." + with.name);
       }
       m.addAnnotation("@Override");
-      m.body.line("return new {}({});", uiXml.viewName, Join.commaSpace(withs));
+      m.body.line("return new {}({});", uiXml.gwtName, Join.commaSpace(withs));
     }
     save(gwtViews);
 
@@ -124,7 +125,7 @@ public class ViewGenerator {
     private final UiXmlHandler handler = new UiXmlHandler();
     private final File uiXml;
     private final String simpleName;
-    private final String viewName;
+    private final String gwtName;
     private final String interfaceName;
     private final String stubName;
 
@@ -133,7 +134,7 @@ public class ViewGenerator {
       final String className = uiXml.getAbsolutePath().replace(input.getAbsolutePath() + File.separator, "").replace(".ui.xml", "").replace("/", ".");
       simpleName = StringUtils.substringAfterLast(className, ".");
       final String packageName = StringUtils.substringBeforeLast(className, ".");
-      viewName = className;
+      gwtName = packageName + ".Gwt" + simpleName;
       interfaceName = packageName + ".Is" + simpleName;
       stubName = packageName + ".Stub" + simpleName;
     }
@@ -147,7 +148,6 @@ public class ViewGenerator {
       factory.newSAXParser().parse(uiXml, handler);
 
       generateInterface();
-
       generateView();
       generateStub();
     }
@@ -167,7 +167,7 @@ public class ViewGenerator {
     }
 
     private void generateView() throws Exception {
-      final GClass v = new GClass(viewName).baseClass(DelegateIsWidget.class).implementsInterface(interfaceName);
+      final GClass v = new GClass(gwtName).baseClass(DelegateIsWidget.class).implementsInterface(interfaceName);
       final GMethod cstr = v.getConstructor();
       v.addImports(GWT.class);
       if (handler.withFields.size() > 0 || handler.uiFields.size() > 0) {
@@ -177,7 +177,9 @@ public class ViewGenerator {
       final GMethod debugId = v.getMethod("setDebugId").argument("String", "baseDebugId");
 
       final GClass uibinder = v.getInnerClass("MyUiBinder").setInterface();
-      uibinder.baseClassName("{}<{}, {}>", UiBinder.class.getName(), handler.firstTagType, viewName);
+      uibinder.baseClassName("{}<{}, {}>", UiBinder.class.getName(), handler.firstTagType, gwtName);
+      uibinder.addAnnotation("@UiTemplate(\"{}.ui.xml\")", simpleName);
+      v.addImports(UiTemplate.class);
 
       v.getField("binder").type("MyUiBinder").setStatic().setFinal().initialValue("GWT.create(MyUiBinder.class)");
 
