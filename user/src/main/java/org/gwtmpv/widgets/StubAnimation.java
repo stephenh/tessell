@@ -13,7 +13,7 @@ package org.gwtmpv.widgets;
  */
 public class StubAnimation implements IsAnimation {
 
-  private final AnimationLogic logic;
+  private AnimationLogic logic;
   private boolean autoFinish = true;
   private double currentProgress = -1;
 
@@ -51,6 +51,16 @@ public class StubAnimation implements IsAnimation {
   @Override
   public void cancel() {
     currentProgress = -1;
+  }
+
+  @Override
+  public IsAnimation newLogic(AnimationLogic logic) {
+    this.logic = logic;
+    return this;
+  }
+
+  public boolean isRunning() {
+    return currentProgress > -1;
   }
 
 }

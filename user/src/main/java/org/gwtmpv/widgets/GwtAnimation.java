@@ -5,7 +5,7 @@ import com.google.gwt.animation.client.Animation;
 /** Implements {@link IsAnimation} for a generic {@code logic} by extending GWT's Animation class. */
 public final class GwtAnimation extends Animation implements IsAnimation {
 
-  private final AnimationLogic logic;
+  private AnimationLogic logic;
 
   public GwtAnimation(final AnimationLogic logic) {
     this.logic = logic;
@@ -29,6 +29,12 @@ public final class GwtAnimation extends Animation implements IsAnimation {
   @Override
   public void doNotAutoFinish() {
     // noop
+  }
+
+  @Override
+  public IsAnimation newLogic(AnimationLogic logic) {
+    this.logic = logic;
+    return this;
   }
 
 }
