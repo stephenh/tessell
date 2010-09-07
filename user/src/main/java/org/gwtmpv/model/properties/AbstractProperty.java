@@ -167,11 +167,6 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
     return Inflector.humanize(toString());
   }
 
-  @Override
-  public void pullInitial() {
-    setInitial(get());
-  }
-
   protected abstract T getThis();
 
   /** Runs validation against our rules. */
