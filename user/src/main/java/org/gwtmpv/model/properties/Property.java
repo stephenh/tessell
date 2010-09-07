@@ -27,16 +27,18 @@ public interface Property<P> extends HasRuleTriggers {
   /** @return whether this property was invalid, does not rerun validation. */
   Valid wasValid();
 
-  // for rules to fire events against our handlers
+  /** For rules to fire events against our handlers. */
   void fireEvent(GwtEvent<?> event);
 
-  <T extends Property<?>> T addDerived(final T other);
+  /** Adds {@code} downstream as a derivative of us. */
+  <T extends Property<?>> T addDerived(final T downstream);
 
-  /** Adds us as derivatives of {@code upstream} properties. */
+  /** Adds us as a derivative of {@code upstream} properties. */
   Property<P> depends(Property<?>... upstream);
 
   HandlerRegistration addPropertyChangedHandler(PropertyChangedHandler<P> handler);
 
+  /** @return the {@link Value} this property is wrapping. */
   Value<P> getValue();
 
   String getName();
