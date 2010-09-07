@@ -125,31 +125,6 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
     return getThis();
   }
 
-  /** Runs validation against our rules. */
-  private Valid validate() {
-    if (alreadyValidating) {
-      throw new IllegalStateException(this + " validation recursed");
-    }
-    alreadyValidating = true;
-    try {
-      Valid allValid = Valid.YES;
-      for (final Rule rule : rules) {
-        final Valid ruleValid = rule.validate(allValid == Valid.NO);
-        // returning DEFER is okay
-        if (ruleValid == Valid.NO) {
-          allValid = Valid.NO;
-        }
-      }
-      if (allValid == Valid.YES && untouchIfValid) {
-        touched = false; // setTouched(false);
-      }
-      valid = allValid;
-      return allValid;
-    } finally {
-      alreadyValidating = false;
-    }
-  }
-
   @Override
   public HandlerRegistration addRuleTriggeredHandler(final RuleTriggeredHandler handler) {
     return handlers.addHandler(RuleTriggeredEvent.getType(), handler);
@@ -219,4 +194,28 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
   }
 
   protected abstract T getThis();
+
+  /** Runs validation against our rules. */
+  private void validate() {
+    if (alreadyValidating) {
+      throw new IllegalStateException(this + " validation recursed");
+    }
+    alreadyValidating = true;
+    try {
+      Valid allValid = Valid.YES;
+      for (final Rule rule : rules) {
+        final Valid ruleValid = rule.validate(allValid == Valid.NO);
+        if (ruleValid == Valid.NO) {
+          allValid = Valid.NO;
+        }
+      }
+      if (allValid == Valid.YES && untouchIfValid) {
+        touched = false; // setTouched(false);
+      }
+      valid = allValid;
+    } finally {
+      alreadyValidating = false;
+    }
+  }
+
 }
