@@ -27,4 +27,14 @@ public class BasicPropertyTest {
     Listen.updateOnChanged(m.name.remaining(), v, "text={}");
     assertThat(v.getText(), is("text=45"));
   }
+
+  @Test
+  public void changingEventNotesWhetherItIsTheInitialValue() {
+    final DummyModel m = new DummyModel();
+    m.name.set("dummy");
+    final StubHasText v = new StubHasText();
+    Listen.updateOnChanged(m.name.remaining(), v, "text={}");
+    assertThat(v.getText(), is("text=45"));
+  }
+
 }

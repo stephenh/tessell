@@ -25,9 +25,7 @@ public class Listen {
   }
 
   /** Fires a {@link PropertyChangingEvent} on key up for <code>hasKeyUp</code>. */
-  public static <P, W extends HasAllKeyHandlers & HasValue<P>> HandlerRegistration listenIntently(
-                                                                                                  final W fromWidget,
-                                                                                                  final Property<P> toProperty) {
+  public static <P, W extends HasAllKeyHandlers & HasValue<P>> HandlerRegistration listenIntently(final W fromWidget, final Property<P> toProperty) {
     return fromWidget.addKeyUpHandler(new KeyUpHandler() {
       public void onKeyUp(final KeyUpEvent event) {
         toProperty.set(fromWidget.getValue());
@@ -64,7 +62,7 @@ public class Listen {
   }
 
   private static <P> HandlerRegistration addAndFireIfSet(final Property<P> p, final PropertyChangedHandler<P> h) {
-    h.onPropertyChanged(new PropertyChangedEvent<P>(p, true));
+    h.onPropertyChanged(new PropertyChangedEvent<P>(p));
     return p.addPropertyChangedHandler(h);
   }
 

@@ -8,6 +8,4 @@ import org.gwtmpv.model.properties.Property;
 public class PropertyChangedEventSpec<P> {
   @Param(1)
   Property<P> property;
-  @Param(2)
-  boolean isFirstLoad;
 }
