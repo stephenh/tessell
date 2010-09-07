@@ -2,6 +2,8 @@ package org.gwtmpv.model.validation.rules;
 
 import java.util.ArrayList;
 
+import org.gwtmpv.model.events.PropertyChangedEvent;
+import org.gwtmpv.model.events.PropertyChangedEvent.PropertyChangedHandler;
 import org.gwtmpv.model.properties.Property;
 import org.gwtmpv.model.validation.Valid;
 import org.gwtmpv.model.validation.events.RuleTriggeredEvent;
@@ -90,8 +92,13 @@ public abstract class AbstractRule<T, U extends AbstractRule<T, U>> implements R
 
   /** Only run this rule if {@code other} is true */
   public U onlyIf(final Property<Boolean> other) {
+    other.addPropertyChangedHandler(new PropertyChangedHandler<Boolean>() {
+      @Override
+      public void onPropertyChanged(PropertyChangedEvent<Boolean> event) {
+        validate(false);
+      }
+    });
     this.onlyIf.add(other.getValue());
-    other.addDownstream(this.property);
     return getThis();
   }
 

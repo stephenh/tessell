@@ -40,4 +40,14 @@ public class RuleGroupTest extends AbstractRuleTest {
     assertMessages();
   }
 
+  @Test
+  public void validInAGroupBecomingInvalidFiresGroup() {
+    f.name.set("somename");
+    f.description.set("somedesc");
+    f.all.touch();
+    assertMessages();
+    f.description.set(null);
+    assertMessages("some invalid", "description required");
+  }
+
 }

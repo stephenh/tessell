@@ -3,8 +3,8 @@ package org.gwtmpv.model.properties;
 import java.util.ArrayList;
 
 import org.gwtmpv.model.validation.events.RuleTriggeredEvent;
-import org.gwtmpv.model.validation.events.RuleUntriggeredEvent;
 import org.gwtmpv.model.validation.events.RuleTriggeredEvent.RuleTriggeredHandler;
+import org.gwtmpv.model.validation.events.RuleUntriggeredEvent;
 import org.gwtmpv.model.validation.events.RuleUntriggeredEvent.RuleUntriggeredHandler;
 import org.gwtmpv.model.validation.rules.Custom;
 import org.gwtmpv.model.validation.rules.Rule;
@@ -33,7 +33,6 @@ public class PropertyGroup extends AbstractProperty<Boolean, PropertyGroup> {
   public void add(final Property<?>... properties) {
     for (final Property<?> property : properties) {
       this.properties.add(property);
-      this.addDerived(property);
       property.addRuleTriggeredHandler(triggered);
       property.addRuleUntriggeredHandler(untriggered);
     }
@@ -63,12 +62,10 @@ public class PropertyGroup extends AbstractProperty<Boolean, PropertyGroup> {
 
   @Override
   public void setTouched(final boolean touched) {
-    this.touched = touched;
-    for (final Property<?> other : derived) {
-      // if (other.isIgnoreUpstreamTouch()) { continue; }
+    for (final Property<?> other : properties) {
       other.setTouched(touched);
     }
-    validate();
+    super.setTouched(touched);
   }
 
   @Override
@@ -79,7 +76,7 @@ public class PropertyGroup extends AbstractProperty<Boolean, PropertyGroup> {
   private final RuleTriggeredHandler triggered = new RuleTriggeredHandler() {
     public void onTrigger(final RuleTriggeredEvent event) {
       invalid.add(event.getKey());
-      // validate();
+      validate();
     }
   };
 

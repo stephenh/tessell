@@ -33,8 +33,6 @@ public interface Property<P> extends HasRuleTriggers {
   // for rules to fire events against our handlers
   void fireEvent(GwtEvent<?> event);
 
-  void addDownstream(Property<?> other);
-
   <T extends Property<?>> T addDerived(final T other);
 
   Property<P> depends(Property<?>... upstream);

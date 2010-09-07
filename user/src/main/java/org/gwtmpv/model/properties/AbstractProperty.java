@@ -8,8 +8,8 @@ import org.gwtmpv.model.events.PropertyChangedEvent;
 import org.gwtmpv.model.events.PropertyChangedEvent.PropertyChangedHandler;
 import org.gwtmpv.model.validation.Valid;
 import org.gwtmpv.model.validation.events.RuleTriggeredEvent;
-import org.gwtmpv.model.validation.events.RuleUntriggeredEvent;
 import org.gwtmpv.model.validation.events.RuleTriggeredEvent.RuleTriggeredHandler;
+import org.gwtmpv.model.validation.events.RuleUntriggeredEvent;
 import org.gwtmpv.model.validation.events.RuleUntriggeredEvent.RuleUntriggeredHandler;
 import org.gwtmpv.model.validation.rules.Required;
 import org.gwtmpv.model.validation.rules.Rule;
@@ -25,13 +25,11 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
 
   // handlers
   protected final HandlerManager handlers = new HandlerManager(this);
-  // other properties that are calculated off of our value
-  protected final ArrayList<Property<?>> derived = new ArrayList<Property<?>>();
   // other properties that are validated off of our value
-  private final ArrayList<Property<?>> downstream = new ArrayList<Property<?>>();
+  protected final ArrayList<Property<?>> derived = new ArrayList<Property<?>>();
   // rules that validate against our value and fire against our handlers
   private final ArrayList<Rule> rules = new ArrayList<Rule>();
-  // our bound/set/derived value
+  // our wrapped value
   private final Value<P> value;
   // snapshot of the value for diff purposes (e.g. derived values)
   protected P lastValue;
@@ -152,9 +150,6 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
         touched = false; // setTouched(false);
       }
       valid = allValid;
-      for (final Property<?> other : downstream) {
-        other.validate();
-      }
       return allValid;
     } finally {
       alreadyValidating = false;
@@ -186,11 +181,6 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
       other.setTouched(touched);
     }
     validate();
-  }
-
-  @Override
-  public void addDownstream(final Property<?> other) {
-    downstream.add(other);
   }
 
   @Override
