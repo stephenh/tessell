@@ -60,14 +60,12 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
   public void set(final P value) {
     this.value.set(value);
     setTouched(true); // even if unchanged, treat this as touching
-    reassess();
   }
 
   @Override
   public void setInitial(final P value) {
     this.value.set(value);
     setTouched(false);
-    reassess();
   }
 
   @Override
@@ -180,7 +178,7 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
       }
       other.setTouched(touched);
     }
-    validate();
+    reassess();
   }
 
   @Override
