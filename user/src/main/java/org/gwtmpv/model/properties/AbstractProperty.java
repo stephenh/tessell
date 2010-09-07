@@ -34,7 +34,7 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
   // snapshot of the value for diff purposes (e.g. derived values)
   protected P lastValue;
   // whether the user has touched this field on the screen yet
-  protected boolean touched;
+  private boolean touched;
   // whether validate() is currently running
   private boolean alreadyValidating = false;
   // the result of the last validate()
