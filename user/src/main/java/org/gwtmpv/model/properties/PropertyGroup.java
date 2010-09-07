@@ -65,14 +65,14 @@ public class PropertyGroup extends AbstractProperty<Boolean, PropertyGroup> {
   private final RuleTriggeredHandler triggered = new RuleTriggeredHandler() {
     public void onTrigger(final RuleTriggeredEvent event) {
       invalid.add(event.getKey());
-      validate();
+      reassess();
     }
   };
 
   private final RuleUntriggeredHandler untriggered = new RuleUntriggeredHandler() {
     public void onUntrigger(final RuleUntriggeredEvent event) {
       invalid.remove(event.getKey());
-      validate();
+      reassess();
     }
   };
 

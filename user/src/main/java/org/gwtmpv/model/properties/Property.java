@@ -24,9 +24,6 @@ public interface Property<P> extends HasRuleTriggers {
 
   void setTouched(boolean touched);
 
-  /** @return whether this property is valid */
-  Valid validate();
-
   /** @return whether this property was invalid, does not rerun validation. */
   Valid wasValid();
 
@@ -35,6 +32,7 @@ public interface Property<P> extends HasRuleTriggers {
 
   <T extends Property<?>> T addDerived(final T other);
 
+  /** Adds us as derivatives of {@code upstream} properties. */
   Property<P> depends(Property<?>... upstream);
 
   HandlerRegistration addPropertyChangedHandler(PropertyChangedHandler<P> handler);

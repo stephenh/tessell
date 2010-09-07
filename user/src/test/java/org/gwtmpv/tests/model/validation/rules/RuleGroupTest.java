@@ -26,12 +26,6 @@ public class RuleGroupTest extends AbstractRuleTest {
   }
 
   @Test
-  public void noForceDoesNotTriggerChildren() {
-    f.all.validate();
-    assertMessages();
-  }
-
-  @Test
   public void invalidInAGroupBecomingValidUnfiresGroup() {
     f.name.set("somename");
     f.all.touch();

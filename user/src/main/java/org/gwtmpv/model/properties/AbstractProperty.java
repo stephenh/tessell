@@ -125,8 +125,8 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
     return getThis();
   }
 
-  @Override
-  public Valid validate() {
+  /** Runs validation against our rules. */
+  private Valid validate() {
     if (alreadyValidating) {
       throw new IllegalStateException(this + " validation recursed");
     }
