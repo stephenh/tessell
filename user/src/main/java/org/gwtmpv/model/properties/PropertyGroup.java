@@ -7,7 +7,6 @@ import org.gwtmpv.model.validation.events.RuleTriggeredEvent.RuleTriggeredHandle
 import org.gwtmpv.model.validation.events.RuleUntriggeredEvent;
 import org.gwtmpv.model.validation.events.RuleUntriggeredEvent.RuleUntriggeredHandler;
 import org.gwtmpv.model.validation.rules.Custom;
-import org.gwtmpv.model.validation.rules.Rule;
 import org.gwtmpv.model.values.DerivedValue;
 import org.gwtmpv.model.values.SetValue;
 
@@ -17,7 +16,6 @@ public class PropertyGroup extends AbstractProperty<Boolean, PropertyGroup> {
   // All of the rules in this group
   private final ArrayList<Property<?>> properties = new ArrayList<Property<?>>();
   private final ArrayList<Object> invalid = new ArrayList<Object>();
-  private boolean letInFirstRule = true;
 
   public PropertyGroup(final String name, final String message) {
     super(new SetValue<Boolean>(name));
@@ -26,7 +24,6 @@ public class PropertyGroup extends AbstractProperty<Boolean, PropertyGroup> {
         return invalid.size() == 0;
       }
     });
-    letInFirstRule = false;
   }
 
   /** Adds properties to the group to validate as a group. */
@@ -36,14 +33,6 @@ public class PropertyGroup extends AbstractProperty<Boolean, PropertyGroup> {
       property.addRuleTriggeredHandler(triggered);
       property.addRuleUntriggeredHandler(untriggered);
     }
-  }
-
-  @Override
-  public void addRule(final Rule rule) {
-    if (!letInFirstRule) {
-      throw new IllegalArgumentException("PropertyGroups cannot have rules");
-    }
-    super.addRule(rule);
   }
 
   @Override
