@@ -35,8 +35,6 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
   protected P lastValue;
   // whether the user has touched this field on the screen yet
   private boolean touched;
-  // whether validate() is currently running
-  private boolean alreadyValidating = false;
   // the result of the last validate()
   private Valid valid;
   // has fired at least once
@@ -178,19 +176,11 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
 
   /** Runs validation against our rules. */
   private void validate() {
-    if (alreadyValidating) {
-      throw new IllegalStateException(this + " validation recursed");
-    }
-    alreadyValidating = true;
-    try {
-      valid = Valid.YES; // start out valid
-      for (final Rule rule : rules) {
-        if (rule.validate() == Valid.NO) {
-          valid = Valid.NO;
-        }
+    valid = Valid.YES; // start out valid
+    for (final Rule rule : rules) {
+      if (rule.validate() == Valid.NO) {
+        valid = Valid.NO;
       }
-    } finally {
-      alreadyValidating = false;
     }
   }
 
