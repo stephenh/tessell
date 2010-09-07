@@ -39,10 +39,6 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
   private boolean alreadyValidating = false;
   // the result of the last validate()
   private Valid valid;
-  // go back to untouched if we become valid
-  private boolean untouchIfValid;
-  // ugh
-  private boolean ignoreUpstreamTouch;
   // has fired at least once
   private boolean hasFired;
 
@@ -144,9 +140,6 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
   public void setTouched(final boolean touched) {
     this.touched = touched;
     for (final Property<?> other : derived) {
-      if (other.isIgnoreUpstreamTouch()) {
-        continue;
-      }
       other.setTouched(touched);
     }
     reassess();
@@ -159,18 +152,6 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
 
   public Value<P> getValue() {
     return value;
-  }
-
-  public void setUntouchIfValid(final boolean untouchIfValid) {
-    this.untouchIfValid = untouchIfValid;
-  }
-
-  public boolean isIgnoreUpstreamTouch() {
-    return ignoreUpstreamTouch;
-  }
-
-  public void setIgnoreUpstreamTouch() {
-    ignoreUpstreamTouch = true;
   }
 
   public T req() {
@@ -207,9 +188,6 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
         if (rule.validate() == Valid.NO) {
           valid = Valid.NO;
         }
-      }
-      if (valid == Valid.YES && untouchIfValid) {
-        touched = false; // setTouched(false);
       }
     } finally {
       alreadyValidating = false;

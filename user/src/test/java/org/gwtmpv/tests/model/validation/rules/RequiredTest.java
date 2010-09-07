@@ -63,7 +63,7 @@ public class RequiredTest extends AbstractRuleTest {
 
   @Test
   public void testUnfireIfSkippedLater() {
-    final Required r = new Required(f.name, "name invalid").onlyIf(f.condition);
+    new Required(f.name, "name invalid").onlyIf(f.condition);
     f.name.set(null);
     assertMessages("name invalid");
 
@@ -72,7 +72,6 @@ public class RequiredTest extends AbstractRuleTest {
     assertMessages("");
 
     // was left touched, e.g. even if onlyIf=true, requires Force.YES
-    // f.onlyIfValue = true;
     f.condition.set(true);
     assertMessages("name invalid");
   }

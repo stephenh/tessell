@@ -37,8 +37,6 @@ public interface Property<P> extends HasRuleTriggers {
 
   HandlerRegistration addPropertyChangedHandler(PropertyChangedHandler<P> handler);
 
-  boolean isIgnoreUpstreamTouch();
-
   Value<P> getValue();
 
   String getName();
