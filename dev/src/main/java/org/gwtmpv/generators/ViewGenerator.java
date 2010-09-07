@@ -215,7 +215,7 @@ public class ViewGenerator {
       }
 
       cstr.body.line("setWidget(binder.createAndBindUi(this));");
-      cstr.body.line("setDebugId(\"{}\");", v.getSimpleClassNameWithoutGeneric().replaceAll("View$", ""));
+      cstr.body.line("setDebugId(\"{}\");", v.getSimpleClassNameWithoutGeneric().replaceAll("View$", "").replaceAll("^Gwt", ""));
 
       save(v);
     }
