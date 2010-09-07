@@ -43,4 +43,6 @@ public interface Property<P> extends HasRuleTriggers {
 
   String getName();
 
+  void pullInitial();
+
 }
