@@ -74,7 +74,7 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
     final boolean changed = !eq(lastValue, newValue);
     lastValue = newValue;
     if (changed || !hasFired) {
-      fireChanged();
+      fireEvent(new PropertyChangedEvent<P>(this));
       hasFired = true;
     }
 
@@ -88,10 +88,6 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
   @Override
   public HandlerRegistration addPropertyChangedHandler(final PropertyChangedHandler<P> handler) {
     return handlers.addHandler(PropertyChangedEvent.getType(), handler);
-  }
-
-  private void fireChanged() {
-    fireEvent(new PropertyChangedEvent<P>(this));
   }
 
   /** Track {@code other} as derived on us, so we'll forward changed/changing events to it. */
