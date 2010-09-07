@@ -50,7 +50,7 @@ public abstract class AbstractRule<T, U extends AbstractRule<T, U>> implements R
   protected abstract U getThis();
 
   @Override
-  public final Valid validate(final boolean propertyIsAlreadyInvalid) {
+  public final Valid validate() {
     if (onlyIfSaysToSkip()) {
       untriggerIfNeeded();
       return Valid.YES;
@@ -58,12 +58,11 @@ public abstract class AbstractRule<T, U extends AbstractRule<T, U>> implements R
 
     // TODO if unchanged (and not derived?), return the last result
     // TODO prevent recursion by marking ourselves already validating
+    boolean propertyIsAlreadyInvalid = (property == null) ? false : property.wasValid() == Valid.NO;
     if (propertyIsAlreadyInvalid) {
       untriggerIfNeeded();
       return Valid.NO;
     }
-
-    // we used to always vote DEFER if not touched--allow voting YES
 
     final Valid valid = this.isValid();
 
@@ -92,12 +91,7 @@ public abstract class AbstractRule<T, U extends AbstractRule<T, U>> implements R
 
   /** Only run this rule if {@code other} is true */
   public U onlyIf(final Property<Boolean> other) {
-    other.addPropertyChangedHandler(new PropertyChangedHandler<Boolean>() {
-      @Override
-      public void onPropertyChanged(PropertyChangedEvent<Boolean> event) {
-        validate(false);
-      }
-    });
+    other.addPropertyChangedHandler(new OnOnlyIfPropertyChanged());
     this.onlyIf.add(other.getValue());
     return getThis();
   }
@@ -137,6 +131,19 @@ public abstract class AbstractRule<T, U extends AbstractRule<T, U>> implements R
       }
     }
     return false;
+  }
+
+  /** Called when one of our guard properties changes. */
+  private final class OnOnlyIfPropertyChanged implements PropertyChangedHandler<Boolean> {
+    public void onPropertyChanged(PropertyChangedEvent<Boolean> event) {
+      // call reassess so that Property#validate sets valid is set back
+      // to YES, and we can know if we're the first invalid rule or not
+      if (property != null) {
+        property.reassess();
+      } else {
+        validate();
+      }
+    }
   }
 
 }

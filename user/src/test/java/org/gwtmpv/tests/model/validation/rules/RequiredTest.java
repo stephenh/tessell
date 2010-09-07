@@ -32,7 +32,7 @@ public class RequiredTest extends AbstractRuleTest {
   public void ruleDoesNotFireIfPropertyUntouched() {
     assertThat(f.name.isTouched(), is(false));
     final Required r = new Required(f.name, "name invalid");
-    r.validate(false);
+    r.validate();
     assertMessages("");
   }
 
@@ -40,7 +40,7 @@ public class RequiredTest extends AbstractRuleTest {
   public void ruleDoesFireIfPropertyTouched() {
     f.name.touch();
     final Required r = new Required(f.name, "name invalid");
-    r.validate(false);
+    r.validate();
     assertMessages("name invalid");
   }
 
@@ -69,17 +69,11 @@ public class RequiredTest extends AbstractRuleTest {
 
     // Just setting the onlyIf percolates down to our Required rule
     f.condition.set(false);
-    // r.validate(Force.NO, false);
     assertMessages("");
 
-    // Force.YES respects onlyIf
-    // r.validate(Force.YES, false);
-    assertMessages("");
-
-    // was left ticked, e.g. even if onlyIf=true, requires Force.YES
+    // was left touched, e.g. even if onlyIf=true, requires Force.YES
     // f.onlyIfValue = true;
     f.condition.set(true);
-    r.validate(false);
     assertMessages("name invalid");
   }
 
@@ -87,17 +81,16 @@ public class RequiredTest extends AbstractRuleTest {
   public void testTickedDoesNotFireIfAlreadyInvalid() {
     final Required r = new Required(f.name, "name invalid second");
     f.name.set(null);
-    Assert.assertEquals(Valid.NO, r.validate(true));
+    Assert.assertEquals(Valid.NO, r.validate());
     assertMessages("");
   }
 
   @Test
   public void testUnfiresIfAlreadyInvalid() {
-    final Required r = new Required(f.name, "name invalid");
+    final Required r1 = new Required(f.name, "name invalid");
     f.name.set(null);
-    Assert.assertEquals(Valid.NO, r.validate(false));
     assertMessages("name invalid");
-    Assert.assertEquals(Valid.NO, r.validate(true));
+    Assert.assertEquals(Valid.NO, r1.validate());
     assertMessages("");
   }
 

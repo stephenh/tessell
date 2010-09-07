@@ -7,6 +7,6 @@ import org.gwtmpv.model.validation.Valid;
 public interface Rule extends HasRuleTriggers {
 
   /** @return whether this rule is valid */
-  Valid validate(boolean propertyIsAlreadyInvalid);
+  Valid validate();
 
 }

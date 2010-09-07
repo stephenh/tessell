@@ -202,17 +202,15 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
     }
     alreadyValidating = true;
     try {
-      Valid allValid = Valid.YES;
+      valid = Valid.YES; // start out valid
       for (final Rule rule : rules) {
-        final Valid ruleValid = rule.validate(allValid == Valid.NO);
-        if (ruleValid == Valid.NO) {
-          allValid = Valid.NO;
+        if (rule.validate() == Valid.NO) {
+          valid = Valid.NO;
         }
       }
-      if (allValid == Valid.YES && untouchIfValid) {
+      if (valid == Valid.YES && untouchIfValid) {
         touched = false; // setTouched(false);
       }
-      valid = allValid;
     } finally {
       alreadyValidating = false;
     }
