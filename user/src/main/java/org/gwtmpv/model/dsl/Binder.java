@@ -8,6 +8,7 @@ import org.gwtmpv.model.events.PropertyChangedEvent.PropertyChangedHandler;
 import org.gwtmpv.model.properties.Property;
 import org.gwtmpv.model.properties.StringProperty;
 import org.gwtmpv.model.properties.StringableProperty;
+import org.gwtmpv.model.validation.rules.Rule;
 import org.gwtmpv.widgets.IsElement;
 import org.gwtmpv.widgets.IsTextBox;
 import org.gwtmpv.widgets.IsTextList;
@@ -41,14 +42,20 @@ public class Binder {
     return new PropertyBinder<P>(property);
   }
 
+  public RuleBinder bind(Rule rule) {
+    return new RuleBinder(rule);
+  }
+
   /** @return a fluent {@link StringPropertyBinder} against {@code property}. */
   public <P> StringPropertyBinder bind(StringProperty property) {
     return new StringPropertyBinder(property);
   }
 
-  /** @return a fluent {@link StringPropertyBinder} against {@code property}. */
-  public <P> StringPropertyBinder bind(StringableProperty property) {
-    return new StringPropertyBinder(property);
+  /** @return a fluent {@link FormattedPropertyBinder} against {@code property}. */
+  // this method sucks as you can't substitute the formatter
+  // StringableProperty in general just needs to go away
+  public <P, U extends StringableProperty & Property<P>> FormattedPropertyBinder<P, U> bindFormatted(U property) {
+    return new FormattedPropertyBinder<P, U>(property);
   }
 
   /** Enhances each {@code source} to fire change events on key up and blur. */
@@ -155,6 +162,57 @@ public class Binder {
 
     public ValueBinder<P> to(HasClickHandlers clickable) {
       registerHandler(clickable.addClickHandler(new BoundOnClick<P>(p, value)));
+      return this;
+    }
+  }
+
+  /** Methods to bind a StringableProperty to HasValue<String> widgets--needs StringableProperty to go away. */
+  public class FormattedPropertyBinder<P, U extends StringableProperty & Property<P>> {
+    private final U p;
+
+    private FormattedPropertyBinder(U p) {
+      this.p = p;
+    }
+
+    /** Binds our property to {@code source} and its errors to {@code errors}. */
+    public <S extends HasBlurHandlers & HasValue<String>> FormattedPropertyBinder<P, U> to(final S source, IsTextList errors) {
+      return to(source).errorsTo(errors);
+    }
+
+    /** Binds our property to {@code source}. */
+    public FormattedPropertyBinder<P, U> to(final HasValue<String> source) {
+      registerHandler(source.addValueChangeHandler(new SetStringableOnChangeHandler(p, source)));
+      PropertyChangedHandler<P> h = new PropertyChangedHandler<P>() {
+        public void onPropertyChanged(final PropertyChangedEvent<P> event) {
+          source.setValue(p.getAsString());
+        }
+      };
+      h.onPropertyChanged(new PropertyChangedEvent<P>(p));
+      registerHandler(p.addPropertyChangedHandler(h));
+      return this;
+    }
+
+    /** Binds errors for our property to {@code errors}. */
+    public FormattedPropertyBinder<P, U> errorsTo(IsTextList errors) {
+      final TextListOnError i = new TextListOnError(errors);
+      registerHandler(p.addRuleTriggeredHandler(i));
+      registerHandler(p.addRuleUntriggeredHandler(i));
+      return this;
+    }
+  }
+
+  /** Binds specific rule outcomes to widgets, really only text lists. */
+  public class RuleBinder {
+    private final Rule rule;
+
+    private RuleBinder(Rule rule) {
+      this.rule = rule;
+    }
+
+    public RuleBinder errorsTo(final IsTextList list) {
+      final TextListOnError i = new TextListOnError(list);
+      registerHandler(rule.addRuleTriggeredHandler(i));
+      registerHandler(rule.addRuleUntriggeredHandler(i));
       return this;
     }
   }
