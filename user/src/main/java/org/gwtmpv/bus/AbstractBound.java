@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import com.google.gwt.event.shared.HandlerRegistration;
 
 /** A basic presenter that tracks bound handler registrations. */
-public abstract class AbstractBound implements Bound {
+public abstract class AbstractBound implements Bound, CanRegisterHandlers {
 
   private boolean bound = false;
   private boolean hasBeenUnbound = false;
@@ -41,12 +41,12 @@ public abstract class AbstractBound implements Bound {
   }
 
   /** Registers a handler to be removed on {@link #unbind()}. */
-  protected final void registerHandler(final HandlerRegistration handlerRegistration) {
+  public final void registerHandler(final HandlerRegistration handlerRegistration) {
     registrations.add(handlerRegistration);
   }
 
   /** Register handlers to be removed on {@link #unbind()}. */
-  protected final void registerHandlers(final HandlerRegistration... handlerRegistrations) {
+  public final void registerHandlers(final HandlerRegistration... handlerRegistrations) {
     for (final HandlerRegistration handlerRegistration : handlerRegistrations) {
       registrations.add(handlerRegistration);
     }
