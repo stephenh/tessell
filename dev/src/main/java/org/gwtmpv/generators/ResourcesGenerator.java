@@ -179,7 +179,8 @@ public class ResourcesGenerator {
   @SuppressWarnings("unchecked")
   private Collection<File> getFilesInInputDirectory() {
     String[] exts = new String[] { "css", "png", "gif", "jpg", "html", "js", "htc" };
-    return FileUtils.listFiles(inputDirectory, exts, true);
+    File packageDirectory = new File(inputDirectory, packageName.replace(".", "/"));
+    return FileUtils.listFiles(packageDirectory, exts, true);
   }
 
 }
