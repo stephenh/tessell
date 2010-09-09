@@ -124,6 +124,7 @@ public class ViewGenerator {
   private class UiXmlFile {
     private final UiXmlHandler handler = new UiXmlHandler();
     private final File uiXml;
+    private final String fileName;
     private final String simpleName;
     private final String gwtName;
     private final String interfaceName;
@@ -131,8 +132,9 @@ public class ViewGenerator {
 
     private UiXmlFile(final File uiXml) {
       this.uiXml = uiXml;
-      final String className = uiXml.getAbsolutePath().replace(input.getAbsolutePath() + File.separator, "").replace(".ui.xml", "").replace("/", ".");
-      simpleName = StringUtils.substringAfterLast(className, ".");
+      String className = uiXml.getAbsolutePath().replace(input.getAbsolutePath() + File.separator, "").replace(".ui.xml", "").replace("/", ".");
+      fileName = StringUtils.substringAfterLast(className, ".");
+      simpleName = fileName.endsWith("View") ? fileName : fileName + "View";
       final String packageName = StringUtils.substringBeforeLast(className, ".");
       gwtName = packageName + ".Gwt" + simpleName;
       interfaceName = packageName + ".Is" + simpleName;
@@ -178,7 +180,7 @@ public class ViewGenerator {
 
       final GClass uibinder = v.getInnerClass("MyUiBinder").setInterface();
       uibinder.baseClassName("{}<{}, {}>", UiBinder.class.getName(), handler.firstTagType, gwtName);
-      uibinder.addAnnotation("@UiTemplate(\"{}.ui.xml\")", simpleName);
+      uibinder.addAnnotation("@UiTemplate(\"{}.ui.xml\")", fileName);
       v.addImports(UiTemplate.class);
 
       v.getField("binder").type("MyUiBinder").setStatic().setFinal().initialValue("GWT.create(MyUiBinder.class)");
