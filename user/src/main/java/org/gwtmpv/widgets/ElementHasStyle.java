@@ -187,4 +187,14 @@ public class ElementHasStyle implements IsStyle {
     return element.getStyle().getHeight();
   }
 
+  @Override
+  public void setBottom(double value, Unit unit) {
+    element.getStyle().setBottom(value, unit);
+  }
+
+  @Override
+  public void setRight(double value, Unit unit) {
+    element.getStyle().setRight(value, unit);
+  }
+
 }

@@ -34,6 +34,10 @@ public interface IsStyle {
 
   void setTop(double value, Unit unit);
 
+  void setBottom(double value, Unit unit);
+
+  void setRight(double value, Unit unit);
+
   void setMargin(double value, Unit unit);
 
   void setMarginTop(double value, Unit unit);

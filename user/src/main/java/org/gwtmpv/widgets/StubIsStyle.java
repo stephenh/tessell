@@ -190,4 +190,14 @@ public class StubIsStyle implements IsStyle {
     return style.get("height");
   }
 
+  @Override
+  public void setBottom(double value, Unit unit) {
+    style.put("bottom", value + unit.getType());
+  }
+
+  @Override
+  public void setRight(double value, Unit unit) {
+    style.put("right", value + unit.getType());
+  }
+
 }
