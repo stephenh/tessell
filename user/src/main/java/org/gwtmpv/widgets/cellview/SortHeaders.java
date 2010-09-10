@@ -37,8 +37,7 @@ public class SortHeaders<T> {
     // Assume we're only sorted the data we've got here on the screen
     final List<T> data = cellTable.getDisplayedItems();
     Collections.sort(data, c);
-    cellTable.setData(0, data.size(), data);
-    cellTable.refreshHeaders();
+    cellTable.setRowData(0, data);
   }
 
 }

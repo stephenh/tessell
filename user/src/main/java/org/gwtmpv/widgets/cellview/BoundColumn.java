@@ -5,6 +5,7 @@ import org.gwtmpv.util.UserStringable;
 
 import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.cell.client.Cell;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.view.client.ProvidesKey;
 
@@ -14,13 +15,13 @@ public class BoundColumn<T, C> extends Column<T, C> {
   private String styleName;
 
   @Override
-  public void render(final T object, final ProvidesKey<T> keyProvider, final StringBuilder sb) {
+  public void render(final T object, final ProvidesKey<T> keyProvider, final SafeHtmlBuilder sb) {
     if (styleName != null) {
-      sb.append("<div class=\"" + styleName + "\">");
+      sb.appendHtmlConstant("<div class=\"" + styleName + "\">");
     }
     super.render(object, keyProvider, sb);
     if (styleName != null) {
-      sb.append("</div>");
+      sb.appendHtmlConstant("</div>");
     }
   }
 
@@ -31,9 +32,9 @@ public class BoundColumn<T, C> extends Column<T, C> {
   public static <R> BoundColumn<R, String> ofString(final BindingRoot<R, String> binding) {
     return new BoundColumn<R, String>(binding, new AbstractCell<String>() {
       @Override
-      public void render(final String value, final Object viewData, final StringBuilder sb) {
+      public void render(final String value, final Object key, final SafeHtmlBuilder sb) {
         if (value != null) {
-          sb.append(value);
+          sb.appendEscaped(value);
         }
       }
     });
@@ -42,9 +43,9 @@ public class BoundColumn<T, C> extends Column<T, C> {
   public static <R, P extends UserStringable> BoundColumn<R, P> ofUserStringable(final BindingRoot<R, P> binding) {
     return new BoundColumn<R, P>(binding, new AbstractCell<P>() {
       @Override
-      public void render(final P value, final Object viewData, final StringBuilder sb) {
+      public void render(final P value, final Object key, final SafeHtmlBuilder sb) {
         if (value != null) {
-          sb.append(value.toUserString());
+          sb.appendEscaped(value.toUserString());
         }
       }
     });

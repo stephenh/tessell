@@ -13,17 +13,13 @@ public interface IsCellTable<T> extends IsWidget {
 
   void addColumn(Column<T, ?> col, Header<?> header, Header<?> footer);
 
-  void setData(int start, int length, List<T> values);
+  void setRowData(int start, List<T> values);
 
-  void setDataSize(int size, boolean isExact);
+  void setRowCount(int size, boolean isExact);
 
   void setPageSize(int pageSize);
 
   List<T> getDisplayedItems();
-
-  void refreshFooters();
-
-  void refreshHeaders();
 
   void redraw();
 

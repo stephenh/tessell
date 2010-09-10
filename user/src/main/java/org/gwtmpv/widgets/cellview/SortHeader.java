@@ -6,6 +6,7 @@ import org.bindgen.BindingRoot;
 
 import com.google.gwt.cell.client.ClickableTextCell;
 import com.google.gwt.cell.client.ValueUpdater;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.cellview.client.Header;
 
 /** A header that can sort, all done client-side. */
@@ -45,15 +46,15 @@ public class SortHeader<T, U extends Comparable<U>> extends Header<String> {
   }
 
   @Override
-  public void render(final StringBuilder sb) {
+  public void render(final SafeHtmlBuilder sb) {
     if (styleName != null) {
-      sb.append("<div style=\"" + styleName + "\">");
+      sb.appendHtmlConstant("<div style=\"" + styleName + "\">");
     }
     super.render(sb);
-    sb.append("&nbsp;");
-    sb.append(sorted.icon());
+    sb.appendHtmlConstant("&nbsp;");
+    sb.appendHtmlConstant(sorted.icon());
     if (styleName != null) {
-      sb.append("</div>");
+      sb.appendHtmlConstant("</div>");
     }
   }
 
