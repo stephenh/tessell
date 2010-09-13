@@ -4,8 +4,8 @@ import java.util.HashMap;
 
 import org.gwtmpv.bus.EventBus;
 import org.gwtmpv.place.events.PlaceChangedEvent;
-import org.gwtmpv.place.events.PlaceRequestEvent;
 import org.gwtmpv.place.events.PlaceChangedEvent.PlaceChangedHandler;
+import org.gwtmpv.place.events.PlaceRequestEvent;
 import org.gwtmpv.place.events.PlaceRequestEvent.PlaceRequestHandler;
 import org.gwtmpv.place.history.IsHistory;
 import org.gwtmpv.place.tokenizer.Tokenizer;
@@ -71,6 +71,7 @@ public class DefaultPlaceManager implements PlaceManager {
     if (place != null) {
       setTokenWithoutEvent(request);
       place.handleRequest(request);
+      eventBus.fireEvent(new PlaceChangedEvent(place, request));
     }
   }
 
