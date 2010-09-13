@@ -7,6 +7,17 @@ See [gwtmpv.org](http://www.gwtmpv.org).
 * doLogin.call(user, pass);
 * HasDispatchAsync to ServerCall cstr
 
+Todo
+----
+
+* Add @Place annotation
+  * Take name of presenter
+  * Any constructor parameters--how to denote application-level vs. request-level?
+* Figure out cross-presenter transitions
+  * Event bus doesn't make sense--these aren't global things
+  * Have Slot listen to presenter events?
+* Support 2nd generation Presenter interfaces via event hook hints in ui.xml file
+
 Limitations
 -----------
 
