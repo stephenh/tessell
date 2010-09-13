@@ -36,7 +36,7 @@ public abstract class AbstractBound implements Bound, CanRegisterHandlers {
   }
 
   /** @return whether we have been bound yet */
-  protected boolean isBound() {
+  public boolean isBound() {
     return bound;
   }
 

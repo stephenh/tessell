@@ -8,4 +8,6 @@ public interface Bound {
   /** Called after the presenter and view have been finished with for the moment. */
   void unbind();
 
+  boolean isBound();
+
 }
