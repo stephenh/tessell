@@ -1,8 +1,6 @@
 package org.gwtmpv.place;
 
 import org.gwtmpv.bus.AbstractBound;
-import org.gwtmpv.bus.EventBus;
-import org.gwtmpv.place.events.PlaceChangedEvent;
 
 /**
  * A place represents a particular bookmark in an application.
@@ -13,15 +11,13 @@ import org.gwtmpv.place.events.PlaceChangedEvent;
  */
 public abstract class Place extends AbstractBound {
 
-  protected final EventBus eventBus;
   protected final String name;
 
   /**
    * @param name
    *          the unique name for this place
    */
-  public Place(final EventBus eventBus, final String name) {
-    this.eventBus = eventBus;
+  public Place(final String name) {
     this.name = name;
   }
 
@@ -36,11 +32,6 @@ public abstract class Place extends AbstractBound {
   @Override
   public String toString() {
     return getName();
-  }
-
-  /** Subclasses should call when they are changed and the PlaceManager should update the history token. */
-  protected void firePlaceChanged(final PlaceRequest request) {
-    eventBus.fireEvent(new PlaceChangedEvent(this, request));
   }
 
 }

@@ -37,7 +37,7 @@ public class DefaultPlaceManagerTest {
     int called;
 
     private DummyPlace(String name) {
-      super(bus, name);
+      super(name);
     }
 
     @Override

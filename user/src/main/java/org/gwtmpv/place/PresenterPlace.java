@@ -4,19 +4,21 @@ import org.gwtmpv.bus.EventBus;
 import org.gwtmpv.place.events.PlaceChangedEvent;
 import org.gwtmpv.presenter.Presenter;
 import org.gwtmpv.presenter.events.PresenterChangedEvent;
-import org.gwtmpv.presenter.events.PresenterRevealedEvent;
-import org.gwtmpv.presenter.events.PresenterUnboundEvent;
 import org.gwtmpv.presenter.events.PresenterChangedEvent.PresenterChangedHandler;
+import org.gwtmpv.presenter.events.PresenterRevealedEvent;
 import org.gwtmpv.presenter.events.PresenterRevealedEvent.PresenterRevealedHandler;
+import org.gwtmpv.presenter.events.PresenterUnboundEvent;
 import org.gwtmpv.presenter.events.PresenterUnboundEvent.PresenterUnboundHandler;
 
 /** This is a subclass of {@link Place} with some helper values for working with {@link Presenter}s. */
 public abstract class PresenterPlace<T extends Presenter> extends Place {
 
   protected T currentPresenter;
+  protected EventBus eventBus;
 
   public PresenterPlace(final EventBus eventBus, final String name) {
-    super(eventBus, name);
+    super(name);
+    this.eventBus = eventBus;
   }
 
   /** Put any state from <code>presenter</code> into the <code>request</code> for serialization as a token. */
@@ -62,4 +64,8 @@ public abstract class PresenterPlace<T extends Presenter> extends Place {
     }
   }
 
+  /** Subclasses should call when they are changed and the PlaceManager should update the history token. */
+  protected void firePlaceChanged(final PlaceRequest request) {
+    eventBus.fireEvent(new PlaceChangedEvent(this, request));
+  }
 }
