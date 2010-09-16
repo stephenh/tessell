@@ -2,7 +2,9 @@ package org.gwtmpv.testing;
 
 import org.gwtmpv.widgets.HasCss;
 import org.gwtmpv.widgets.HasStubCss;
+import org.gwtmpv.widgets.IsTextList;
 import org.gwtmpv.widgets.StubStyle;
+import org.gwtmpv.widgets.StubTextList;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
@@ -109,4 +111,25 @@ public class MpvMatchers {
     };
   }
 
+  /** A matcher to assert no validation errors. */
+  public static Matcher<IsTextList> hasNoErrors() {
+    return new TypeSafeMatcher<IsTextList>() {
+      @Override
+      protected boolean matchesSafely(IsTextList item) {
+        return ((StubTextList) item).getList().size() == 0;
+      }
+
+      @Override
+      public void describeTo(Description description) {
+        description.appendText("has no errors");
+      }
+
+      @Override
+      protected void describeMismatchSafely(IsTextList item, Description mismatchDescription) {
+        mismatchDescription.appendValue(item);
+        mismatchDescription.appendText(" has errors ");
+        mismatchDescription.appendValueList("", ", ", "", ((StubTextList) item).getList());
+      }
+    };
+  }
 }
