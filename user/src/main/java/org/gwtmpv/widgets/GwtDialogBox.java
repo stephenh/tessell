@@ -35,4 +35,9 @@ public class GwtDialogBox extends DialogBox implements IsDialogBox {
     return new GwtElement(getElement());
   }
 
+  @Override
+  public void addAutoHidePartner(IsElement element) {
+    addAutoHidePartner(element.asElement());
+  }
+
 }

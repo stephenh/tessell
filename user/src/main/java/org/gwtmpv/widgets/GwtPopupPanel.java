@@ -35,4 +35,9 @@ public class GwtPopupPanel extends PopupPanel implements IsPopupPanel {
     return new GwtElement(getElement());
   }
 
+  @Override
+  public void addAutoHidePartner(IsElement element) {
+    addAutoHidePartner(element.asElement());
+  }
+
 }

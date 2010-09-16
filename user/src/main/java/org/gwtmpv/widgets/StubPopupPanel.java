@@ -59,4 +59,9 @@ public class StubPopupPanel extends StubSimplePanel implements IsPopupPanel {
     popupLeft = left;
     popopTop = top;
   }
+
+  @Override
+  public void addAutoHidePartner(IsElement element) {
+  }
+
 }

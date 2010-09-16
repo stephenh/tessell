@@ -20,4 +20,6 @@ public interface IsPopupPanel extends IsSimplePanel, HasAnimation, HasCloseHandl
 
   boolean isShowing();
 
+  void addAutoHidePartner(IsElement element);
+
 }

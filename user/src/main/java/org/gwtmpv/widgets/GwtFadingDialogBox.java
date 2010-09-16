@@ -35,4 +35,9 @@ public class GwtFadingDialogBox extends FadingDialogBox implements IsFadingDialo
     return new GwtElement(getElement());
   }
 
+  @Override
+  public void addAutoHidePartner(IsElement element) {
+    addAutoHidePartner(element.asElement());
+  }
+
 }
