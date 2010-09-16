@@ -53,8 +53,7 @@ public class OutstandingDispatchAsync implements DispatchAsync {
    * @param message
    *          the in-progress message to include in the {@link DispatchActionEvent}/{@link DispatchResultEvent} events
    */
-  public <A extends Action<R>, R extends Result> void execute(final A action, final SuccessCallback<R> success,
-                                                              final String message) {
+  public <A extends Action<R>, R extends Result> void execute(final A action, final SuccessCallback<R> success, final String message) {
     execute(action, new AsyncCallback<R>() {
       public void onSuccess(final R result) {
         success.onSuccess(result);
@@ -76,8 +75,7 @@ public class OutstandingDispatchAsync implements DispatchAsync {
    * @param message
    *          the in-progress message to include in the {@link DispatchActionEvent}/{@link DispatchResultEvent} events
    */
-  public <A extends Action<R>, R extends Result> void execute(final A action, final AsyncCallback<R> callback,
-                                                              final String message) {
+  public <A extends Action<R>, R extends Result> void execute(final A action, final AsyncCallback<R> callback, final String message) {
     outstanding.add(action);
     eventBus.fireEvent(new DispatchActionEvent(action, message));
     realDispatch.execute(action, new AsyncCallback<R>() {

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.gwtmpv.bus.EventBus;
+import org.gwtmpv.bus.StubEventBus;
 import org.gwtmpv.dispatch.client.util.StubDispatchAsync.ExecuteCall;
 import org.gwtmpv.dispatch.shared.Action;
 import org.gwtmpv.dispatch.shared.Result;
@@ -17,6 +18,10 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 public class StubOutstandingDispatchAsync extends OutstandingDispatchAsync {
 
   private final StubDispatchAsync realStub;
+
+  public StubOutstandingDispatchAsync() {
+    this(new StubEventBus(), new StubDispatchAsync());
+  }
 
   public StubOutstandingDispatchAsync(final EventBus eventBus, final StubDispatchAsync realStub) {
     super(eventBus, realStub);
