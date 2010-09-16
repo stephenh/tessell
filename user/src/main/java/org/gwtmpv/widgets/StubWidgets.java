@@ -50,4 +50,14 @@ public class StubWidgets implements Widgets {
     return new StubFlowPanel();
   }
 
+  @Override
+  public IsScrollPanel newScrollPanel() {
+    return new StubScrollPanel();
+  }
+
+  @Override
+  public IsFadingDialogBox newFadingDialogBox() {
+    return new StubFadingDialogBox();
+  }
+
 }

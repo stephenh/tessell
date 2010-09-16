@@ -3,6 +3,7 @@ package org.gwtmpv.widgets;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.user.cellview.client.CellTable.Resources;
 
+/** A Widget factory interface. */
 public interface Widgets {
 
   IsElement newElement(String tag);
@@ -16,6 +17,10 @@ public interface Widgets {
   IsImage newImage();
 
   IsFlowPanel newFlowPanel();
+
+  IsScrollPanel newScrollPanel();
+
+  IsFadingDialogBox newFadingDialogBox();
 
   <T> IsCellTable<T> newCellTable();
 

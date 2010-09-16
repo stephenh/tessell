@@ -51,4 +51,14 @@ public class GwtWidgets implements Widgets {
     return new GwtFlowPanel();
   }
 
+  @Override
+  public IsScrollPanel newScrollPanel() {
+    return new GwtScrollPanel();
+  }
+
+  @Override
+  public IsFadingDialogBox newFadingDialogBox() {
+    return new GwtFadingDialogBox();
+  }
+
 }
