@@ -21,6 +21,9 @@ public abstract class DispatchUiCommand<A extends Action<R>, R extends Result> e
 
   @Override
   protected final void doExecute() {
+    if (active.isTrue()) {
+      return;
+    }
     active.set(true);
     async.execute(createAction(), this);
   }

@@ -41,15 +41,35 @@ public class DispatchUiCommandTest extends AbstractRuleTest {
     assertThat(command.getActive().get(), is(FALSE));
   }
 
+  @Test
+  public void doesNotReExecuteWhenActive() {
+    DummyUiCommand command = new DummyUiCommand(async);
+    command.execute();
+    assertThat(command.createActionCalls, is(1));
+
+    command.execute();
+    assertThat(command.createActionCalls, is(1));
+
+    // after the call comes back, we can execute again
+    async.getCalls().get(0).callback.onFailure(null);
+    command.execute();
+    assertThat(command.createActionCalls, is(2));
+
+  }
+
   /** Fails depending on the instance variable {@code fail}. */
   private final class DummyUiCommand extends DispatchUiCommand<Action<Result>, Result> {
+    private int createActionCalls = 0;
+
     public DummyUiCommand(OutstandingDispatchAsync async) {
       super(async);
     }
 
     @Override
     protected Action<Result> createAction() {
-      return null;
+      createActionCalls++;
+      return new Action<Result>() {
+      };
     }
 
     @Override
