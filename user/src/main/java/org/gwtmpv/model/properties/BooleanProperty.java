@@ -1,6 +1,7 @@
 package org.gwtmpv.model.properties;
 
 import static java.lang.Boolean.FALSE;
+import static java.lang.Boolean.TRUE;
 
 import org.gwtmpv.model.values.DerivedValue;
 import org.gwtmpv.model.values.Value;
@@ -14,6 +15,10 @@ public class BooleanProperty extends AbstractProperty<Boolean, BooleanProperty> 
   @Override
   protected BooleanProperty getThis() {
     return this;
+  }
+
+  public boolean isTrue() {
+    return TRUE.equals(get());
   }
 
   public BooleanProperty not() {

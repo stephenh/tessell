@@ -3,6 +3,7 @@ package org.gwtmpv.model.dsl;
 import static org.gwtmpv.util.ObjectUtils.toStr;
 
 import org.gwtmpv.bus.CanRegisterHandlers;
+import org.gwtmpv.model.commands.UiCommand;
 import org.gwtmpv.model.events.PropertyChangedEvent;
 import org.gwtmpv.model.events.PropertyChangedEvent.PropertyChangedHandler;
 import org.gwtmpv.model.properties.Property;
@@ -15,6 +16,8 @@ import org.gwtmpv.widgets.IsTextList;
 
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasBlurHandlers;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.dom.client.HasKeyUpHandlers;
@@ -51,6 +54,11 @@ public class Binder {
     return new StringPropertyBinder(property);
   }
 
+  /** @return a fluent {@link UiCommandBinder} against {@code command}. */
+  public UiCommandBinder bind(UiCommand command) {
+    return new UiCommandBinder(command);
+  }
+
   /** @return a fluent {@link FormattedPropertyBinder} against {@code property}. */
   // this method sucks as you can't substitute the formatter
   // StringableProperty in general just needs to go away
@@ -77,6 +85,39 @@ public class Binder {
 
   private void registerHandler(HandlerRegistration r) {
     handlersOwner.registerHandler(r);
+  }
+
+  /** Binds various things to a command. */
+  public class UiCommandBinder {
+    protected final UiCommand command;
+
+    private UiCommandBinder(UiCommand command) {
+      this.command = command;
+    }
+
+    /** Binds clicks from {@code clickable} to our command, and our errors to {@code errors}. */
+    public UiCommandBinder to(HasClickHandlers clickable, IsTextList errors) {
+      return to(clickable).errorsTo(errors);
+    }
+
+    /** Binds clicks from {@code clickable} to our command. */
+    public UiCommandBinder to(HasClickHandlers clickable) {
+      registerHandler(clickable.addClickHandler(new ClickHandler() {
+        @Override
+        public void onClick(ClickEvent event) {
+          command.execute();
+        }
+      }));
+      return this;
+    }
+
+    /** Binds errors for our command to {@code errors}. */
+    public UiCommandBinder errorsTo(IsTextList errors) {
+      final TextListOnError i = new TextListOnError(errors);
+      registerHandler(command.addRuleTriggeredHandler(i));
+      registerHandler(command.addRuleUntriggeredHandler(i));
+      return this;
+    }
   }
 
   /** Binds properties to widgets. */
