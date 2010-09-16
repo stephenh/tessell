@@ -100,6 +100,12 @@ public class Binder {
       return to(clickable).errorsTo(errors);
     }
 
+    /** Has our command execute only if {@code onlyIf} is true. */
+    public UiCommandBinder onlyIf(Property<Boolean> onlyIf) {
+      command.addOnlyIf(onlyIf);
+      return this;
+    }
+
     /** Binds clicks from {@code clickable} to our command. */
     public UiCommandBinder to(HasClickHandlers clickable) {
       registerHandler(clickable.addClickHandler(new ClickHandler() {
