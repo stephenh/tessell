@@ -200,4 +200,14 @@ public class StubIsStyle implements IsStyle {
     style.put("right", value + unit.getType());
   }
 
+  @Override
+  public void setZIndex(int value) {
+    style.put("zIndex", Integer.toString(value));
+  }
+
+  @Override
+  public void clearZIndex() {
+    style.remove("zIndex");
+  }
+
 }

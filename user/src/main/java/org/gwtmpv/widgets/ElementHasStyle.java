@@ -197,4 +197,14 @@ public class ElementHasStyle implements IsStyle {
     element.getStyle().setRight(value, unit);
   }
 
+  @Override
+  public void setZIndex(int value) {
+    element.getStyle().setZIndex(value);
+  }
+
+  @Override
+  public void clearZIndex() {
+    element.getStyle().clearZIndex();
+  }
+
 }

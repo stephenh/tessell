@@ -82,4 +82,8 @@ public interface IsStyle {
 
   void clearFloat();
 
+  void setZIndex(int value);
+
+  void clearZIndex();
+
 }
