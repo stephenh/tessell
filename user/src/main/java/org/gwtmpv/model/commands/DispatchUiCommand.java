@@ -24,8 +24,11 @@ public abstract class DispatchUiCommand<A extends Action<R>, R extends Result> e
     if (active.isTrue()) {
       return;
     }
-    active.set(true);
-    async.execute(createAction(), this);
+    A action = createAction();
+    if (action != null) {
+      active.set(true);
+      async.execute(action, this);
+    }
   }
 
   @Override
