@@ -2,7 +2,7 @@ package org.gwtmpv.widgets;
 
 import java.util.ArrayList;
 
-public class StubIsColumnsPanel extends StubFlowPanel implements IsColumnsPanel {
+public class StubColumnsPanel extends StubFlowPanel implements IsColumnsPanel {
 
   private final ArrayList<ArrayList<IsWidget>> columns = new ArrayList<ArrayList<IsWidget>>();
 

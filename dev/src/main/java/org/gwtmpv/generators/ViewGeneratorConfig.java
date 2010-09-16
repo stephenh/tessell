@@ -75,7 +75,7 @@ import org.gwtmpv.widgets.StubHyperlink;
 import org.gwtmpv.widgets.StubImage;
 import org.gwtmpv.widgets.StubInlineHyperlink;
 import org.gwtmpv.widgets.StubInlineLabel;
-import org.gwtmpv.widgets.StubIsColumnsPanel;
+import org.gwtmpv.widgets.StubColumnsPanel;
 import org.gwtmpv.widgets.StubIsElement;
 import org.gwtmpv.widgets.StubLabel;
 import org.gwtmpv.widgets.StubListBox;
@@ -182,7 +182,7 @@ public class ViewGeneratorConfig {
     // custom
     map(RowTable.class, IsRowTable.class, RowTable.class, StubRowTable.class);
     map(TextList.class, IsTextList.class, TextList.class, StubTextList.class);
-    map(ColumnsPanel.class, IsColumnsPanel.class, ColumnsPanel.class, StubIsColumnsPanel.class);
+    map(ColumnsPanel.class, IsColumnsPanel.class, ColumnsPanel.class, StubColumnsPanel.class);
     map(FadingDialogBox.class, IsFadingDialogBox.class, GwtFadingDialogBox.class, StubFadingDialogBox.class);
   }
 
