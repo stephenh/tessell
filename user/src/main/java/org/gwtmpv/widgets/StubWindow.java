@@ -5,7 +5,7 @@ import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.event.shared.HandlerRegistration;
 
-public class StubIsWindow implements IsWindow {
+public class StubWindow implements IsWindow {
 
   private final HandlerManager handlers = new HandlerManager(this);
   public String open;
