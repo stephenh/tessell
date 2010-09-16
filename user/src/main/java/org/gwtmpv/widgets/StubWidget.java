@@ -10,7 +10,7 @@ import com.google.gwt.user.client.ui.Widget;
 public class StubWidget implements IsWidget, HasStubCss {
 
   protected final HandlerManager handlers = new HandlerManager(this);
-  private final StubIsElement element = new StubIsElement();
+  private final StubElement element = new StubElement();
   public int absoluteTop;
   public int absoluteLeft;
   public int offsetWidth;

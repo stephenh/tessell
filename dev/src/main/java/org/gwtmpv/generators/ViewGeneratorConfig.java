@@ -76,7 +76,7 @@ import org.gwtmpv.widgets.StubImage;
 import org.gwtmpv.widgets.StubInlineHyperlink;
 import org.gwtmpv.widgets.StubInlineLabel;
 import org.gwtmpv.widgets.StubColumnsPanel;
-import org.gwtmpv.widgets.StubIsElement;
+import org.gwtmpv.widgets.StubElement;
 import org.gwtmpv.widgets.StubLabel;
 import org.gwtmpv.widgets.StubListBox;
 import org.gwtmpv.widgets.StubPasswordTextBox;
@@ -152,7 +152,7 @@ public class ViewGeneratorConfig {
 
   private void setupDefault() {
     // gwt
-    map(Element.class, IsElement.class, GwtElement.class, StubIsElement.class);
+    map(Element.class, IsElement.class, GwtElement.class, StubElement.class);
     map(Anchor.class, IsAnchor.class, GwtAnchor.class, StubAnchor.class);
     map(CheckBox.class, IsCheckBox.class, GwtCheckBox.class, StubCheckBox.class);
     map(TextBox.class, IsTextBox.class, GwtTextBox.class, StubTextBox.class);

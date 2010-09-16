@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class StubIsElement implements IsElement, HasStubCss {
+public class StubElement implements IsElement, HasStubCss {
 
   private String id;
   private String debugId;

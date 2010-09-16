@@ -37,7 +37,7 @@ public class StubWidgets implements Widgets {
 
   @Override
   public IsElement newElement(String tag) {
-    return new StubIsElement();
+    return new StubElement();
   }
 
   @Override
