@@ -96,4 +96,9 @@ public class GwtElement implements IsElement {
     element.setId(id);
   }
 
+  @Override
+  public Element asElement() {
+    return element;
+  }
+
 }

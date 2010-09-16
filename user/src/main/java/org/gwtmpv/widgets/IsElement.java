@@ -1,5 +1,6 @@
 package org.gwtmpv.widgets;
 
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.ui.HasText;
 
 public interface IsElement extends HasCss, HasText {
@@ -25,5 +26,7 @@ public interface IsElement extends HasCss, HasText {
   void setInnerHTML(String html);
 
   void ensureDebugId(String id);
+
+  Element asElement();
 
 }

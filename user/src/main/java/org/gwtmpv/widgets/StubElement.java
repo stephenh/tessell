@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.gwt.dom.client.Element;
+
 public class StubElement implements IsElement, HasStubCss {
 
   private String id;
@@ -113,4 +115,8 @@ public class StubElement implements IsElement, HasStubCss {
     this.id = id;
   }
 
+  @Override
+  public Element asElement() {
+    throw new IllegalStateException("This is a stub");
+  }
 }
