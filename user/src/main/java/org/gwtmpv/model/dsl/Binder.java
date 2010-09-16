@@ -162,7 +162,7 @@ public class Binder {
     }
 
     /** Binds our property to {@code source} and its errors to {@code errors}. */
-    public <S extends HasBlurHandlers & HasValue<P>> PropertyBinder<P> to(final S source, IsTextList errors) {
+    public PropertyBinder<P> to(final HasValue<P> source, IsTextList errors) {
       return to(source).errorsTo(errors);
     }
 
