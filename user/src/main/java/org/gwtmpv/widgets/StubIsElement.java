@@ -15,7 +15,7 @@ public class StubIsElement implements IsElement, HasStubCss {
   private String innerHTML;
   private final ArrayList<String> styleNames = new ArrayList<String>();
   private final Map<String, String> attributes = new HashMap<String, String>();
-  private final StubIsStyle style = new StubIsStyle();
+  private final StubStyle style = new StubStyle();
 
   @Override
   public String getInnerText() {
@@ -44,7 +44,7 @@ public class StubIsElement implements IsElement, HasStubCss {
   }
 
   @Override
-  public StubIsStyle getStyle() {
+  public StubStyle getStyle() {
     return style;
   }
 

@@ -2,7 +2,7 @@ package org.gwtmpv.testing;
 
 import org.gwtmpv.widgets.HasCss;
 import org.gwtmpv.widgets.HasStubCss;
-import org.gwtmpv.widgets.StubIsStyle;
+import org.gwtmpv.widgets.StubStyle;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
@@ -30,7 +30,7 @@ public class MpvMatchers {
       }
 
       private String getDisplay(HasCss item) {
-        return ((StubIsStyle) item.getStyle()).getStyle().get("display");
+        return ((StubStyle) item.getStyle()).getStyle().get("display");
       }
     };
   }
@@ -56,7 +56,7 @@ public class MpvMatchers {
       }
 
       private String getDisplay(HasCss item) {
-        return ((StubIsStyle) item.getStyle()).getStyle().get("display");
+        return ((StubStyle) item.getStyle()).getStyle().get("display");
       }
     };
   }
@@ -82,7 +82,7 @@ public class MpvMatchers {
       }
 
       private String get(HasCss item) {
-        return ((StubIsStyle) item.getStyle()).getStyle().get(name);
+        return ((StubStyle) item.getStyle()).getStyle().get(name);
       }
     };
   }

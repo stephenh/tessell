@@ -53,7 +53,7 @@ public class StubWidget implements IsWidget, HasStubCss {
   }
 
   @Override
-  public StubIsStyle getStyle() {
+  public StubStyle getStyle() {
     return element.getStyle();
   }
 

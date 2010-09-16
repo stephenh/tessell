@@ -11,7 +11,7 @@ import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 
-public class StubIsStyle implements IsStyle {
+public class StubStyle implements IsStyle {
 
   private final Map<String, String> style = new HashMap<String, String>();
 
