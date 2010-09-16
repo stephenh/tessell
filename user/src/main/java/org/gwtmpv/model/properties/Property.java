@@ -24,6 +24,8 @@ public interface Property<P> extends HasRuleTriggers {
 
   void setTouched(boolean touched);
 
+  Valid touch();
+
   /** @return whether this property was invalid, does not rerun validation. */
   Valid wasValid();
 
