@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import joist.sourcegen.Access;
@@ -41,11 +43,23 @@ public class ViewGenerator {
   private final String packageName;
   private final List<UiXmlFile> uiXmlFiles = new ArrayList<UiXmlFile>();
   private final ViewGeneratorConfig config = new ViewGeneratorConfig();
+  private final SAXParser parser;
 
   public ViewGenerator(final File inputDirectory, final String packageName, final File outputDirectory) {
     input = inputDirectory;
     output = outputDirectory;
     this.packageName = packageName;
+
+    final SAXParserFactory factory = SAXParserFactory.newInstance();
+    factory.setValidating(false);
+    factory.setNamespaceAware(true);
+    try {
+      parser = factory.newSAXParser();
+    } catch (ParserConfigurationException e) {
+      throw new RuntimeException(e);
+    } catch (SAXException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   public static void main(final String[] args) throws Exception {
@@ -143,11 +157,7 @@ public class ViewGenerator {
 
     private void generate() throws Exception {
       System.out.println(uiXml);
-
-      final SAXParserFactory factory = SAXParserFactory.newInstance();
-      factory.setValidating(false);
-      factory.setNamespaceAware(true);
-      factory.newSAXParser().parse(uiXml, handler);
+      parser.parse(uiXml, handler);
 
       generateInterface();
       generateView();
