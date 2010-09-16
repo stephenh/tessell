@@ -19,7 +19,7 @@ public abstract class AbstractDispatchServiceServlet extends RemoteServiceServle
   public Result execute(final String sessionId, final Action<?> action) throws ActionException {
     try {
       final ExecutionContext context = new ExecutionContext(getThreadLocalRequest(), getThreadLocalResponse());
-      if (!eq(sessionId, getSessionValidator().get(context))) {
+      if (getSessionValidator() != null && !eq(sessionId, getSessionValidator().get(context))) {
         throw new IllegalStateException("Invalid session");
       }
       return getActionDispatch().execute(action, context);
