@@ -1,6 +1,6 @@
 package org.gwtmpv.model.commands;
 
-import static java.lang.Boolean.TRUE;
+import static java.lang.Boolean.FALSE;
 import static org.gwtmpv.model.properties.NewProperty.booleanProperty;
 
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ public abstract class UiCommand implements HasRuleTriggers {
   public void execute() {
     if (enabled.isTrue()) {
       for (Property<Boolean> p : onlyIf) {
-        if (p.touch() == Valid.NO || !TRUE.equals(p.get())) {
+        if (p.touch() == Valid.NO || FALSE.equals(p.get())) {
           return;
         }
       }
