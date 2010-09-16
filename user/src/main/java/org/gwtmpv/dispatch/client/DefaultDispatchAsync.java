@@ -27,11 +27,10 @@ public class DefaultDispatchAsync implements DispatchAsync {
   }
 
   public <A extends Action<R>, R extends Result> void execute(final A action, final AsyncCallback<R> callback) {
-    final String sessionId = sessionIdAccessor.getSessionId();
+    final String sessionId = sessionIdAccessor == null ? null : sessionIdAccessor.getSessionId();
     // Append action class name as extra path info
     // http://turbomanage.wordpress.com/2010/03/19/adding-info-to-dispatch-url-for-logs/
-    ((ServiceDefTarget) realService).setServiceEntryPoint(baseUrl
-        + substringAfterLast(action.getClass().getName(), "."));
+    ((ServiceDefTarget) realService).setServiceEntryPoint(baseUrl + substringAfterLast(action.getClass().getName(), "."));
     realService.execute(sessionId, action, new AsyncCallback<Result>() {
       @SuppressWarnings("unchecked")
       public void onSuccess(final Result result) {
@@ -44,13 +43,11 @@ public class DefaultDispatchAsync implements DispatchAsync {
     });
   }
 
-  protected <A extends Action<R>, R extends Result> void onFailure(final A action, final Throwable caught,
-                                                                   final AsyncCallback<R> callback) {
+  protected <A extends Action<R>, R extends Result> void onFailure(final A action, final Throwable caught, final AsyncCallback<R> callback) {
     callback.onFailure(caught);
   }
 
-  protected <A extends Action<R>, R extends Result> void onSuccess(final A action, final R result,
-                                                                   final AsyncCallback<R> callback) {
+  protected <A extends Action<R>, R extends Result> void onSuccess(final A action, final R result, final AsyncCallback<R> callback) {
     callback.onSuccess(result);
   }
 
