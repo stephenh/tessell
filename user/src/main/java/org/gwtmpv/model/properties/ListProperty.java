@@ -19,6 +19,7 @@ public class ListProperty<E> extends AbstractProperty<ArrayList<E>, ListProperty
     super(value);
   }
 
+  /** Adds {@code item}, firing a {@link ValueAddedEvent}. */
   public void add(final E item) {
     get().add(item);
     setTouched(true);
@@ -27,7 +28,9 @@ public class ListProperty<E> extends AbstractProperty<ArrayList<E>, ListProperty
     reassess();
   }
 
+  /** Removes {@code item}, firing a {@link ValueRemovedEvent}. */
   public void remove(final E item) {
+    // should be considered touched?
     if (get().remove(item)) {
       fireEvent(new ValueRemovedEvent<E>(this, item));
       lastValue = null; // force changed
@@ -35,6 +38,7 @@ public class ListProperty<E> extends AbstractProperty<ArrayList<E>, ListProperty
     }
   }
 
+  /** Removes all entries, firing a {@link ValueRemovedEvent} for each. */
   public void clear() {
     final int size = get().size();
     for (int i = size - 1; i >= 0; i--) {
@@ -45,6 +49,7 @@ public class ListProperty<E> extends AbstractProperty<ArrayList<E>, ListProperty
     reassess();
   }
 
+  /** @return a derived property that reflects this list's size. */
   public IntegerProperty size() {
     return addDerived(integerProperty(new DerivedValue<Integer>() {
       public Integer get() {
@@ -54,10 +59,12 @@ public class ListProperty<E> extends AbstractProperty<ArrayList<E>, ListProperty
     }));
   }
 
+  /** Registers {@code handler} to be called when new values are added. */
   public HandlerRegistration addValueAddedHandler(final ValueAddedHandler<E> handler) {
     return handlers.addHandler(ValueAddedEvent.getType(), handler);
   }
 
+  /** Registers {@code handler} to be called when values are removed. */
   public HandlerRegistration addValueRemovedHandler(final ValueRemovedHandler<E> handler) {
     return handlers.addHandler(ValueRemovedEvent.getType(), handler);
   }
