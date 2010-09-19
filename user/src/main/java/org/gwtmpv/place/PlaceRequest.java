@@ -30,8 +30,7 @@ import org.gwtmpv.place.events.PlaceRequestEvent;
 public class PlaceRequest {
 
   private final String name;
-  // not quite ready for immutability
-  protected final LinkedHashMap<String, String> params = new LinkedHashMap<String, String>();
+  private final LinkedHashMap<String, String> params = new LinkedHashMap<String, String>();
 
   public PlaceRequest(final String name) {
     this.name = name;
@@ -73,6 +72,7 @@ public class PlaceRequest {
     return new PlaceRequest(this, name, value);
   }
 
+  /** @return a new {@link PlaceRequestEvent} for this {@link PlaceRequest}. */
   public PlaceRequestEvent asEvent() {
     return new PlaceRequestEvent(this);
   }
