@@ -111,4 +111,12 @@ public class DefaultPlaceManager implements PlaceManager {
       handleRequest(event.getRequest());
     }
   }
+
+  @Override
+  public void fireCurrentOr(PlaceRequest defaultPlace) {
+    if (!fireCurrentPlace()) {
+      eventBus.fireEvent(defaultPlace.asEvent());
+    }
+  }
+
 }

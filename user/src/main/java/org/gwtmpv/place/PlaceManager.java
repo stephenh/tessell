@@ -16,6 +16,11 @@ public interface PlaceManager {
   public boolean fireCurrentPlace();
 
   /**
+   * Fires an event for the current place, or makes a new event for {@code defaultPlace}.
+   */
+  public void fireCurrentOr(PlaceRequest defaultPlace);
+
+  /**
    * Registers the place with the manager.
    * 
    * This allows the place to be updated when the browser's history token is updated.
