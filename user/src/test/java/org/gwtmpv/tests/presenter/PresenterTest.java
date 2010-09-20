@@ -32,21 +32,6 @@ public class PresenterTest {
   }
 
   @Test(expected = IllegalStateException.class)
-  public void revealTooEarlyFails() {
-    final Presenter p = new BasicPresenter<IsWidget>(null, testBus) {
-    };
-    p.revealDisplay();
-  }
-
-  @Test
-  public void revealAfterBindWorks() {
-    final Presenter p = new BasicPresenter<IsWidget>(null, testBus) {
-    };
-    p.bind();
-    p.revealDisplay();
-  }
-
-  @Test(expected = IllegalStateException.class)
   public void noRebind() {
     final Presenter p = new BasicPresenter<IsWidget>(null, testBus) {
     };
