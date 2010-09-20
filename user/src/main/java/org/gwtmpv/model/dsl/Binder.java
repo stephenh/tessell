@@ -10,7 +10,6 @@ import org.gwtmpv.model.properties.Property;
 import org.gwtmpv.model.properties.StringProperty;
 import org.gwtmpv.model.properties.StringableProperty;
 import org.gwtmpv.model.validation.rules.Rule;
-import org.gwtmpv.widgets.IsElement;
 import org.gwtmpv.widgets.IsTextBox;
 import org.gwtmpv.widgets.IsTextList;
 
@@ -25,6 +24,7 @@ import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.HasValue;
 
 /**
@@ -135,10 +135,10 @@ public class Binder {
     }
 
     /** Binds our property to {@code element} (one-way). */
-    public PropertyBinder<P> toTextOf(final IsElement element) {
+    public PropertyBinder<P> toTextOf(final HasText element) {
       PropertyChangedHandler<P> h = new PropertyChangedHandler<P>() {
         public void onPropertyChanged(final PropertyChangedEvent<P> event) {
-          element.setInnerText(toStr(p.get(), ""));
+          element.setText(toStr(p.get(), ""));
         }
       };
       h.onPropertyChanged(new PropertyChangedEvent<P>(p)); // set initial value
