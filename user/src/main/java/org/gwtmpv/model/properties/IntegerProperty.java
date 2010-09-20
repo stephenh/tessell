@@ -23,4 +23,9 @@ public class IntegerProperty extends AbstractStringableProperty<Integer, Integer
     return String.valueOf(get().intValue());
   }
 
+  @Override
+  public String toUserString() {
+    return getAsString();
+  }
+
 }

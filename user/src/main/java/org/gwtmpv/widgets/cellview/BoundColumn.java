@@ -1,6 +1,7 @@
 package org.gwtmpv.widgets.cellview;
 
 import org.bindgen.BindingRoot;
+import org.gwtmpv.model.properties.StringProperty;
 import org.gwtmpv.util.UserStringable;
 
 import com.google.gwt.cell.client.AbstractCell;
@@ -35,6 +36,17 @@ public class BoundColumn<T, C> extends Column<T, C> {
       public void render(final String value, final Object key, final SafeHtmlBuilder sb) {
         if (value != null) {
           sb.appendEscaped(value);
+        }
+      }
+    });
+  }
+
+  public static <R> BoundColumn<R, StringProperty> ofStringProperty(final BindingRoot<R, StringProperty> binding) {
+    return new BoundColumn<R, StringProperty>(binding, new AbstractCell<StringProperty>() {
+      @Override
+      public void render(final StringProperty value, final Object key, final SafeHtmlBuilder sb) {
+        if (value != null) {
+          sb.appendEscaped(value.get());
         }
       }
     });

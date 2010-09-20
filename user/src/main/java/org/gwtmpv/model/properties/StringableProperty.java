@@ -1,7 +1,9 @@
 package org.gwtmpv.model.properties;
 
+import org.gwtmpv.util.UserStringable;
+
 /** Interface for properties that are not necessarily strings but can got into, say, ListBoxes, as strings. */
-public interface StringableProperty extends HasRuleTriggers {
+public interface StringableProperty extends HasRuleTriggers, UserStringable {
 
   /** @return the property as a string. */
   public String getAsString();
