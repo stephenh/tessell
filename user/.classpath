@@ -7,7 +7,7 @@
 			<attribute name="optional" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="con" path="org.apache.ivyde.eclipse.cpcontainer.IVYDE_CONTAINER/?ivyXmlPath=ivy.xml&amp;confs=*&amp;ivySettingsPath=project%3A%2F%2F%2Fivysettings.xml&amp;loadSettingsOnDemand=false&amp;propertyFiles=&amp;doRetrieve=true&amp;retrievePattern=bin%2Flib%2F%5Bconf%5D%2F%5Btype%5Ds%2F%5Bartifact%5D.%5Bext%5D&amp;retrieveSync=false&amp;retrieveConfs=*&amp;retrieveTypes=*&amp;acceptedTypes=jar%2Cbundle%2Cejb%2Cmaven-plugin&amp;sourceTypes=source&amp;javadocTypes=javadoc&amp;sourceSuffixes=-source%2C-sources%2C-src&amp;javadocSuffixes=-javadoc%2C-javadocs%2C-doc%2C-docs&amp;alphaOrder=true&amp;resolveInWorkspace=true"/>
+	<classpathentry exported="true" kind="con" path="org.apache.ivyde.eclipse.cpcontainer.IVYDE_CONTAINER/?ivyXmlPath=ivy.xml&amp;confs=*&amp;ivySettingsPath=%24%7Bworkspace_loc%3Agwt-mpv-user%2Fivysettings.xml%7D&amp;loadSettingsOnDemand=false&amp;propertyFiles=&amp;doRetrieve=true&amp;retrievePattern=bin%2Flib%2F%5Bconf%5D%2F%5Btype%5Ds%2F%5Bartifact%5D.%5Bext%5D&amp;retrieveSync=false&amp;retrieveConfs=*&amp;retrieveTypes=*&amp;acceptedTypes=jar%2Cbundle%2Cejb%2Cmaven-plugin&amp;sourceTypes=source&amp;javadocTypes=javadoc&amp;sourceSuffixes=-source%2C-sources%2C-src&amp;javadocSuffixes=-javadoc%2C-javadocs%2C-doc%2C-docs&amp;alphaOrder=false&amp;resolveInWorkspace=true&amp;resolveBeforeLaunch=false"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="bin/eclipse"/>
 </classpath>
