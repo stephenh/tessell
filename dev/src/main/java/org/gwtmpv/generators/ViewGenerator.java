@@ -46,8 +46,8 @@ public class ViewGenerator {
   private final SAXParser parser;
 
   public ViewGenerator(final File inputDirectory, final String packageName, final File outputDirectory) {
-    input = inputDirectory;
-    output = outputDirectory;
+    input = inputDirectory.getAbsoluteFile();
+    output = outputDirectory.getAbsoluteFile();
     this.packageName = packageName;
 
     final SAXParserFactory factory = SAXParserFactory.newInstance();
@@ -80,7 +80,9 @@ public class ViewGenerator {
     }
 
     for (final UiXmlFile uiXml : uiXmlFiles) {
-      uiXml.generate();
+      if (uiXml.hasChanged()) {
+        uiXml.generate();
+      }
     }
 
     final GClass appViews = new GClass(packageName + ".AppViews").setInterface();
@@ -146,13 +148,18 @@ public class ViewGenerator {
 
     private UiXmlFile(final File uiXml) {
       this.uiXml = uiXml;
-      String className = uiXml.getAbsolutePath().replace(input.getAbsolutePath() + File.separator, "").replace(".ui.xml", "").replace("/", ".");
+      String className = uiXml.getAbsolutePath().replace(input.getPath() + File.separator, "").replace(".ui.xml", "").replace("/", ".");
       fileName = StringUtils.substringAfterLast(className, ".");
       simpleName = fileName.endsWith("View") ? fileName : fileName + "View";
       final String packageName = StringUtils.substringBeforeLast(className, ".");
       gwtName = packageName + ".Gwt" + simpleName;
       interfaceName = packageName + ".Is" + simpleName;
       stubName = packageName + ".Stub" + simpleName;
+    }
+
+    private boolean hasChanged() {
+      File interfaceFile = new File(output.getPath() + File.separator + interfaceName.replace(".", File.separator) + ".java");
+      return uiXml.lastModified() > interfaceFile.lastModified();
     }
 
     private void generate() throws Exception {
