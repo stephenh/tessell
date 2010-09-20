@@ -3,6 +3,7 @@ package org.gwtmpv.dispatch.client.util;
 import java.util.ArrayList;
 
 import org.gwtmpv.bus.EventBus;
+import org.gwtmpv.dispatch.client.DefaultDispatchAsync;
 import org.gwtmpv.dispatch.client.DispatchAsync;
 import org.gwtmpv.dispatch.client.SuccessCallback;
 import org.gwtmpv.dispatch.client.events.DispatchActionEvent;
@@ -20,6 +21,10 @@ public class OutstandingDispatchAsync implements DispatchAsync {
   protected final EventBus eventBus;
   protected final DispatchAsync realDispatch;
   protected final ArrayList<Action<?>> outstanding = new ArrayList<Action<?>>();
+
+  public OutstandingDispatchAsync(EventBus eventBus) {
+    this(eventBus, new DefaultDispatchAsync(null));
+  }
 
   public OutstandingDispatchAsync(final EventBus eventBus, final DispatchAsync realDispatch) {
     this.eventBus = eventBus;
