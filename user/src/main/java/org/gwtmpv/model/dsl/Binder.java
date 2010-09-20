@@ -84,7 +84,9 @@ public class Binder {
   }
 
   private void registerHandler(HandlerRegistration r) {
-    handlersOwner.registerHandler(r);
+    if (handlersOwner != null) {
+      handlersOwner.registerHandler(r);
+    }
   }
 
   /** Binds various things to a command. */

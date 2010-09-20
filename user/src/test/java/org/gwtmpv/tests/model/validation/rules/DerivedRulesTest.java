@@ -5,12 +5,12 @@ import static org.gwtmpv.model.properties.NewProperty.stringProperty;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+import org.gwtmpv.model.dsl.Binder;
 import org.gwtmpv.model.events.PropertyChangedEvent;
 import org.gwtmpv.model.events.PropertyChangedEvent.PropertyChangedHandler;
 import org.gwtmpv.model.properties.IntegerProperty;
 import org.gwtmpv.model.properties.Property;
 import org.gwtmpv.model.properties.StringProperty;
-import org.gwtmpv.model.util.Listen;
 import org.gwtmpv.model.validation.rules.Range;
 import org.gwtmpv.model.values.DerivedValue;
 import org.gwtmpv.widgets.StubHasValue;
@@ -49,10 +49,11 @@ public class DerivedRulesTest extends AbstractRuleTest {
   }
 
   @Test
-  public void listenDoesFireChangedIfPropertyAlreadySet() {
+  public void binderDoesFireChangedIfPropertyAlreadySet() {
     f.name.set("foo");
     final StubHasValue<Integer> value = new StubHasValue<Integer>();
-    Listen.bothWays(value, f.name.remaining());
+    Binder b = new Binder(null);
+    b.bind(f.name.remaining()).to(value);
     assertThat(value.getValue(), is(7));
   }
 
