@@ -3,6 +3,8 @@ package org.gwtmpv.model.properties;
 import java.util.ArrayList;
 
 import org.bindgen.Binding;
+import org.gwtmpv.model.Dto;
+import org.gwtmpv.model.Model;
 import org.gwtmpv.model.values.BoundValue;
 import org.gwtmpv.model.values.DerivedValue;
 import org.gwtmpv.model.values.SetValue;
@@ -62,7 +64,14 @@ public class NewProperty {
     return new ListProperty<E>(new BoundValue<ArrayList<E>>(binding));
   }
 
+  public static <E extends Model<F>, F extends Dto<E>> DtoListProperty<E, F> dtoListProperty(final Binding<ArrayList<F>> binding) {
+    final SetValue<ArrayList<E>> modelListValue = new SetValue<ArrayList<E>>("modelList");
+    modelListValue.set(new ArrayList<E>());
+    return new DtoListProperty<E, F>(modelListValue, new BoundValue<ArrayList<F>>(binding));
+  }
+
   public static <E> ListProperty<E> listProperty(final String name) {
     return new ListProperty<E>(new SetValue<ArrayList<E>>(name));
   }
+
 }

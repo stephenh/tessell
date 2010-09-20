@@ -13,4 +13,9 @@ public class DummyModel implements Model<DummyModel> {
   public void merge(final DummyModel dto) {
   }
 
+  @Override
+  public DummyModel getDto() {
+    return null;
+  }
+
 }

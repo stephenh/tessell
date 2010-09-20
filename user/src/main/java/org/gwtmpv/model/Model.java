@@ -6,4 +6,7 @@ public interface Model<D> {
   /** Merges the new values from {@code dto} into the model's properties. */
   void merge(D dto);
 
+  /** @return the dto for this model */
+  D getDto();
+
 }
