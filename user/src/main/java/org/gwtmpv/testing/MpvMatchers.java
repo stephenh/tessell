@@ -1,5 +1,11 @@
 package org.gwtmpv.testing;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import org.gwtmpv.bus.StubEventBus;
+import org.gwtmpv.place.events.PlaceRequestEvent;
 import org.gwtmpv.widgets.HasCss;
 import org.gwtmpv.widgets.HasStubCss;
 import org.gwtmpv.widgets.IsTextList;
@@ -129,6 +135,37 @@ public class MpvMatchers {
         mismatchDescription.appendValue(item);
         mismatchDescription.appendText(" has errors ");
         mismatchDescription.appendValueList("", ", ", "", ((StubTextList) item).getList());
+      }
+    };
+  }
+
+  /** A matcher to assert place requests on the event bus. */
+  public static Matcher<StubEventBus> hasPlaceRequests(final String... places) {
+    return new TypeSafeMatcher<StubEventBus>() {
+      @Override
+      protected boolean matchesSafely(StubEventBus bus) {
+        return Arrays.asList(places).equals(getRequests(bus));
+      }
+
+      @Override
+      public void describeTo(Description description) {
+        description.appendText("has places ");
+        description.appendValueList("", ", ", "", Arrays.asList(places));
+      }
+
+      @Override
+      protected void describeMismatchSafely(StubEventBus bus, Description mismatchDescription) {
+        mismatchDescription.appendValue(bus);
+        mismatchDescription.appendText(" places are ");
+        mismatchDescription.appendValueList("", ", ", "", getRequests(bus));
+      }
+
+      private List<String> getRequests(StubEventBus bus) {
+        List<String> requests = new ArrayList<String>();
+        for (PlaceRequestEvent e : bus.getEvents(PlaceRequestEvent.class)) {
+          requests.add(e.getRequest().toString());
+        }
+        return requests;
       }
     };
   }
