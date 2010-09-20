@@ -9,9 +9,8 @@ gwt-mpv
 Disclaimers
 -----------
 
-* View generation is awesome
-* The Properties/Rules are useful but still need polish
-* The Repositories are laughable--needs a lot of work, I have no good answers yet
+* The view generation is awesome
+* The model (properties, rules, etc.) are coming along
 * Presenter <-> Presenter communication/fades/etc. needs a lot of work, I have no good answers yet
 
 Todo
@@ -22,6 +21,7 @@ Todo
 Credits
 -------
 
-Thanks to [Bizo](http://www.bizo.com) for their initial and continued support of `gwt-mpv`.
+* [Bizo](http://www.bizo.com) for their initial and continued support of `gwt-mpv`
+* [gwt-pectin](http://code.google.com/p/gwt-pectin/) inspired gwt-mpv's binding DSL, which was previously very ugly--pectin is much more mature than gwt-mpv, you should check it out
 
 
