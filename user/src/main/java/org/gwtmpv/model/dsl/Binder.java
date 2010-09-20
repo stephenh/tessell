@@ -141,7 +141,7 @@ public class Binder {
           element.setInnerText(toStr(p.get(), ""));
         }
       };
-      h.onPropertyChanged(new PropertyChangedEvent<P>(p));
+      h.onPropertyChanged(new PropertyChangedEvent<P>(p)); // set initial value
       registerHandler(p.addPropertyChangedHandler(h));
       return this;
     }
@@ -154,7 +154,7 @@ public class Binder {
           source.setValue(event.getProperty().get());
         }
       };
-      h.onPropertyChanged(new PropertyChangedEvent<P>(p));
+      h.onPropertyChanged(new PropertyChangedEvent<P>(p)); // set initial value
       registerHandler(p.addPropertyChangedHandler(h));
       return this;
     }
