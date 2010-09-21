@@ -1,6 +1,7 @@
 package org.gwtmpv.generators;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -43,23 +44,14 @@ public class ViewGenerator {
   private final String packageName;
   private final List<UiXmlFile> uiXmlFiles = new ArrayList<UiXmlFile>();
   private final ViewGeneratorConfig config = new ViewGeneratorConfig();
+  private final ViewGeneratorCache cache = new ViewGeneratorCache();
   private final SAXParser parser;
 
   public ViewGenerator(final File inputDirectory, final String packageName, final File outputDirectory) {
     input = inputDirectory.getAbsoluteFile();
     output = outputDirectory.getAbsoluteFile();
     this.packageName = packageName;
-
-    final SAXParserFactory factory = SAXParserFactory.newInstance();
-    factory.setValidating(false);
-    factory.setNamespaceAware(true);
-    try {
-      parser = factory.newSAXParser();
-    } catch (ParserConfigurationException e) {
-      throw new RuntimeException(e);
-    } catch (SAXException e) {
-      throw new RuntimeException(e);
-    }
+    parser = makeNewParser();
   }
 
   public static void main(final String[] args) throws Exception {
@@ -72,6 +64,9 @@ public class ViewGenerator {
   }
 
   private void generate() throws Exception {
+    long start = System.currentTimeMillis();
+
+    cache.loadIfExists();
     for (final File uiXml : findUiXmlFiles()) {
       if (uiXml.getName().contains("-nogen.")) {
         continue;
@@ -80,17 +75,31 @@ public class ViewGenerator {
     }
 
     for (final UiXmlFile uiXml : uiXmlFiles) {
-      if (uiXml.hasChanged()) {
+      if (uiXml.hasChanged() || !cache.has(uiXml)) {
         uiXml.generate();
+        cache.update(uiXml);
       }
     }
 
+    generateAppViews();
+    generateGwtViews();
+    generateStubViews();
+
+    cache.save();
+
+    long end = System.currentTimeMillis();
+    System.out.println("Done " + (end - start) + "ms");
+  }
+
+  private void generateAppViews() {
     final GClass appViews = new GClass(packageName + ".AppViews").setInterface();
     for (final UiXmlFile uiXml : uiXmlFiles) {
       appViews.getMethod("get" + uiXml.simpleName).returnType(uiXml.interfaceName);
     }
     save(appViews);
+  }
 
+  private void generateGwtViews() {
     final GClass gwtViews = new GClass(packageName + ".GwtViews").implementsInterface("AppViews");
     final GMethod cstr = gwtViews.getConstructor();
     for (final UiFieldDeclaration with : allWiths()) {
@@ -100,15 +109,17 @@ public class ViewGenerator {
     }
     for (final UiXmlFile uiXml : uiXmlFiles) {
       final GMethod m = gwtViews.getMethod("get" + uiXml.simpleName).returnType(uiXml.interfaceName);
-      final List<String> withs = new ArrayList<String>();
-      for (final UiFieldDeclaration with : uiXml.handler.withFields) {
-        withs.add("this." + with.name);
+      final List<String> withFieldNames = new ArrayList<String>();
+      for (final UiFieldDeclaration with : uiXml.getWithTypes()) {
+        withFieldNames.add("this." + with.name);
       }
       m.addAnnotation("@Override");
-      m.body.line("return new {}({});", uiXml.gwtName, Join.commaSpace(withs));
+      m.body.line("return new {}({});", uiXml.gwtName, Join.commaSpace(withFieldNames));
     }
     save(gwtViews);
+  }
 
+  private void generateStubViews() {
     final GClass stubViews = new GClass(packageName + ".StubViews").implementsInterface("AppViews");
     for (final UiXmlFile uiXml : uiXmlFiles) {
       final GMethod m = stubViews.getMethod("get" + uiXml.simpleName).returnType(uiXml.stubName);
@@ -121,15 +132,19 @@ public class ViewGenerator {
   private Collection<UiFieldDeclaration> allWiths() {
     final Map<String, UiFieldDeclaration> map = new HashMap<String, UiFieldDeclaration>();
     for (final UiXmlFile uiXml : uiXmlFiles) {
-      for (final UiFieldDeclaration field : uiXml.handler.withFields) {
+      for (final UiFieldDeclaration field : uiXml.getWithTypes()) {
         map.put(field.name, field);
       }
     }
     return new TreeSet<UiFieldDeclaration>(map.values());
   }
 
-  private void save(final GClass gclass) throws Exception {
-    FileUtils.writeStringToFile(new File(output, gclass.getFileName()), gclass.toCode());
+  private void save(final GClass gclass) {
+    try {
+      FileUtils.writeStringToFile(new File(output, gclass.getFileName()), gclass.toCode());
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   @SuppressWarnings("unchecked")
@@ -137,14 +152,29 @@ public class ViewGenerator {
     return FileUtils.listFiles(input, new String[] { "ui.xml" }, true);
   }
 
-  private class UiXmlFile {
-    private final UiXmlHandler handler = new UiXmlHandler();
+  private SAXParser makeNewParser() {
+    final SAXParserFactory factory = SAXParserFactory.newInstance();
+    factory.setValidating(false);
+    factory.setNamespaceAware(true);
+    try {
+      return factory.newSAXParser();
+    } catch (ParserConfigurationException e) {
+      throw new RuntimeException(e);
+    } catch (SAXException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  // package private so ViewGeneratorCache can use it
+  class UiXmlFile {
     private final File uiXml;
     private final String fileName;
     private final String simpleName;
     private final String gwtName;
     private final String interfaceName;
     private final String stubName;
+    // the handler is only created if we have to parser the ui.xml file
+    private UiXmlHandler handler;
 
     private UiXmlFile(final File uiXml) {
       this.uiXml = uiXml;
@@ -159,11 +189,15 @@ public class ViewGenerator {
 
     private boolean hasChanged() {
       File interfaceFile = new File(output.getPath() + File.separator + interfaceName.replace(".", File.separator) + ".java");
+      if (!interfaceFile.exists()) {
+        return true;
+      }
       return uiXml.lastModified() > interfaceFile.lastModified();
     }
 
     private void generate() throws Exception {
       System.out.println(uiXml);
+      handler = new UiXmlHandler();
       parser.parse(uiXml, handler);
 
       generateInterface();
@@ -258,6 +292,18 @@ public class ViewGenerator {
 
       save(s);
     }
+
+    String getPath() {
+      return uiXml.getPath();
+    }
+
+    List<UiFieldDeclaration> getWithTypes() {
+      if (handler == null) {
+        return cache.getWithTypes(this);
+      } else {
+        return handler.withFields;
+      }
+    }
   }
 
   private static class UiXmlHandler extends DefaultHandler {
@@ -291,12 +337,13 @@ public class ViewGenerator {
     }
   }
 
-  private static class UiFieldDeclaration implements Comparable<UiFieldDeclaration> {
-    private final String type;
-    private final String name;
-    private final boolean isElement;
+  /** A DTO for {@code ui:with} or {@code ui:field} declarations. */
+  static class UiFieldDeclaration implements Comparable<UiFieldDeclaration> {
+    final String type;
+    final String name;
+    final boolean isElement;
 
-    private UiFieldDeclaration(final String type, final String name) {
+    UiFieldDeclaration(final String type, final String name) {
       this.type = type;
       this.name = name;
       isElement = type.contains("dom");
