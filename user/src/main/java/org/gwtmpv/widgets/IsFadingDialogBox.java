@@ -6,10 +6,6 @@ public interface IsFadingDialogBox extends IsDialogBox {
 
   void fadeOutElement();
 
-  boolean isAutoFadeInGlass();
-
-  void setAutoFadeInGlass(boolean autoFadeInGlass);
-
   boolean isAutoFadeInElement();
 
   void setAutoFadeInElement(boolean autoFadeInElement);

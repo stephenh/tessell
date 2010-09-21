@@ -5,7 +5,6 @@ import com.google.gwt.animation.client.Animation;
 /** Fades in a dialog box instead of using clip. */
 public class FadingDialogBox extends DialogBox {
 
-  private boolean autoFadeInGlass;
   private boolean autoFadeInElement;
   private Animation a;
 
@@ -68,21 +67,21 @@ public class FadingDialogBox extends DialogBox {
       if (!showing) {
         progress = 1.0 - progress;
       }
-      if (isAutoFadeInGlass() || !showing) {
-        getGlassElement().getStyle().setOpacity(progress);
-      }
+      getGlassElement().getStyle().setOpacity(progress);
       if (isAutoFadeInElement() || !showing) {
         getElement().getStyle().setOpacity(progress);
       }
     }
-  }
 
-  public boolean isAutoFadeInGlass() {
-    return autoFadeInGlass;
-  }
+    @Override
+    protected void onComplete() {
+      if (showing) {
+        getElement().getStyle().setOpacity(1);
+        getGlassElement().getStyle().setOpacity(1);
+      }
+      super.onComplete();
+    }
 
-  public void setAutoFadeInGlass(final boolean autoFadeInGlass) {
-    this.autoFadeInGlass = autoFadeInGlass;
   }
 
   public boolean isAutoFadeInElement() {

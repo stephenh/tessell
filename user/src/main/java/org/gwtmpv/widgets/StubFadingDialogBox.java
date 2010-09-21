@@ -19,16 +19,6 @@ public class StubFadingDialogBox extends StubDialogBox implements IsFadingDialog
   }
 
   @Override
-  public boolean isAutoFadeInGlass() {
-    return autoFadeInGlass;
-  }
-
-  @Override
-  public void setAutoFadeInGlass(final boolean autoFadeInGlass) {
-    this.autoFadeInGlass = autoFadeInGlass;
-  }
-
-  @Override
   public boolean isAutoFadeInElement() {
     return autoFadeInElement;
   }
