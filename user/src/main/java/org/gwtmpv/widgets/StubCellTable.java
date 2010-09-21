@@ -47,7 +47,7 @@ public class StubCellTable<T> extends StubWidget implements IsCellTable<T> {
     for (int i = 0; i < columns.size(); i++) {
       final SafeHtmlBuilder sb = new SafeHtmlBuilder();
       columns.get(i).render(data.get(row), null, sb);
-      s.add(sb.toString());
+      s.add(sb.toSafeHtml().asString());
     }
     return s;
   }
