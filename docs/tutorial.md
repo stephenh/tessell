@@ -225,9 +225,14 @@ The last test tests the submit button:
       assertThat(async.getAction(SaveClientAction.class).getClient().name, is("bar"));
 
       // save on the server is successful
-      async.getCallback(SaveClientAction.class).onSuccess(new SaveClientResult(new ArrayList<String>()));
+      doSaveClientResult(true);
 
       assertThat(bus, hasPlaceRequests("clients"));
+    }
+
+    private void doSaveClientResult(boolean success, String... messages) {
+      async.getCallback(SaveClientAction.class).onSuccess(//
+        new SaveClientResult(success, new ArrayList<String>(Arrays.asList(messages))));
     }
 {: class=brush:java}
 
