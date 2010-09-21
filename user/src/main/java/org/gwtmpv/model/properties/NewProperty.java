@@ -38,6 +38,12 @@ public class NewProperty {
     return new IntegerProperty(new SetValue<Integer>(name));
   }
 
+  public static IntegerProperty integerProperty(final String name, Integer i) {
+    SetValue<Integer> value = new SetValue<Integer>(name);
+    value.set(i);
+    return new IntegerProperty(value);
+  }
+
   public static IntegerProperty integerProperty(final DerivedValue<Integer> derived) {
     return new IntegerProperty(derived);
   }

@@ -13,6 +13,7 @@ import org.gwtmpv.model.validation.events.RuleUntriggeredEvent;
 import org.gwtmpv.model.validation.events.RuleUntriggeredEvent.RuleUntriggeredHandler;
 import org.gwtmpv.model.validation.rules.Required;
 import org.gwtmpv.model.validation.rules.Rule;
+import org.gwtmpv.model.values.DerivedValue;
 import org.gwtmpv.model.values.Value;
 import org.gwtmpv.util.Inflector;
 
@@ -88,6 +89,16 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
   public <P1 extends Property<?>> P1 addDerived(final P1 other) {
     derived.add(other);
     return other;
+  }
+
+  /** @return a new derived property by applying {@code formatter} to our value */
+  public <T1> Property<T1> formatted(final PropertyFormatter<P, T1> formatter) {
+    return addDerived(new BasicProperty<T1>(new DerivedValue<T1>("formatted " + getName()) {
+      @Override
+      public T1 get() {
+        return formatter.format(AbstractProperty.this.get());
+      }
+    }));
   }
 
   @Override

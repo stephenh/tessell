@@ -9,6 +9,16 @@ import org.gwtmpv.model.properties.Property;
  */
 public abstract class DerivedValue<P> implements Value<P> {
 
+  private final String name;
+
+  public DerivedValue() {
+    this.name = "derived";
+  }
+
+  public DerivedValue(String name) {
+    this.name = name;
+  }
+
   @Override
   public abstract P get();
 
@@ -19,7 +29,7 @@ public abstract class DerivedValue<P> implements Value<P> {
 
   @Override
   public String getName() {
-    return "derived";
+    return name;
   }
 
 }
