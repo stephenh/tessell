@@ -2,6 +2,7 @@ package org.gwtmpv.widgets.cellview;
 
 import org.bindgen.BindingRoot;
 import org.gwtmpv.model.properties.StringProperty;
+import org.gwtmpv.util.ObjectUtils;
 import org.gwtmpv.util.UserStringable;
 
 import com.google.gwt.cell.client.AbstractCell;
@@ -58,6 +59,19 @@ public class BoundColumn<T, C> extends Column<T, C> {
       public void render(final P value, final Object key, final SafeHtmlBuilder sb) {
         if (value != null) {
           sb.appendEscaped(value.toUserString());
+        }
+      }
+    });
+  }
+
+  public static <R, P extends Object> BoundColumn<R, P> ofLink(final String name, final String template, BindingRoot<R, P> binding) {
+    return new BoundColumn<R, P>(binding, new AbstractCell<P>() {
+      @Override
+      public void render(final P value, final Object key, final SafeHtmlBuilder sb) {
+        if (value != null) {
+          sb.appendHtmlConstant("<a href=\"" + template.replace("{}", ObjectUtils.toStr(value, "")) + "\">");
+          sb.appendEscaped(name);
+          sb.appendHtmlConstant("</a>");
         }
       }
     });
