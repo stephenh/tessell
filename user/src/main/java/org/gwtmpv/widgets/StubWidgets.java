@@ -1,6 +1,7 @@
 package org.gwtmpv.widgets;
 
 import com.google.gwt.cell.client.Cell;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.cellview.client.CellTable.Resources;
 
 public class StubWidgets implements Widgets {
@@ -58,6 +59,11 @@ public class StubWidgets implements Widgets {
   @Override
   public IsFadingDialogBox newFadingDialogBox() {
     return new StubFadingDialogBox();
+  }
+
+  @Override
+  public IsTabLayoutPanel newTabLayoutPanel(double barHeight, Unit barUnit) {
+    return new StubTabLayoutPanel();
   }
 
 }

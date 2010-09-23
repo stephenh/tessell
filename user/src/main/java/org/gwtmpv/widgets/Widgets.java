@@ -1,6 +1,7 @@
 package org.gwtmpv.widgets;
 
 import com.google.gwt.cell.client.Cell;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.cellview.client.CellTable.Resources;
 
 /** A Widget factory interface. */
@@ -19,6 +20,8 @@ public interface Widgets {
   IsFlowPanel newFlowPanel();
 
   IsScrollPanel newScrollPanel();
+
+  IsTabLayoutPanel newTabLayoutPanel(double barHeight, Unit barUnit);
 
   IsFadingDialogBox newFadingDialogBox();
 
