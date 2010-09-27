@@ -39,7 +39,7 @@ public abstract class DispatchUiCommand<A extends Action<R>, R extends Result> e
 
   @Override
   public void onFailure(Throwable caught) {
-    // trust that caught is handled by someone listening for DispatchFailureEvents
+    error(caught.getMessage());
     active.set(false);
   }
 
