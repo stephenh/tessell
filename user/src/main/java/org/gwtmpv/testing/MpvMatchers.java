@@ -150,14 +150,14 @@ public class MpvMatchers {
       @Override
       public void describeTo(Description description) {
         description.appendText("has places ");
-        description.appendValueList("", ", ", "", Arrays.asList(places));
+        description.appendValueList("[", ", ", "]", Arrays.asList(places));
       }
 
       @Override
       protected void describeMismatchSafely(StubEventBus bus, Description mismatchDescription) {
         mismatchDescription.appendValue(bus);
         mismatchDescription.appendText(" places are ");
-        mismatchDescription.appendValueList("", ", ", "", getRequests(bus));
+        mismatchDescription.appendValueList("[", ", ", "]", getRequests(bus));
       }
 
       private List<String> getRequests(StubEventBus bus) {
