@@ -23,3 +23,12 @@ Limitations
 
 * ResourcesGenerator assumes a global namespace of images/css files, even if you use subdirectories. It also assumes all images/css files are below the packageName you pass to it.
 
+Notes
+-----
+
+* Mapping cases:
+  * `entity * (all fields) -> dto`
+  * `entity some fields -> dto`
+  * `entity + other stuff -> dto + other dto`
+  * `entity field errors -> dto -> model property errors`
+
