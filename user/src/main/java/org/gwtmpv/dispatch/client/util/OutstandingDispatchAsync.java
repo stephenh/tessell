@@ -15,17 +15,26 @@ import org.gwtmpv.dispatch.shared.Result;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-/** Fires events outstanding dispatch calls so tests can know when to continue. */
+/**
+ * Fires events outstanding dispatch calls so tests can know when to continue.
+ *
+ * {@link DispatchActionEvent} is fired at the start of every command.
+ * {@link DispatchResultEvent} is fired on success.
+ * {@link DispatchFailureEvent} is fired on every failure.
+ * {@link DispatchUnhandledFailureEvent} is fired on failures when a SuccessCallback was used.
+ */
 public class OutstandingDispatchAsync implements DispatchAsync {
 
   protected final EventBus eventBus;
   protected final DispatchAsync realDispatch;
   protected final ArrayList<Action<?>> outstanding = new ArrayList<Action<?>>();
 
+  /** Fires events on {@code eventBus} with a {@link DefaultDispatchAsync}. */
   public OutstandingDispatchAsync(EventBus eventBus) {
     this(eventBus, new DefaultDispatchAsync(null));
   }
 
+  /** Fires events on {@code eventBus} before making calls against the {@link realDispatch}. */
   public OutstandingDispatchAsync(final EventBus eventBus, final DispatchAsync realDispatch) {
     this.eventBus = eventBus;
     this.realDispatch = realDispatch;
