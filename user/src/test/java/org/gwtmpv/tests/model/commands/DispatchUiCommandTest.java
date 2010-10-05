@@ -20,25 +20,25 @@ public class DispatchUiCommandTest extends AbstractRuleTest {
   @Test
   public void activeIsTrueThenFalseWhenRpcIsSuccessful() {
     DummyUiCommand command = new DummyUiCommand(async);
-    assertThat(command.getActive().get(), is(FALSE));
+    assertThat(command.active().get(), is(FALSE));
 
     command.execute();
-    assertThat(command.getActive().get(), is(TRUE));
+    assertThat(command.active().get(), is(TRUE));
 
     async.getCalls().get(0).callback.onSuccess(null);
-    assertThat(command.getActive().get(), is(FALSE));
+    assertThat(command.active().get(), is(FALSE));
   }
 
   @Test
   public void activeIsTrueThenFalseWhenRpcFails() {
     DummyUiCommand command = new DummyUiCommand(async);
-    assertThat(command.getActive().get(), is(FALSE));
+    assertThat(command.active().get(), is(FALSE));
 
     command.execute();
-    assertThat(command.getActive().get(), is(TRUE));
+    assertThat(command.active().get(), is(TRUE));
 
     async.getCalls().get(0).callback.onFailure(null);
-    assertThat(command.getActive().get(), is(FALSE));
+    assertThat(command.active().get(), is(FALSE));
   }
 
   @Test
