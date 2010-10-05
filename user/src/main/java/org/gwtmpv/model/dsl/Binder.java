@@ -10,6 +10,7 @@ import org.gwtmpv.model.properties.Property;
 import org.gwtmpv.model.properties.StringProperty;
 import org.gwtmpv.model.properties.StringableProperty;
 import org.gwtmpv.model.validation.rules.Rule;
+import org.gwtmpv.widgets.HasCss;
 import org.gwtmpv.widgets.IsTextBox;
 import org.gwtmpv.widgets.IsTextList;
 
@@ -57,6 +58,52 @@ public class Binder {
   /** @return a fluent {@link UiCommandBinder} against {@code command}. */
   public UiCommandBinder bind(UiCommand command) {
     return new UiCommandBinder(command);
+  }
+
+  public BooleanBinder whileTrue(Property<Boolean> property) {
+    return new BooleanBinder(property);
+  }
+
+  /** Does various things as the boolean property changes from true/false. */
+  public class BooleanBinder {
+    private final Property<Boolean> property;
+
+    public BooleanBinder(Property<Boolean> property) {
+      this.property = property;
+    }
+
+    /** @return a binder to set {@code style} on {@link HasCss} */
+    public BooleanSetBinder set(String style) {
+      return new BooleanSetBinder(style);
+    }
+
+    /** Sets the style based on the property value. */
+    public class BooleanSetBinder {
+      private final String style;
+
+      public BooleanSetBinder(final String style) {
+        this.style = style;
+      }
+
+      /** Sets/removes our {@code style} when our property is {@code true}. */
+      public void on(final HasCss css) {
+        update(css); // set initial value
+        registerHandler(property.addPropertyChangedHandler(new PropertyChangedHandler<Boolean>() {
+          @Override
+          public void onPropertyChanged(PropertyChangedEvent<Boolean> event) {
+            update(css);
+          }
+        }));
+      }
+
+      private void update(HasCss css) {
+        if (Boolean.TRUE.equals(property.get())) {
+          css.addStyleName(style);
+        } else {
+          css.removeStyleName(style);
+        }
+      }
+    }
   }
 
   /** @return a fluent {@link FormattedPropertyBinder} against {@code property}. */
