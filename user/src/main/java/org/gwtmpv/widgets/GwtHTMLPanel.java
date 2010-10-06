@@ -130,4 +130,9 @@ public class GwtHTMLPanel implements IsHTMLPanel {
     return new GwtElement(panel.getElement());
   }
 
+  @Override
+  public void add(IsWidget widget, IsElement elem) {
+    panel.add(widget.asWidget(), elem.asElement());
+  }
+
 }
