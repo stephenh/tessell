@@ -9,6 +9,8 @@ public interface Widgets {
 
   IsElement newElement(String tag);
 
+  IsAnchor newAnchor();
+
   IsHyperlink newHyperline();
 
   IsInlineHyperlink newInlineHyperlink();

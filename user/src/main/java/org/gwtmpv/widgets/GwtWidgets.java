@@ -67,4 +67,9 @@ public class GwtWidgets implements Widgets {
     return new GwtTabLayoutPanel(barHeight, barUnit);
   }
 
+  @Override
+  public IsAnchor newAnchor() {
+    return new GwtAnchor();
+  }
+
 }

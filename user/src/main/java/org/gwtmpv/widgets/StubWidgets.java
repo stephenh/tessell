@@ -66,4 +66,8 @@ public class StubWidgets implements Widgets {
     return new StubTabLayoutPanel();
   }
 
+  @Override
+  public IsAnchor newAnchor() {
+    return new StubAnchor();
+  }
 }
