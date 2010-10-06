@@ -15,7 +15,9 @@ public class StubElement implements IsElement, HasStubCss {
   private String debugId;
   private String innerText;
   private String innerHTML;
+  private StubWidget widget;
   private final ArrayList<String> styleNames = new ArrayList<String>();
+  private final ArrayList<StubElement> children = new ArrayList<StubElement>();
   private final Map<String, String> attributes = new HashMap<String, String>();
   private final StubStyle style = new StubStyle();
 
@@ -119,4 +121,27 @@ public class StubElement implements IsElement, HasStubCss {
   public Element asElement() {
     throw new IllegalStateException("This is a stub");
   }
+
+  @Override
+  public void appendChild(IsElement element) {
+    children.add((StubElement) element);
+  }
+
+  public ArrayList<StubElement> getChildren() {
+    return children;
+  }
+
+  @Override
+  public void appendChild(IsWidget widget) {
+    children.add((StubElement) widget.getIsElement());
+  }
+
+  public StubWidget getWidget() {
+    return widget;
+  }
+
+  public void setWidget(StubWidget owner) {
+    widget = owner;
+  }
+
 }

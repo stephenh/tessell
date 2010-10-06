@@ -27,6 +27,10 @@ public interface IsElement extends HasCss, HasText {
 
   void ensureDebugId(String id);
 
+  void appendChild(IsElement element);
+
+  void appendChild(IsWidget widget);
+
   Element asElement();
 
 }

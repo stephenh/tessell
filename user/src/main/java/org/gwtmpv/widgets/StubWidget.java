@@ -17,6 +17,10 @@ public class StubWidget implements IsWidget, HasStubCss {
   public int offsetHeight;
   private String debugId;
 
+  public StubWidget() {
+    element.setWidget(this);
+  }
+
   @Override
   public void onBrowserEvent(final Event event) {
     throw new UnsupportedOperationException("This is a stub.");

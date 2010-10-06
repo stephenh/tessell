@@ -101,4 +101,14 @@ public class GwtElement implements IsElement {
     return element;
   }
 
+  @Override
+  public void appendChild(IsElement element) {
+    this.element.appendChild(element.asElement());
+  }
+
+  @Override
+  public void appendChild(IsWidget widget) {
+    element.appendChild(widget.asWidget().getElement());
+  }
+
 }
