@@ -14,6 +14,7 @@ import org.gwtmpv.widgets.HasCss;
 import org.gwtmpv.widgets.IsTextBox;
 import org.gwtmpv.widgets.IsTextList;
 
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -70,6 +71,24 @@ public class Binder {
 
     public BooleanBinder(Property<Boolean> property) {
       this.property = property;
+    }
+
+    public BooleanBinder show(final HasCss css) {
+      registerHandler(property.addPropertyChangedHandler(new PropertyChangedHandler<Boolean>() {
+        public void onPropertyChanged(PropertyChangedEvent<Boolean> event) {
+          showIfTrue(css);
+        }
+      }));
+      showIfTrue(css); // set initial
+      return this;
+    }
+
+    private void showIfTrue(HasCss css) {
+      if (Boolean.TRUE.equals(property.get())) {
+        css.getStyle().clearDisplay();
+      } else {
+        css.getStyle().setDisplay(Display.NONE);
+      }
     }
 
     /** @return a binder to set {@code style} on {@link HasCss} */

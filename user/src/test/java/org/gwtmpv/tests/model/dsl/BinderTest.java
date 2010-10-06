@@ -3,6 +3,8 @@ package org.gwtmpv.tests.model.dsl;
 import static org.gwtmpv.model.properties.NewProperty.booleanProperty;
 import static org.gwtmpv.model.properties.NewProperty.stringProperty;
 import static org.gwtmpv.testing.MpvMatchers.hasStyle;
+import static org.gwtmpv.testing.MpvMatchers.hidden;
+import static org.gwtmpv.testing.MpvMatchers.shown;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
@@ -78,6 +80,31 @@ public class BinderTest {
     binder.whileTrue(b).set("c").on(w);
     b.set(true);
     assertThat(w, hasStyle("c"));
+  }
+
+  @Test
+  public void whileTrueShowHidesWhenFalse() {
+    BooleanProperty b = booleanProperty("b", false);
+    StubWidget w = new StubWidget();
+    binder.whileTrue(b).show(w);
+    assertThat(w, is(hidden()));
+  }
+
+  @Test
+  public void whileTrueShowDisplaysWhenTrue() {
+    BooleanProperty b = booleanProperty("b", true);
+    StubWidget w = new StubWidget();
+    binder.whileTrue(b).show(w);
+    assertThat(w, is(shown()));
+  }
+
+  @Test
+  public void whileTrueShowHidesWhenChangesToFalse() {
+    BooleanProperty b = booleanProperty("b", true);
+    StubWidget w = new StubWidget();
+    binder.whileTrue(b).show(w);
+    b.set(false);
+    assertThat(w, is(hidden()));
   }
 
 }
