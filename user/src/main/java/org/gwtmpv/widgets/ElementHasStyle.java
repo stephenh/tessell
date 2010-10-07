@@ -8,6 +8,7 @@ import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.dom.client.Style.Visibility;
 
 public class ElementHasStyle implements IsStyle {
 
@@ -205,6 +206,16 @@ public class ElementHasStyle implements IsStyle {
   @Override
   public void clearZIndex() {
     element.getStyle().clearZIndex();
+  }
+
+  @Override
+  public void setVisibility(Visibility value) {
+    element.getStyle().setVisibility(value);
+  }
+
+  @Override
+  public void clearVisibility() {
+    element.getStyle().clearVisibility();
   }
 
 }

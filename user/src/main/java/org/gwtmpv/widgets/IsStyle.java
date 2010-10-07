@@ -7,6 +7,7 @@ import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.dom.client.Style.Visibility;
 
 public interface IsStyle {
 
@@ -85,5 +86,9 @@ public interface IsStyle {
   void setZIndex(int value);
 
   void clearZIndex();
+
+  void setVisibility(Visibility value);
+
+  void clearVisibility();
 
 }

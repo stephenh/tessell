@@ -10,6 +10,7 @@ import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.dom.client.Style.Visibility;
 
 public class StubStyle implements IsStyle {
 
@@ -208,6 +209,16 @@ public class StubStyle implements IsStyle {
   @Override
   public void clearZIndex() {
     style.remove("zIndex");
+  }
+
+  @Override
+  public void setVisibility(Visibility value) {
+    style.put("visibility", value.getCssName());
+  }
+
+  @Override
+  public void clearVisibility() {
+    style.remove("visibility");
   }
 
 }
