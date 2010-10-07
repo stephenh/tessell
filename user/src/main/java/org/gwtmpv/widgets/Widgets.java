@@ -27,6 +27,8 @@ public interface Widgets {
 
   IsFadingDialogBox newFadingDialogBox();
 
+  IsHTML newHTML();
+
   <T> IsCellTable<T> newCellTable();
 
   <T> IsCellTable<T> newCellTable(int pageSize, Resources resources);

@@ -72,4 +72,9 @@ public class GwtWidgets implements Widgets {
     return new GwtAnchor();
   }
 
+  @Override
+  public IsHTML newHTML() {
+    return new GwtHTML();
+  }
+
 }

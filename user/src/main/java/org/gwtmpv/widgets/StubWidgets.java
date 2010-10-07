@@ -70,4 +70,9 @@ public class StubWidgets implements Widgets {
   public IsAnchor newAnchor() {
     return new StubAnchor();
   }
+
+  @Override
+  public IsHTML newHTML() {
+    return new StubHTML();
+  }
 }
