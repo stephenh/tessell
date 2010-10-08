@@ -27,19 +27,33 @@ public interface IsStyle {
 
   void setFontWeight(FontWeight value);
 
+  void clearFontWeight();
+
   void setColor(String value);
+
+  void clearColor();
 
   void setBackgroundColor(String value);
 
   void setLeft(double value, Unit unit);
 
+  void clearLeft();
+
   void setTop(double value, Unit unit);
+
+  void clearTop();
 
   void setBottom(double value, Unit unit);
 
+  void clearBottom();
+
   void setRight(double value, Unit unit);
 
+  void clearRight();
+
   void setMargin(double value, Unit unit);
+
+  void clearMargin();
 
   void setMarginTop(double value, Unit unit);
 

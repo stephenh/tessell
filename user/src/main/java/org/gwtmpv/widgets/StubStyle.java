@@ -221,4 +221,39 @@ public class StubStyle implements IsStyle {
     style.remove("visibility");
   }
 
+  @Override
+  public void clearFontWeight() {
+    style.remove("font-weight");
+  }
+
+  @Override
+  public void clearColor() {
+    style.remove("color");
+  }
+
+  @Override
+  public void clearLeft() {
+    style.remove("left");
+  }
+
+  @Override
+  public void clearTop() {
+    style.remove("top");
+  }
+
+  @Override
+  public void clearBottom() {
+    style.remove("bottom");
+  }
+
+  @Override
+  public void clearRight() {
+    style.remove("right");
+  }
+
+  @Override
+  public void clearMargin() {
+    style.remove("margin");
+  }
+
 }

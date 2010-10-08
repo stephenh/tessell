@@ -218,4 +218,39 @@ public class ElementHasStyle implements IsStyle {
     element.getStyle().clearVisibility();
   }
 
+  @Override
+  public void clearFontWeight() {
+    element.getStyle().clearFontWeight();
+  }
+
+  @Override
+  public void clearColor() {
+    element.getStyle().clearColor();
+  }
+
+  @Override
+  public void clearLeft() {
+    element.getStyle().clearLeft();
+  }
+
+  @Override
+  public void clearTop() {
+    element.getStyle().clearTop();
+  }
+
+  @Override
+  public void clearBottom() {
+    element.getStyle().clearBottom();
+  }
+
+  @Override
+  public void clearRight() {
+    element.getStyle().clearRight();
+  }
+
+  @Override
+  public void clearMargin() {
+    element.getStyle().clearMargin();
+  }
+
 }
