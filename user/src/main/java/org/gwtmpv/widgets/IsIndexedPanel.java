@@ -1,6 +1,6 @@
 package org.gwtmpv.widgets;
 
-public interface IsIndexedPanel {
+public interface IsIndexedPanel extends IsWidget {
 
   IsWidget getIsWidget(int index);
 
