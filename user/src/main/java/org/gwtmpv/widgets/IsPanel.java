@@ -1,8 +1,6 @@
 package org.gwtmpv.widgets;
 
-import com.google.gwt.user.client.ui.HasWidgets;
-
-public interface IsPanel extends IsWidget, HasWidgets {
+public interface IsPanel extends IsWidget, HasIsWidgets {
 
   void add(IsWidget isWidget);
 

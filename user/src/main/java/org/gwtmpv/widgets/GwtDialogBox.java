@@ -1,5 +1,7 @@
 package org.gwtmpv.widgets;
 
+import java.util.Iterator;
+
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -38,6 +40,11 @@ public class GwtDialogBox extends DialogBox implements IsDialogBox {
   @Override
   public void addAutoHidePartner(IsElement element) {
     addAutoHidePartner(element.asElement());
+  }
+
+  @Override
+  public Iterator<IsWidget> iteratorIsWidgets() {
+    return new GwtIsWidgetIteratorAdaptor(iterator());
   }
 
 }

@@ -1,5 +1,7 @@
 package org.gwtmpv.widgets;
 
+import java.util.Iterator;
+
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -38,6 +40,11 @@ public class GwtPopupPanel extends PopupPanel implements IsPopupPanel {
   @Override
   public void addAutoHidePartner(IsElement element) {
     addAutoHidePartner(element.asElement());
+  }
+
+  @Override
+  public Iterator<IsWidget> iteratorIsWidgets() {
+    return new GwtIsWidgetIteratorAdaptor(iterator());
   }
 
 }

@@ -56,38 +56,13 @@ public class GwtHTMLPanel implements IsHTMLPanel {
   }
 
   @Override
-  public void add(final Widget w) {
-    panel.add(w);
-  }
-
-  @Override
   public void clear() {
     panel.clear();
   }
 
   @Override
-  public Iterator<Widget> iterator() {
-    return panel.iterator();
-  }
-
-  @Override
-  public boolean remove(final Widget w) {
-    return panel.remove(w);
-  }
-
-  @Override
-  public Widget getWidget(final int index) {
-    return panel.getWidget(index);
-  }
-
-  @Override
   public int getWidgetCount() {
     return panel.getWidgetCount();
-  }
-
-  @Override
-  public int getWidgetIndex(final Widget child) {
-    return panel.getWidgetIndex(child);
   }
 
   @Override
@@ -133,6 +108,21 @@ public class GwtHTMLPanel implements IsHTMLPanel {
   @Override
   public void add(IsWidget widget, IsElement elem) {
     panel.add(widget.asWidget(), elem.asElement());
+  }
+
+  @Override
+  public Iterator<IsWidget> iteratorIsWidgets() {
+    return new GwtIsWidgetIteratorAdaptor(panel.iterator());
+  }
+
+  @Override
+  public IsWidget getIsWidget(int index) {
+    return (IsWidget) panel.getWidget(index);
+  }
+
+  @Override
+  public int getWidgetIndex(IsWidget child) {
+    return panel.getWidgetIndex(child.asWidget());
   }
 
 }

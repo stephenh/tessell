@@ -1,5 +1,7 @@
 package org.gwtmpv.widgets;
 
+import java.util.Iterator;
+
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -33,6 +35,11 @@ public class GwtScrollPanel extends ScrollPanel implements IsScrollPanel {
   @Override
   public IsStyle getStyle() {
     return getIsElement().getStyle();
+  }
+
+  @Override
+  public Iterator<IsWidget> iteratorIsWidgets() {
+    return new GwtIsWidgetIteratorAdaptor(iterator());
   }
 
 }

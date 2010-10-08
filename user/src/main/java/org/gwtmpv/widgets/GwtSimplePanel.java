@@ -1,5 +1,7 @@
 package org.gwtmpv.widgets;
 
+import java.util.Iterator;
+
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -33,6 +35,11 @@ public class GwtSimplePanel extends SimplePanel implements IsSimplePanel {
   @Override
   public IsElement getIsElement() {
     return new GwtElement(getElement());
+  }
+
+  @Override
+  public Iterator<IsWidget> iteratorIsWidgets() {
+    return new GwtIsWidgetIteratorAdaptor(iterator());
   }
 
 }

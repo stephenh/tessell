@@ -1,5 +1,7 @@
 package org.gwtmpv.widgets;
 
+import java.util.Iterator;
+
 import com.google.gwt.user.client.ui.FadingDialogBox;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -38,6 +40,11 @@ public class GwtFadingDialogBox extends FadingDialogBox implements IsFadingDialo
   @Override
   public void addAutoHidePartner(IsElement element) {
     addAutoHidePartner(element.asElement());
+  }
+
+  @Override
+  public Iterator<IsWidget> iteratorIsWidgets() {
+    return new GwtIsWidgetIteratorAdaptor(iterator());
   }
 
 }

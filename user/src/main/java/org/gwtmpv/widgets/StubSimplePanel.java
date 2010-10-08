@@ -1,5 +1,9 @@
 package org.gwtmpv.widgets;
 
+import java.util.Iterator;
+
+import org.gwtmpv.processor.deps.joist.util.Copy;
+
 public class StubSimplePanel extends StubPanel implements IsSimplePanel {
 
   private IsWidget isWidget;
@@ -30,6 +34,11 @@ public class StubSimplePanel extends StubPanel implements IsSimplePanel {
 
   public IsWidget getDisplay() {
     return isWidget;
+  }
+
+  @Override
+  public Iterator<IsWidget> iteratorIsWidgets() {
+    return Copy.list(isWidget).iterator();
   }
 
 }

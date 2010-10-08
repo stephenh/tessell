@@ -1,6 +1,7 @@
 package org.gwtmpv.widgets;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -55,6 +56,26 @@ public class ColumnsPanel extends FlowPanel implements IsColumnsPanel {
   @Override
   public IsStyle getStyle() {
     return getIsElement().getStyle();
+  }
+
+  @Override
+  public Iterator<IsWidget> iteratorIsWidgets() {
+    return new GwtIsWidgetIteratorAdaptor(iterator());
+  }
+
+  @Override
+  public void insert(IsWidget widget, int beforeIndex) {
+    insert(widget.asWidget(), beforeIndex);
+  }
+
+  @Override
+  public IsWidget getIsWidget(int index) {
+    return (IsWidget) getWidget(index);
+  }
+
+  @Override
+  public int getWidgetIndex(IsWidget child) {
+    return getWidgetIndex(child.asWidget());
   }
 
 }
