@@ -21,8 +21,6 @@ import org.gwtmpv.widgets.StubDataResource;
 import org.gwtmpv.widgets.StubTextResource;
 
 import com.google.gwt.resources.client.ClientBundle;
-import com.google.gwt.resources.client.CssResource;
-import com.google.gwt.resources.client.CssResource.NotStrict;
 import com.google.gwt.resources.client.DataResource;
 import com.google.gwt.resources.client.TextResource;
 
@@ -59,9 +57,9 @@ public class ResourcesGenerator {
 
     for (final File file : getFilesInInputDirectory()) {
       if (file.getName().endsWith(".notstrict.css")) {
-        addNotStrictCss(file);
+        addCss(file, true);
       } else if (file.getName().endsWith(".css")) {
-        addCss(file);
+        addCss(file, false);
       } else if (file.getName().endsWith(".png")
         || file.getName().endsWith(".gif")
         || file.getName().endsWith(".jpg")
@@ -77,20 +75,10 @@ public class ResourcesGenerator {
     FileUtils.writeStringToFile(new File(outputDirectory, stubResources.getFileName()), stubResources.toCode());
   }
 
-  private void addNotStrictCss(final File cssFile) throws Exception {
-    final String methodName = GenUtils.toMethodName(cssFile.getName().replace(".notstrict.css", ""));
-    final GMethod m = appResources.getMethod(methodName).returnType(CssResource.class);
-    m.addAnnotation("@Source(\"" + getRelativePath(cssFile) + "\")");
-    m.addAnnotation("@NotStrict");
-    appResources.addImports(NotStrict.class.getName().replace("$", "."));
-
-    stubResources.getMethod(methodName).returnType(CssResource.class).body.line("return null;");
-  }
-
-  private void addCss(final File cssFile) throws Exception {
-    final String methodName = GenUtils.toMethodName(cssFile.getName().replace(".css", ""));
-    final String newInterfaceName = packageName + "." + Inflector.capitalize(methodName);
-    final String stubName = packageName + ".Stub" + Inflector.capitalize(methodName);
+  private void addCss(final File cssFile, boolean notStrict) throws Exception {
+    final String methodName = GenUtils.toMethodName(cssFile.getName().replace(".css", "").replace(".notstrict", ""));
+    final String newInterfaceName = packageName + "." + suffixIfNeeded(Inflector.capitalize(methodName), "Style");
+    final String stubName = packageName + ".Stub" + suffixIfNeeded(Inflector.capitalize(methodName), "Style");
 
     // Copy the file and do any url(...) => @url replacement
     File cssFileCopy = fileInOutputDirectory(cssFile, ".css", ".gen.css");
@@ -106,6 +94,10 @@ public class ResourcesGenerator {
 
     new CssGenerator(cssFile, newInterfaceName, outputDirectory).run();
     new CssStubGenerator(cssFile, newInterfaceName, outputDirectory).run();
+  }
+
+  private String suffixIfNeeded(String name, String suffix) {
+    return name.endsWith(suffix) ? name : name + suffix;
   }
 
   /** @return a file in the same package as {@code file} but in the output (generated) directory */
