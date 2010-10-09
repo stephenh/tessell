@@ -216,6 +216,10 @@ public class ViewGenerator {
         i.getMethod(uiField.name).returnType(config.getInterface(uiField.type));
       }
 
+      for (final UiStyleDeclaration style : handler.styleFields) {
+        i.getMethod(style.name).returnType(style.type);
+      }
+
       save(i);
     }
 
@@ -240,6 +244,13 @@ public class ViewGenerator {
         v.getField(field.name).type(field.type).setAccess(Access.PACKAGE).addAnnotation("@UiField(provided = true)");
         cstr.argument(field.type, field.name);
         cstr.body.line("this.{} = {};", field.name, field.name);
+      }
+
+      // Make fields, getter, plus Css class for each ui:style
+      for (final UiStyleDeclaration style : handler.styleFields) {
+        v.getField(style.name).type(style.type).setAccess(Access.PACKAGE).initialValue("GWT.create({}.class)", style.type);
+        v.getMethod(style.name).returnType(style.type).body.line("return {};", style.name);
+        new CssGenerator(style.getCssInFile(), style.type, output).run();
       }
 
       for (final UiFieldDeclaration field : handler.uiFields) {
@@ -283,9 +294,17 @@ public class ViewGenerator {
         if (stubType == null) {
           throw new RuntimeException("No stub for " + field.type);
         }
-        s.getField(field.name).type(stubType).setPublic().setFinal().initialValue("new {}()", stubType);
+        s.getField(field.name).type(stubType).setFinal().initialValue("new {}()", stubType);
         s.getMethod(field.name).returnType(stubType).body.line("return {};", field.name);
         debugId.body.line("{}.ensureDebugId(baseDebugId + \"-{}\");", field.name, field.name);
+      }
+
+      // Make fields, getter, plus StubCss class for each ui:style
+      for (final UiStyleDeclaration style : handler.styleFields) {
+        CssStubGenerator g = new CssStubGenerator(style.getCssInFile(), style.type, output);
+        g.run();
+        s.getField(style.name).type(style.type).setFinal().initialValue("new {}()", g.getCssStubClassName());
+        s.getMethod(style.name).returnType(style.type).body.line("return {};", style.name);
       }
 
       s.getConstructor().body.line("setDebugId(\"{}\");", s.getSimpleClassNameWithoutGeneric().replaceAll("View$", "").replaceAll("^Stub", ""));
@@ -307,9 +326,11 @@ public class ViewGenerator {
   }
 
   private static class UiXmlHandler extends DefaultHandler {
-    private String firstTagType;
     private final List<UiFieldDeclaration> withFields = new ArrayList<UiFieldDeclaration>();
     private final List<UiFieldDeclaration> uiFields = new ArrayList<UiFieldDeclaration>();
+    private final List<UiStyleDeclaration> styleFields = new ArrayList<UiStyleDeclaration>();
+    private String firstTagType;
+    private UiStyleDeclaration lastStyle;
 
     @Override
     public void startElement(final String uri, final String localName, final String qName, final Attributes attributes) throws SAXException {
@@ -321,6 +342,16 @@ public class ViewGenerator {
         final String type = attributes.getValue(attributes.getIndex("type"));
         final String name = attributes.getValue(attributes.getIndex("field"));
         withFields.add(new UiFieldDeclaration(type, name));
+      }
+      if (uri.equals("urn:ui:com.google.gwt.uibinder") && localName.equals("style")) {
+        int fieldIndex = attributes.getIndex("field");
+        int typeIndex = attributes.getIndex("type");
+        if (typeIndex > -1) {
+          final String name = fieldIndex == -1 ? "style" : attributes.getValue(fieldIndex);
+          final String type = attributes.getValue(typeIndex);
+          lastStyle = new UiStyleDeclaration(type, name);
+          styleFields.add(lastStyle);
+        }
       }
 
       final int indexOfUiField = attributes.getIndex("urn:ui:com.google.gwt.uibinder", "field");
@@ -334,6 +365,18 @@ public class ViewGenerator {
         final String name = attributes.getValue(indexOfUiField);
         uiFields.add(new UiFieldDeclaration(type, name));
       }
+    }
+
+    @Override
+    public void characters(char[] ch, int start, int length) {
+      if (lastStyle != null) {
+        lastStyle.css += new String(ch, start, length);
+      }
+    }
+
+    @Override
+    public void endElement(String namespaceURI, String localName, String qName) {
+      lastStyle = null;
     }
   }
 
@@ -352,6 +395,29 @@ public class ViewGenerator {
     @Override
     public int compareTo(final UiFieldDeclaration o) {
       return name.compareTo(o.name);
+    }
+  }
+
+  /** A DTO for {@code ui:style} declarations. */
+  static class UiStyleDeclaration {
+    final String type;
+    final String name;
+    String css = "";
+
+    UiStyleDeclaration(final String type, final String name) {
+      this.type = type;
+      this.name = name;
+    }
+
+    private File getCssInFile() {
+      try {
+        File f = File.createTempFile(name, ".tmp");
+        FileUtils.writeStringToFile(f, css);
+        f.deleteOnExit();
+        return f;
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
     }
   }
 

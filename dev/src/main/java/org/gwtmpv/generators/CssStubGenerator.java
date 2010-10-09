@@ -36,6 +36,10 @@ public class CssStubGenerator extends AbstractCssGenerator {
     FileUtils.writeStringToFile(new File(outputDirectory, cssStub.getFileName()), cssStub.toCode());
   }
 
+  public String getCssStubClassName() {
+    return cssStub.getFullClassName();
+  }
+
   private void generateStub() {
     for (final String methodName : getClassNameToMethodName(inputCssFile).values()) {
       cssStub.getMethod(methodName).returnType(String.class).body.line("return \"{}\";", methodName);
