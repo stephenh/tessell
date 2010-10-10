@@ -17,6 +17,8 @@ import joist.util.Inflector;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
+import org.gwtmpv.generators.css.CssGenerator;
+import org.gwtmpv.generators.css.CssStubGenerator;
 import org.gwtmpv.widgets.StubDataResource;
 import org.gwtmpv.widgets.StubTextResource;
 
