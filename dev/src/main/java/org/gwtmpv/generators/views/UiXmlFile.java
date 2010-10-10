@@ -159,7 +159,7 @@ class UiXmlFile {
       if (stubType == null) {
         throw new RuntimeException("No stub for " + field.type);
       }
-      s.getField(field.name).type(stubType).setFinal().initialValue("new {}()", stubType);
+      s.getField(field.name).type(stubType).setPublic().setFinal().initialValue("new {}()", stubType);
       s.getMethod(field.name).returnType(stubType).body.line("return {};", field.name);
       debugId.body.line("{}.ensureDebugId(baseDebugId + \"-{}\");", field.name, field.name);
     }
