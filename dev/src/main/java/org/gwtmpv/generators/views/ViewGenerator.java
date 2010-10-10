@@ -27,12 +27,9 @@ import org.gwtmpv.widgets.DelegateIsWidget;
 import org.gwtmpv.widgets.GwtElement;
 import org.gwtmpv.widgets.IsWidget;
 import org.gwtmpv.widgets.StubWidget;
-import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
-import org.xml.sax.helpers.DefaultHandler;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Element;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiTemplate;
@@ -315,61 +312,6 @@ public class ViewGenerator {
       } else {
         return handler.withFields;
       }
-    }
-  }
-
-  private static class UiXmlHandler extends DefaultHandler {
-    private final List<UiFieldDeclaration> withFields = new ArrayList<UiFieldDeclaration>();
-    private final List<UiFieldDeclaration> uiFields = new ArrayList<UiFieldDeclaration>();
-    private final List<UiStyleDeclaration> styleFields = new ArrayList<UiStyleDeclaration>();
-    private String firstTagType;
-    private UiStyleDeclaration lastStyle;
-
-    @Override
-    public void startElement(final String uri, final String localName, final String qName, final Attributes attributes) throws SAXException {
-      if (firstTagType == null && uri.startsWith("urn:import")) {
-        firstTagType = StringUtils.substringAfterLast(uri, ":") + "." + localName;
-      }
-
-      if (uri.equals("urn:ui:com.google.gwt.uibinder") && localName.equals("with")) {
-        final String type = attributes.getValue(attributes.getIndex("type"));
-        final String name = attributes.getValue(attributes.getIndex("field"));
-        withFields.add(new UiFieldDeclaration(type, name));
-      }
-      if (uri.equals("urn:ui:com.google.gwt.uibinder") && localName.equals("style")) {
-        int fieldIndex = attributes.getIndex("field");
-        int typeIndex = attributes.getIndex("type");
-        if (typeIndex > -1) {
-          final String name = fieldIndex == -1 ? "style" : attributes.getValue(fieldIndex);
-          final String type = attributes.getValue(typeIndex);
-          lastStyle = new UiStyleDeclaration(type, name);
-          styleFields.add(lastStyle);
-        }
-      }
-
-      final int indexOfUiField = attributes.getIndex("urn:ui:com.google.gwt.uibinder", "field");
-      if (indexOfUiField > -1) {
-        final String type;
-        if (uri.equals("")) {
-          type = Element.class.getName();
-        } else {
-          type = StringUtils.substringAfterLast(uri, ":") + "." + localName;
-        }
-        final String name = attributes.getValue(indexOfUiField);
-        uiFields.add(new UiFieldDeclaration(type, name));
-      }
-    }
-
-    @Override
-    public void characters(char[] ch, int start, int length) {
-      if (lastStyle != null) {
-        lastStyle.css += new String(ch, start, length);
-      }
-    }
-
-    @Override
-    public void endElement(String namespaceURI, String localName, String qName) {
-      lastStyle = null;
     }
   }
 
