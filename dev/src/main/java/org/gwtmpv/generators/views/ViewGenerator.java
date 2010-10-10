@@ -1,4 +1,4 @@
-package org.gwtmpv.generators;
+package org.gwtmpv.generators.views;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,6 +21,7 @@ import joist.util.Join;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
+import org.gwtmpv.generators.GenUtils;
 import org.gwtmpv.generators.css.CssGenerator;
 import org.gwtmpv.generators.css.CssStubGenerator;
 import org.gwtmpv.widgets.DelegateIsWidget;

@@ -1,4 +1,4 @@
-package org.gwtmpv.generators;
+package org.gwtmpv.generators.views;
 
 import java.io.IOException;
 import java.io.InputStream;

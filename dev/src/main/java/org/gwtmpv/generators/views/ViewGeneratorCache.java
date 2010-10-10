@@ -1,4 +1,4 @@
-package org.gwtmpv.generators;
+package org.gwtmpv.generators.views;
 
 import static org.apache.commons.lang.StringUtils.join;
 import static org.apache.commons.lang.StringUtils.split;
@@ -11,8 +11,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
-import org.gwtmpv.generators.ViewGenerator.UiFieldDeclaration;
-import org.gwtmpv.generators.ViewGenerator.UiXmlFile;
+import org.gwtmpv.generators.views.ViewGenerator.UiFieldDeclaration;
+import org.gwtmpv.generators.views.ViewGenerator.UiXmlFile;
 
 /** Caches the "ui:with" types of ui.xml files so we don't have to re-parse each file every time. */
 public class ViewGeneratorCache {
