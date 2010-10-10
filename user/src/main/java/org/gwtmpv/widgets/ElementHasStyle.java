@@ -2,6 +2,7 @@ package org.gwtmpv.widgets;
 
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.BorderStyle;
+import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.FontWeight;
@@ -251,6 +252,26 @@ public class ElementHasStyle implements IsStyle {
   @Override
   public void clearMargin() {
     element.getStyle().clearMargin();
+  }
+
+  @Override
+  public void setCursor(Cursor value) {
+    element.getStyle().setCursor(value);
+  }
+
+  @Override
+  public void clearCursor() {
+    element.getStyle().clearCursor();
+  }
+
+  @Override
+  public void setPadding(double value, Unit unit) {
+    element.getStyle().setPadding(value, unit);
+  }
+
+  @Override
+  public void clearPadding() {
+    element.getStyle().clearPadding();
   }
 
 }

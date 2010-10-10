@@ -1,6 +1,7 @@
 package org.gwtmpv.widgets;
 
 import com.google.gwt.dom.client.Style.BorderStyle;
+import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.FontWeight;
@@ -105,4 +106,11 @@ public interface IsStyle {
 
   void clearVisibility();
 
+  void setCursor(Cursor value);
+
+  void clearCursor();
+
+  void setPadding(double value, Unit unit);
+
+  void clearPadding();
 }

@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.google.gwt.dom.client.Style.BorderStyle;
+import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.FontWeight;
@@ -254,6 +255,26 @@ public class StubStyle implements IsStyle {
   @Override
   public void clearMargin() {
     style.remove("margin");
+  }
+
+  @Override
+  public void setCursor(Cursor value) {
+    style.put("cursor", value.getCssName());
+  }
+
+  @Override
+  public void clearCursor() {
+    style.remove("cursor");
+  }
+
+  @Override
+  public void setPadding(double value, Unit unit) {
+    style.put("padding", value + unit.getType());
+  }
+
+  @Override
+  public void clearPadding() {
+    style.remove("padding");
   }
 
 }
