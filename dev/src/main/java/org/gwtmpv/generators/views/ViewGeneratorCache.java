@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
-import org.gwtmpv.generators.views.ViewGenerator.UiFieldDeclaration;
 import org.gwtmpv.generators.views.ViewGenerator.UiXmlFile;
 
 /** Caches the "ui:with" types of ui.xml files so we don't have to re-parse each file every time. */

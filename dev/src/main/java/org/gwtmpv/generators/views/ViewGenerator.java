@@ -373,45 +373,4 @@ public class ViewGenerator {
     }
   }
 
-  /** A DTO for {@code ui:with} or {@code ui:field} declarations. */
-  static class UiFieldDeclaration implements Comparable<UiFieldDeclaration> {
-    final String type;
-    final String name;
-    final boolean isElement;
-
-    UiFieldDeclaration(final String type, final String name) {
-      this.type = type;
-      this.name = name;
-      isElement = type.contains("dom");
-    }
-
-    @Override
-    public int compareTo(final UiFieldDeclaration o) {
-      return name.compareTo(o.name);
-    }
-  }
-
-  /** A DTO for {@code ui:style} declarations. */
-  static class UiStyleDeclaration {
-    final String type;
-    final String name;
-    String css = "";
-
-    UiStyleDeclaration(final String type, final String name) {
-      this.type = type;
-      this.name = name;
-    }
-
-    private File getCssInFile() {
-      try {
-        File f = File.createTempFile(name, ".tmp");
-        FileUtils.writeStringToFile(f, css);
-        f.deleteOnExit();
-        return f;
-      } catch (IOException e) {
-        throw new RuntimeException(e);
-      }
-    }
-  }
-
 }
