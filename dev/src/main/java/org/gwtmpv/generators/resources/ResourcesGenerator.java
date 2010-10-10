@@ -1,4 +1,4 @@
-package org.gwtmpv.generators;
+package org.gwtmpv.generators.resources;
 
 import static org.apache.commons.lang.StringUtils.substringBeforeLast;
 
@@ -17,6 +17,7 @@ import joist.util.Inflector;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
+import org.gwtmpv.generators.GenUtils;
 import org.gwtmpv.generators.css.CssGenerator;
 import org.gwtmpv.generators.css.CssStubGenerator;
 import org.gwtmpv.widgets.StubDataResource;
