@@ -19,12 +19,12 @@ public class Generator {
     final File input = new File(settings.get("inputDirectory"));
     final File output = new File(settings.get("outputDirectory"));
 
-    final String viewsPackage = settings.get("viewsPackage");
+    final String viewsPackage = settings.get("viewsPackageName");
     if (viewsPackage != null) {
       new ViewGenerator(input, viewsPackage, output).generate();
     }
 
-    final String resourcesPackage = settings.get("resourcesPackage");
+    final String resourcesPackage = settings.get("resourcesPackageName");
     if (resourcesPackage != null) {
       new ResourcesGenerator(input, resourcesPackage, output).run();
     }
