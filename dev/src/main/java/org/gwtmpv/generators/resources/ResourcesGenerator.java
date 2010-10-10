@@ -5,7 +5,6 @@ import static org.apache.commons.lang.StringUtils.substringBeforeLast;
 import java.io.File;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -29,15 +28,6 @@ import com.google.gwt.resources.client.TextResource;
 
 /** A utility class for generating resource interfaces from files in directory. */
 public class ResourcesGenerator {
-
-  /** Args: {@code --inputDirectory src/main/java --packageName com.app.resources --outputDirectory target/gen}. */
-  public static void main(final String[] args) throws Exception {
-    final Map<String, String> settings = GenUtils.parseArgs(args);
-    final File inputDirectory = new File(settings.get("inputDirectory"));
-    final String packageName = settings.get("packageName");
-    final File outputDirectory = new File(settings.get("outputDirectory"));
-    new ResourcesGenerator(inputDirectory, packageName, outputDirectory).run();
-  }
 
   private static final Pattern urlPattern = Pattern.compile("url\\(([^\\)]+)\\)");
   private final File inputDirectory;

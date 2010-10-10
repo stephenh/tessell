@@ -21,7 +21,6 @@ import joist.util.Join;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
-import org.gwtmpv.generators.GenUtils;
 import org.gwtmpv.generators.css.CssGenerator;
 import org.gwtmpv.generators.css.CssStubGenerator;
 import org.gwtmpv.widgets.DelegateIsWidget;
@@ -57,16 +56,7 @@ public class ViewGenerator {
     parser = makeNewParser();
   }
 
-  public static void main(final String[] args) throws Exception {
-    final Map<String, String> settings = GenUtils.parseArgs(args);
-    final File inputDirectory = new File(settings.get("inputDirectory"));
-    final File outputDirectory = new File(settings.get("outputDirectory"));
-    final String packageName = settings.get("packageName");
-    final ViewGenerator g = new ViewGenerator(inputDirectory, packageName, outputDirectory);
-    g.generate();
-  }
-
-  private void generate() throws Exception {
+  public void generate() throws Exception {
     long start = System.currentTimeMillis();
 
     cache.loadIfExists();
