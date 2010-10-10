@@ -123,13 +123,13 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.datepicker.client.DatePicker;
 
 /** Holds mappings of ui.xml type -> interface type, stub type, and subclass type. */
-public class ViewGeneratorConfig {
+public class Config {
 
   private final Map<String, String> typeToInterface = new HashMap<String, String>();
   private final Map<String, String> typeToStub = new HashMap<String, String>();
   private final Map<String, String> typeToSub = new HashMap<String, String>();
 
-  public ViewGeneratorConfig() {
+  public Config() {
     setupDefault();
     setupUsersViewGenDotProperties();
   }
