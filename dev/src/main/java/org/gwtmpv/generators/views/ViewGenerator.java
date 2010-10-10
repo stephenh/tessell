@@ -20,13 +20,13 @@ import joist.util.Join;
 import org.apache.commons.io.FileUtils;
 import org.xml.sax.SAXException;
 
-
+/** Takes a {@code ui.xml} source and generates a {@code IsXxx, GwtXxx, StubXxx} trio of view classes. */
 public class ViewGenerator {
 
-  final File input;
-  final File output;
   private final String packageName;
   private final List<UiXmlFile> uiXmlFiles = new ArrayList<UiXmlFile>();
+  final File input;
+  final File output;
   final Config config = new Config();
   final UiXmlCache cache = new UiXmlCache();
   final SAXParser parser;
@@ -77,7 +77,7 @@ public class ViewGenerator {
   private void generateGwtViews() {
     final GClass gwtViews = new GClass(packageName + ".GwtViews").implementsInterface("AppViews");
     final GMethod cstr = gwtViews.getConstructor();
-    for (final UiFieldDeclaration with : allWiths()) {
+    for (final UiFieldDeclaration with : getWithsFromAllViews()) {
       gwtViews.getField(with.name).type(with.type).setFinal();
       cstr.argument(with.type, with.name);
       cstr.body.line("this.{} = {};", with.name, with.name);
@@ -104,7 +104,7 @@ public class ViewGenerator {
     save(stubViews);
   }
 
-  private Collection<UiFieldDeclaration> allWiths() {
+  private Collection<UiFieldDeclaration> getWithsFromAllViews() {
     final Map<String, UiFieldDeclaration> map = new HashMap<String, UiFieldDeclaration>();
     for (final UiXmlFile uiXml : uiXmlFiles) {
       for (final UiFieldDeclaration field : uiXml.getWithTypes()) {
