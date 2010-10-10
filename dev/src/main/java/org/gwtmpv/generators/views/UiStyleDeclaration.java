@@ -11,6 +11,7 @@ class UiStyleDeclaration {
   final String type;
   final String name;
   String css = "";
+  private File cssFile;
 
   UiStyleDeclaration(final String type, final String name) {
     this.type = type;
@@ -19,14 +20,16 @@ class UiStyleDeclaration {
 
   /** @return the css content from our ui:style snippet in a tmp file */
   File getCssInFile() {
-    try {
-      File f = File.createTempFile(name, ".tmp");
-      FileUtils.writeStringToFile(f, css);
-      f.deleteOnExit();
-      return f;
-    } catch (IOException e) {
-      throw new RuntimeException(e);
+    if (cssFile == null) {
+      try {
+        cssFile = File.createTempFile(name, ".tmp");
+        cssFile.deleteOnExit();
+        FileUtils.writeStringToFile(cssFile, css);
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
     }
+    return cssFile;
   }
 
 }
