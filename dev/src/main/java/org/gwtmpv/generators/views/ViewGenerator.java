@@ -28,7 +28,7 @@ public class ViewGenerator {
   private final String packageName;
   private final List<UiXmlFile> uiXmlFiles = new ArrayList<UiXmlFile>();
   final ViewGeneratorConfig config = new ViewGeneratorConfig();
-  final ViewGeneratorCache cache = new ViewGeneratorCache();
+  final UiXmlCache cache = new UiXmlCache();
   final SAXParser parser;
 
   public ViewGenerator(final File inputDirectory, final String packageName, final File outputDirectory) {

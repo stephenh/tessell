@@ -12,14 +12,11 @@ import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 
-/** Caches the "ui:with" types of ui.xml files so we don't have to re-parse each file every time. */
-public class ViewGeneratorCache {
+/** Caches the "ui:with" types of {@code ui.xml} files between {@code ViewGenerator} runs so that we don't have to re-parse each file every time. */
+public class UiXmlCache {
 
   private final File cache = new File("./.viewGenerator.cache");
   private final Map<String, Entry> entries = new HashMap<String, Entry>();
-
-  public ViewGeneratorCache() {
-  }
 
   /** @return whether we have an entry for {@code uiXmlFile} */
   public boolean has(UiXmlFile uiXml) {
