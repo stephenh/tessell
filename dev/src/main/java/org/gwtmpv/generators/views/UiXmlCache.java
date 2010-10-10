@@ -28,6 +28,7 @@ public class UiXmlCache {
     entries.put(uiXml.getPath(), new Entry(uiXml.getPath(), uiXml.getWithTypes()));
   }
 
+  /** @return the {@code ui:with} declarations for {@code uiXml}. */
   public List<UiFieldDeclaration> getWithTypes(UiXmlFile uiXml) {
     return entries.get(uiXml.getPath()).getWithTypes();
   }
@@ -41,12 +42,13 @@ public class UiXmlCache {
     }
   }
 
+  /** Populates our cache from the last run's output, if available. */
   public void loadIfExists() {
     if (cache.exists()) {
       try {
         for (Object line : FileUtils.readLines(cache)) {
           Entry e = new Entry((String) line);
-          entries.put(e.uiXml(), e);
+          entries.put(e.uiXmlFileName(), e);
         }
       } catch (IOException e) {
         throw new RuntimeException(e);
@@ -54,6 +56,7 @@ public class UiXmlCache {
     }
   }
 
+  /** @return the cache entries as a list of lines. */
   private List<String> entriesToLines() {
     List<String> lines = new ArrayList<String>();
     for (Entry e : entries.values()) {
@@ -64,15 +67,18 @@ public class UiXmlCache {
 
   /** One entry per ui.xml file. */
   private class Entry {
+    // each entry is serialized to 1 line in the cache file, comma separated into a String[]
     private final String[] parts;
 
+    /** Make a new entry from the cached line. */
     private Entry(String line) {
       parts = split(line, ",");
     }
 
-    private Entry(String uiXmlFile, List<UiFieldDeclaration> withTypes) {
+    /** Make a new entry from a new {@code ui.xml} file with its {@code ui:with} types. */
+    private Entry(String uiXmlFileName, List<UiFieldDeclaration> withTypes) {
       parts = new String[withTypes.size() + 1];
-      parts[0] = uiXmlFile;
+      parts[0] = uiXmlFileName;
       int i = 1;
       for (UiFieldDeclaration withType : withTypes) {
         parts[i++] = withType.type + " " + withType.name;
@@ -88,7 +94,7 @@ public class UiXmlCache {
       return withTypes;
     }
 
-    private String uiXml() {
+    private String uiXmlFileName() {
       return parts[0];
     }
 
