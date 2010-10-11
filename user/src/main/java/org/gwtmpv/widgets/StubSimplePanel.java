@@ -1,8 +1,7 @@
 package org.gwtmpv.widgets;
 
+import java.util.ArrayList;
 import java.util.Iterator;
-
-import org.gwtmpv.processor.deps.joist.util.Copy;
 
 public class StubSimplePanel extends StubPanel implements IsSimplePanel {
 
@@ -38,7 +37,9 @@ public class StubSimplePanel extends StubPanel implements IsSimplePanel {
 
   @Override
   public Iterator<IsWidget> iteratorIsWidgets() {
-    return Copy.list(isWidget).iterator();
+    ArrayList<IsWidget> list = new ArrayList<IsWidget>();
+    list.add(isWidget);
+    return list.iterator();
   }
 
 }
