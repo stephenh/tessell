@@ -4,6 +4,7 @@ import com.google.gwt.cell.client.Cell;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.cellview.client.CellTable.Resources;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.ui.HTMLPanel;
 
 public class GwtWidgets implements Widgets {
 
@@ -75,6 +76,21 @@ public class GwtWidgets implements Widgets {
   @Override
   public IsHTML newHTML() {
     return new GwtHTML();
+  }
+
+  @Override
+  public IsHTMLPanel newHTMLPanel(String html) {
+    return new GwtHTMLPanel(new HTMLPanel(html));
+  }
+
+  @Override
+  public IsTextBox newTextBox() {
+    return new GwtTextBox();
+  }
+
+  @Override
+  public IsTextList newTextList() {
+    return new TextList();
   }
 
 }

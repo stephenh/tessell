@@ -9,6 +9,10 @@ public interface Widgets {
 
   IsElement newElement(String tag);
 
+  IsTextBox newTextBox();
+
+  IsTextList newTextList();
+
   IsAnchor newAnchor();
 
   IsHyperlink newHyperline();
@@ -28,6 +32,8 @@ public interface Widgets {
   IsFadingDialogBox newFadingDialogBox();
 
   IsHTML newHTML();
+
+  IsHTMLPanel newHTMLPanel(String html);
 
   <T> IsCellTable<T> newCellTable();
 

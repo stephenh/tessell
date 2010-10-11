@@ -75,4 +75,19 @@ public class StubWidgets implements Widgets {
   public IsHTML newHTML() {
     return new StubHTML();
   }
+
+  @Override
+  public IsHTMLPanel newHTMLPanel(String html) {
+    return new StubHTMLPanel(html);
+  }
+
+  @Override
+  public IsTextBox newTextBox() {
+    return new StubTextBox();
+  }
+
+  @Override
+  public IsTextList newTextList() {
+    return new StubTextList();
+  }
 }
