@@ -12,6 +12,7 @@ import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.event.dom.client.MouseWheelHandler;
+import com.google.gwt.event.logical.shared.AttachEvent.Handler;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -230,6 +231,11 @@ public class GwtRadioButton implements IsRadioButton {
   @Override
   public IsElement getIsElement() {
     return new GwtElement(button.getElement());
+  }
+
+  @Override
+  public HandlerRegistration addAttachHandler(Handler handler) {
+    return button.addAttachHandler(handler);
   }
 
 }

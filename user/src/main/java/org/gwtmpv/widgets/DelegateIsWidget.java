@@ -1,6 +1,8 @@
 package org.gwtmpv.widgets;
 
+import com.google.gwt.event.logical.shared.AttachEvent.Handler;
 import com.google.gwt.event.shared.GwtEvent;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -75,6 +77,11 @@ public class DelegateIsWidget implements IsWidget {
   @Override
   public IsElement getIsElement() {
     return new GwtElement(widget.getElement());
+  }
+
+  @Override
+  public HandlerRegistration addAttachHandler(Handler handler) {
+    return widget.addAttachHandler(handler);
   }
 
 }

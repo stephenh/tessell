@@ -1,10 +1,12 @@
 package org.gwtmpv.widgets;
 
+import com.google.gwt.event.logical.shared.HasAttachHandlers;
 import com.google.gwt.event.shared.HasHandlers;
 import com.google.gwt.user.client.EventListener;
 import com.google.gwt.user.client.ui.Widget;
 
-public interface IsWidget extends EventListener, HasHandlers, HasCss {
+public interface IsWidget extends EventListener, HasHandlers, HasCss, HasAttachHandlers {
+
   // HasCss addStyleName/removeStyleName is really from IsUIObject
 
   // really from IsUIObject
