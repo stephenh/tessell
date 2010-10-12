@@ -113,7 +113,7 @@ class UiXmlFile {
 
     // Make fields, getter, plus Css class for each ui:style
     for (final UiStyleDeclaration style : handler.styleFields) {
-      v.getField(style.name).type(style.type).setAccess(Access.PACKAGE).initialValue("GWT.create({}.class)", style.type);
+      v.getField(style.name).type(style.type).setAccess(Access.PACKAGE).addAnnotation("@UiField");
       v.getMethod(style.name).returnType(style.type).body.line("return {};", style.name);
       new CssGenerator(style.getCssInFile(), style.type, viewGenerator.output).run();
     }
