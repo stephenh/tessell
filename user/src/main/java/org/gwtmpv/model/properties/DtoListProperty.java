@@ -92,12 +92,12 @@ public class DtoListProperty<E extends Model<F>, F extends Dto<E>> extends Abstr
 
   /** Registers {@code handler} to be called when new values are added. */
   public HandlerRegistration addValueAddedHandler(final ValueAddedHandler<E> handler) {
-    return handlers.addHandler(ValueAddedEvent.getType(), handler);
+    return addHandler(ValueAddedEvent.getType(), handler);
   }
 
   /** Registers {@code handler} to be called when values are removed. */
   public HandlerRegistration addValueRemovedHandler(final ValueRemovedHandler<E> handler) {
-    return handlers.addHandler(ValueRemovedEvent.getType(), handler);
+    return addHandler(ValueRemovedEvent.getType(), handler);
   }
 
   @Override

@@ -28,7 +28,7 @@ import com.google.gwt.event.shared.SimpleEventBus;
 public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> implements Property<P> {
 
   // handlers
-  protected final EventBus handlers = new SimpleEventBus();
+  private final EventBus handlers = new SimpleEventBus();
   // other properties that are validated off of our value
   protected final ArrayList<Property<?>> derived = new ArrayList<Property<?>>();
   // rules that validate against our value and fire against our handlers
@@ -122,7 +122,7 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
 
   @Override
   public void fireEvent(final GwtEvent<?> event) {
-    handlers.fireEvent(event);
+    handlers.fireEventFromSource(event, this);
   }
 
   @Override
