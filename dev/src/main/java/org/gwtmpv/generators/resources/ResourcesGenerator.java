@@ -23,6 +23,7 @@ import org.gwtmpv.widgets.StubDataResource;
 import org.gwtmpv.widgets.StubTextResource;
 
 import com.google.gwt.resources.client.ClientBundle;
+import com.google.gwt.resources.client.CssResource.NotStrict;
 import com.google.gwt.resources.client.DataResource;
 import com.google.gwt.resources.client.TextResource;
 
@@ -79,6 +80,10 @@ public class ResourcesGenerator {
 
     final GMethod m = appResources.getMethod(methodName).returnType(newInterfaceName);
     m.addAnnotation("@Source(\"" + getRelativePath(cssFileCopy) + "\")");
+    if (notStrict) {
+      m.addAnnotation("@NotStrict");
+      appResources.addImports(NotStrict.class.getName().replace("$", "."));
+    }
 
     // stub
     final GField sf = stubResources.getField(methodName).type(stubName).setFinal();
