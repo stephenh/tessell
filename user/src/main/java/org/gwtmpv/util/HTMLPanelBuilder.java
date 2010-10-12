@@ -1,10 +1,11 @@
 package org.gwtmpv.util;
 
+import static org.gwtmpv.widgets.Widgets.newHTMLPanel;
+
 import java.util.ArrayList;
 
 import org.gwtmpv.widgets.IsHTMLPanel;
 import org.gwtmpv.widgets.IsWidget;
-import org.gwtmpv.widgets.Widgets;
 
 import com.google.gwt.user.client.ui.HTMLPanel;
 
@@ -21,11 +22,6 @@ public class HTMLPanelBuilder {
   private static int nextId;
   private final StringBuilder sb = new StringBuilder();
   private final ArrayList<ToPlace> places = new ArrayList<ToPlace>();
-  private final Widgets widgets;
-
-  public HTMLPanelBuilder(Widgets widgets) {
-    this.widgets = widgets;
-  }
 
   public void add(String html) {
     sb.append(html);
@@ -39,7 +35,7 @@ public class HTMLPanelBuilder {
 
   /** @return the buffered html and widgets as one {@link IsHTMLPanel}. */
   public IsHTMLPanel toHTMLPanel() {
-    IsHTMLPanel p = widgets.newHTMLPanel(sb.toString());
+    IsHTMLPanel p = newHTMLPanel(sb.toString());
     for (ToPlace t : places) {
       p.addAndReplaceElement(t.widget, t.id);
     }

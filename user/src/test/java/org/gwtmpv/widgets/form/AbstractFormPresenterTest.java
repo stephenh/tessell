@@ -8,14 +8,12 @@ import org.gwtmpv.bus.StubEventBus;
 import org.gwtmpv.util.HTMLPanelBuilder;
 import org.gwtmpv.widgets.StubHTMLPanel;
 import org.gwtmpv.widgets.StubWidget;
-import org.gwtmpv.widgets.StubWidgets;
 import org.junit.Before;
 
 public class AbstractFormPresenterTest {
 
-  protected final StubWidgets widgets = new StubWidgets();
   protected final StubEventBus eventBus = new StubEventBus();
-  protected final FormPresenter p = new FormPresenter(widgets, eventBus);
+  protected final FormPresenter p = new FormPresenter(eventBus);
 
   @Before
   public void resetHTMLPanelBuilderId() {

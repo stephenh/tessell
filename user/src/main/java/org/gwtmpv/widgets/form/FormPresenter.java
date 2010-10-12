@@ -1,5 +1,7 @@
 package org.gwtmpv.widgets.form;
 
+import static org.gwtmpv.widgets.Widgets.newFlowPanel;
+
 import java.util.ArrayList;
 
 import org.gwtmpv.bus.EventBus;
@@ -9,7 +11,6 @@ import org.gwtmpv.presenter.BasicPresenter;
 import org.gwtmpv.util.HTMLPanelBuilder;
 import org.gwtmpv.widgets.IsFlowPanel;
 import org.gwtmpv.widgets.IsHTMLPanel;
-import org.gwtmpv.widgets.Widgets;
 import org.gwtmpv.widgets.form.lines.FormLine;
 import org.gwtmpv.widgets.form.lines.TextBoxFormLine;
 
@@ -17,14 +18,12 @@ import com.google.gwt.event.logical.shared.AttachEvent;
 
 public class FormPresenter extends BasicPresenter<IsFlowPanel> {
 
-  private final Widgets widgets;
   private final ArrayList<FormLine> lines = new ArrayList<FormLine>();
   private final Binder binder = new Binder(this);
   private boolean needsRender = true;
 
-  public FormPresenter(Widgets widgets, EventBus eventBus) {
-    super(widgets.newFlowPanel(), eventBus);
-    this.widgets = widgets;
+  public FormPresenter(EventBus eventBus) {
+    super(newFlowPanel(), eventBus);
   }
 
   @Override
@@ -35,12 +34,12 @@ public class FormPresenter extends BasicPresenter<IsFlowPanel> {
 
   /** Adds a {@link TextBoxFormLine} for {@code p}. */
   public void addTextBox(final Property<String> p) {
-    add(new TextBoxFormLine(widgets, binder, p));
+    add(new TextBoxFormLine(binder, p));
   }
 
   /** Renders all of our lines into our view. */
   protected void render() {
-    HTMLPanelBuilder hb = new HTMLPanelBuilder(widgets);
+    HTMLPanelBuilder hb = new HTMLPanelBuilder();
     hb.add("<div>");
     for (FormLine line : lines) {
       line.render(hb);
