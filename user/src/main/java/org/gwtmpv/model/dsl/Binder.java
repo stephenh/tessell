@@ -5,7 +5,7 @@ import static org.gwtmpv.util.ObjectUtils.toStr;
 import org.gwtmpv.bus.CanRegisterHandlers;
 import org.gwtmpv.model.commands.UiCommand;
 import org.gwtmpv.model.events.PropertyChangedEvent;
-import org.gwtmpv.model.events.PropertyChangedEvent.PropertyChangedHandler;
+import org.gwtmpv.model.events.PropertyChangedHandler;
 import org.gwtmpv.model.properties.Property;
 import org.gwtmpv.model.properties.StringProperty;
 import org.gwtmpv.model.properties.StringableProperty;

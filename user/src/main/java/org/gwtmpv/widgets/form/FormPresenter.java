@@ -4,7 +4,6 @@ import static org.gwtmpv.widgets.Widgets.newFlowPanel;
 
 import java.util.ArrayList;
 
-import org.gwtmpv.bus.EventBus;
 import org.gwtmpv.model.dsl.Binder;
 import org.gwtmpv.model.properties.Property;
 import org.gwtmpv.presenter.BasicPresenter;
@@ -15,6 +14,7 @@ import org.gwtmpv.widgets.form.lines.FormLine;
 import org.gwtmpv.widgets.form.lines.TextBoxFormLine;
 
 import com.google.gwt.event.logical.shared.AttachEvent;
+import com.google.gwt.event.shared.EventBus;
 
 public class FormPresenter extends BasicPresenter<IsFlowPanel> {
 

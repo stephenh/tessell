@@ -3,16 +3,17 @@ package org.gwtmpv.tests.presenter;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-import org.gwtmpv.bus.DefaultEventBus;
-import org.gwtmpv.bus.EventBus;
 import org.gwtmpv.presenter.BasicPresenter;
 import org.gwtmpv.presenter.Presenter;
 import org.gwtmpv.widgets.IsWidget;
 import org.junit.Test;
 
+import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.event.shared.SimpleEventBus;
+
 public class PresenterChildrenTest {
 
-  protected final EventBus testBus = new DefaultEventBus();
+  protected final EventBus testBus = new SimpleEventBus();
 
   @Test
   public void addingInConstructorDoesNotBindRightAway() {

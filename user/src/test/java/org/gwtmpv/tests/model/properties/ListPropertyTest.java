@@ -6,11 +6,11 @@ import static org.junit.Assert.assertThat;
 import java.util.ArrayList;
 
 import org.gwtmpv.model.events.PropertyChangedEvent;
+import org.gwtmpv.model.events.PropertyChangedHandler;
 import org.gwtmpv.model.events.ValueAddedEvent;
+import org.gwtmpv.model.events.ValueAddedHandler;
 import org.gwtmpv.model.events.ValueRemovedEvent;
-import org.gwtmpv.model.events.PropertyChangedEvent.PropertyChangedHandler;
-import org.gwtmpv.model.events.ValueAddedEvent.ValueAddedHandler;
-import org.gwtmpv.model.events.ValueRemovedEvent.ValueRemovedHandler;
+import org.gwtmpv.model.events.ValueRemovedHandler;
 import org.gwtmpv.model.properties.IntegerProperty;
 import org.gwtmpv.model.properties.ListProperty;
 import org.gwtmpv.model.values.SetValue;

@@ -1,7 +1,7 @@
 package org.gwtmpv.model.properties;
 
-import org.gwtmpv.model.validation.events.RuleTriggeredEvent.RuleTriggeredHandler;
-import org.gwtmpv.model.validation.events.RuleUntriggeredEvent.RuleUntriggeredHandler;
+import org.gwtmpv.model.validation.events.RuleTriggeredHandler;
+import org.gwtmpv.model.validation.events.RuleUntriggeredHandler;
 
 import com.google.gwt.event.shared.HandlerRegistration;
 

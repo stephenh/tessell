@@ -1,9 +1,9 @@
 package org.gwtmpv.model.dsl;
 
 import org.gwtmpv.model.validation.events.RuleTriggeredEvent;
-import org.gwtmpv.model.validation.events.RuleTriggeredEvent.RuleTriggeredHandler;
+import org.gwtmpv.model.validation.events.RuleTriggeredHandler;
 import org.gwtmpv.model.validation.events.RuleUntriggeredEvent;
-import org.gwtmpv.model.validation.events.RuleUntriggeredEvent.RuleUntriggeredHandler;
+import org.gwtmpv.model.validation.events.RuleUntriggeredHandler;
 import org.gwtmpv.widgets.IsTextList;
 
 /** Listens for rule events for a field and adds the messages to a {@link IsTextList}. */

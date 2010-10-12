@@ -7,9 +7,9 @@ import java.util.ArrayList;
 import org.gwtmpv.model.Dto;
 import org.gwtmpv.model.Model;
 import org.gwtmpv.model.events.ValueAddedEvent;
-import org.gwtmpv.model.events.ValueAddedEvent.ValueAddedHandler;
+import org.gwtmpv.model.events.ValueAddedHandler;
 import org.gwtmpv.model.events.ValueRemovedEvent;
-import org.gwtmpv.model.events.ValueRemovedEvent.ValueRemovedHandler;
+import org.gwtmpv.model.events.ValueRemovedHandler;
 import org.gwtmpv.model.values.DerivedValue;
 import org.gwtmpv.model.values.Value;
 

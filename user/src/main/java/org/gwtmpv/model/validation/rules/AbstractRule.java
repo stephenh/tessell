@@ -3,18 +3,19 @@ package org.gwtmpv.model.validation.rules;
 import java.util.ArrayList;
 
 import org.gwtmpv.model.events.PropertyChangedEvent;
-import org.gwtmpv.model.events.PropertyChangedEvent.PropertyChangedHandler;
+import org.gwtmpv.model.events.PropertyChangedHandler;
 import org.gwtmpv.model.properties.Property;
 import org.gwtmpv.model.validation.Valid;
 import org.gwtmpv.model.validation.events.RuleTriggeredEvent;
-import org.gwtmpv.model.validation.events.RuleTriggeredEvent.RuleTriggeredHandler;
+import org.gwtmpv.model.validation.events.RuleTriggeredHandler;
 import org.gwtmpv.model.validation.events.RuleUntriggeredEvent;
-import org.gwtmpv.model.validation.events.RuleUntriggeredEvent.RuleUntriggeredHandler;
+import org.gwtmpv.model.validation.events.RuleUntriggeredHandler;
 import org.gwtmpv.model.values.Value;
 
+import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.GwtEvent;
-import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.event.shared.SimpleEventBus;
 
 /**
  * A base class with most of the common {@link Rule} functionality implemented
@@ -27,7 +28,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
 public abstract class AbstractRule<T, U extends AbstractRule<T, U>> implements Rule {
 
   // handlers
-  protected final HandlerManager handlers = new HandlerManager(this);
+  protected final EventBus handlers = new SimpleEventBus();
   // The property that wraps our value
   protected final Property<T> property;
   // List of properties that must be true for this rule to run.

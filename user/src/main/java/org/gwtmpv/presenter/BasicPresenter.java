@@ -4,8 +4,9 @@ import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
 import org.gwtmpv.bus.AbstractBound;
-import org.gwtmpv.bus.EventBus;
 import org.gwtmpv.widgets.IsWidget;
+
+import com.google.gwt.event.shared.EventBus;
 
 /** A basic presenter that tracks bound handler registrations. */
 public abstract class BasicPresenter<V extends IsWidget> extends AbstractBound implements Presenter {

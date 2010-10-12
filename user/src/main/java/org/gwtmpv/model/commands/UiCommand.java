@@ -10,18 +10,19 @@ import org.gwtmpv.model.properties.HasRuleTriggers;
 import org.gwtmpv.model.properties.Property;
 import org.gwtmpv.model.validation.Valid;
 import org.gwtmpv.model.validation.events.RuleTriggeredEvent;
-import org.gwtmpv.model.validation.events.RuleTriggeredEvent.RuleTriggeredHandler;
+import org.gwtmpv.model.validation.events.RuleTriggeredHandler;
 import org.gwtmpv.model.validation.events.RuleUntriggeredEvent;
-import org.gwtmpv.model.validation.events.RuleUntriggeredEvent.RuleUntriggeredHandler;
+import org.gwtmpv.model.validation.events.RuleUntriggeredHandler;
 
-import com.google.gwt.event.shared.HandlerManager;
+import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.event.shared.SimpleEventBus;
 
 /** Codifies a UI command that may have rules triggered. */
 public abstract class UiCommand implements HasRuleTriggers {
 
   private final BooleanProperty enabled = booleanProperty("enabled", true);
-  private final HandlerManager handlers = new HandlerManager(this);
+  private final EventBus handlers = new SimpleEventBus();
   private final ArrayList<String> errors = new ArrayList<String>();
   private final ArrayList<Property<Boolean>> onlyIf = new ArrayList<Property<Boolean>>();
 

@@ -4,16 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.EventHandler;
-import com.google.gwt.event.shared.FixedHandlerManager;
 import com.google.gwt.event.shared.GwtEvent;
-import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.event.shared.GwtEvent.Type;
+import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.event.shared.SimpleEventBus;
 
-public class StubEventBus implements EventBus {
+public class StubEventBus extends EventBus {
 
+  private final EventBus m = new SimpleEventBus();
   private static final Logger log = Logger.getLogger(StubEventBus.class.getName());
-  private final FixedHandlerManager m = new FixedHandlerManager(this);
   private final List<GwtEvent<?>> events = new ArrayList<GwtEvent<?>>();
 
   @Override
@@ -26,6 +27,18 @@ public class StubEventBus implements EventBus {
     log.fine(event.toString());
     events.add(event);
     m.fireEvent(event);
+  }
+
+  @Override
+  public <H extends EventHandler> HandlerRegistration addHandlerToSource(Type<H> type, Object source, H handler) {
+    return m.addHandlerToSource(type, source, handler);
+  }
+
+  @Override
+  public void fireEventFromSource(GwtEvent<?> event, Object source) {
+    log.fine(event.toString());
+    events.add(event);
+    m.fireEventFromSource(event, source);
   }
 
   @SuppressWarnings("unchecked")
@@ -42,4 +55,5 @@ public class StubEventBus implements EventBus {
   public <E extends GwtEvent<?>> E getEvent(final Class<E> type, final int i) {
     return getEvents(type).get(i);
   }
+
 }

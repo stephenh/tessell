@@ -2,7 +2,6 @@ package org.gwtmpv.dispatch.client.util;
 
 import java.util.ArrayList;
 
-import org.gwtmpv.bus.EventBus;
 import org.gwtmpv.dispatch.client.DefaultDispatchAsync;
 import org.gwtmpv.dispatch.client.DispatchAsync;
 import org.gwtmpv.dispatch.client.SuccessCallback;
@@ -13,6 +12,7 @@ import org.gwtmpv.dispatch.client.events.DispatchUnhandledFailureEvent;
 import org.gwtmpv.dispatch.shared.Action;
 import org.gwtmpv.dispatch.shared.Result;
 
+import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 /**

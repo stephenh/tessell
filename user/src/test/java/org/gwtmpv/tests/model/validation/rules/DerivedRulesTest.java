@@ -7,7 +7,7 @@ import static org.junit.Assert.assertThat;
 
 import org.gwtmpv.model.dsl.Binder;
 import org.gwtmpv.model.events.PropertyChangedEvent;
-import org.gwtmpv.model.events.PropertyChangedEvent.PropertyChangedHandler;
+import org.gwtmpv.model.events.PropertyChangedHandler;
 import org.gwtmpv.model.properties.IntegerProperty;
 import org.gwtmpv.model.properties.Property;
 import org.gwtmpv.model.properties.StringProperty;

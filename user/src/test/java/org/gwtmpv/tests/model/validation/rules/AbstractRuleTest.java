@@ -9,9 +9,9 @@ import joist.util.Join;
 
 import org.gwtmpv.model.properties.HasRuleTriggers;
 import org.gwtmpv.model.validation.events.RuleTriggeredEvent;
+import org.gwtmpv.model.validation.events.RuleTriggeredHandler;
 import org.gwtmpv.model.validation.events.RuleUntriggeredEvent;
-import org.gwtmpv.model.validation.events.RuleTriggeredEvent.RuleTriggeredHandler;
-import org.gwtmpv.model.validation.events.RuleUntriggeredEvent.RuleUntriggeredHandler;
+import org.gwtmpv.model.validation.events.RuleUntriggeredHandler;
 
 public abstract class AbstractRuleTest {
 

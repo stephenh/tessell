@@ -3,12 +3,12 @@ package org.gwtmpv.dispatch.client.util;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.gwtmpv.bus.EventBus;
 import org.gwtmpv.bus.StubEventBus;
 import org.gwtmpv.dispatch.client.util.StubDispatchAsync.ExecuteCall;
 import org.gwtmpv.dispatch.shared.Action;
 import org.gwtmpv.dispatch.shared.Result;
 
+import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 /**

@@ -3,9 +3,9 @@ package org.gwtmpv.model.properties;
 import java.util.ArrayList;
 
 import org.gwtmpv.model.validation.events.RuleTriggeredEvent;
-import org.gwtmpv.model.validation.events.RuleTriggeredEvent.RuleTriggeredHandler;
+import org.gwtmpv.model.validation.events.RuleTriggeredHandler;
 import org.gwtmpv.model.validation.events.RuleUntriggeredEvent;
-import org.gwtmpv.model.validation.events.RuleUntriggeredEvent.RuleUntriggeredHandler;
+import org.gwtmpv.model.validation.events.RuleUntriggeredHandler;
 import org.gwtmpv.model.validation.rules.Custom;
 import org.gwtmpv.model.values.DerivedValue;
 import org.gwtmpv.model.values.SetValue;

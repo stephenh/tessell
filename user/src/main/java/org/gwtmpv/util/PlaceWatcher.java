@@ -1,9 +1,9 @@
 package org.gwtmpv.util;
 
-import org.gwtmpv.bus.EventBus;
 import org.gwtmpv.place.events.PlaceChangedEvent;
-import org.gwtmpv.place.events.PlaceChangedEvent.PlaceChangedHandler;
+import org.gwtmpv.place.events.PlaceChangedHandler;
 
+import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.HasText;
 

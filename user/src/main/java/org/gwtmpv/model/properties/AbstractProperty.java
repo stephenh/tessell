@@ -5,27 +5,30 @@ import static org.gwtmpv.util.ObjectUtils.eq;
 import java.util.ArrayList;
 
 import org.gwtmpv.model.events.PropertyChangedEvent;
-import org.gwtmpv.model.events.PropertyChangedEvent.PropertyChangedHandler;
+import org.gwtmpv.model.events.PropertyChangedHandler;
 import org.gwtmpv.model.validation.Valid;
 import org.gwtmpv.model.validation.events.RuleTriggeredEvent;
-import org.gwtmpv.model.validation.events.RuleTriggeredEvent.RuleTriggeredHandler;
+import org.gwtmpv.model.validation.events.RuleTriggeredHandler;
 import org.gwtmpv.model.validation.events.RuleUntriggeredEvent;
-import org.gwtmpv.model.validation.events.RuleUntriggeredEvent.RuleUntriggeredHandler;
+import org.gwtmpv.model.validation.events.RuleUntriggeredHandler;
 import org.gwtmpv.model.validation.rules.Required;
 import org.gwtmpv.model.validation.rules.Rule;
 import org.gwtmpv.model.values.DerivedValue;
 import org.gwtmpv.model.values.Value;
 import org.gwtmpv.util.Inflector;
 
+import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.event.shared.EventHandler;
 import com.google.gwt.event.shared.GwtEvent;
-import com.google.gwt.event.shared.HandlerManager;
+import com.google.gwt.event.shared.GwtEvent.Type;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.event.shared.SimpleEventBus;
 
 /** Provides most of the validation/derived/etc. implementation guts of {@link Property}. */
 public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> implements Property<P> {
 
   // handlers
-  protected final HandlerManager handlers = new HandlerManager(this);
+  protected final EventBus handlers = new SimpleEventBus();
   // other properties that are validated off of our value
   protected final ArrayList<Property<?>> derived = new ArrayList<Property<?>>();
   // rules that validate against our value and fire against our handlers
@@ -82,7 +85,7 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
 
   @Override
   public HandlerRegistration addPropertyChangedHandler(final PropertyChangedHandler<P> handler) {
-    return handlers.addHandler(PropertyChangedEvent.getType(), handler);
+    return addHandler(PropertyChangedEvent.getType(), handler);
   }
 
   /** Track {@code other} as derived on us, so we'll forward changed/changing events to it. */
@@ -132,12 +135,12 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
 
   @Override
   public HandlerRegistration addRuleTriggeredHandler(final RuleTriggeredHandler handler) {
-    return handlers.addHandler(RuleTriggeredEvent.getType(), handler);
+    return addHandler(RuleTriggeredEvent.getType(), handler);
   }
 
   @Override
   public HandlerRegistration addRuleUntriggeredHandler(final RuleUntriggeredHandler handler) {
-    return handlers.addHandler(RuleUntriggeredEvent.getType(), handler);
+    return addHandler(RuleUntriggeredEvent.getType(), handler);
   }
 
   @Override
@@ -184,6 +187,10 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
   }
 
   protected abstract T getThis();
+
+  protected <H extends EventHandler> HandlerRegistration addHandler(Type<H> type, H handler) {
+    return handlers.addHandlerToSource(type, this, handler);
+  }
 
   /** Runs validation against our rules. */
   private void validate() {

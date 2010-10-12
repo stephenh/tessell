@@ -2,17 +2,17 @@ package org.gwtmpv.place;
 
 import java.util.HashMap;
 
-import org.gwtmpv.bus.EventBus;
 import org.gwtmpv.place.events.PlaceChangedEvent;
-import org.gwtmpv.place.events.PlaceChangedEvent.PlaceChangedHandler;
+import org.gwtmpv.place.events.PlaceChangedHandler;
 import org.gwtmpv.place.events.PlaceRequestEvent;
-import org.gwtmpv.place.events.PlaceRequestEvent.PlaceRequestHandler;
+import org.gwtmpv.place.events.PlaceRequestHandler;
 import org.gwtmpv.place.history.IsHistory;
 import org.gwtmpv.place.tokenizer.Tokenizer;
 import org.gwtmpv.place.tokenizer.TokenizerException;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.event.shared.EventBus;
 
 public class DefaultPlaceManager implements PlaceManager {
 

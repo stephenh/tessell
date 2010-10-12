@@ -2,12 +2,13 @@ package org.gwtmpv.widgets;
 
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
-import com.google.gwt.event.shared.HandlerManager;
+import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.event.shared.SimpleEventBus;
 
 public class StubWindow implements IsWindow {
 
-  private final HandlerManager handlers = new HandlerManager(this);
+  private final EventBus handlers = new SimpleEventBus();
   public String open;
   public int x = -1;
   public int y = -1;

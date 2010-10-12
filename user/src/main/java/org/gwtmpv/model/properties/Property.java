@@ -1,6 +1,6 @@
 package org.gwtmpv.model.properties;
 
-import org.gwtmpv.model.events.PropertyChangedEvent.PropertyChangedHandler;
+import org.gwtmpv.model.events.PropertyChangedHandler;
 import org.gwtmpv.model.validation.Valid;
 import org.gwtmpv.model.validation.rules.Rule;
 import org.gwtmpv.model.values.Value;

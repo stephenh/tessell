@@ -1,13 +1,13 @@
 package org.gwtmpv.util;
 
-import org.gwtmpv.bus.EventBus;
 import org.gwtmpv.dispatch.client.events.DispatchActionEvent;
-import org.gwtmpv.dispatch.client.events.DispatchActionEvent.DispatchActionHandler;
+import org.gwtmpv.dispatch.client.events.DispatchActionHandler;
 import org.gwtmpv.dispatch.client.events.DispatchFailureEvent;
-import org.gwtmpv.dispatch.client.events.DispatchFailureEvent.DispatchFailureHandler;
+import org.gwtmpv.dispatch.client.events.DispatchFailureHandler;
 import org.gwtmpv.dispatch.client.events.DispatchResultEvent;
-import org.gwtmpv.dispatch.client.events.DispatchResultEvent.DispatchResultHandler;
+import org.gwtmpv.dispatch.client.events.DispatchResultHandler;
 
+import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.HasText;
 

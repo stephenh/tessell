@@ -1,15 +1,16 @@
 package org.gwtmpv.tests.presenter;
 
-import org.gwtmpv.bus.DefaultEventBus;
-import org.gwtmpv.bus.EventBus;
 import org.gwtmpv.presenter.BasicPresenter;
 import org.gwtmpv.presenter.Presenter;
 import org.gwtmpv.widgets.IsWidget;
 import org.junit.Test;
 
+import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.event.shared.SimpleEventBus;
+
 public class PresenterTest {
 
-  protected final EventBus testBus = new DefaultEventBus();
+  protected final EventBus testBus = new SimpleEventBus();
 
   @Test(expected = IllegalStateException.class)
   public void superOnBindMustBeCalled() {

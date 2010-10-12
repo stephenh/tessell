@@ -3,13 +3,14 @@ package org.gwtmpv.place.history;
 import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.GwtEvent;
-import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.event.shared.SimpleEventBus;
 
 public class StubHistory implements IsHistory, HasValueChangeHandlers<String> {
 
-  private final HandlerManager manager = new HandlerManager(this);
+  private final EventBus handlers = new SimpleEventBus();
   private String token;
 
   public void setToken(final String token) {
@@ -18,7 +19,7 @@ public class StubHistory implements IsHistory, HasValueChangeHandlers<String> {
 
   @Override
   public HandlerRegistration addValueChangeHandler(final ValueChangeHandler<String> handler) {
-    return manager.addHandler(ValueChangeEvent.getType(), handler);
+    return handlers.addHandler(ValueChangeEvent.getType(), handler);
   }
 
   @Override
@@ -41,7 +42,7 @@ public class StubHistory implements IsHistory, HasValueChangeHandlers<String> {
 
   @Override
   public void fireEvent(final GwtEvent<?> event) {
-    manager.fireEvent(event);
+    handlers.fireEvent(event);
   }
 
 }
