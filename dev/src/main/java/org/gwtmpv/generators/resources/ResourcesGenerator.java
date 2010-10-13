@@ -126,8 +126,12 @@ public class ResourcesGenerator {
     }
     m.appendTail(sb);
 
-    String content = defs.toString() + sb.toString();
-    FileUtils.writeStringToFile(gen, content);
+    String newContent = defs.toString() + sb.toString();
+    String oldContent = FileUtils.readFileToString(gen);
+    if (!newContent.equals(oldContent)) {
+      FileUtils.writeStringToFile(gen, newContent);
+      System.out.println(gen.getName());
+    }
   }
 
   public void addImage(final File imageFile) throws Exception {
