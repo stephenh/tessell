@@ -1,9 +1,14 @@
 package org.gwtmpv.generators;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import joist.sourcegen.GClass;
 import joist.util.Inflector;
+
+import org.apache.commons.io.FileUtils;
 
 public class GenUtils {
 
@@ -42,6 +47,16 @@ public class GenUtils {
 
     // throw in a camelize for good measure
     return Inflector.uncapitalize(Inflector.camelize(sb.toString()));
+  }
+
+  public static void saveIfChanged(File outputDirectory, GClass gc) throws IOException {
+    File output = new File(outputDirectory, gc.getFileName());
+    String oldCode = FileUtils.readFileToString(output);
+    String newCode = gc.toCode();
+    if (!oldCode.equals(newCode)) {
+      System.out.println(gc.getFileName());
+      FileUtils.writeStringToFile(output, newCode);
+    }
   }
 
 }

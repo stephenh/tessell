@@ -64,8 +64,8 @@ public class ResourcesGenerator {
       }
     }
 
-    FileUtils.writeStringToFile(new File(outputDirectory, appResources.getFileName()), appResources.toCode());
-    FileUtils.writeStringToFile(new File(outputDirectory, stubResources.getFileName()), stubResources.toCode());
+    GenUtils.saveIfChanged(outputDirectory, appResources);
+    GenUtils.saveIfChanged(outputDirectory, stubResources);
   }
 
   private void addCss(final File cssFile, boolean notStrict) throws Exception {

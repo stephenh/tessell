@@ -28,7 +28,6 @@ import java.util.TreeMap;
 
 import joist.sourcegen.GClass;
 
-import org.apache.commons.io.FileUtils;
 import org.gwtmpv.generators.GenUtils;
 
 import com.google.gwt.core.ext.UnableToCompleteException;
@@ -62,13 +61,7 @@ public class AbstractCssGenerator {
   }
 
   protected void saveIfChanged(GClass gc) throws IOException {
-    File output = new File(outputDirectory, gc.getFileName());
-    String oldCode = FileUtils.readFileToString(output);
-    String newCode = gc.toCode();
-    if (!oldCode.equals(newCode)) {
-      System.out.println(gc.getFileName());
-      FileUtils.writeStringToFile(output, newCode);
-    }
+    GenUtils.saveIfChanged(outputDirectory, gc);
   }
 
   /** @return a sorted map of class name -> method name for {@code inputFile} */
