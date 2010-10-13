@@ -70,7 +70,7 @@ public class ViewGenerator {
   private void generateAppViews() {
     final GClass appViews = new GClass(packageName + ".AppViews").setInterface();
     for (final UiXmlFile uiXml : uiXmlFiles) {
-      appViews.getMethod("get" + uiXml.simpleName).returnType(uiXml.interfaceName);
+      appViews.getMethod("new" + uiXml.simpleName).returnType(uiXml.interfaceName);
     }
     save(appViews);
   }
@@ -84,7 +84,7 @@ public class ViewGenerator {
       cstr.body.line("this.{} = {};", with.name, with.name);
     }
     for (final UiXmlFile uiXml : uiXmlFiles) {
-      final GMethod m = gwtViews.getMethod("get" + uiXml.simpleName).returnType(uiXml.interfaceName);
+      final GMethod m = gwtViews.getMethod("new" + uiXml.simpleName).returnType(uiXml.interfaceName);
       final List<String> withFieldNames = new ArrayList<String>();
       for (final UiFieldDeclaration with : uiXml.getWithTypes()) {
         withFieldNames.add("this." + with.name);
@@ -98,7 +98,7 @@ public class ViewGenerator {
   private void generateStubViews() {
     final GClass stubViews = new GClass(packageName + ".StubViews").implementsInterface("AppViews");
     for (final UiXmlFile uiXml : uiXmlFiles) {
-      final GMethod m = stubViews.getMethod("get" + uiXml.simpleName).returnType(uiXml.stubName);
+      final GMethod m = stubViews.getMethod("new" + uiXml.simpleName).returnType(uiXml.stubName);
       m.addAnnotation("@Override");
       m.body.line("return new {}();", uiXml.stubName);
     }
