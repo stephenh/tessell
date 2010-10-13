@@ -21,15 +21,21 @@ public class Generator {
     final File input = new File(settings.get("inputDirectory"));
     final File output = new File(settings.get("outputDirectory"));
 
+    final Cleanup cleanup = new Cleanup(output);
+
     final String viewsPackage = settings.get("viewsPackageName");
     if (viewsPackage != null) {
-      new ViewGenerator(input, viewsPackage, output).generate();
+      cleanup.watchPackage(viewsPackage);
+      new ViewGenerator(input, viewsPackage, output, cleanup).generate();
     }
 
     final String resourcesPackage = settings.get("resourcesPackageName");
     if (resourcesPackage != null) {
-      new ResourcesGenerator(input, resourcesPackage, output).run();
+      cleanup.watchPackage(resourcesPackage);
+      new ResourcesGenerator(input, cleanup, resourcesPackage, output).run();
     }
+
+    cleanup.deleteLeftOvers();
 
     long end = System.currentTimeMillis();
     System.out.println("Done " + (end - start) + "ms");

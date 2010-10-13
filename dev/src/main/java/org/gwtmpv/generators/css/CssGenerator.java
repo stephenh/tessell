@@ -7,6 +7,8 @@ import java.util.Map;
 import joist.sourcegen.GClass;
 import joist.sourcegen.GMethod;
 
+import org.gwtmpv.generators.Cleanup;
+
 import com.google.gwt.core.ext.Generator;
 import com.google.gwt.resources.client.CssResource;
 
@@ -16,15 +18,15 @@ public class CssGenerator extends AbstractCssGenerator {
   private final File inputCssFile;
   private final GClass cssInterface;
 
-  public CssGenerator(final File inputCssFile, final String interfaceName, final File outputDirectory) {
-    super(outputDirectory);
+  public CssGenerator(final File inputCssFile, Cleanup cleanup, final String interfaceName, final File outputDirectory) {
+    super(outputDirectory, cleanup);
     this.inputCssFile = inputCssFile;
     cssInterface = new GClass(interfaceName).setInterface().baseClass(CssResource.class);
   }
 
   public void run() throws IOException {
     addMethods();
-    saveIfChanged(cssInterface);
+    markAndSaveIfChanged(cssInterface);
   }
 
   private void addMethods() {

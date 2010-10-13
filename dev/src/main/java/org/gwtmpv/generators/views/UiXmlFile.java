@@ -28,101 +28,103 @@ class UiXmlFile {
 
   private final ViewGenerator viewGenerator;
   private final File uiXml;
-  private final String fileName;
-  final String simpleName;
-  final String gwtName;
-  final String interfaceName;
-  final String stubName;
+  final String baseName;
+  final GClass gwtView;
+  final GClass isView;
+  final GClass stubView;
+
   // the handler is only created if we have to parser the ui.xml file
   private UiXmlHandler handler;
 
   UiXmlFile(ViewGenerator viewGenerator, final File uiXml) {
     this.viewGenerator = viewGenerator;
     this.uiXml = uiXml;
-    String className = uiXml
-      .getAbsolutePath()
-      .replace(this.viewGenerator.input.getPath() + File.separator, "")
-      .replace(".ui.xml", "")
-      .replace("/", ".");
-    fileName = StringUtils.substringAfterLast(className, ".");
-    simpleName = fileName.endsWith("View") ? fileName : fileName + "View";
-    final String packageName = StringUtils.substringBeforeLast(className, ".");
-    gwtName = packageName + ".Gwt" + simpleName;
-    interfaceName = packageName + ".Is" + simpleName;
-    stubName = packageName + ".Stub" + simpleName;
+
+    final String templateClassName = deriveClassName();
+    final String packageName = StringUtils.substringBeforeLast(templateClassName, ".");
+    baseName = StringUtils.substringAfterLast(templateClassName, ".");
+    isView = new GClass(packageName + ".Is" + baseName);
+    gwtView = new GClass(packageName + ".Gwt" + baseName);
+    stubView = new GClass(packageName + ".Stub" + baseName);
   }
 
-  boolean hasChanged() {
-    File interfaceFile = new File(viewGenerator.output.getPath() + File.separator + interfaceName.replace(".", File.separator) + ".java");
-    if (!interfaceFile.exists()) {
+  /** @return whether the {@code ui.xml} file is newer than the last {@code IsXxx} output. */
+  public boolean hasChanged() {
+    File isFile = new File(viewGenerator.output, isView.getFileName());
+    if (!isFile.exists()) {
       return true;
     }
-    return uiXml.lastModified() > interfaceFile.lastModified();
+    return uiXml.lastModified() > isFile.lastModified();
   }
 
-  void generate() throws Exception {
+  public void generate() throws Exception {
     System.out.println(uiXml);
     handler = new UiXmlHandler();
     viewGenerator.parser.parse(uiXml, handler);
 
-    generateInterface();
-    generateView();
-    generateStub();
+    generateIsView();
+    generateGwtView();
+    generateStubView();
   }
 
-  private void generateInterface() throws Exception {
-    final GClass i = new GClass(interfaceName);
-    i.baseClass(IsWidget.class);
-    i.setInterface();
-    i.getMethod("asWidget").returnType(Widget.class);
-    i.getMethod("setDebugId").argument("String", "baseDebugId");
+  private void generateIsView() throws Exception {
+    isView.baseClass(IsWidget.class);
+    isView.setInterface();
+    isView.getMethod("asWidget").returnType(Widget.class);
+    isView.getMethod("setDebugId").argument("String", "baseDebugId");
 
+    // methods for each ui:field
     for (final UiFieldDeclaration uiField : handler.uiFields) {
-      i.getMethod(uiField.name).returnType(viewGenerator.config.getInterface(uiField.type));
+      isView.getMethod(uiField.name).returnType(viewGenerator.config.getInterface(uiField.type));
     }
-
+    // methods for each ui:style
     for (final UiStyleDeclaration style : handler.styleFields) {
-      i.getMethod(style.name).returnType(style.type);
+      isView.getMethod(style.name).returnType(style.type);
     }
 
-    viewGenerator.save(i);
+    viewGenerator.markAndSave(isView);
   }
 
-  private void generateView() throws Exception {
-    final GClass v = new GClass(gwtName).baseClass(DelegateIsWidget.class).implementsInterface(interfaceName);
-    final GMethod cstr = v.getConstructor();
-    v.addImports(GWT.class);
+  private void generateGwtView() throws Exception {
+    gwtView.baseClass(DelegateIsWidget.class).implementsInterface(isView.getSimpleClassName());
+    final GMethod cstr = gwtView.getConstructor();
+    gwtView.addImports(GWT.class);
     if (handler.withFields.size() > 0 || handler.uiFields.size() > 0) {
-      v.addImports(UiField.class);
+      gwtView.addImports(UiField.class);
     }
 
-    final GMethod debugId = v.getMethod("setDebugId").argument("String", "baseDebugId");
+    final GMethod debugId = gwtView.getMethod("setDebugId").argument("String", "baseDebugId");
 
-    final GClass uibinder = v.getInnerClass("MyUiBinder").setInterface();
-    uibinder.baseClassName("{}<{}, {}>", UiBinder.class.getName(), handler.firstTagType, gwtName);
-    uibinder.addAnnotation("@UiTemplate(\"{}.ui.xml\")", fileName);
-    v.addImports(UiTemplate.class);
+    {
+      // uibinder
+      final GClass uibinder = gwtView.getInnerClass("MyUiBinder").setInterface();
+      uibinder.baseClassName("{}<{}, {}>", UiBinder.class.getName(), handler.firstTagType, gwtView.getSimpleClassName());
+      uibinder.addAnnotation("@UiTemplate(\"{}\")", uiXml.getName());
+      gwtView.addImports(UiTemplate.class);
 
-    v.getField("binder").type("MyUiBinder").setStatic().setFinal().initialValue("GWT.create(MyUiBinder.class)");
+      gwtView.getField("binder").type("MyUiBinder").setStatic().setFinal().initialValue("GWT.create(MyUiBinder.class)");
+    }
 
+    // for each ui:with, add a @UiField(provided=true) field and a constructor arg
     for (final UiFieldDeclaration field : handler.withFields) {
-      v.getField(field.name).type(field.type).setAccess(Access.PACKAGE).addAnnotation("@UiField(provided = true)");
+      gwtView.getField(field.name).type(field.type).setAccess(Access.PACKAGE).addAnnotation("@UiField(provided = true)");
       cstr.argument(field.type, field.name);
       cstr.body.line("this.{} = {};", field.name, field.name);
     }
 
-    // Make fields, getter, plus Css class for each ui:style
+    // for each ui:style, make @UiField fields, getter methods, plus Css class for each ui:style
     for (final UiStyleDeclaration style : handler.styleFields) {
-      v.getField(style.name).type(style.type).setAccess(Access.PACKAGE).addAnnotation("@UiField");
-      v.getMethod(style.name).returnType(style.type).body.line("return {};", style.name);
-      new CssGenerator(style.getCssInFile(), style.type, viewGenerator.output).run();
+      gwtView.getField(style.name).type(style.type).setAccess(Access.PACKAGE).addAnnotation("@UiField");
+      gwtView.getMethod(style.name).returnType(style.type).body.line("return {};", style.name);
+      new CssGenerator(style.getCssInFile(), viewGenerator.cleanup, style.type, viewGenerator.output).run();
     }
 
+    // for each ui:field, make @UiField (usually provided=true) and getter methods
     for (final UiFieldDeclaration field : handler.uiFields) {
       final String interfaceType = viewGenerator.config.getInterface(field.type);
       final String subType = viewGenerator.config.getSubclass(field.type);
-      final GField f = v.getField(field.name);
-      final GMethod m = v.getMethod(field.name).returnType(interfaceType);
+      final GField f = gwtView.getField(field.name);
+      final GMethod m = gwtView.getMethod(field.name).returnType(interfaceType);
 
       if (field.isElement) {
         f.type(field.type).setAccess(Access.PACKAGE).addAnnotation("@UiField");
@@ -137,50 +139,51 @@ class UiXmlFile {
 
       if (field.isElement) {
         debugId.body.line("UIObject.ensureDebugId({}, baseDebugId + \"-{}\");", field.name, field.name);
-        v.addImports(UIObject.class);
+        gwtView.addImports(UIObject.class);
       } else {
         debugId.body.line("{}.ensureDebugId(baseDebugId + \"-{}\");", field.name, field.name);
       }
     }
 
     cstr.body.line("setWidget(binder.createAndBindUi(this));");
-    cstr.body.line("setDebugId(\"{}\");", v.getSimpleClassNameWithoutGeneric().replaceAll("View$", "").replaceAll("^Gwt", ""));
+    cstr.body.line("setDebugId(\"{}\");", gwtView.getSimpleClassNameWithoutGeneric().replaceAll("View$", "").replaceAll("^Gwt", ""));
 
-    viewGenerator.save(v);
+    viewGenerator.markAndSave(gwtView);
   }
 
-  private void generateStub() throws Exception {
-    final GClass s = new GClass(stubName).baseClass(StubWidget.class).implementsInterface(interfaceName);
+  private void generateStubView() throws Exception {
+    stubView.baseClass(StubWidget.class).implementsInterface(isView.getSimpleClassName());
 
-    final GMethod debugId = s.getMethod("setDebugId").argument("String", "baseDebugId");
+    final GMethod debugId = stubView.getMethod("setDebugId").argument("String", "baseDebugId");
 
+    // for each ui:field, add a field assigned to the stub type, and a getter method
     for (final UiFieldDeclaration field : handler.uiFields) {
       final String stubType = viewGenerator.config.getStub(field.type);
-      if (stubType == null) {
-        throw new RuntimeException("No stub for " + field.type);
-      }
-      s.getField(field.name).type(stubType).setPublic().setFinal().initialValue("new {}()", stubType);
-      s.getMethod(field.name).returnType(stubType).body.line("return {};", field.name);
+      stubView.getField(field.name).type(stubType).setPublic().setFinal().initialValue("new {}()", stubType);
+      stubView.getMethod(field.name).returnType(stubType).body.line("return {};", field.name);
       debugId.body.line("{}.ensureDebugId(baseDebugId + \"-{}\");", field.name, field.name);
     }
 
-    // Make fields, getter, plus StubCss class for each ui:style
+    // for each ui:style, make @UiField fields, getter method, plus StubCss class
     for (final UiStyleDeclaration style : handler.styleFields) {
-      CssStubGenerator g = new CssStubGenerator(style.getCssInFile(), style.type, viewGenerator.output);
+      CssStubGenerator g = new CssStubGenerator(style.getCssInFile(), viewGenerator.cleanup, style.type, viewGenerator.output);
       g.run();
-      s.getField(style.name).type(style.type).setFinal().initialValue("new {}()", g.getCssStubClassName());
-      s.getMethod(style.name).returnType(style.type).body.line("return {};", style.name);
+      stubView.getField(style.name).type(style.type).setFinal().initialValue("new {}()", g.getCssStubClassName());
+      stubView.getMethod(style.name).returnType(style.type).body.line("return {};", style.name);
     }
 
-    s.getConstructor().body.line("setDebugId(\"{}\");", s.getSimpleClassNameWithoutGeneric().replaceAll("View$", "").replaceAll("^Stub", ""));
+    stubView.getConstructor().body.line(
+      "setDebugId(\"{}\");",
+      stubView.getSimpleClassNameWithoutGeneric().replaceAll("View$", "").replaceAll("^Stub", ""));
 
-    viewGenerator.save(s);
+    viewGenerator.markAndSave(stubView);
   }
 
   String getPath() {
     return uiXml.getPath();
   }
 
+  /** @return the ui:with fields, possibly cached to avoid parsing each file each time. */
   List<UiFieldDeclaration> getWithTypes() {
     if (handler == null) {
       return viewGenerator.cache.getWithTypes(this);
@@ -188,4 +191,18 @@ class UiXmlFile {
       return handler.withFields;
     }
   }
+
+  private String deriveClassName() {
+    // Get the absolute path, drop off the input path, drop ui.xml, / -> .
+    return appendViewIfNeeded(uiXml
+      .getAbsolutePath()
+      .replace(viewGenerator.input.getPath() + File.separator, "")
+      .replace(".ui.xml", "")
+      .replace("/", "."));
+  }
+
+  private String appendViewIfNeeded(String input) {
+    return input.endsWith("View") ? input : input + "View";
+  }
+
 }

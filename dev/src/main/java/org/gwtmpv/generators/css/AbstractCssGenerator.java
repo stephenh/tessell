@@ -17,7 +17,6 @@ package org.gwtmpv.generators.css;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.util.Comparator;
@@ -28,6 +27,7 @@ import java.util.TreeMap;
 
 import joist.sourcegen.GClass;
 
+import org.gwtmpv.generators.Cleanup;
 import org.gwtmpv.generators.GenUtils;
 
 import com.google.gwt.core.ext.UnableToCompleteException;
@@ -47,9 +47,11 @@ public class AbstractCssGenerator {
   private static PrintWriter logWriter;
   private final PrintWriterTreeLogger logger;
   private final File outputDirectory;
+  private final Cleanup cleanup;
 
-  protected AbstractCssGenerator(final File outputDirectory) {
+  protected AbstractCssGenerator(final File outputDirectory, final Cleanup cleanup) {
     this.outputDirectory = outputDirectory;
+    this.cleanup = cleanup;
     if (logWriter == null) {
       try {
         logWriter = new PrintWriter(new File(outputDirectory, ".cssGenerator.log"));
@@ -60,7 +62,8 @@ public class AbstractCssGenerator {
     logger = new PrintWriterTreeLogger(logWriter);
   }
 
-  protected void saveIfChanged(GClass gc) throws IOException {
+  protected void markAndSaveIfChanged(GClass gc) {
+    cleanup.markOkay(gc);
     GenUtils.saveIfChanged(outputDirectory, gc);
   }
 

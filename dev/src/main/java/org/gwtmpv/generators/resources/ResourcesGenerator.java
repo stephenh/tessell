@@ -16,6 +16,7 @@ import joist.util.Inflector;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
+import org.gwtmpv.generators.Cleanup;
 import org.gwtmpv.generators.GenUtils;
 import org.gwtmpv.generators.css.CssGenerator;
 import org.gwtmpv.generators.css.CssStubGenerator;
@@ -32,13 +33,15 @@ public class ResourcesGenerator {
 
   private static final Pattern urlPattern = Pattern.compile("url\\(([^\\)]+)\\)");
   private final File inputDirectory;
+  private final Cleanup cleanup;
   private final String packageName;
   private final File outputDirectory;
   private final GClass appResources;
   private final GClass stubResources;
 
-  public ResourcesGenerator(final File inputDirectory, final String packageName, final File outputDirectory) {
+  public ResourcesGenerator(final File inputDirectory, Cleanup cleanup, final String packageName, final File outputDirectory) {
     this.inputDirectory = inputDirectory;
+    this.cleanup = cleanup;
     this.packageName = packageName;
     this.outputDirectory = outputDirectory;
     appResources = new GClass(packageName + ".AppResources");
@@ -62,6 +65,8 @@ public class ResourcesGenerator {
       }
     }
 
+    cleanup.markOkay(appResources);
+    cleanup.markOkay(stubResources);
     GenUtils.saveIfChanged(outputDirectory, appResources);
     GenUtils.saveIfChanged(outputDirectory, stubResources);
   }
@@ -74,6 +79,7 @@ public class ResourcesGenerator {
     // Copy the file and do any url(...) => @url replacement
     File cssFileCopy = fileInOutputDirectory(cssFile, ".css", ".gen.css");
     doUrlSubstitution(cssFile, cssFileCopy);
+    cleanup.markOkay(cssFileCopy);
 
     final GMethod m = appResources.getMethod(methodName).returnType(newInterfaceName);
     m.addAnnotation("@Source(\"" + getRelativePath(cssFileCopy) + "\")");
@@ -89,8 +95,8 @@ public class ResourcesGenerator {
     sf.initialValue("new {}()", stubName).autoImportInitialValue();
     stubResources.getMethod(methodName).returnType(stubName).body.line("return {};", methodName);
 
-    new CssGenerator(cssFile, newInterfaceName, outputDirectory).run();
-    new CssStubGenerator(cssFile, newInterfaceName, outputDirectory).run();
+    new CssGenerator(cssFile, cleanup, newInterfaceName, outputDirectory).run();
+    new CssStubGenerator(cssFile, cleanup, newInterfaceName, outputDirectory).run();
   }
 
   private String suffixIfNeeded(String name, String suffix) {
@@ -106,7 +112,7 @@ public class ResourcesGenerator {
   }
 
   /** Finds {@code url(...)} in the css and replaces it with GWT @url declarations. */
-  private void doUrlSubstitution(File original, File gen) throws Exception {
+  private void doUrlSubstitution(File originalFile, File generatedFile) throws Exception {
     // keep track of urls we've already defined so we don't redefine them
     Set<String> defined = new HashSet<String>();
     // buffer for @url definitions, to be prepended at the end
@@ -114,7 +120,7 @@ public class ResourcesGenerator {
     // buffer to hold the transformed css, to be appended at the end
     StringBuffer sb = new StringBuffer();
 
-    Matcher m = urlPattern.matcher(FileUtils.readFileToString(original));
+    Matcher m = urlPattern.matcher(FileUtils.readFileToString(originalFile));
     while (m.find()) {
       String path = m.group(1);
       String methodName = GenUtils.toMethodName(substringBeforeLast(new File(path).getName(), "."));
@@ -127,11 +133,7 @@ public class ResourcesGenerator {
     m.appendTail(sb);
 
     String newContent = defs.toString() + sb.toString();
-    String oldContent = FileUtils.readFileToString(gen);
-    if (!newContent.equals(oldContent)) {
-      FileUtils.writeStringToFile(gen, newContent);
-      System.out.println(gen.getName());
-    }
+    GenUtils.saveIfChanged(generatedFile, newContent);
   }
 
   public void addImage(final File imageFile) throws Exception {

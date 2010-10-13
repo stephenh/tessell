@@ -49,13 +49,22 @@ public class GenUtils {
     return Inflector.uncapitalize(Inflector.camelize(sb.toString()));
   }
 
-  public static void saveIfChanged(File outputDirectory, GClass gc) throws IOException {
-    File output = new File(outputDirectory, gc.getFileName());
-    String oldCode = FileUtils.readFileToString(output);
-    String newCode = gc.toCode();
-    if (!oldCode.equals(newCode)) {
-      System.out.println(gc.getFileName());
-      FileUtils.writeStringToFile(output, newCode);
+  /** Saves {@code gc} to {@code outputDirectory} if needed. */
+  public static void saveIfChanged(File outputDirectory, GClass gc) {
+    File outputFile = new File(outputDirectory, gc.getFileName());
+    saveIfChanged(outputFile, gc.toCode());
+  }
+
+  /** Saves {@code newContent} to {@code outputFile} if needed. */
+  public static void saveIfChanged(File outputFile, String newContent) {
+    try {
+      String oldContent = outputFile.exists() ? FileUtils.readFileToString(outputFile) : "";
+      if (!oldContent.equals(newContent)) {
+        System.out.println(outputFile);
+        FileUtils.writeStringToFile(outputFile, newContent);
+      }
+    } catch (IOException io) {
+      throw new RuntimeException(io);
     }
   }
 

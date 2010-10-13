@@ -31,4 +31,6 @@ Notes
   * `entity some fields -> dto`
   * `entity + other stuff -> dto + other dto`
   * `entity field errors -> dto -> model property errors`
+  * have the codegen make both the dtos and the mapping
+  * List<Entity> <-> List<String> names
 

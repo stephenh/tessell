@@ -18,6 +18,8 @@ import joist.util.Join;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
+import org.gwtmpv.generators.Cleanup;
+import org.gwtmpv.generators.GenUtils;
 import org.xml.sax.SAXException;
 
 /** Takes a {@code ui.xml} source and generates a {@code IsXxx, GwtXxx, StubXxx} trio of view classes. */
@@ -27,15 +29,17 @@ public class ViewGenerator {
   private final List<UiXmlFile> uiXmlFiles = new ArrayList<UiXmlFile>();
   final File input;
   final File output;
+  final Cleanup cleanup;
   final Config config = new Config();
   final UiXmlCache cache;
   final SAXParser parser;
 
-  public ViewGenerator(final File inputDirectory, final String packageName, final File outputDirectory) {
+  public ViewGenerator(final File inputDirectory, final String packageName, final File outputDirectory, final Cleanup cleanup) {
     input = inputDirectory.getAbsoluteFile();
     output = outputDirectory.getAbsoluteFile();
     cache = new UiXmlCache(output);
     this.packageName = packageName;
+    this.cleanup = cleanup;
     parser = makeNewParser();
   }
 
@@ -53,6 +57,9 @@ public class ViewGenerator {
         uiXml.generate();
         cache.update(uiXml);
       }
+      cleanup.markOkay(uiXml.isView);
+      cleanup.markOkay(uiXml.gwtView);
+      cleanup.markOkay(uiXml.stubView);
     }
 
     generateAppViews();
@@ -65,9 +72,9 @@ public class ViewGenerator {
   private void generateAppViews() {
     final GClass appViews = new GClass(packageName + ".AppViews").setInterface();
     for (final UiXmlFile uiXml : uiXmlFiles) {
-      appViews.getMethod("new" + uiXml.simpleName).returnType(uiXml.interfaceName);
+      appViews.getMethod("new" + uiXml.baseName).returnType(uiXml.isView.getFullClassName());
     }
-    save(appViews);
+    markAndSaveIfChanged(appViews);
   }
 
   private void generateGwtViews() {
@@ -77,32 +84,32 @@ public class ViewGenerator {
     // ui:withs in separate files could use the same type but different
     // variable names, so we resolve based on the type only
     for (String type : getUniqueWithTypes()) {
-      final String name = resourceName(type);
+      final String name = simpleName(type);
       gwtViews.getField(name).type(type).setFinal();
       cstr.argument(type, name);
       cstr.body.line("this.{} = {};", name, name);
     }
 
     for (final UiXmlFile uiXml : uiXmlFiles) {
-      final GMethod m = gwtViews.getMethod("new" + uiXml.simpleName).returnType(uiXml.interfaceName);
+      final GMethod m = gwtViews.getMethod("new" + uiXml.baseName).returnType(uiXml.isView.getFullClassName());
       final List<String> withFieldNames = new ArrayList<String>();
       for (final UiFieldDeclaration with : uiXml.getWithTypes()) {
-        withFieldNames.add("this." + resourceName(with.type));
+        withFieldNames.add("this." + simpleName(with.type));
       }
       m.addAnnotation("@Override");
-      m.body.line("return new {}({});", uiXml.gwtName, Join.commaSpace(withFieldNames));
+      m.body.line("return new {}({});", uiXml.gwtView.getFullClassName(), Join.commaSpace(withFieldNames));
     }
-    save(gwtViews);
+    markAndSaveIfChanged(gwtViews);
   }
 
   private void generateStubViews() {
     final GClass stubViews = new GClass(packageName + ".StubViews").implementsInterface("AppViews");
     for (final UiXmlFile uiXml : uiXmlFiles) {
-      final GMethod m = stubViews.getMethod("new" + uiXml.simpleName).returnType(uiXml.stubName);
+      final GMethod m = stubViews.getMethod("new" + uiXml.baseName).returnType(uiXml.stubView.getFullClassName());
       m.addAnnotation("@Override");
-      m.body.line("return new {}();", uiXml.stubName);
+      m.body.line("return new {}();", uiXml.stubView.getFullClassName());
     }
-    save(stubViews);
+    markAndSaveIfChanged(stubViews);
   }
 
   /** @return the unique types required by {@code ui:with}s across all views */
@@ -116,11 +123,18 @@ public class ViewGenerator {
     return all;
   }
 
-  private String resourceName(String fullName) {
+  private String simpleName(String fullName) {
     return StringUtils.uncapitalize(StringUtils.substringAfterLast(fullName, "."));
   }
 
-  void save(final GClass gclass) {
+  void markAndSaveIfChanged(final GClass gclass) {
+    GenUtils.saveIfChanged(output, gclass);
+    cleanup.markOkay(gclass);
+  }
+
+  /** If the ui.xml files have had their time stamp changed, we always save the new ones. */
+  void markAndSave(final GClass gclass) {
+    cleanup.markOkay(gclass);
     try {
       FileUtils.writeStringToFile(new File(output, gclass.getFileName()), gclass.toCode());
     } catch (IOException e) {
@@ -138,6 +152,10 @@ public class ViewGenerator {
     factory.setValidating(false);
     factory.setNamespaceAware(true);
     try {
+      // don't hit the net for DTDs and crap
+      // http://stackoverflow.com/questions/243728/how-to-disable-dtd-at-runtime-in-javas-xpath
+      factory.setFeature("http://apache.org/xml/features/nonvalidating/load-dtd-grammar", false);
+      factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
       return factory.newSAXParser();
     } catch (ParserConfigurationException e) {
       throw new RuntimeException(e);

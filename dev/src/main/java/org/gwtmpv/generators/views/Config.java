@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Map.Entry;
+import java.util.Properties;
 
 import org.apache.commons.lang.StringUtils;
 import org.gwtmpv.widgets.ColumnsPanel;
@@ -65,6 +65,8 @@ import org.gwtmpv.widgets.RowTable;
 import org.gwtmpv.widgets.StubAnchor;
 import org.gwtmpv.widgets.StubCellTable;
 import org.gwtmpv.widgets.StubCheckBox;
+import org.gwtmpv.widgets.StubColumnsPanel;
+import org.gwtmpv.widgets.StubElement;
 import org.gwtmpv.widgets.StubFadingDialogBox;
 import org.gwtmpv.widgets.StubFlowPanel;
 import org.gwtmpv.widgets.StubFocusPanel;
@@ -75,8 +77,6 @@ import org.gwtmpv.widgets.StubHyperlink;
 import org.gwtmpv.widgets.StubImage;
 import org.gwtmpv.widgets.StubInlineHyperlink;
 import org.gwtmpv.widgets.StubInlineLabel;
-import org.gwtmpv.widgets.StubColumnsPanel;
-import org.gwtmpv.widgets.StubElement;
 import org.gwtmpv.widgets.StubLabel;
 import org.gwtmpv.widgets.StubListBox;
 import org.gwtmpv.widgets.StubPasswordTextBox;
@@ -143,7 +143,11 @@ public class Config {
   }
 
   public String getStub(final String type) {
-    return typeToStub.get(type);
+    String stubType = typeToStub.get(type);
+    if (stubType == null) {
+      throw new RuntimeException("No stub for " + type);
+    }
+    return stubType;
   }
 
   public String getSubclass(final String type) {
