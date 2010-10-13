@@ -40,8 +40,6 @@ public class ViewGenerator {
   }
 
   public void generate() throws Exception {
-    long start = System.currentTimeMillis();
-
     cache.loadIfExists();
     for (final File uiXml : findUiXmlFiles()) {
       if (uiXml.getName().contains("-nogen.")) {
@@ -62,9 +60,6 @@ public class ViewGenerator {
     generateStubViews();
 
     cache.save();
-
-    long end = System.currentTimeMillis();
-    System.out.println("Done " + (end - start) + "ms");
   }
 
   private void generateAppViews() {

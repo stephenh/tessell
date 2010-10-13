@@ -15,6 +15,8 @@ public class Generator {
 
   /** Args: {@code --inputDirectory src/main/java --viewsPackage com.app.views --resourcesPackage com.app.resources --outputDirectory target/gen}. */
   public static void main(final String[] args) throws Exception {
+    long start = System.currentTimeMillis();
+
     final Map<String, String> settings = GenUtils.parseArgs(args);
     final File input = new File(settings.get("inputDirectory"));
     final File output = new File(settings.get("outputDirectory"));
@@ -28,6 +30,9 @@ public class Generator {
     if (resourcesPackage != null) {
       new ResourcesGenerator(input, resourcesPackage, output).run();
     }
+
+    long end = System.currentTimeMillis();
+    System.out.println("Done " + (end - start) + "ms");
   }
 
 }
