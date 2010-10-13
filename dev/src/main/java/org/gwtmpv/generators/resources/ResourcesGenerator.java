@@ -50,10 +50,8 @@ public class ResourcesGenerator {
     stubResources.implementsInterface(appResources.getFullClassName());
 
     for (final File file : getFilesInInputDirectory()) {
-      if (file.getName().endsWith(".notstrict.css")) {
-        addCss(file, true);
-      } else if (file.getName().endsWith(".css")) {
-        addCss(file, false);
+      if (file.getName().endsWith(".css")) {
+        addCss(file);
       } else if (file.getName().endsWith(".png")
         || file.getName().endsWith(".gif")
         || file.getName().endsWith(".jpg")
@@ -68,7 +66,7 @@ public class ResourcesGenerator {
     GenUtils.saveIfChanged(outputDirectory, stubResources);
   }
 
-  private void addCss(final File cssFile, boolean notStrict) throws Exception {
+  private void addCss(final File cssFile) throws Exception {
     final String methodName = GenUtils.toMethodName(cssFile.getName().replace(".css", "").replace(".notstrict", ""));
     final String newInterfaceName = packageName + "." + suffixIfNeeded(Inflector.capitalize(methodName), "Style");
     final String stubName = packageName + ".Stub" + suffixIfNeeded(Inflector.capitalize(methodName), "Style");
@@ -79,6 +77,8 @@ public class ResourcesGenerator {
 
     final GMethod m = appResources.getMethod(methodName).returnType(newInterfaceName);
     m.addAnnotation("@Source(\"" + getRelativePath(cssFileCopy) + "\")");
+
+    boolean notStrict = cssFile.getName().endsWith(".notstrict.css");
     if (notStrict) {
       m.addAnnotation("@NotStrict");
       appResources.addImports(NotStrict.class.getName().replace("$", "."));
