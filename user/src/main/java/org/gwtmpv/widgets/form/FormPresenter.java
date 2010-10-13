@@ -20,10 +20,12 @@ public class FormPresenter extends BasicPresenter<IsFlowPanel> {
 
   private final ArrayList<FormLine> lines = new ArrayList<FormLine>();
   private final Binder binder = new Binder(this);
+  private final FormLayout layout;
   private boolean needsRender = true;
 
   public FormPresenter(EventBus eventBus) {
     super(newFlowPanel(), eventBus);
+    layout = new DefaultFormLayout();
   }
 
   @Override
@@ -38,17 +40,18 @@ public class FormPresenter extends BasicPresenter<IsFlowPanel> {
   }
 
   /** Renders all of our lines into our view. */
-  protected void render() {
+  private void render() {
     HTMLPanelBuilder hb = new HTMLPanelBuilder();
-    hb.add("<div>");
+    layout.formBegin(this, hb);
     for (FormLine line : lines) {
       line.render(hb);
     }
-    hb.add("</div>");
+    layout.formEnd(this, hb);
     insertHtml(hb.toHTMLPanel());
     needsRender = false;
   }
 
+  /** Adds {@code line} and resets the {@code needsRender} flag. */
   private void add(FormLine line) {
     lines.add(line);
     needsRender = true;
