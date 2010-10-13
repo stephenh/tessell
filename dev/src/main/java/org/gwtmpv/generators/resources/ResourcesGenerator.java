@@ -62,7 +62,6 @@ public class ResourcesGenerator {
       } else if (file.getName().endsWith(".html") || file.getName().endsWith("js")) {
         addText(file);
       }
-      System.out.println(file);
     }
 
     FileUtils.writeStringToFile(new File(outputDirectory, appResources.getFileName()), appResources.toCode());

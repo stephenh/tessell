@@ -5,24 +5,15 @@ import java.io.IOException;
 
 import joist.sourcegen.GClass;
 
-import org.apache.commons.io.FileUtils;
-
 /** A utility class for creating a Java stub class for a given CSS file. */
 public class CssStubGenerator extends AbstractCssGenerator {
 
-  /**
-   * Args: css file, stub file name
-   */
-  public static void main(final String[] args) {
-  }
-
   private final File inputCssFile;
-  private final File outputDirectory;
   private final GClass cssStub;
 
   public CssStubGenerator(final File inputCssFile, final String interfaceName, final File outputDirectory) {
+    super(outputDirectory);
     this.inputCssFile = inputCssFile;
-    this.outputDirectory = outputDirectory;
 
     // break open interfaceName and put Stub in the front of its simple name
     final int lastDot = interfaceName.lastIndexOf('.');
@@ -33,7 +24,7 @@ public class CssStubGenerator extends AbstractCssGenerator {
 
   public void run() throws IOException {
     generateStub();
-    FileUtils.writeStringToFile(new File(outputDirectory, cssStub.getFileName()), cssStub.toCode());
+    saveIfChanged(cssStub);
   }
 
   public String getCssStubClassName() {

@@ -16,6 +16,8 @@
 package org.gwtmpv.generators.css;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.util.Comparator;
@@ -24,6 +26,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import joist.sourcegen.GClass;
+
+import org.apache.commons.io.FileUtils;
 import org.gwtmpv.generators.GenUtils;
 
 import com.google.gwt.core.ext.UnableToCompleteException;
@@ -40,8 +45,31 @@ import com.google.gwt.resources.css.ast.CssStylesheet;
  */
 public class AbstractCssGenerator {
 
-  private final PrintWriter logWriter = new PrintWriter(System.err);
-  private final PrintWriterTreeLogger logger = new PrintWriterTreeLogger(logWriter);
+  private static PrintWriter logWriter;
+  private final PrintWriterTreeLogger logger;
+  private final File outputDirectory;
+
+  protected AbstractCssGenerator(final File outputDirectory) {
+    this.outputDirectory = outputDirectory;
+    if (logWriter == null) {
+      try {
+        logWriter = new PrintWriter(new File(outputDirectory, ".cssGenerator.log"));
+      } catch (FileNotFoundException e) {
+        throw new RuntimeException(e);
+      }
+    }
+    logger = new PrintWriterTreeLogger(logWriter);
+  }
+
+  protected void saveIfChanged(GClass gc) throws IOException {
+    File output = new File(outputDirectory, gc.getFileName());
+    String oldCode = FileUtils.readFileToString(output);
+    String newCode = gc.toCode();
+    if (!oldCode.equals(newCode)) {
+      System.out.println(gc.getFileName());
+      FileUtils.writeStringToFile(output, newCode);
+    }
+  }
 
   /** @return a sorted map of class name -> method name for {@code inputFile} */
   protected Map<String, String> getClassNameToMethodName(final File inputFile) {
