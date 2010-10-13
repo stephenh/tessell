@@ -28,12 +28,13 @@ public class ViewGenerator {
   final File input;
   final File output;
   final Config config = new Config();
-  final UiXmlCache cache = new UiXmlCache();
+  final UiXmlCache cache;
   final SAXParser parser;
 
   public ViewGenerator(final File inputDirectory, final String packageName, final File outputDirectory) {
     input = inputDirectory.getAbsoluteFile();
     output = outputDirectory.getAbsoluteFile();
+    cache = new UiXmlCache(output);
     this.packageName = packageName;
     parser = makeNewParser();
   }
