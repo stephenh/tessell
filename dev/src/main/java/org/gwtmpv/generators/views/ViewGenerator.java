@@ -4,9 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 import java.util.TreeSet;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -18,6 +17,7 @@ import joist.sourcegen.GMethod;
 import joist.util.Join;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringUtils;
 import org.xml.sax.SAXException;
 
 /** Takes a {@code ui.xml} source and generates a {@code IsXxx, GwtXxx, StubXxx} trio of view classes. */
@@ -73,16 +73,21 @@ public class ViewGenerator {
   private void generateGwtViews() {
     final GClass gwtViews = new GClass(packageName + ".GwtViews").implementsInterface("AppViews");
     final GMethod cstr = gwtViews.getConstructor();
-    for (final UiFieldDeclaration with : getWithsFromAllViews()) {
-      gwtViews.getField(with.name).type(with.type).setFinal();
-      cstr.argument(with.type, with.name);
-      cstr.body.line("this.{} = {};", with.name, with.name);
+
+    // ui:withs in separate files could use the same type but different
+    // variable names, so we resolve based on the type only
+    for (String type : getUniqueWithTypes()) {
+      final String name = resourceName(type);
+      gwtViews.getField(name).type(type).setFinal();
+      cstr.argument(type, name);
+      cstr.body.line("this.{} = {};", name, name);
     }
+
     for (final UiXmlFile uiXml : uiXmlFiles) {
       final GMethod m = gwtViews.getMethod("new" + uiXml.simpleName).returnType(uiXml.interfaceName);
       final List<String> withFieldNames = new ArrayList<String>();
       for (final UiFieldDeclaration with : uiXml.getWithTypes()) {
-        withFieldNames.add("this." + with.name);
+        withFieldNames.add("this." + resourceName(with.type));
       }
       m.addAnnotation("@Override");
       m.body.line("return new {}({});", uiXml.gwtName, Join.commaSpace(withFieldNames));
@@ -100,14 +105,19 @@ public class ViewGenerator {
     save(stubViews);
   }
 
-  private Collection<UiFieldDeclaration> getWithsFromAllViews() {
-    final Map<String, UiFieldDeclaration> map = new HashMap<String, UiFieldDeclaration>();
+  /** @return the unique types required by {@code ui:with}s across all views */
+  private Set<String> getUniqueWithTypes() {
+    final Set<String> all = new TreeSet<String>();
     for (final UiXmlFile uiXml : uiXmlFiles) {
       for (final UiFieldDeclaration field : uiXml.getWithTypes()) {
-        map.put(field.name, field);
+        all.add(field.type);
       }
     }
-    return new TreeSet<UiFieldDeclaration>(map.values());
+    return all;
+  }
+
+  private String resourceName(String fullName) {
+    return StringUtils.uncapitalize(StringUtils.substringAfterLast(fullName, "."));
   }
 
   void save(final GClass gclass) {

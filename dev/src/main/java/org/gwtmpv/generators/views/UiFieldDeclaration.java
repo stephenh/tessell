@@ -15,6 +15,6 @@ class UiFieldDeclaration implements Comparable<UiFieldDeclaration> {
 
   @Override
   public int compareTo(final UiFieldDeclaration o) {
-    return name.compareTo(o.name);
+    return type.compareTo(o.type);
   }
 }
