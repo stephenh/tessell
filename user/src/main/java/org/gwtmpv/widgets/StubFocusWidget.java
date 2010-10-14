@@ -171,28 +171,76 @@ public class StubFocusWidget extends StubWidget implements IsFocusWidget {
     this.enabled = enabled;
   }
 
-  protected class DummyClickEvent extends ClickEvent {
+  public static class DummyClickEvent extends ClickEvent {
+    public boolean prevented = false;
+
+    @Override
+    public void preventDefault() {
+      prevented = true;
+    }
   }
 
-  private class DummyMouseOverEvent extends MouseOverEvent {
+  public static class DummyMouseOverEvent extends MouseOverEvent {
+    public boolean prevented = false;
+
+    @Override
+    public void preventDefault() {
+      prevented = true;
+    }
   }
 
-  private class DummyMouseOutEvent extends MouseOutEvent {
+  public static class DummyMouseOutEvent extends MouseOutEvent {
+    public boolean prevented = false;
+
+    @Override
+    public void preventDefault() {
+      prevented = true;
+    }
   }
 
-  private class DummyBlurEvent extends BlurEvent {
+  public static class DummyBlurEvent extends BlurEvent {
+    public boolean prevented = false;
+
+    @Override
+    public void preventDefault() {
+      prevented = true;
+    }
   }
 
-  private class DummyFocusEvent extends FocusEvent {
+  public static class DummyFocusEvent extends FocusEvent {
+    public boolean prevented = false;
+
+    @Override
+    public void preventDefault() {
+      prevented = true;
+    }
   }
 
-  private class DummyKeyDownEvent extends KeyDownEvent {
+  public static class DummyKeyDownEvent extends KeyDownEvent {
+    public boolean prevented = false;
+
+    @Override
+    public void preventDefault() {
+      prevented = true;
+    }
   }
 
-  private class DummyKeyPressEvent extends KeyPressEvent {
+  public static class DummyKeyPressEvent extends KeyPressEvent {
+    public boolean prevented = false;
+
+    @Override
+    public void preventDefault() {
+      prevented = true;
+    }
   }
 
-  private class DummyKeyUpEvent extends KeyUpEvent {
+  public static class DummyKeyUpEvent extends KeyUpEvent {
+    public boolean prevented = false;
+
+    @Override
+    public void preventDefault() {
+      prevented = true;
+    }
   }
 
 }
