@@ -27,6 +27,10 @@ public class Cleanup {
     }
   }
 
+  public void markTypeOkay(String className) {
+    filesAssumedBad.remove(new File(outputDirectory, className.replace(".", "/") + ".java").getAbsolutePath());
+  }
+
   public void markOkay(File file) {
     filesAssumedBad.remove(file.getAbsolutePath());
   }

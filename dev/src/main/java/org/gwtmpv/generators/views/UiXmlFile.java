@@ -183,13 +183,22 @@ class UiXmlFile {
     return uiXml.getPath();
   }
 
-  /** @return the ui:with fields, possibly cached to avoid parsing each file each time. */
-  List<UiFieldDeclaration> getWithTypes() {
-    if (handler == null) {
-      return viewGenerator.cache.getWithTypes(this);
-    } else {
-      return handler.withFields;
-    }
+  /** @return the ui:with fields, if we parsed the file. */
+  List<UiFieldDeclaration> getWiths() {
+    return handler.withFields;
+  }
+
+  List<UiFieldDeclaration> getWithsPossiblyCached() {
+    return handler == null ? viewGenerator.cache.getCachedWiths(this) : getWiths();
+  }
+
+  /** @return the ui:style fields, if we parsed the file. */
+  List<UiStyleDeclaration> getStyles() {
+    return handler.styleFields;
+  }
+
+  List<UiStyleDeclaration> getStylesPossiblyCached() {
+    return handler == null ? viewGenerator.cache.getCachedStyles(this) : getStyles();
   }
 
   private String deriveClassName() {

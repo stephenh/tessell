@@ -1,5 +1,8 @@
 package org.gwtmpv.generators.views;
 
+import static org.apache.commons.lang.StringUtils.substringAfterLast;
+import static org.apache.commons.lang.StringUtils.substringBeforeLast;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -30,6 +33,12 @@ class UiStyleDeclaration {
       }
     }
     return cssFile;
+  }
+
+  public String getStubClassName() {
+    final String packageName = substringBeforeLast(type, ".");
+    final String simpleName = substringAfterLast(type, ".");
+    return packageName + ".Stub" + simpleName;
   }
 
 }

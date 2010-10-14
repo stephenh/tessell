@@ -1,5 +1,8 @@
 package org.gwtmpv.generators.css;
 
+import static org.apache.commons.lang.StringUtils.substringAfterLast;
+import static org.apache.commons.lang.StringUtils.substringBeforeLast;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -18,10 +21,9 @@ public class CssStubGenerator extends AbstractCssGenerator {
     this.inputCssFile = inputCssFile;
 
     // break open interfaceName and put Stub in the front of its simple name
-    final int lastDot = interfaceName.lastIndexOf('.');
-    final String packageName = interfaceName.substring(0, lastDot);
-    final String interfaceSimpleName = interfaceName.substring(lastDot + 1);
-    cssStub = new GClass(packageName + ".Stub" + interfaceSimpleName).implementsInterface(interfaceName);
+    final String packageName = substringBeforeLast(interfaceName, ".");
+    final String simpleName = substringAfterLast(interfaceName, ".");
+    cssStub = new GClass(packageName + ".Stub" + simpleName).implementsInterface(interfaceName);
   }
 
   public void run() throws IOException {
