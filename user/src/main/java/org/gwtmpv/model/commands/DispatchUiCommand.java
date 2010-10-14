@@ -37,6 +37,7 @@ public abstract class DispatchUiCommand<A extends Action<R>, R extends Result> e
         }
 
         public void onFailure(Throwable caught) {
+          DispatchUiCommand.this.onFailure(caught);
           active.set(false);
         }
       });
