@@ -27,7 +27,7 @@
 	</target>
 
 	<!-- start ivy targets -->
-	<property name="ivy.jar.version" value="2.1.0"/>
+	<property name="ivy.jar.version" value="2.2.0"/>
 	<property name="ivy.jar.name" value="ivy-${ivy.jar.version}.jar"/>
 	<property name="ivy.home" value="${user.home}/.ivy2"/>
 	<available property="ivy.installed" file="${ivy.home}/${ivy.jar.name}"/>
