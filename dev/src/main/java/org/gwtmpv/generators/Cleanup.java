@@ -20,8 +20,10 @@ public class Cleanup {
   @SuppressWarnings("unchecked")
   public void watchPackage(String packageName) {
     File packageDirectory = new File(outputDirectory, packageName.replace(".", "/"));
-    for (File file : (List<File>) FileUtils.listFiles(packageDirectory, null, true)) {
-      filesAssumedBad.add(file.getAbsolutePath());
+    if (packageDirectory.exists()) {
+      for (File file : (List<File>) FileUtils.listFiles(packageDirectory, null, true)) {
+        filesAssumedBad.add(file.getAbsolutePath());
+      }
     }
   }
 
