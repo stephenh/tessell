@@ -33,6 +33,11 @@ public class BooleanBinder {
     return new BooleanSetBinder(binder, property, style);
   }
 
+  /** @return a binder to remove {@code} value} from a list. */
+  public <V> BooleanRemoveBinder<V> remove(V value) {
+    return new BooleanRemoveBinder<V>(binder, property, value);
+  }
+
   private void showIfTrue(HasCss css) {
     if (Boolean.TRUE.equals(property.get())) {
       css.getStyle().clearDisplay();
