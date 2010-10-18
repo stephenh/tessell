@@ -1,8 +1,9 @@
 package org.gwtmpv.generators;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import joist.sourcegen.GClass;
 
@@ -11,7 +12,7 @@ import org.apache.commons.io.FileUtils;
 public class Cleanup {
 
   private final File outputDirectory;
-  private final List<String> filesAssumedBad = new ArrayList<String>();
+  private final Set<String> filesAssumedBad = new TreeSet<String>();
 
   public Cleanup(final File outputDirectory) {
     this.outputDirectory = outputDirectory;
