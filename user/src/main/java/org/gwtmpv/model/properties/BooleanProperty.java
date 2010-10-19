@@ -17,6 +17,10 @@ public class BooleanProperty extends AbstractProperty<Boolean, BooleanProperty> 
     return this;
   }
 
+  public void toggle() {
+    set(isTrue() ? false : true);
+  }
+
   public boolean isTrue() {
     return TRUE.equals(get());
   }
