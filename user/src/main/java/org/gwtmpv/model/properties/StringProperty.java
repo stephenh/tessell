@@ -15,6 +15,12 @@ public class StringProperty extends AbstractProperty<String, StringProperty> {
     super(value);
   }
 
+  public StringProperty len(int minLength, int maxLength) {
+    new Length(this, getName() + " must be between " + minLength + " and " + maxLength, minLength, maxLength);
+    this.maxLength = maxLength;
+    return this;
+  }
+
   public StringProperty max(final int maxLength) {
     new Length(this, getName() + " must be less than " + maxLength, 0, maxLength);
     this.maxLength = maxLength;
