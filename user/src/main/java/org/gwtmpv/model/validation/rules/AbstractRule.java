@@ -74,7 +74,6 @@ public abstract class AbstractRule<T, U extends AbstractRule<T, U>> implements R
         triggerIfNeeded();
       } else {
         untriggerIfNeeded();
-        return Valid.NO;
       }
     }
     return valid;
