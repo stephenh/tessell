@@ -56,7 +56,7 @@ public abstract class DispatchUiCommand<A extends Action<R>, R extends Result> e
     if (GWT.isClient()) {
       GWT.log("Failure in " + this, caught);
     }
-    error(caught.getMessage());
+    error(caught == null ? null : caught.getMessage());
   }
 
   /** @return whether the call is currently active */
