@@ -2,6 +2,7 @@ package org.gwtmpv.model.properties;
 
 import static org.gwtmpv.model.properties.NewProperty.integerProperty;
 
+import org.gwtmpv.model.validation.rules.Length;
 import org.gwtmpv.model.validation.rules.Regex;
 import org.gwtmpv.model.values.DerivedValue;
 import org.gwtmpv.model.values.Value;
@@ -15,6 +16,7 @@ public class StringProperty extends AbstractProperty<String, StringProperty> {
   }
 
   public StringProperty max(final int maxLength) {
+    new Length(this, getName() + " must be less than " + maxLength, 0, maxLength);
     this.maxLength = maxLength;
     return this;
   }
