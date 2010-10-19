@@ -3,6 +3,8 @@ package org.gwtmpv.model.properties;
 import static org.gwtmpv.util.ObjectUtils.eq;
 
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.gwtmpv.model.events.PropertyChangedEvent;
 import org.gwtmpv.model.events.PropertyChangedHandler;
@@ -27,6 +29,7 @@ import com.google.gwt.event.shared.SimpleEventBus;
 /** Provides most of the validation/derived/etc. implementation guts of {@link Property}. */
 public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> implements Property<P> {
 
+  private static final Logger log = Logger.getLogger("org.gwtmpv.model");
   // handlers
   private final EventBus handlers = new SimpleEventBus();
   // other properties that are validated off of our value
@@ -68,10 +71,12 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
 
   @Override
   public void reassess() {
+    log.log(Level.FINEST, this + " reassessing");
     final P newValue = get();
     final boolean changed = !eq(lastValue, newValue);
     lastValue = newValue;
     if (changed || !hasFired) {
+      log.log(Level.FINER, this + " changed");
       fireEvent(new PropertyChangedEvent<P>(this));
       hasFired = true;
     }
@@ -122,6 +127,7 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
 
   @Override
   public void fireEvent(final GwtEvent<?> event) {
+    log.finest(this + " firing " + event);
     handlers.fireEventFromSource(event, this);
   }
 

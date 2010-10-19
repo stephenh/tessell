@@ -1,6 +1,8 @@
 package org.gwtmpv.model.validation.rules;
 
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.gwtmpv.model.events.PropertyChangedEvent;
 import org.gwtmpv.model.events.PropertyChangedHandler;
@@ -27,6 +29,7 @@ import com.google.gwt.event.shared.SimpleEventBus;
  */
 public abstract class AbstractRule<T, U extends AbstractRule<T, U>> implements Rule {
 
+  private static final Logger log = Logger.getLogger("org.gwtmpv.model");
   // handlers
   protected final EventBus handlers = new SimpleEventBus();
   // The property that wraps our value
@@ -116,7 +119,7 @@ public abstract class AbstractRule<T, U extends AbstractRule<T, U>> implements R
   }
 
   private void fireEvent(final GwtEvent<?> event) {
-    System.out.println(event.toString());
+    log.log(Level.FINEST, this + " firing " + event);
     handlers.fireEvent(event);
     if (property != null) {
       property.fireEvent(event);
