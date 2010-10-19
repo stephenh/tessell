@@ -58,51 +58,51 @@ public class BinderTest {
   }
 
   @Test
-  public void whileTrueFiresInitialValueWhenTrue() {
+  public void whenTrueFiresInitialValueWhenTrue() {
     BooleanProperty b = booleanProperty("b", true);
     StubWidget w = new StubWidget();
-    binder.whileTrue(b).set("c").on(w);
+    binder.when(b).is(true).set("c").on(w);
     assertThat(w, hasStyle("c"));
   }
 
   @Test
-  public void whileTrueDoesNotFireInitialValueWhenFalse() {
+  public void whenTrueDoesNotFireInitialValueWhenFalse() {
     BooleanProperty b = booleanProperty("b", false);
     StubWidget w = new StubWidget();
-    binder.whileTrue(b).set("c").on(w);
+    binder.when(b).is(true).set("c").on(w);
     assertThat(w, not(hasStyle("c")));
   }
 
   @Test
-  public void whileTrueFiresWhenFalseChangesToTrue() {
+  public void whenTrueFiresWhenFalseChangesToTrue() {
     BooleanProperty b = booleanProperty("b", false);
     StubWidget w = new StubWidget();
-    binder.whileTrue(b).set("c").on(w);
+    binder.when(b).is(true).set("c").on(w);
     b.set(true);
     assertThat(w, hasStyle("c"));
   }
 
   @Test
-  public void whileTrueShowHidesWhenFalse() {
+  public void whenTrueShowHidesWhenFalse() {
     BooleanProperty b = booleanProperty("b", false);
     StubWidget w = new StubWidget();
-    binder.whileTrue(b).show(w);
+    binder.when(b).is(true).show(w);
     assertThat(w, is(hidden()));
   }
 
   @Test
-  public void whileTrueShowDisplaysWhenTrue() {
+  public void whenTrueShowDisplaysWhenTrue() {
     BooleanProperty b = booleanProperty("b", true);
     StubWidget w = new StubWidget();
-    binder.whileTrue(b).show(w);
+    binder.when(b).is(true).show(w);
     assertThat(w, is(shown()));
   }
 
   @Test
-  public void whileTrueShowHidesWhenChangesToFalse() {
+  public void whenTrueShowHidesWhenChangesToFalse() {
     BooleanProperty b = booleanProperty("b", true);
     StubWidget w = new StubWidget();
-    binder.whileTrue(b).show(w);
+    binder.when(b).is(true).show(w);
     b.set(false);
     assertThat(w, is(hidden()));
   }

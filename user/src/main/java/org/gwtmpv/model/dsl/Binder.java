@@ -54,8 +54,8 @@ public class Binder {
     return new UiCommandBinder(this, command);
   }
 
-  public BooleanBinder whileTrue(Property<Boolean> property) {
-    return new BooleanBinder(this, property);
+  public <P> WhenBinder<P> when(Property<P> property) {
+    return new WhenBinder<P>(this, property);
   }
 
   /** @return a fluent {@link FormattedPropertyBinder} against {@code property}. */
