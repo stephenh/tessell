@@ -27,6 +27,11 @@ public class StringProperty extends AbstractProperty<String, StringProperty> {
     return this;
   }
 
+  public StringProperty regex(final String regex, final String message) {
+    new Regex(this, message, regex);
+    return this;
+  }
+
   public StringProperty numeric() {
     new Regex(this, getName() + " must be numeric", Regex.NUMERIC);
     return this;

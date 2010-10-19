@@ -41,4 +41,20 @@ public class StringPropertyTest extends AbstractRuleTest {
     assertThat(p.getMaxLength(), is(5));
   }
 
+  @Test
+  public void regexMatches() {
+    final StringProperty p = stringProperty("p").regex("[a-z]", "did not match");
+    listenTo(p);
+    p.set("a");
+    assertMessages("");
+  }
+
+  @Test
+  public void regexDoesNotMatch() {
+    final StringProperty p = stringProperty("p").regex("[a-z]", "did not match");
+    listenTo(p);
+    p.set("1");
+    assertMessages("did not match");
+  }
+
 }
