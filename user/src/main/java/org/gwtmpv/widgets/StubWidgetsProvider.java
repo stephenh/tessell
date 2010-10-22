@@ -95,4 +95,9 @@ public class StubWidgetsProvider implements WidgetsProvider {
   public <T> IsCellList<T> newCellList(Cell<T> cell) {
     return new StubCellList<T>(cell);
   }
+
+  @Override
+  public IsCheckBox newCheckBox() {
+    return new StubCheckBox();
+  }
 }

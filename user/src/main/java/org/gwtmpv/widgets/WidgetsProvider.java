@@ -12,6 +12,8 @@ public interface WidgetsProvider {
 
   IsTextList newTextList();
 
+  IsCheckBox newCheckBox();
+
   IsAnchor newAnchor();
 
   IsHyperlink newHyperline();

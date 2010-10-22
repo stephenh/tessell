@@ -13,6 +13,10 @@ public class Widgets {
     return provider.newElement(tag);
   }
 
+  public static IsCheckBox newCheckBox() {
+    return provider.newCheckBox();
+  }
+
   public static IsTextBox newTextBox() {
     return provider.newTextBox();
   }

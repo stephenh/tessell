@@ -94,4 +94,9 @@ public class GwtWidgetsProvider implements WidgetsProvider {
     return new GwtCellList<T>(cell);
   }
 
+  @Override
+  public IsCheckBox newCheckBox() {
+    return new GwtCheckBox();
+  }
+
 }
