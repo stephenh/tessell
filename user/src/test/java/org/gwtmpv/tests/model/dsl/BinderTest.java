@@ -5,9 +5,12 @@ import static org.gwtmpv.model.properties.NewProperty.stringProperty;
 import static org.gwtmpv.testing.MpvMatchers.hasStyle;
 import static org.gwtmpv.testing.MpvMatchers.hidden;
 import static org.gwtmpv.testing.MpvMatchers.shown;
+import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
+
+import java.util.ArrayList;
 
 import org.gwtmpv.model.dsl.Binder;
 import org.gwtmpv.model.properties.BooleanProperty;
@@ -105,6 +108,23 @@ public class BinderTest {
     binder.when(b).is(true).show(w);
     b.set(false);
     assertThat(w, is(hidden()));
+  }
+
+  @Test
+  public void whenTrueAddDoesInitialSet() {
+    BooleanProperty b = booleanProperty("b", true);
+    ArrayList<String> list = new ArrayList<String>();
+    binder.when(b).is(true).add("foo").to(list);
+    assertThat(list, hasItem("foo"));
+  }
+
+  @Test
+  public void whenTrueRemovesFromInitialSet() {
+    BooleanProperty b = booleanProperty("b", false);
+    ArrayList<String> list = new ArrayList<String>();
+    list.add("foo");
+    binder.when(b).is(true).add("foo").to(list);
+    assertThat(list, not(hasItem("foo")));
   }
 
 }

@@ -32,6 +32,10 @@ public class WhenIsBinder<P> {
     return new WhenIsRemoveBinder<P, V>(binder, property, value, newValue);
   }
 
+  public <V> WhenIsAddBinder<P, V> add(V newValue) {
+    return new WhenIsAddBinder<P, V>(binder, property, value, newValue);
+  }
+
   public void show(final HasCss css) {
     binder.registerHandler(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
       public void onPropertyChanged(PropertyChangedEvent<P> event) {
