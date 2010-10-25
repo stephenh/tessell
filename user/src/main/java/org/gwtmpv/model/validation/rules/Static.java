@@ -6,7 +6,7 @@ import org.gwtmpv.model.validation.Valid;
 /** A rule for applying custom logic. */
 public class Static extends AbstractRule<Object, Static> {
 
-  private boolean valid;
+  private boolean valid = true;
 
   @SuppressWarnings("unchecked")
   public Static(final Property<?> property, final String message) {
@@ -25,6 +25,7 @@ public class Static extends AbstractRule<Object, Static> {
 
   public void set(final boolean valid) {
     this.valid = valid;
+    property.reassess();
   }
 
   public void setMessage(final String message) {
