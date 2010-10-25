@@ -1,0 +1,6 @@
+#Mon Oct 25 15:11:11 MDT 2010
+eclipse.preferences.version=1
+org.moreunit.prefixes=
+org.moreunit.test_type=junit4
+org.moreunit.unitsourcefolder=gwt-mpv-user\:src/main/java\:gwt-mpv-user\:src/test/java
+org.moreunit.useprojectsettings=true
