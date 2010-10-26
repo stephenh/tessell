@@ -12,6 +12,10 @@ import org.gwtmpv.model.values.SetValue;
 /** Lots of helper methods to constructor {@link Property}s out of bindings/{@link DerivedValue}s/etc. */
 public class NewProperty {
 
+  public static <P> BasicProperty<P> property(String name, P value) {
+    return new BasicProperty<P>(new SetValue<P>(name, value));
+  }
+
   public static <P> BasicProperty<P> basicProperty(final Binding<P> binding) {
     return new BasicProperty<P>(new BoundValue<P>(binding));
   }

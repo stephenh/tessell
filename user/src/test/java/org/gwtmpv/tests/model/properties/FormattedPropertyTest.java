@@ -2,6 +2,7 @@ package org.gwtmpv.tests.model.properties;
 
 import static org.gwtmpv.model.properties.NewProperty.integerProperty;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 
@@ -13,9 +14,11 @@ import org.gwtmpv.model.events.PropertyChangedHandler;
 import org.gwtmpv.model.properties.IntegerProperty;
 import org.gwtmpv.model.properties.Property;
 import org.gwtmpv.model.properties.PropertyFormatter;
+import org.gwtmpv.model.validation.Valid;
+import org.gwtmpv.tests.model.validation.rules.AbstractRuleTest;
 import org.junit.Test;
 
-public class FormattedPropertyTest {
+public class FormattedPropertyTest extends AbstractRuleTest {
 
   @Test
   public void get() {
@@ -24,7 +27,71 @@ public class FormattedPropertyTest {
   }
 
   @Test
-  public void onChangeFires() {
+  public void setStringToInt() {
+    IntegerProperty i = integerProperty("i", 1);
+    Property<String> p = i.formatted(f);
+    p.set("2");
+    assertThat(i.get(), is(2));
+  }
+
+  @Test
+  public void setBadString() {
+    IntegerProperty i = integerProperty("i", 1);
+    listenTo(i);
+
+    Property<String> p = i.formatted(f);
+    p.set("a");
+    assertMessages("I was invalid");
+  }
+
+  @Test
+  public void setNull() {
+    IntegerProperty i = integerProperty("i", 1);
+    listenTo(i);
+
+    i.asString().set(null);
+    assertThat(i.get(), is(nullValue()));
+    assertThat(i.wasValid(), is(Valid.YES));
+  }
+
+  @Test
+  public void setEmptyString() {
+    IntegerProperty i = integerProperty("i", 1);
+    listenTo(i);
+
+    i.asString().set("");
+    assertThat(i.get(), is(nullValue()));
+    assertThat(i.wasValid(), is(Valid.YES));
+  }
+
+  @Test
+  public void setThatFailsThenIsCorrected() {
+    IntegerProperty i = integerProperty("i", 1);
+    listenTo(i);
+
+    Property<String> p = i.formatted(f);
+    p.set("a");
+    assertMessages("I was invalid");
+
+    p.set("2");
+    assertMessages("");
+  }
+
+  @Test
+  public void setThatFailsThenIsCorrectedInOriginalProperty() {
+    IntegerProperty i = integerProperty("i", 1);
+    listenTo(i);
+
+    Property<String> p = i.formatted(f);
+    p.set("a");
+    assertMessages("I was invalid");
+
+    i.set(2);
+    assertMessages("");
+  }
+
+  @Test
+  public void sourceChangingMakesTheFormattedValueChange() {
     IntegerProperty i = integerProperty("i", 1);
     Property<String> p = i.formatted(f);
 
@@ -39,6 +106,11 @@ public class FormattedPropertyTest {
     @Override
     public String format(Integer a) {
       return a + "-" + a;
+    }
+
+    @Override
+    public Integer parse(String b) {
+      return Integer.parseInt(b);
     }
   };
 

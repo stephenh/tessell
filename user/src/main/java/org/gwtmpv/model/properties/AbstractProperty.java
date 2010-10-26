@@ -15,7 +15,6 @@ import org.gwtmpv.model.validation.events.RuleUntriggeredEvent;
 import org.gwtmpv.model.validation.events.RuleUntriggeredHandler;
 import org.gwtmpv.model.validation.rules.Required;
 import org.gwtmpv.model.validation.rules.Rule;
-import org.gwtmpv.model.values.DerivedValue;
 import org.gwtmpv.model.values.Value;
 import org.gwtmpv.util.Inflector;
 
@@ -75,10 +74,11 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
     final P newValue = get();
     final boolean changed = !eq(lastValue, newValue);
     lastValue = newValue;
+    hasFired = true; // hack for FormattedProperty
     if (changed || !hasFired) {
+      hasFired = true;
       log.log(Level.FINER, this + " changed");
       fireEvent(new PropertyChangedEvent<P>(this));
-      hasFired = true;
     }
 
     validate();
@@ -101,12 +101,7 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
 
   /** @return a new derived property by applying {@code formatter} to our value */
   public <T1> Property<T1> formatted(final PropertyFormatter<P, T1> formatter) {
-    return addDerived(new BasicProperty<T1>(new DerivedValue<T1>("formatted " + getName()) {
-      @Override
-      public T1 get() {
-        return formatter.format(AbstractProperty.this.get());
-      }
-    }));
+    return addDerived(new FormattedProperty<T1, P>(this, formatter, null));
   }
 
   @Override

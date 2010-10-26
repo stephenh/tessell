@@ -16,6 +16,11 @@ public class SetValue<P> implements Value<P> {
     this.name = name;
   }
 
+  public SetValue(final String name, P initialValue) {
+    this.name = name;
+    value = initialValue;
+  }
+
   @Override
   public P get() {
     return value;
