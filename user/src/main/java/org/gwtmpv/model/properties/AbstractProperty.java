@@ -43,8 +43,6 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
   private boolean touched;
   // the result of the last validate()
   private Valid valid;
-  // has fired at least once
-  private boolean hasFired;
 
   public AbstractProperty(final Value<P> value) {
     this.value = value;
@@ -74,9 +72,7 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
     final P newValue = get();
     final boolean changed = !eq(lastValue, newValue);
     lastValue = newValue;
-    hasFired = true; // hack for FormattedProperty
-    if (changed || !hasFired) {
-      hasFired = true;
+    if (changed) {
       log.log(Level.FINER, this + " changed");
       fireEvent(new PropertyChangedEvent<P>(this));
     }
