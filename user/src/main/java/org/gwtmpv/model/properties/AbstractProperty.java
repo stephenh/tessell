@@ -106,7 +106,11 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
 
   @Override
   public void addRule(final Rule rule) {
-    rules.add(rule);
+    if (rule.isImportant()) {
+      rules.add(0, rule);
+    } else {
+      rules.add(rule);
+    }
   }
 
   @Override

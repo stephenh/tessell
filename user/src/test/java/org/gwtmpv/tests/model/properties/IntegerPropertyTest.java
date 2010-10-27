@@ -7,9 +7,10 @@ import static org.junit.Assert.assertThat;
 
 import org.gwtmpv.model.properties.IntegerProperty;
 import org.gwtmpv.model.validation.Valid;
+import org.gwtmpv.tests.model.validation.rules.AbstractRuleTest;
 import org.junit.Test;
 
-public class IntegerPropertyTest {
+public class IntegerPropertyTest extends AbstractRuleTest {
 
   @Test
   public void fromStringIsResetWhenGood() {
@@ -27,4 +28,14 @@ public class IntegerPropertyTest {
     assertThat(p.get(), is(nullValue()));
     assertThat(p.wasValid(), is(Valid.YES));
   }
+
+  @Test
+  public void callingAsStringTwiceShouldNotResultInMultipleErrors() {
+    final IntegerProperty p = integerProperty("p", 1);
+    listenTo(p);
+    p.asString().set("2"); // good
+    p.asString().set("asdf"); // bad
+    assertMessages("P is invalid");
+  }
+
 }

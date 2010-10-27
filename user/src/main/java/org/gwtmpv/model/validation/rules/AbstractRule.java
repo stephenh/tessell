@@ -118,6 +118,11 @@ public abstract class AbstractRule<T, U extends AbstractRule<T, U>> implements R
     return message;
   }
 
+  @Override
+  public boolean isImportant() {
+    return false;
+  }
+
   private void fireEvent(final GwtEvent<?> event) {
     log.log(Level.FINEST, this + " firing " + event);
     handlers.fireEvent(event);

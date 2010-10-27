@@ -91,6 +91,15 @@ public class FormattedPropertyTest extends AbstractRuleTest {
   }
 
   @Test
+  public void setThatFailsHasInvalidMessageTakePrecedenceOverRequired() {
+    IntegerProperty i = integerProperty("i", null).req();
+    listenTo(i);
+
+    i.asString().set("asdf");
+    assertMessages("I is invalid");
+  }
+
+  @Test
   public void sourceChangingMakesTheFormattedValueChange() {
     IntegerProperty i = integerProperty("i", 1);
     Property<String> p = i.formatted(f);
