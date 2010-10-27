@@ -16,11 +16,7 @@ public class Custom extends AbstractRule<Object, Custom> {
     this(property, message, property);
   }
 
-  /** Adds a rule that will trigger against {@code property} whenever {@code other} is false. */
-  public Custom(final Property<?> property, final String message, final Property<Boolean> other) {
-    this(property, message, other.getValue());
-  }
-
+  /** Adds a rule that will trigger against {@code property} whenever {@code value} is false. */
   public Custom(final Property<?> property, final String message, final Binding<Boolean> value) {
     this(property, message, new BoundValue<Boolean>(value));
   }

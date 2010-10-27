@@ -95,7 +95,7 @@ public abstract class AbstractRule<T, U extends AbstractRule<T, U>> implements R
   /** Only run this rule if {@code other} is true */
   public U onlyIf(final Property<Boolean> other) {
     other.addPropertyChangedHandler(new OnOnlyIfPropertyChanged());
-    this.onlyIf.add(other.getValue());
+    this.onlyIf.add(other);
     return getThis();
   }
 

@@ -8,7 +8,7 @@ import org.gwtmpv.model.values.Value;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 
-public interface Property<P> extends HasRuleTriggers {
+public interface Property<P> extends HasRuleTriggers, Value<P> {
 
   P get();
 
@@ -39,9 +39,6 @@ public interface Property<P> extends HasRuleTriggers {
   Property<P> depends(Property<?>... upstream);
 
   HandlerRegistration addPropertyChangedHandler(PropertyChangedHandler<P> handler);
-
-  /** @return the {@link Value} this property is wrapping. */
-  Value<P> getValue();
 
   String getName();
 

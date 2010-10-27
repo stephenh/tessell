@@ -7,7 +7,6 @@ import org.gwtmpv.model.validation.events.RuleTriggeredHandler;
 import org.gwtmpv.model.validation.events.RuleUntriggeredHandler;
 import org.gwtmpv.model.validation.rules.Rule;
 import org.gwtmpv.model.validation.rules.Static;
-import org.gwtmpv.model.values.Value;
 
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -159,23 +158,6 @@ public class FormattedProperty<DP, SP> implements Property<DP> {
         handler.onPropertyChanged(new PropertyChangedEvent<DP>(FormattedProperty.this));
       }
     });
-  }
-
-  @Override
-  public Value<DP> getValue() {
-    return new Value<DP>() {
-      public DP get() {
-        return FormattedProperty.this.get();
-      }
-
-      public void set(DP value) {
-        FormattedProperty.this.set(value);
-      }
-
-      public String getName() {
-        return FormattedProperty.this.getName();
-      }
-    };
   }
 
   @Override
