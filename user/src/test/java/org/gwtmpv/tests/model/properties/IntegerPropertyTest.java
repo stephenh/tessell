@@ -21,15 +21,6 @@ public class IntegerPropertyTest {
   }
 
   @Test
-  public void fromStringIsResetWhenGoodViaInitial() {
-    final IntegerProperty p = integerProperty("p");
-    p.asString().set("blah");
-    assertThat(p.wasValid(), is(Valid.NO));
-    p.setInitial(1);
-    assertThat(p.wasValid(), is(Valid.YES));
-  }
-
-  @Test
   public void fromStringWithNull() {
     final IntegerProperty p = integerProperty("p", 1);
     p.asString().set(null);

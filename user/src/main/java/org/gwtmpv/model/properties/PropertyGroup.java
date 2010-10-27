@@ -40,11 +40,6 @@ public class PropertyGroup extends AbstractProperty<Boolean, PropertyGroup> {
     throw new IllegalArgumentException("PropertyGroups cannot be set, call validate");
   }
 
-  @Override
-  public void setInitial(final Boolean value) {
-    throw new IllegalArgumentException("PropertyGroups cannot be set, call validate");
-  }
-
   public ArrayList<Property<?>> getProperties() {
     return properties;
   }

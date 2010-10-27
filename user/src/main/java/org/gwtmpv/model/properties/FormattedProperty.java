@@ -68,29 +68,6 @@ public class FormattedProperty<DP, SP> implements Property<DP> {
     source.set(parsed);
   }
 
-  @Override
-  public void setInitial(DP value) {
-    // ugly copy/paste
-
-    // null and "" are special
-    if (value == null || "".equals(value)) {
-      isValid.set(true);
-      source.setInitial(null);
-      return;
-    }
-    final SP parsed;
-    try {
-      parsed = formatter.parse(value);
-    } catch (Exception e) {
-      isValid.set(false);
-      // we failed to parse the value, but still treat this as touching the source property
-      source.setTouched(true);
-      return;
-    }
-    isValid.set(true);
-    source.setInitial(parsed);
-  }
-
   public String valueName() {
     return "formatted " + source.getName();
   }
@@ -163,11 +140,6 @@ public class FormattedProperty<DP, SP> implements Property<DP> {
   @Override
   public String getName() {
     return "formatted " + source.getName();
-  }
-
-  @Override
-  public void pullInitial() {
-    setInitial(get());
   }
 
 }

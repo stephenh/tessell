@@ -60,12 +60,6 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
   }
 
   @Override
-  public void setInitial(final P value) {
-    this.value.set(value);
-    setTouched(false);
-  }
-
-  @Override
   public void reassess() {
     // log.log(Level.FINEST, this + " reassessing");
     final P newValue = get();
@@ -175,11 +169,6 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
   @Override
   public String getName() {
     return Inflector.humanize(toString());
-  }
-
-  @Override
-  public void pullInitial() {
-    setInitial(get());
   }
 
   protected abstract T getThis();

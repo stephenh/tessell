@@ -14,8 +14,6 @@ public interface Property<P> extends HasRuleTriggers, Value<P> {
 
   void set(P value);
 
-  void setInitial(P value);
-
   void reassess();
 
   void addRule(Rule rule);
@@ -41,7 +39,5 @@ public interface Property<P> extends HasRuleTriggers, Value<P> {
   HandlerRegistration addPropertyChangedHandler(PropertyChangedHandler<P> handler);
 
   String getName();
-
-  void pullInitial();
 
 }
