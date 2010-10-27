@@ -49,6 +49,7 @@ public abstract class BasicPresenter<V extends IsWidget> extends AbstractBound i
     }
   }
 
+  /** Adds {@code child} as a child presenter, and binds it if we're already bound. */
   protected <C extends Presenter> C addPresenter(final C child) {
     if (children().add(child)) {
       if (isBound()) {
@@ -58,6 +59,7 @@ public abstract class BasicPresenter<V extends IsWidget> extends AbstractBound i
     return child;
   }
 
+  /** Removes {@code child} as a child presenter, and unbinds it. */
   protected void removePresenter(final Presenter child) {
     if (children().remove(child)) {
       child.unbind();
@@ -66,6 +68,7 @@ public abstract class BasicPresenter<V extends IsWidget> extends AbstractBound i
     }
   }
 
+  /** @return our list of child presenters, lazily instantiated. */
   private ArrayList<Presenter> children() {
     if (children == null) {
       children = new ArrayList<Presenter>();
