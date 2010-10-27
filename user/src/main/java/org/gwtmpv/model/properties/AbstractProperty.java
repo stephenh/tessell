@@ -3,7 +3,6 @@ package org.gwtmpv.model.properties;
 import static org.gwtmpv.util.ObjectUtils.eq;
 
 import java.util.ArrayList;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.gwtmpv.model.events.PropertyChangedEvent;
@@ -68,12 +67,12 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
 
   @Override
   public void reassess() {
-    log.log(Level.FINEST, this + " reassessing");
+    // log.log(Level.FINEST, this + " reassessing");
     final P newValue = get();
     final boolean changed = !eq(lastValue, newValue);
     lastValue = newValue;
     if (changed) {
-      log.log(Level.FINER, this + " changed");
+      // log.log(Level.FINER, this + " changed");
       fireEvent(new PropertyChangedEvent<P>(this));
     }
 
