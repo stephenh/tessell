@@ -14,7 +14,7 @@ public class IntegerProperty extends AbstractProperty<Integer, IntegerProperty> 
   }
 
   public Property<String> asString() {
-    return new FormattedProperty<String, Integer>(this, new PropertyFormatter<Integer, String>() {
+    return formatted(new PropertyFormatter<Integer, String>() {
       public String format(Integer a) {
         return Integer.toString(a);
       }
