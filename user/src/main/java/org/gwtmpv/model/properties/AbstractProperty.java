@@ -96,7 +96,7 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
 
   /** @return a new derived property by applying {@code formatter} to our value */
   public <T1> Property<T1> formatted(final PropertyFormatter<P, T1> formatter) {
-    return addDerived(new FormattedProperty<T1, P>(this, formatter, null));
+    return new FormattedProperty<T1, P>(this, formatter, null);
   }
 
   @Override

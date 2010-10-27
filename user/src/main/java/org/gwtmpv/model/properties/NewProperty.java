@@ -25,9 +25,7 @@ public class NewProperty {
   }
 
   public static BooleanProperty booleanProperty(final String name, final boolean initialValue) {
-    final BooleanProperty b = booleanProperty(name);
-    b.setInitial(initialValue);
-    return b;
+    return new BooleanProperty(new SetValue<Boolean>(name, initialValue));
   }
 
   public static BooleanProperty booleanProperty(final DerivedValue<Boolean> value) {
@@ -43,9 +41,7 @@ public class NewProperty {
   }
 
   public static IntegerProperty integerProperty(final String name, Integer i) {
-    SetValue<Integer> value = new SetValue<Integer>(name);
-    value.set(i);
-    return new IntegerProperty(value);
+    return new IntegerProperty(new SetValue<Integer>(name, i));
   }
 
   public static IntegerProperty integerProperty(final DerivedValue<Integer> derived) {
@@ -61,9 +57,7 @@ public class NewProperty {
   }
 
   public static StringProperty stringProperty(final String name, final String initialValue) {
-    final StringProperty s = stringProperty(name);
-    s.setInitial(initialValue);
-    return s;
+    return new StringProperty(new SetValue<String>(name, initialValue));
   }
 
   public static StringProperty stringProperty(final Binding<String> binding) {
