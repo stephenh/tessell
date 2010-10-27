@@ -7,8 +7,6 @@ import org.gwtmpv.widgets.StubWidgetsProvider;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.google.gwt.event.shared.EventBus;
-
 public class BasicPresenterTest {
 
   @BeforeClass
@@ -18,13 +16,13 @@ public class BasicPresenterTest {
 
   @Test(expected = IllegalStateException.class)
   public void getViewShouldFailIfUnbound() {
-    TestPresenter p = new TestPresenter(null);
+    TestPresenter p = new TestPresenter();
     p.getView();
   }
 
   private final class TestPresenter extends BasicPresenter<IsFlowPanel> {
-    private TestPresenter(EventBus eventBus) {
-      super(newFlowPanel(), eventBus);
+    private TestPresenter() {
+      super(newFlowPanel());
     }
   }
 }

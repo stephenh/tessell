@@ -5,12 +5,7 @@ import org.gwtmpv.presenter.Presenter;
 import org.gwtmpv.widgets.IsWidget;
 import org.junit.Test;
 
-import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.event.shared.SimpleEventBus;
-
 public class PresenterTest {
-
-  protected final EventBus testBus = new SimpleEventBus();
 
   @Test(expected = IllegalStateException.class)
   public void superOnBindMustBeCalled() {
@@ -34,7 +29,7 @@ public class PresenterTest {
 
   @Test(expected = IllegalStateException.class)
   public void noRebind() {
-    final Presenter p = new BasicPresenter<IsWidget>(null, testBus) {
+    final Presenter p = new BasicPresenter<IsWidget>(null) {
     };
     p.bind();
     p.unbind();
@@ -43,7 +38,7 @@ public class PresenterTest {
 
   public class NoSuperBindPresenter extends BasicPresenter<IsWidget> {
     public NoSuperBindPresenter() {
-      super(null, testBus);
+      super(null);
     }
 
     @Override
@@ -54,7 +49,7 @@ public class PresenterTest {
 
   public class NoSuperUnbindPresenter extends BasicPresenter<IsWidget> {
     public NoSuperUnbindPresenter() {
-      super(null, testBus);
+      super(null);
     }
 
     @Override
@@ -65,7 +60,7 @@ public class PresenterTest {
 
   public class BothSuperBindAndUnbindPresenter extends BasicPresenter<IsWidget> {
     public BothSuperBindAndUnbindPresenter() {
-      super(null, testBus);
+      super(null);
     }
 
     @Override

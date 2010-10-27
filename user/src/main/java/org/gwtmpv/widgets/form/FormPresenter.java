@@ -14,7 +14,6 @@ import org.gwtmpv.widgets.form.lines.FormLine;
 import org.gwtmpv.widgets.form.lines.TextBoxFormLine;
 
 import com.google.gwt.event.logical.shared.AttachEvent;
-import com.google.gwt.event.shared.EventBus;
 
 public class FormPresenter extends BasicPresenter<IsFlowPanel> {
 
@@ -23,8 +22,8 @@ public class FormPresenter extends BasicPresenter<IsFlowPanel> {
   private final FormLayout layout;
   private boolean needsRender = true;
 
-  public FormPresenter(EventBus eventBus) {
-    super(newFlowPanel(), eventBus);
+  public FormPresenter() {
+    super(newFlowPanel());
     layout = new DefaultFormLayout();
   }
 

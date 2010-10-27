@@ -4,7 +4,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import joist.util.Join;
 
-import org.gwtmpv.bus.StubEventBus;
 import org.gwtmpv.util.HTMLPanelBuilder;
 import org.gwtmpv.widgets.StubHTMLPanel;
 import org.gwtmpv.widgets.StubWidget;
@@ -12,10 +11,9 @@ import org.gwtmpv.widgets.StubWidgetsProvider;
 import org.junit.Before;
 import org.junit.BeforeClass;
 
-public class AbstractFormPresenterTest {
+public abstract class AbstractFormPresenterTest {
 
-  protected final StubEventBus eventBus = new StubEventBus();
-  protected final FormPresenter p = new FormPresenter(eventBus);
+  protected final FormPresenter p = new FormPresenter();
 
   @BeforeClass
   public static void useStubs() {

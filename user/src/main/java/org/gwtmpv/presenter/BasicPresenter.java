@@ -6,18 +6,14 @@ import java.util.NoSuchElementException;
 import org.gwtmpv.bus.AbstractBound;
 import org.gwtmpv.widgets.IsWidget;
 
-import com.google.gwt.event.shared.EventBus;
-
 /** A basic presenter that tracks bound handler registrations. */
 public abstract class BasicPresenter<V extends IsWidget> extends AbstractBound implements Presenter {
 
   protected final V view;
-  protected final EventBus eventBus;
   private ArrayList<Presenter> children;
 
-  public BasicPresenter(final V view, final EventBus eventBus) {
+  public BasicPresenter(final V view) {
     this.view = view;
-    this.eventBus = eventBus;
   }
 
   /** @return The view for the presenter. */

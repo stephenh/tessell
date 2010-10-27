@@ -8,12 +8,7 @@ import org.gwtmpv.presenter.Presenter;
 import org.gwtmpv.widgets.IsWidget;
 import org.junit.Test;
 
-import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.event.shared.SimpleEventBus;
-
 public class PresenterChildrenTest {
-
-  protected final EventBus testBus = new SimpleEventBus();
 
   @Test
   public void addingInConstructorDoesNotBindRightAway() {
@@ -37,7 +32,7 @@ public class PresenterChildrenTest {
 
   public class AddInConstructorPresenter extends BasicPresenter<IsWidget> {
     public AddInConstructorPresenter(final Presenter child) {
-      super(null, testBus);
+      super(null);
       addPresenter(child);
     }
   }
@@ -46,7 +41,7 @@ public class PresenterChildrenTest {
     private final Presenter child;
 
     public AddInOnBindPresenter(final Presenter child) {
-      super(null, testBus);
+      super(null);
       this.child = child;
     }
 
@@ -61,7 +56,7 @@ public class PresenterChildrenTest {
     public boolean wasBound = false;
 
     public ChildPresenter() {
-      super(null, testBus);
+      super(null);
     }
 
     @Override

@@ -10,12 +10,7 @@ import org.gwtmpv.presenter.Slot;
 import org.gwtmpv.widgets.IsWidget;
 import org.junit.Test;
 
-import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.event.shared.SimpleEventBus;
-
 public class SlotTest {
-
-  protected final EventBus testBus = new SimpleEventBus();
 
   @Test
   public void doubleDisplayDoesNotUnbind() {
@@ -77,7 +72,7 @@ public class SlotTest {
     private final Slot<Presenter> current = new Slot<Presenter>(this);
 
     public ParentPresenter(final Presenter... children) {
-      super(null, testBus);
+      super(null);
       for (final Presenter child : children) {
         addPresenter(child);
       }
@@ -97,7 +92,7 @@ public class SlotTest {
     public boolean wasUnbound = false;
 
     public ChildPresenter() {
-      super(null, testBus);
+      super(null);
     }
 
     @Override
