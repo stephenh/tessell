@@ -22,6 +22,9 @@ public abstract class BasicPresenter<V extends IsWidget> extends AbstractBound i
 
   /** @return The view for the presenter. */
   public V getView() {
+    if (!isBound()) {
+      throw new IllegalStateException(this + " has not been bound");
+    }
     return view;
   }
 
