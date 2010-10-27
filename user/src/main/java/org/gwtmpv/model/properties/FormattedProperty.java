@@ -25,7 +25,9 @@ public class FormattedProperty<DP, SP> extends BasicProperty<DP> implements Dele
     super(new DelegatedValue<DP>());
     this.source = source;
     this.formatter = formatter;
-    isValid = new Static(source, (message == null) ? source.getName() + " was invalid" : message);
+    // note, we currently fire the error against our source property, so that people listening for errors
+    // to it will see them. it might make more sense to fire against us first, then our source property.
+    isValid = new Static(source, (message == null) ? source.getName() + " is invalid" : message);
     ((DelegatedValue<DP>) getValue()).setDelegate(this);
     source.addPropertyChangedHandler(new PropertyChangedHandler<SP>() {
       public void onPropertyChanged(PropertyChangedEvent<SP> event) {

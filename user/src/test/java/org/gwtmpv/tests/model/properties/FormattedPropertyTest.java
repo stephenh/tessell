@@ -41,7 +41,7 @@ public class FormattedPropertyTest extends AbstractRuleTest {
 
     Property<String> p = i.formatted(f);
     p.set("a");
-    assertMessages("I was invalid");
+    assertMessages("I is invalid");
   }
 
   @Test
@@ -71,7 +71,7 @@ public class FormattedPropertyTest extends AbstractRuleTest {
 
     Property<String> p = i.formatted(f);
     p.set("a");
-    assertMessages("I was invalid");
+    assertMessages("I is invalid");
 
     p.set("2");
     assertMessages("");
@@ -84,7 +84,7 @@ public class FormattedPropertyTest extends AbstractRuleTest {
 
     Property<String> p = i.formatted(f);
     p.set("a");
-    assertMessages("I was invalid");
+    assertMessages("I is invalid");
 
     i.set(2);
     assertMessages("");
