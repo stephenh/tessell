@@ -1,5 +1,7 @@
 package org.gwtmpv.model.validation.rules;
 
+import static java.lang.Boolean.TRUE;
+
 import org.bindgen.Binding;
 import org.gwtmpv.model.properties.Property;
 import org.gwtmpv.model.validation.Valid;
@@ -29,11 +31,7 @@ public class Custom extends AbstractRule<Object, Custom> {
 
   @Override
   protected Valid isValid() {
-    final Boolean value = this.value.get();
-    if (value == null) {
-      return Valid.NO;
-    }
-    return value.booleanValue() ? Valid.YES : Valid.NO;
+    return TRUE.equals(value.get()) ? Valid.YES : Valid.NO;
   }
 
   @Override
