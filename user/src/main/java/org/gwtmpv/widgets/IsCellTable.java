@@ -23,4 +23,8 @@ public interface IsCellTable<T> extends IsWidget {
 
   void redraw();
 
+  void redrawHeaders();
+
+  void redrawFooters();
+
 }

@@ -86,4 +86,12 @@ public class StubCellTable<T> extends StubWidget implements IsCellTable<T> {
   public void setPageSize(final int pageSize) {
   }
 
+  @Override
+  public void redrawHeaders() {
+  }
+
+  @Override
+  public void redrawFooters() {
+  }
+
 }
