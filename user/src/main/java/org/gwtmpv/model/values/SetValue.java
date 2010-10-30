@@ -36,4 +36,9 @@ public class SetValue<P> implements Value<P> {
     return name;
   }
 
+  @Override
+  public String toString() {
+    return name + " " + value;
+  }
+
 }

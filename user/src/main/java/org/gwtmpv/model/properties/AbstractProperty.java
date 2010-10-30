@@ -95,7 +95,7 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
 
   @Override
   public String toString() {
-    return value.getName();
+    return value.toString();
   }
 
   // fluent method of touch + valid
@@ -172,7 +172,7 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
 
   @Override
   public String getName() {
-    return Inflector.humanize(toString());
+    return Inflector.humanize(value.getName());
   }
 
   protected abstract T getThis();
