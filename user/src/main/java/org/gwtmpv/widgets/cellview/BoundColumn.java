@@ -3,7 +3,6 @@ package org.gwtmpv.widgets.cellview;
 import org.bindgen.BindingRoot;
 import org.gwtmpv.model.properties.StringProperty;
 import org.gwtmpv.util.ObjectUtils;
-import org.gwtmpv.util.UserStringable;
 
 import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.cell.client.Cell;
@@ -55,17 +54,6 @@ public class BoundColumn<T, C> extends Column<T, C> implements FieldUpdater<T, C
       public void render(final StringProperty value, final Object key, final SafeHtmlBuilder sb) {
         if (value != null) {
           sb.appendEscaped(value.get());
-        }
-      }
-    });
-  }
-
-  public static <R, P extends UserStringable> BoundColumn<R, P> ofUserStringable(final BindingRoot<R, P> binding) {
-    return new BoundColumn<R, P>(binding, new AbstractCell<P>() {
-      @Override
-      public void render(final P value, final Object key, final SafeHtmlBuilder sb) {
-        if (value != null) {
-          sb.appendEscaped(value.toUserString());
         }
       }
     });
