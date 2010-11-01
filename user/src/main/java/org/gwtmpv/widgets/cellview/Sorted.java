@@ -17,15 +17,26 @@ public enum Sorted {
 
   public Sorted toggle() {
     switch (this) {
-    case NO:
-      return ASC;
-    case ASC:
-      return DESC;
-    case DESC:
-      return ASC;
-    default:
-      return ASC;
+      case NO:
+        return ASC;
+      case ASC:
+        return DESC;
+      case DESC:
+        return ASC;
+      default:
+        return ASC;
     }
+  }
+
+  public int offset() {
+    switch (this) {
+      case ASC:
+        return 1;
+      case DESC:
+        return -1;
+    }
+    assert false : "Should not be sorting on " + this;
+    return 1;
   }
 
 }

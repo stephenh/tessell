@@ -22,7 +22,7 @@ public class SortHeader<T, U extends Comparable<U>> extends Header<String> {
     public int compare(final T o1, final T o2) {
       final U v1 = binding.getWithRoot(o1);
       final U v2 = binding.getWithRoot(o2);
-      return v1.compareTo(v2) * (sorted == Sorted.DESC ? -1 : 1);
+      return v1.compareTo(v2) * sorted.offset();
     }
   };
 
