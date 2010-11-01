@@ -13,4 +13,9 @@ public class ObjectUtils {
     return object == null ? ifNull : object.toString();
   }
 
+  /** return {@code object} or {@code ifNull} if it is null */
+  public static <T> T defaultValue(final T object, final T ifNull) {
+    return object == null ? ifNull : object;
+  }
+
 }
