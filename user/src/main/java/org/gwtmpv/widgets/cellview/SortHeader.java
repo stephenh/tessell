@@ -7,10 +7,9 @@ import org.bindgen.BindingRoot;
 import com.google.gwt.cell.client.ClickableTextCell;
 import com.google.gwt.cell.client.ValueUpdater;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
-import com.google.gwt.user.cellview.client.Header;
 
 /** A header that can sort, all done client-side. */
-public class SortHeader<T, U extends Comparable<U>> extends Header<String> {
+public class SortHeader<T, U extends Comparable<U>> extends ExposedUpdaterHeader<String> {
 
   private final SortHeaders<T> headers;
   private final String name;
