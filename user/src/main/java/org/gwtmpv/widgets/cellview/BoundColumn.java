@@ -52,7 +52,7 @@ public class BoundColumn<T, C> extends Column<T, C> implements FieldUpdater<T, C
     return new BoundColumn<R, StringProperty>(binding, new AbstractCell<StringProperty>() {
       @Override
       public void render(final StringProperty value, final Object key, final SafeHtmlBuilder sb) {
-        if (value != null) {
+        if (value != null && value.get() != null) {
           sb.appendEscaped(value.get());
         }
       }
