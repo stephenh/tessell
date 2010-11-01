@@ -15,7 +15,7 @@ public class SortHeader<T, U extends Comparable<U>> extends ExposedUpdaterHeader
   private final String name;
   private final BindingRoot<T, U> binding;
   private String styleName;
-  private Sorted sorted = Sorted.NO;
+  protected Sorted sorted = Sorted.NO;
   private final Comparator<T> c = new Comparator<T>() {
     @Override
     public int compare(final T o1, final T o2) {
