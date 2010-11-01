@@ -32,6 +32,7 @@ public class SortHeader<T, U extends Comparable<U>> extends Header<String> {
     this.name = name;
     this.binding = binding;
     setUpdater(new OnValueUpdated());
+    headers.add(this);
   }
 
   /** Mark this column as already sorted by the server. */

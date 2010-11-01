@@ -20,9 +20,11 @@ public class SortHeaders<T> {
 
   /** @return a new sort header for a given name, sorted by binding. */
   public <U extends Comparable<U>> SortHeader<T, U> on(final String name, final BindingRoot<T, U> binding) {
-    final SortHeader<T, U> h = new SortHeader<T, U>(this, name, binding);
-    all.add(h);
-    return h;
+    return new SortHeader<T, U>(this, name, binding);
+  }
+
+  public void add(SortHeader<T, ?> header) {
+    all.add(header);
   }
 
   public void resortTable(final SortHeader<T, ?> on, final Comparator<T> c) {
