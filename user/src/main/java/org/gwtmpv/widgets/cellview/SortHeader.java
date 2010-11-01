@@ -14,7 +14,6 @@ public class SortHeader<T, U extends Comparable<U>> extends ExposedUpdaterHeader
   private final SortHeaders<T> headers;
   private final String name;
   private final BindingRoot<T, U> binding;
-  private String styleName;
   protected Sorted sorted = Sorted.NO;
   private final Comparator<T> c = new Comparator<T>() {
     @Override
@@ -47,15 +46,9 @@ public class SortHeader<T, U extends Comparable<U>> extends ExposedUpdaterHeader
 
   @Override
   public void render(final SafeHtmlBuilder sb) {
-    if (styleName != null) {
-      sb.appendHtmlConstant("<div style=\"" + styleName + "\">");
-    }
     super.render(sb);
     sb.appendHtmlConstant("&nbsp;");
     sb.appendHtmlConstant(sorted.icon());
-    if (styleName != null) {
-      sb.appendHtmlConstant("</div>");
-    }
   }
 
   public void unsort() {
@@ -64,11 +57,6 @@ public class SortHeader<T, U extends Comparable<U>> extends ExposedUpdaterHeader
 
   public void toggle() {
     sorted = sorted.toggle();
-  }
-
-  public SortHeader<T, U> styleName(final String styleName) {
-    this.styleName = styleName;
-    return this;
   }
 
   /** When the header is clicked, sort/resort the table based on this column. */
