@@ -4,8 +4,9 @@ import java.util.List;
 
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.Header;
+import com.google.gwt.view.client.HasData;
 
-public interface IsCellTable<T> extends IsWidget {
+public interface IsCellTable<T> extends IsWidget, HasData<T> {
 
   void addColumn(Column<T, ?> col);
 

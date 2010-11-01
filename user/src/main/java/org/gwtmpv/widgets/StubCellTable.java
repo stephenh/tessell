@@ -3,9 +3,15 @@ package org.gwtmpv.widgets;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.Header;
+import com.google.gwt.view.client.Range;
+import com.google.gwt.view.client.RangeChangeEvent;
+import com.google.gwt.view.client.RangeChangeEvent.Handler;
+import com.google.gwt.view.client.RowCountChangeEvent;
+import com.google.gwt.view.client.SelectionModel;
 
 public class StubCellTable<T> extends StubWidget implements IsCellTable<T> {
 
@@ -92,6 +98,56 @@ public class StubCellTable<T> extends StubWidget implements IsCellTable<T> {
 
   @Override
   public void redrawFooters() {
+  }
+
+  @Override
+  public SelectionModel<? super T> getSelectionModel() {
+    return null;
+  }
+
+  @Override
+  public void setSelectionModel(SelectionModel<? super T> selectionModel) {
+  }
+
+  @Override
+  public void setVisibleRangeAndClearData(Range range, boolean forceRangeChangeEvent) {
+  }
+
+  @Override
+  public HandlerRegistration addRangeChangeHandler(Handler handler) {
+    return handlers.addHandler(RangeChangeEvent.getType(), handler);
+  }
+
+  @Override
+  public HandlerRegistration addRowCountChangeHandler(com.google.gwt.view.client.RowCountChangeEvent.Handler handler) {
+    return handlers.addHandler(RowCountChangeEvent.getType(), handler);
+  }
+
+  @Override
+  public int getRowCount() {
+    return 0;
+  }
+
+  @Override
+  public Range getVisibleRange() {
+    return null;
+  }
+
+  @Override
+  public boolean isRowCountExact() {
+    return false;
+  }
+
+  @Override
+  public void setRowCount(int count) {
+  }
+
+  @Override
+  public void setVisibleRange(int start, int length) {
+  }
+
+  @Override
+  public void setVisibleRange(Range range) {
   }
 
 }
