@@ -40,6 +40,7 @@ public class SortHeaders<T> {
     final List<T> data = cellTable.getDisplayedItems();
     Collections.sort(data, c);
     cellTable.setRowData(0, data);
+    cellTable.redrawHeaders();
   }
 
 }
