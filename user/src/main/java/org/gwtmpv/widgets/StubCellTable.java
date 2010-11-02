@@ -31,7 +31,11 @@ public class StubCellTable<T> extends StubWidget implements IsCellTable<T> {
   @Override
   public void setRowData(final int start, final List<T> values) {
     for (int i = 0; i < values.size(); i++) {
-      data.add(start + i, values.get(i));
+      if (i < data.size()) {
+        data.set(i, values.get(i));
+      } else {
+        data.add(start + i, values.get(i));
+      }
     }
   }
 
