@@ -2,21 +2,20 @@ package org.gwtmpv.widgets.cellview;
 
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.ValueUpdater;
+import com.google.gwt.user.cellview.client.Header;
 
 /**
- * The header version of {@link DerivedColumn}. Both need better names.
+ * The header version of {@link GwtColumn}.
  *
- * Instead of sub-classing header, the user can pass in a {@link SimpleValue}.
- * 
  * This header automatically sets itself as its own {@link ValueUpdater}, so if
- * the {@link SimpleValue#set(Object)} method is overridden, then it will be called
+ * the {@link HeaderValue#set(Object)} method is overridden, then it will be called
  * as appropriate.
  */
-public class SimpleHeader<C> extends ExposedUpdaterHeader<C> implements ValueUpdater<C> {
+public class GwtHeader<C> extends ExposedUpdaterHeader<C> implements ValueUpdater<C>, IsHeader<C> {
 
-  private final SimpleValue<C> value;
+  private final HeaderValue<C> value;
 
-  public SimpleHeader(final SimpleValue<C> value, final Cell<C> cell) {
+  public GwtHeader(final HeaderValue<C> value, final Cell<C> cell) {
     super(cell);
     this.value = value;
     setUpdater(this);
@@ -30,6 +29,11 @@ public class SimpleHeader<C> extends ExposedUpdaterHeader<C> implements ValueUpd
   @Override
   public void update(final C value) {
     this.value.set(value);
+  }
+
+  @Override
+  public Header<C> asHeader() {
+    return this;
   }
 
 }

@@ -1,40 +1,46 @@
 package org.gwtmpv.widgets.cellview;
 
+import static org.gwtmpv.widgets.cellview.Cells.newClickableTextCell;
+import static org.gwtmpv.widgets.cellview.Cells.newCompositeHeader;
+import static org.gwtmpv.widgets.cellview.Cells.newHeader;
+import static org.gwtmpv.widgets.cellview.Cells.newTextCell;
+import static org.gwtmpv.widgets.cellview.Cells.newTextHeader;
+
 import java.util.Comparator;
 
 import org.bindgen.BindingRoot;
 
-import com.google.gwt.cell.client.ClickableTextCell;
-import com.google.gwt.cell.client.ValueUpdater;
-import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
-
 /** A header that can sort, all done client-side. */
-public class SortHeader<T, U extends Comparable<U>> extends ExposedUpdaterHeader<String> {
+public class SortHeader<T, C extends Comparable<C>> extends DelegateIsHeader<Object> {
 
+  /** References to all of the headers to mark-as-not-sorted the others when we sort. */
   private final SortHeaders<T> headers;
   private final String name;
-  private final BindingRoot<T, U> binding;
+  private final BindingRoot<T, C> binding;
   protected Sorted sorted = Sorted.NO;
-  private final Comparator<T> c = new Comparator<T>() {
+  private final Comparator<T> comparator = new Comparator<T>() {
     @Override
     public int compare(final T o1, final T o2) {
-      final U v1 = binding.getWithRoot(o1);
-      final U v2 = binding.getWithRoot(o2);
-      return v1.compareTo(v2) * sorted.offset();
+      final C v1 = binding.getWithRoot(o1);
+      final C v2 = binding.getWithRoot(o2);
+      return (v1 == null ? 1 : v1.compareTo(v2)) * sorted.offset();
     }
   };
 
-  public SortHeader(final SortHeaders<T> headers, final String name, final BindingRoot<T, U> binding) {
-    super(new ClickableTextCell());
+  public SortHeader(final SortHeaders<T> headers, final String name, final BindingRoot<T, C> binding) {
+    super.delegate = newCompositeHeader(//
+      newHeader(new SortHeaderValue(), newClickableTextCell()),//
+      newTextHeader(" "),//
+      newHeader(new SortTextValue(), newTextCell())//
+    );
     this.headers = headers;
     this.name = name;
     this.binding = binding;
-    setUpdater(new OnValueUpdated());
     headers.add(this);
   }
 
   /** Mark this column as already sorted by the server. */
-  public SortHeader<T, U> isAlreadySorted() {
+  public SortHeader<T, C> isAlreadySorted() {
     sorted = Sorted.ASC;
     return this;
   }
@@ -42,13 +48,6 @@ public class SortHeader<T, U extends Comparable<U>> extends ExposedUpdaterHeader
   @Override
   public String getValue() {
     return name;
-  }
-
-  @Override
-  public void render(final SafeHtmlBuilder sb) {
-    super.render(sb);
-    sb.appendHtmlConstant("&nbsp;");
-    sb.appendHtmlConstant(sorted.icon());
   }
 
   public void unsort() {
@@ -60,10 +59,19 @@ public class SortHeader<T, U extends Comparable<U>> extends ExposedUpdaterHeader
   }
 
   /** When the header is clicked, sort/resort the table based on this column. */
-  private final class OnValueUpdated implements ValueUpdater<String> {
-    @Override
-    public void update(final String value) {
-      headers.resortTable(SortHeader.this, c);
+  private final class SortHeaderValue extends HeaderValue<String> {
+    public String get() {
+      return name;
+    }
+
+    public void set(final String value) {
+      headers.resortTable(SortHeader.this, comparator);
+    }
+  }
+
+  private final class SortTextValue extends HeaderValue<String> {
+    public String get() {
+      return sorted.icon();
     }
   }
 

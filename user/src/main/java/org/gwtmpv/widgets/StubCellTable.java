@@ -3,10 +3,11 @@ package org.gwtmpv.widgets;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.gwtmpv.widgets.cellview.IsColumn;
+import org.gwtmpv.widgets.cellview.IsHeader;
+import org.gwtmpv.widgets.cellview.StubColumn;
+
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
-import com.google.gwt.user.cellview.client.Column;
-import com.google.gwt.user.cellview.client.Header;
 import com.google.gwt.view.client.Range;
 import com.google.gwt.view.client.RangeChangeEvent;
 import com.google.gwt.view.client.RangeChangeEvent.Handler;
@@ -15,9 +16,9 @@ import com.google.gwt.view.client.SelectionModel;
 
 public class StubCellTable<T> extends StubWidget implements IsCellTable<T> {
 
-  private final List<Column<T, ?>> columns = new ArrayList<Column<T, ?>>();
-  private final List<Header<?>> headers = new ArrayList<Header<?>>();
-  private final List<Header<?>> footers = new ArrayList<Header<?>>();
+  private final List<IsColumn<T, ?>> columns = new ArrayList<IsColumn<T, ?>>();
+  private final List<IsHeader<?>> headers = new ArrayList<IsHeader<?>>();
+  private final List<IsHeader<?>> footers = new ArrayList<IsHeader<?>>();
   private final List<T> data = new ArrayList<T>();
 
   public StubCellTable() {
@@ -38,42 +39,23 @@ public class StubCellTable<T> extends StubWidget implements IsCellTable<T> {
   public void setRowCount(final int size, final boolean isExact) {
   }
 
-  public Header<?> getHeader(final int column) {
-    return headers.get(column);
-  }
-
-  public String getRendered(final int row, final int column) {
-    final SafeHtmlBuilder sb = new SafeHtmlBuilder();
-    columns.get(column).render(data.get(row), null, sb);
-    return sb.toString();
-  }
-
-  public List<String> getRendered(final int row) {
-    final List<String> s = new ArrayList<String>();
-    for (int i = 0; i < columns.size(); i++) {
-      final SafeHtmlBuilder sb = new SafeHtmlBuilder();
-      columns.get(i).render(data.get(row), null, sb);
-      s.add(sb.toSafeHtml().asString());
-    }
-    return s;
-  }
-
   public List<T> getData() {
     return data;
   }
 
   @Override
-  public void addColumn(final Column<T, ?> col) {
+  public void addColumn(final IsColumn<T, ?> col) {
     addColumn(col, null, null);
   }
 
   @Override
-  public void addColumn(final Column<T, ?> col, final Header<?> header) {
+  public void addColumn(final IsColumn<T, ?> col, final IsHeader<?> header) {
     addColumn(col, header, null);
   }
 
   @Override
-  public void addColumn(final Column<T, ?> col, final Header<?> header, final Header<?> footer) {
+  public void addColumn(final IsColumn<T, ?> col, final IsHeader<?> header, final IsHeader<?> footer) {
+    ((StubColumn<T, ?>) col).setStubCellTable(this);
     columns.add(col);
     headers.add(header); // could be null
     footers.add(footer); // could be null

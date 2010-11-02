@@ -1,11 +1,12 @@
 package org.gwtmpv.widgets.cellview;
 
-public abstract class SimpleValue<C> {
+/** A header value. */
+public abstract class HeaderValue<C> {
 
   public abstract C get();
 
   public void set(final C value) {
-    throw new UnsupportedOperationException(this + " is read only");
+    // default to nothing
   }
 
 }

@@ -2,17 +2,18 @@ package org.gwtmpv.widgets;
 
 import java.util.List;
 
-import com.google.gwt.user.cellview.client.Column;
-import com.google.gwt.user.cellview.client.Header;
+import org.gwtmpv.widgets.cellview.IsColumn;
+import org.gwtmpv.widgets.cellview.IsHeader;
+
 import com.google.gwt.view.client.HasData;
 
 public interface IsCellTable<T> extends IsWidget, HasData<T> {
 
-  void addColumn(Column<T, ?> col);
+  void addColumn(IsColumn<T, ?> col);
 
-  void addColumn(Column<T, ?> col, Header<?> header);
+  void addColumn(IsColumn<T, ?> col, IsHeader<?> header);
 
-  void addColumn(Column<T, ?> col, Header<?> header, Header<?> footer);
+  void addColumn(IsColumn<T, ?> col, IsHeader<?> header, IsHeader<?> footer);
 
   void setRowData(int start, List<T> values);
 

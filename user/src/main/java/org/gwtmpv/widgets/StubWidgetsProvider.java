@@ -8,7 +8,7 @@ import com.google.gwt.user.cellview.client.CellTable.Resources;
 public class StubWidgetsProvider implements WidgetsProvider {
 
   public static void install() {
-    Widgets.provider = new StubWidgetsProvider();
+    Widgets.setProvider(new StubWidgetsProvider());
   }
 
   @Override

@@ -8,7 +8,9 @@ import com.google.gwt.user.cellview.client.Header;
 /**
  * Exposes a header's {@link ValueUpdater}.
  * 
- * To make composite headers, {@code CompositeCell} needs a header's {@link ValueUpdater} to make fake {@link FieldUpdater}s., which is not exposed by default.
+ * To make composite headers, {@code CompositeCell} needs a header's
+ * {@link ValueUpdater} to make fake {@link FieldUpdater}s, which is
+ * not exposed by default.
  *
  * @param <C> the cell type
  */

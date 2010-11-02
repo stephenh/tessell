@@ -1,13 +1,24 @@
 package org.gwtmpv.widgets;
 
 import com.google.gwt.cell.client.Cell;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.cellview.client.CellTable.Resources;
 
 /** A Widget factory. */
 public class Widgets {
 
-  public static WidgetsProvider provider = new GwtWidgetsProvider();
+  private static WidgetsProvider provider;
+
+  static {
+    if (GWT.isClient()) {
+      setProvider(new GwtWidgetsProvider());
+    }
+  }
+
+  public static void setProvider(WidgetsProvider provider) {
+    Widgets.provider = provider;
+  }
 
   public static IsElement newElement(String tag) {
     return provider.newElement(tag);

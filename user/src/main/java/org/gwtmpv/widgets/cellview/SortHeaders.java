@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.bindgen.BindingRoot;
+import org.gwtmpv.util.Inflector;
 import org.gwtmpv.widgets.IsCellTable;
 
 /** A collection for all of the sort headers in a table so they can unsort each other as needed. */
@@ -21,6 +22,11 @@ public class SortHeaders<T> {
   /** @return a new sort header for a given name, sorted by binding. */
   public <U extends Comparable<U>> SortHeader<T, U> on(final String name, final BindingRoot<T, U> binding) {
     return new SortHeader<T, U>(this, name, binding);
+  }
+
+  /** @return a new sort header for a given name, sorted by binding. */
+  public <U extends Comparable<U>> SortHeader<T, U> on(final BindingRoot<T, U> binding) {
+    return new SortHeader<T, U>(this, Inflector.humanize(binding.getName()), binding);
   }
 
   public void add(SortHeader<T, ?> header) {
