@@ -18,7 +18,7 @@ public class StubCellsProvider implements CellsProvider {
 
   @Override
   public IsClickableTextCell newClickableTextCell() {
-    return new GwtClickableTextCell();
+    return new StubClickableTextCell();
   }
 
   @Override
