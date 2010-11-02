@@ -6,10 +6,18 @@ public class StubCheckboxCell extends StubCell<Boolean> implements IsCheckboxCel
     if (isChecked(displayedIndex)) {
       throw new IllegalStateException(this + " is already checked");
     }
+    setValue(displayedIndex, true);
+  }
+
+  public void uncheck(int displayedIndex) {
+    if (!isChecked(displayedIndex)) {
+      throw new IllegalStateException(this + " is not checked");
+    }
+    setValue(displayedIndex, false);
   }
 
   public boolean isChecked(int displayedIndex) {
-    return getValue(0) != null && getValue(0).booleanValue();
+    return getValue(displayedIndex) != null && getValue(displayedIndex).booleanValue();
 
   }
 
