@@ -7,9 +7,11 @@ import com.google.gwt.user.cellview.client.Column;
 
 public class StubColumn<T, C> implements IsColumn<T, C> {
 
+  private final Cell<C> cell;
   private StubCellTable<T> stubCellTable;
 
   public StubColumn(final ColumnValue<T, C> value, final Cell<C> cell) {
+    this.cell = cell;
     // tell the stub about us
     ((StubCell<C>) cell).setStubCellValue(new StubCell.StubCellValue<C>() {
       @Override
@@ -28,6 +30,10 @@ public class StubColumn<T, C> implements IsColumn<T, C> {
 
   public void setStubCellTable(StubCellTable<T> stubCellTable) {
     this.stubCellTable = stubCellTable;
+  }
+
+  public Cell<C> getCell() {
+    return cell;
   }
 
   @Override

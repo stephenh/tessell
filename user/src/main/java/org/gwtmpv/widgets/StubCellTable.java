@@ -28,6 +28,11 @@ public class StubCellTable<T> extends StubWidget implements IsCellTable<T> {
     // set page size
   }
 
+  /** @return for testing. */
+  public StubColumn<T, ?> getColumn(int index) {
+    return (StubColumn<T, ?>) columns.get(index);
+  }
+
   @Override
   public void setRowData(final int start, final List<T> values) {
     for (int i = 0; i < values.size(); i++) {
