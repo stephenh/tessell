@@ -3,6 +3,7 @@ package org.gwtmpv.widgets.cellview;
 import java.util.List;
 
 import org.bindgen.BindingRoot;
+import org.gwtmpv.model.properties.Property;
 
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.HasCell;
@@ -38,6 +39,10 @@ public class Cells {
 
   public static <T, C> BoundColumnValue<T, C> boundValue(BindingRoot<T, C> binding) {
     return new BoundColumnValue<T, C>(binding);
+  }
+
+  public static <T, C> BoundColumnProperty<T, C> boundProperty(BindingRoot<T, ? extends Property<C>> binding) {
+    return new BoundColumnProperty<T, C>(binding);
   }
 
   public static <C> IsHeader<C> newHeader(HeaderValue<C> value, Cell<C> cell) {
