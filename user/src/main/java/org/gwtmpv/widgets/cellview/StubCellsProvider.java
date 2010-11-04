@@ -46,4 +46,9 @@ public class StubCellsProvider implements CellsProvider {
     return new StubCompositeCell<C>(cells);
   }
 
+  @Override
+  public IsHyperlinkCell newHyperlinkCell() {
+    return new StubHyperlinkCell();
+  }
+
 }

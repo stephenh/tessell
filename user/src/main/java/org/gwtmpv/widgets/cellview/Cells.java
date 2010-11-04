@@ -64,4 +64,7 @@ public class Cells {
     return provider.newCompositeCell(cells);
   }
 
+  public static IsHyperlinkCell newHyperlinkCell() {
+    return provider.newHyperlinkCell();
+  }
 }

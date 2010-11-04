@@ -42,4 +42,9 @@ public class GwtCellsProvider implements CellsProvider {
     return new GwtCompositeCell<C>(cells);
   }
 
+  @Override
+  public IsHyperlinkCell newHyperlinkCell() {
+    return new GwtHyperlinkCell();
+  }
+
 }

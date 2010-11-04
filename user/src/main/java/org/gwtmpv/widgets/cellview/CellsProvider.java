@@ -13,6 +13,8 @@ public interface CellsProvider {
 
   IsCheckboxCell newCheckboxCell();
 
+  IsHyperlinkCell newHyperlinkCell();
+
   <T, C> IsColumn<T, C> newColumn(ColumnValue<T, C> value, Cell<C> cell);
 
   IsTextHeader newTextHeader(String text);
