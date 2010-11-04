@@ -5,27 +5,16 @@ import org.gwtmpv.widgets.StubCellTable;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.user.cellview.client.Column;
 
-public class StubColumn<T, C> implements IsColumn<T, C> {
+public class StubColumn<T, C> implements IsColumn<T, C>, StubCell.StubCellValue<C> {
 
+  private final ColumnValue<T, C> columnValue;
   private final Cell<C> cell;
   private StubCellTable<T> stubCellTable;
 
-  public StubColumn(final ColumnValue<T, C> value, final Cell<C> cell) {
+  public StubColumn(final ColumnValue<T, C> columnValue, final Cell<C> cell) {
+    this.columnValue = columnValue;
     this.cell = cell;
-    // tell the stub about us
-    ((StubCell<C>) cell).setStubCellValue(new StubCell.StubCellValue<C>() {
-      @Override
-      public C getValue(int displayedIndex) {
-        T item = stubCellTable.getDisplayedItems().get(displayedIndex);
-        return value.get(item);
-      }
-
-      @Override
-      public void setValue(int displayedIndex, C newValue) {
-        T item = stubCellTable.getDisplayedItems().get(displayedIndex);
-        value.set(item, newValue);
-      }
-    });
+    ((StubCell<C>) cell).setStubCellValue(this); // tell the stub about us
   }
 
   public void setStubCellTable(StubCellTable<T> stubCellTable) {
@@ -39,6 +28,18 @@ public class StubColumn<T, C> implements IsColumn<T, C> {
   @Override
   public Column<T, C> asColumn() {
     throw new IllegalStateException("This is a stub");
+  }
+
+  @Override
+  public C getValue(int displayedIndex) {
+    T item = stubCellTable.getDisplayedItems().get(displayedIndex);
+    return columnValue.get(item);
+  }
+
+  @Override
+  public void setValue(int displayedIndex, C value) {
+    T item = stubCellTable.getDisplayedItems().get(displayedIndex);
+    columnValue.set(item, value);
   }
 
 }

@@ -3,6 +3,9 @@ package org.gwtmpv.widgets;
 import java.util.ArrayList;
 import java.util.List;
 
+import joist.util.Join;
+
+import org.gwtmpv.util.ObjectUtils;
 import org.gwtmpv.widgets.cellview.IsColumn;
 import org.gwtmpv.widgets.cellview.IsHeader;
 import org.gwtmpv.widgets.cellview.StubColumn;
@@ -31,6 +34,14 @@ public class StubCellTable<T> extends StubWidget implements IsCellTable<T> {
   /** @return for testing. */
   public StubColumn<T, ?> getColumn(int index) {
     return (StubColumn<T, ?>) columns.get(index);
+  }
+
+  public String getValues(int displayedIndex) {
+    List<String> values = new ArrayList<String>();
+    for (int i = 0; i < columns.size(); i++) {
+      values.add(ObjectUtils.toStr(getColumn(i).getValue(displayedIndex), "null"));
+    }
+    return Join.join(values, " || ");
   }
 
   @Override
