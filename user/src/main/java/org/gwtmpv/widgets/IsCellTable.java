@@ -15,6 +15,10 @@ public interface IsCellTable<T> extends IsWidget, HasData<T> {
 
   void addColumn(IsColumn<T, ?> col, IsHeader<?> header, IsHeader<?> footer);
 
+  void removeColumn(IsColumn<T, ?> col);
+
+  void removeColumn(int index);
+
   void setRowData(int start, List<T> values);
 
   void setRowCount(int size, boolean isExact);

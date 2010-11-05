@@ -163,4 +163,16 @@ public class StubCellTable<T> extends StubWidget implements IsCellTable<T> {
   public void setVisibleRange(Range range) {
   }
 
+  @Override
+  public void removeColumn(IsColumn<T, ?> col) {
+    removeColumn(columns.indexOf(col));
+  }
+
+  @Override
+  public void removeColumn(int index) {
+    columns.remove(index);
+    headers.remove(index);
+    footers.remove(index);
+  }
+
 }

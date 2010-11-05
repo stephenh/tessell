@@ -45,4 +45,9 @@ public class GwtCellTable<T> extends CellTable<T> implements IsCellTable<T> {
     addColumn(col.asColumn(), header.asHeader(), footer.asHeader());
   }
 
+  @Override
+  public void removeColumn(IsColumn<T, ?> col) {
+    removeColumn(col.asColumn());
+  }
+
 }
