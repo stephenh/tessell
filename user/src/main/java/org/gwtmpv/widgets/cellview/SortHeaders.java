@@ -1,5 +1,7 @@
 package org.gwtmpv.widgets.cellview;
 
+import static org.gwtmpv.widgets.cellview.Cells.boundValue;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -19,14 +21,19 @@ public class SortHeaders<T> {
     this.cellTable = cellTable;
   }
 
-  /** @return a new sort header for a given name, sorted by binding. */
+  /** @return a new sort header for a given name, sorted by {@code binding}. */
   public <U extends Comparable<U>> SortHeader<T, U> on(final String name, final BindingRoot<T, U> binding) {
-    return new SortHeader<T, U>(this, name, binding);
+    return new SortHeader<T, U>(this, name, boundValue(binding));
   }
 
-  /** @return a new sort header for a given name, sorted by binding. */
+  /** @return a new sort header for a given name, sorted by {@code columnValue}. */
+  public <U extends Comparable<U>> SortHeader<T, U> on(final String name, final ColumnValue<T, U> columnValue) {
+    return new SortHeader<T, U>(this, name, columnValue);
+  }
+
+  /** @return a new sort header for a given name, sorted by {@code binding}. */
   public <U extends Comparable<U>> SortHeader<T, U> on(final BindingRoot<T, U> binding) {
-    return new SortHeader<T, U>(this, Inflector.humanize(binding.getName()), binding);
+    return new SortHeader<T, U>(this, Inflector.humanize(binding.getName()), boundValue(binding));
   }
 
   public void add(SortHeader<T, ?> header) {
