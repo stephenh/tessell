@@ -39,29 +39,37 @@ public class CompositeHeader extends DelegateIsHeader<Object> {
 
   /** Creates a fake {@link HasCell} for {@code header} to satisfy the {@link CompositeCell} cstr. */
   private static <X> HasCell<Object, X> newHasCell(final IsHeader<X> header) {
-    return new HasCell<Object, X>() {
-      @Override
-      public Cell<X> getCell() {
-        return header.getCell();
-      }
+    return new HeaderHasCell<X>(header);
+  }
 
-      @Override
-      public FieldUpdater<Object, X> getFieldUpdater() {
-        if (header.getUpdater() == null) {
-          return null;
+  public static final class HeaderHasCell<X> implements HasCell<Object, X> {
+    private final IsHeader<X> header;
+
+    private HeaderHasCell(IsHeader<X> header) {
+      this.header = header;
+    }
+
+    @Override
+    public Cell<X> getCell() {
+      return header.getCell();
+    }
+
+    @Override
+    public FieldUpdater<Object, X> getFieldUpdater() {
+      if (header.getUpdater() == null) {
+        return null;
+      }
+      return new FieldUpdater<Object, X>() {
+        public void update(final int index, final Object object, final X value) {
+          header.getUpdater().update(value);
         }
-        return new FieldUpdater<Object, X>() {
-          public void update(final int index, final Object object, final X value) {
-            header.getUpdater().update(value);
-          }
-        };
-      }
+      };
+    }
 
-      @Override
-      public X getValue(final Object object) {
-        return header.getValue();
-      }
-    };
+    @Override
+    public X getValue(final Object object) {
+      return header.getValue();
+    }
   }
 
 }

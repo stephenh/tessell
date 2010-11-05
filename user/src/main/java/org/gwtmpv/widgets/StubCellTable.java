@@ -29,7 +29,17 @@ public class StubCellTable<T> extends StubWidget implements IsCellTable<T> {
     // set page size
   }
 
-  /** @return for testing. */
+  /** @return the stub headers for testing. */
+  public IsHeader<?> getHeader(int index) {
+    return headers.get(index);
+  }
+
+  /** @return the stub footers for testing. */
+  public IsHeader<?> getFooter(int index) {
+    return footers.get(index);
+  }
+
+  /** @return the stub column for testing. */
   public StubColumn<T, ?> getColumn(int index) {
     return (StubColumn<T, ?>) columns.get(index);
   }
