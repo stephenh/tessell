@@ -3,6 +3,7 @@ package org.gwtmpv.widgets.cellview;
 import org.gwtmpv.widgets.StubCellTable;
 
 import com.google.gwt.cell.client.Cell;
+import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.user.cellview.client.Column;
 
 public class StubColumn<T, C> implements IsColumn<T, C>, StubCell.StubCellValue<C> {
@@ -40,6 +41,20 @@ public class StubColumn<T, C> implements IsColumn<T, C>, StubCell.StubCellValue<
   public void setValue(int displayedIndex, C value) {
     T item = stubCellTable.getDisplayedItems().get(displayedIndex);
     columnValue.set(item, value);
+  }
+
+  @Override
+  public FieldUpdater<T, C> getFieldUpdater() {
+    return new FieldUpdater<T, C>() {
+      public void update(int index, T object, C value) {
+        columnValue.set(object, value);
+      }
+    };
+  }
+
+  @Override
+  public C getValue(T object) {
+    return columnValue.get(object);
   }
 
 }
