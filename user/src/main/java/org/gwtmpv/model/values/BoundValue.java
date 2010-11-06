@@ -37,4 +37,9 @@ public class BoundValue<P> implements Value<P> {
     return getName() + " " + get();
   }
 
+  @Override
+  public boolean isReadOnly() {
+    return false;
+  }
+
 }

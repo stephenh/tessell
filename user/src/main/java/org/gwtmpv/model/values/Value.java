@@ -18,4 +18,6 @@ public interface Value<P> {
 
   String getName();
 
+  boolean isReadOnly();
+
 }

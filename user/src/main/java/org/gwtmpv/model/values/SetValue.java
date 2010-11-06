@@ -27,6 +27,11 @@ public class SetValue<P> implements Value<P> {
   }
 
   @Override
+  public boolean isReadOnly() {
+    return false;
+  }
+
+  @Override
   public void set(final P value) {
     this.value = value;
   }

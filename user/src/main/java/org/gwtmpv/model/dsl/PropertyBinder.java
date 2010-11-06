@@ -38,11 +38,13 @@ public class PropertyBinder<P> {
 
   /** Binds our property to {@code source} (two-way). */
   public PropertyBinder<P> to(final HasValue<P> source) {
-    binder.registerHandler(source.addValueChangeHandler(new ValueChangeHandler<P>() {
-      public void onValueChange(ValueChangeEvent<P> event) {
-        p.set(source.getValue());
-      }
-    }));
+    if (!p.isReadOnly()) {
+      binder.registerHandler(source.addValueChangeHandler(new ValueChangeHandler<P>() {
+        public void onValueChange(ValueChangeEvent<P> event) {
+          p.set(source.getValue());
+        }
+      }));
+    }
     PropertyChangedHandler<P> h = new PropertyChangedHandler<P>() {
       public void onPropertyChanged(final PropertyChangedEvent<P> event) {
         source.setValue(event.getProperty().get(), true);

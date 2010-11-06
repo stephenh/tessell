@@ -147,4 +147,9 @@ public class FormattedProperty<DP, SP> implements Property<DP> {
     return "formatted " + source.getName();
   }
 
+  @Override
+  public boolean isReadOnly() {
+    return false;
+  }
+
 }

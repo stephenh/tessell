@@ -54,6 +54,11 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
   }
 
   @Override
+  public boolean isReadOnly() {
+    return value.isReadOnly();
+  }
+
+  @Override
   public void set(final P value) {
     this.value.set(value);
     setTouched(true); // even if unchanged, treat this as touching

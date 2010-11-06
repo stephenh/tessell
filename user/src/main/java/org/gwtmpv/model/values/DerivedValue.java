@@ -23,6 +23,11 @@ public abstract class DerivedValue<P> implements Value<P> {
   public abstract P get();
 
   @Override
+  public boolean isReadOnly() {
+    return true;
+  }
+
+  @Override
   public void set(final P value) {
     throw new IllegalStateException(this + " is a derived value");
   }
