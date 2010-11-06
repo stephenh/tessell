@@ -28,6 +28,17 @@ public class StringUtils {
     return sb.toString();
   }
 
+  public static String join(final String[] things, final String on) {
+    final StringBuilder sb = new StringBuilder();
+    for (int i = 0, len = things.length; i < len; i++) {
+      sb.append(things[i]);
+      if (i < len - 1) {
+        sb.append(" ");
+      }
+    }
+    return sb.toString();
+  }
+
   public static String substringAfterLast(final String str, final String separator) {
     if (str == null) {
       return null;
