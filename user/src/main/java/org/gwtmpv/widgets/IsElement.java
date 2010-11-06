@@ -13,6 +13,22 @@ public interface IsElement extends HasCss, HasText {
 
   int getOffsetHeight();
 
+  int getClientHeight();
+
+  int getClientWidth();
+
+  int getScrollHeight();
+
+  int getScrollWidth();
+
+  int getScrollTop();
+
+  int getScrollLeft();
+
+  void setScrollTop(int scrollTop);
+
+  void setScrollLeft(int scrollLeft);
+
   String getAttribute(String name);
 
   void setAttribute(String name, String value);

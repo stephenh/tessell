@@ -111,4 +111,44 @@ public class GwtElement implements IsElement {
     element.appendChild(widget.asWidget().getElement());
   }
 
+  @Override
+  public int getClientHeight() {
+    return element.getClientHeight();
+  }
+
+  @Override
+  public int getClientWidth() {
+    return element.getClientWidth();
+  }
+
+  @Override
+  public int getScrollHeight() {
+    return element.getScrollHeight();
+  }
+
+  @Override
+  public int getScrollWidth() {
+    return element.getScrollWidth();
+  }
+
+  @Override
+  public int getScrollTop() {
+    return element.getScrollTop();
+  }
+
+  @Override
+  public int getScrollLeft() {
+    return element.getScrollLeft();
+  }
+
+  @Override
+  public void setScrollTop(int scrollTop) {
+    element.setScrollTop(scrollTop);
+  }
+
+  @Override
+  public void setScrollLeft(int scrollLeft) {
+    element.setScrollLeft(scrollLeft);
+  }
+
 }

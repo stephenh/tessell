@@ -16,10 +16,19 @@ public class StubElement implements IsElement, HasStubCss {
   private String innerText;
   private String innerHTML;
   private StubWidget widget;
+
+  private int scrollTop;
+  private int scrollLeft;
   private final ArrayList<String> styleNames = new ArrayList<String>();
   private final ArrayList<StubElement> children = new ArrayList<StubElement>();
   private final Map<String, String> attributes = new HashMap<String, String>();
   private final StubStyle style = new StubStyle();
+  public int offsetHeight;
+  public int offsetWidth;
+  public int clientHeight;
+  public int clientWidth;
+  public int scrollHeight;
+  public int scrollWidth;
 
   @Override
   public String getInnerText() {
@@ -99,12 +108,12 @@ public class StubElement implements IsElement, HasStubCss {
 
   @Override
   public int getOffsetHeight() {
-    return 0;
+    return offsetHeight;
   }
 
   @Override
   public int getOffsetWidth() {
-    return 0;
+    return offsetWidth;
   }
 
   @Override
@@ -142,6 +151,46 @@ public class StubElement implements IsElement, HasStubCss {
 
   public void setWidget(StubWidget owner) {
     widget = owner;
+  }
+
+  @Override
+  public int getClientHeight() {
+    return clientHeight;
+  }
+
+  @Override
+  public int getClientWidth() {
+    return clientWidth;
+  }
+
+  @Override
+  public int getScrollTop() {
+    return scrollTop;
+  }
+
+  @Override
+  public void setScrollTop(int scrollTop) {
+    this.scrollTop = scrollTop;
+  }
+
+  @Override
+  public int getScrollLeft() {
+    return scrollLeft;
+  }
+
+  @Override
+  public void setScrollLeft(int scrollLeft) {
+    this.scrollLeft = scrollLeft;
+  }
+
+  @Override
+  public int getScrollHeight() {
+    return scrollHeight;
+  }
+
+  @Override
+  public int getScrollWidth() {
+    return scrollWidth;
   }
 
 }
