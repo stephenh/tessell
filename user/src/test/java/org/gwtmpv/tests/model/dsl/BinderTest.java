@@ -19,6 +19,9 @@ import org.gwtmpv.widgets.StubTextBox;
 import org.gwtmpv.widgets.StubWidget;
 import org.junit.Test;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+
 public class BinderTest {
 
   final Binder binder = new Binder(new StubCanRegisterHandlers());
@@ -37,6 +40,19 @@ public class BinderTest {
     s.set("test");
     binder.bind(s).to(box);
     assertThat(box.getValue(), is("test"));
+  }
+
+  @Test
+  public void propertyToWidgetFiresWidgetChange() {
+    binder.bind(s).to(box);
+    final boolean[] changed = { false };
+    box.addValueChangeHandler(new ValueChangeHandler<String>() {
+      public void onValueChange(ValueChangeEvent<String> event) {
+        changed[0] = true;
+      }
+    });
+    s.set("test");
+    assertThat(changed[0], is(true));
   }
 
   @Test

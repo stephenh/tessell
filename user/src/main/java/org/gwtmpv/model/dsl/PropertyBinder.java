@@ -45,7 +45,7 @@ public class PropertyBinder<P> {
     }));
     PropertyChangedHandler<P> h = new PropertyChangedHandler<P>() {
       public void onPropertyChanged(final PropertyChangedEvent<P> event) {
-        source.setValue(event.getProperty().get());
+        source.setValue(event.getProperty().get(), true);
       }
     };
     h.onPropertyChanged(new PropertyChangedEvent<P>(p)); // set initial value
