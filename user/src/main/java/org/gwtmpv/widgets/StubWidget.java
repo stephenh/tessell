@@ -104,7 +104,7 @@ public class StubWidget implements IsWidget, HasStubCss {
   }
 
   @Override
-  public IsElement getIsElement() {
+  public StubElement getIsElement() {
     return element;
   }
 
