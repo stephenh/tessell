@@ -21,6 +21,7 @@ public class StubCellTable<T> extends StubWidget implements IsCellTable<T> {
   private final List<IsHeader<?>> headers = new ArrayList<IsHeader<?>>();
   private final List<IsHeader<?>> footers = new ArrayList<IsHeader<?>>();
   private final List<T> data = new ArrayList<T>();
+  private int redraws = 0;
 
   public StubCellTable() {
   }
@@ -99,6 +100,7 @@ public class StubCellTable<T> extends StubWidget implements IsCellTable<T> {
 
   @Override
   public void redraw() {
+    redraws++;
   }
 
   @Override
@@ -173,6 +175,14 @@ public class StubCellTable<T> extends StubWidget implements IsCellTable<T> {
     columns.remove(index);
     headers.remove(index);
     footers.remove(index);
+  }
+
+  public void resetRedraws() {
+    redraws = 0;
+  }
+
+  public int getRedraws() {
+    return redraws;
   }
 
 }
