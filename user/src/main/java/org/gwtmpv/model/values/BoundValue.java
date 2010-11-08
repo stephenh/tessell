@@ -39,7 +39,7 @@ public class BoundValue<P> implements Value<P> {
 
   @Override
   public boolean isReadOnly() {
-    return false;
+    return binding.getBindingIsReadOnly();
   }
 
 }
