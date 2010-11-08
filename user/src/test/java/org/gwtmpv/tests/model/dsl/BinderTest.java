@@ -36,6 +36,12 @@ public class BinderTest {
   }
 
   @Test
+  public void propertyToWidgetIsInitiallyUntouched() {
+    binder.bind(s).to(box);
+    assertThat(s.isTouched(), is(false));
+  }
+
+  @Test
   public void propertyToWidgetImmediatelySetsTheWidgetsValue() {
     s.set("test");
     binder.bind(s).to(box);

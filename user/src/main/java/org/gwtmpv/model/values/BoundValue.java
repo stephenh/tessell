@@ -24,7 +24,9 @@ public class BoundValue<P> implements Value<P> {
 
   @Override
   public void set(final P value) {
-    binding.set(value);
+    if (binding.getIsSafe()) {
+      binding.set(value);
+    }
   }
 
   @Override

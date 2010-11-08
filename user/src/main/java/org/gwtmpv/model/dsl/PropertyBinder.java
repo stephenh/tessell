@@ -31,13 +31,23 @@ public class PropertyBinder<P> {
         element.setText(toStr(p.get(), ""));
       }
     };
-    h.onPropertyChanged(new PropertyChangedEvent<P>(p)); // set initial value
+    // set initial value
+    h.onPropertyChanged(new PropertyChangedEvent<P>(p));
     binder.registerHandler(p.addPropertyChangedHandler(h));
     return this;
   }
 
   /** Binds our property to {@code source} (two-way). */
   public PropertyBinder<P> to(final HasValue<P> source) {
+    PropertyChangedHandler<P> h = new PropertyChangedHandler<P>() {
+      public void onPropertyChanged(final PropertyChangedEvent<P> event) {
+        source.setValue(event.getProperty().get(), true);
+      }
+    };
+    // set initial value
+    h.onPropertyChanged(new PropertyChangedEvent<P>(p));
+    // after we've set the initial value (which fired ValueChangeEvent and
+    // would have messed up our 'touched' state), listen for others changes
     if (!p.isReadOnly()) {
       binder.registerHandler(source.addValueChangeHandler(new ValueChangeHandler<P>() {
         public void onValueChange(ValueChangeEvent<P> event) {
@@ -45,12 +55,6 @@ public class PropertyBinder<P> {
         }
       }));
     }
-    PropertyChangedHandler<P> h = new PropertyChangedHandler<P>() {
-      public void onPropertyChanged(final PropertyChangedEvent<P> event) {
-        source.setValue(event.getProperty().get(), true);
-      }
-    };
-    h.onPropertyChanged(new PropertyChangedEvent<P>(p)); // set initial value
     binder.registerHandler(p.addPropertyChangedHandler(h));
     return this;
   }
