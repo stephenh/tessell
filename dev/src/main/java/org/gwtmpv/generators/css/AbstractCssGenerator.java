@@ -35,7 +35,11 @@ import com.google.gwt.dev.util.log.PrintWriterTreeLogger;
 import com.google.gwt.resources.css.ExtractClassNamesVisitor;
 import com.google.gwt.resources.css.GenerateCssAst;
 import com.google.gwt.resources.css.InterfaceGenerator;
+import com.google.gwt.resources.css.ast.Context;
+import com.google.gwt.resources.css.ast.CssDef;
+import com.google.gwt.resources.css.ast.CssProperty.Value;
 import com.google.gwt.resources.css.ast.CssStylesheet;
+import com.google.gwt.resources.css.ast.CssVisitor;
 
 /**
  * A utility class for creating a Java interface declaration for a given CSS file.
@@ -44,14 +48,35 @@ import com.google.gwt.resources.css.ast.CssStylesheet;
  */
 public class AbstractCssGenerator {
 
+  // cache the PrintWriter only if we need it
   private static PrintWriter logWriter;
-  private final PrintWriterTreeLogger logger;
+  private final File inputFile;
   private final File outputDirectory;
   private final Cleanup cleanup;
+  private final Map<String, String> classToMethod = new TreeMap<String, String>(CSS_CLASS_COMPARATOR);
+  private final Map<String, Value> defs = new TreeMap<String, Value>();
 
-  protected AbstractCssGenerator(final File outputDirectory, final Cleanup cleanup) {
+  protected AbstractCssGenerator(File inputFile, final File outputDirectory, final Cleanup cleanup) {
+    this.inputFile = inputFile;
     this.outputDirectory = outputDirectory;
     this.cleanup = cleanup;
+    lazyInitStaticLogWriter();
+    CssStylesheet sheet = parseFile();
+    extractClassNames(sheet);
+    extractDefs(sheet);
+  }
+
+  /** @return a sorted map of class name -> method name for {@code inputFile} */
+  protected Map<String, String> getClassNameToMethodName() {
+    return classToMethod;
+  }
+
+  /** @return a sorted list of defs. */
+  protected Map<String, Value> getDefs() {
+    return defs;
+  }
+
+  private void lazyInitStaticLogWriter() {
     if (logWriter == null) {
       try {
         logWriter = new PrintWriter(new File(outputDirectory, ".cssGenerator.log"));
@@ -59,7 +84,6 @@ public class AbstractCssGenerator {
         throw new RuntimeException(e);
       }
     }
-    logger = new PrintWriterTreeLogger(logWriter);
   }
 
   protected void markAndSaveIfChanged(GClass gc) {
@@ -67,22 +91,7 @@ public class AbstractCssGenerator {
     GenUtils.saveIfChanged(outputDirectory, gc);
   }
 
-  /** @return a sorted map of class name -> method name for {@code inputFile} */
-  protected Map<String, String> getClassNameToMethodName(final File inputFile) {
-    final Map<String, String> classToMethod = new TreeMap<String, String>(CSS_CLASS_COMPARATOR);
-
-    final CssStylesheet sheet;
-    try {
-      // Create AST
-      sheet = GenerateCssAst.exec(logger, inputFile.toURI().toURL());
-    } catch (final MalformedURLException e) {
-      throw new RuntimeException(e);
-    } catch (final UnableToCompleteException e) {
-      throw new RuntimeException(e);
-    } finally {
-      logWriter.flush();
-    }
-
+  private void extractClassNames(CssStylesheet sheet) {
     // De-duplicate method names
     final Set<String> methodNames = new HashSet<String>();
     for (final String className : ExtractClassNamesVisitor.exec(sheet)) {
@@ -92,8 +101,31 @@ public class AbstractCssGenerator {
       }
       classToMethod.put(className, methodName);
     }
+  }
 
-    return classToMethod;
+  private void extractDefs(CssStylesheet sheet) {
+    new CssVisitor() {
+      @Override
+      public void endVisit(CssDef x, Context ctx) {
+        if (x.getValues().size() > 0) {
+          defs.put(x.getKey(), x.getValues().get(0));
+        }
+      }
+    }.accept(sheet);
+  }
+
+  private CssStylesheet parseFile() {
+    try {
+      // Create AST
+      PrintWriterTreeLogger logger = new PrintWriterTreeLogger(logWriter);
+      return GenerateCssAst.exec(logger, inputFile.toURI().toURL());
+    } catch (final MalformedURLException e) {
+      throw new RuntimeException(e);
+    } catch (final UnableToCompleteException e) {
+      throw new RuntimeException(e);
+    } finally {
+      logWriter.flush();
+    }
   }
 
   private static final Comparator<String> CSS_CLASS_COMPARATOR = new Comparator<String>() {

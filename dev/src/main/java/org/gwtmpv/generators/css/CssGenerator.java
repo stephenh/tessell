@@ -11,16 +11,15 @@ import org.gwtmpv.generators.Cleanup;
 
 import com.google.gwt.core.ext.Generator;
 import com.google.gwt.resources.client.CssResource;
+import com.google.gwt.resources.css.ast.CssProperty.Value;
 
 /** A utility class for creating a Java interface declaration for a given CSS file. */
 public class CssGenerator extends AbstractCssGenerator {
 
-  private final File inputCssFile;
   private final GClass cssInterface;
 
   public CssGenerator(final File inputCssFile, Cleanup cleanup, final String interfaceName, final File outputDirectory) {
-    super(outputDirectory, cleanup);
-    this.inputCssFile = inputCssFile;
+    super(inputCssFile, outputDirectory, cleanup);
     cssInterface = new GClass(interfaceName).setInterface().baseClass(CssResource.class);
   }
 
@@ -30,12 +29,18 @@ public class CssGenerator extends AbstractCssGenerator {
   }
 
   private void addMethods() {
-    for (final Map.Entry<String, String> e : getClassNameToMethodName(inputCssFile).entrySet()) {
+    for (final Map.Entry<String, String> e : getClassNameToMethodName().entrySet()) {
       final String className = e.getKey();
       final String methodName = e.getValue();
       final GMethod m = cssInterface.getMethod(methodName).returnType(String.class);
       if (!methodName.equals(className)) {
         m.addAnnotation("@ClassName(\"{}\")", Generator.escape(className));
+      }
+    }
+    for (final Map.Entry<String, Value> def : getDefs().entrySet()) {
+      // need stricter matching
+      if (def.getValue().toString().endsWith("px")) {
+        cssInterface.getMethod(def.getKey()).returnType(int.class);
       }
     }
   }
