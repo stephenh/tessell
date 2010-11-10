@@ -75,7 +75,7 @@ public class NewProperty {
   }
 
   public static <E> ListProperty<E> listProperty(final String name) {
-    return new ListProperty<E>(new SetValue<ArrayList<E>>(name));
+    return new ListProperty<E>(new SetValue<ArrayList<E>>(name, new ArrayList<E>()));
   }
 
 }
