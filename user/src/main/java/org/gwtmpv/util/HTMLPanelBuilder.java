@@ -29,7 +29,7 @@ public class HTMLPanelBuilder {
 
   public void add(IsWidget widget) {
     final String id = "mpv-hb-" + String.valueOf(++nextId);
-    sb.append("<div id=\"" + id + "\"/>");
+    sb.append("<div id=\"" + id + "\"></div>");
     places.add(new ToPlace(id, widget));
   }
 
