@@ -17,9 +17,9 @@ public class StringUtils {
     return a != null && a.trim().length() > 0 ? a : defaultString;
   }
 
-  public static String join(final List<String> things, final String on) {
+  public static String join(final List<?> things, final String on) {
     final StringBuilder sb = new StringBuilder();
-    for (final Iterator<String> i = things.iterator(); i.hasNext();) {
+    for (final Iterator<?> i = things.iterator(); i.hasNext();) {
       sb.append(i.next());
       if (i.hasNext()) {
         sb.append(" ");
@@ -28,7 +28,7 @@ public class StringUtils {
     return sb.toString();
   }
 
-  public static String join(final String[] things, final String on) {
+  public static String join(final Object[] things, final String on) {
     final StringBuilder sb = new StringBuilder();
     for (int i = 0, len = things.length; i < len; i++) {
       sb.append(things[i]);
