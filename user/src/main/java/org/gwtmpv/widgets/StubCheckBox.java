@@ -9,6 +9,20 @@ public class StubCheckBox extends StubButtonBase implements IsCheckBox {
   private String name;
   private Boolean value;
 
+  public void check() {
+    if (value != null && value.booleanValue()) {
+      throw new RuntimeException(name + " is already checked");
+    }
+    click();
+  }
+
+  public void uncheck() {
+    if (value == null || !value.booleanValue()) {
+      throw new RuntimeException(name + " is not checked");
+    }
+    click();
+  }
+
   @Override
   public void click() {
     super.click();
