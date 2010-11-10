@@ -1,5 +1,7 @@
 package org.gwtmpv.testing;
 
+import static org.gwtmpv.util.StringUtils.join;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -135,6 +137,30 @@ public class MpvMatchers {
         mismatchDescription.appendValue(item);
         mismatchDescription.appendText(" has errors ");
         mismatchDescription.appendValueList("", ", ", "", ((StubTextList) item).getList());
+      }
+    };
+  }
+
+  /** A matcher to assert validation errors. */
+  public static Matcher<IsTextList> hasErrors(final String... errors) {
+    return new TypeSafeMatcher<IsTextList>() {
+      @Override
+      protected boolean matchesSafely(IsTextList item) {
+        String expected = join(errors, ", ");
+        String actual = join(((StubTextList) item).getList(), ", ");
+        return expected.equals(actual);
+      }
+
+      @Override
+      public void describeTo(Description description) {
+        description.appendText("errors ");
+        description.appendValueList("<", ", ", ">", errors);
+      }
+
+      @Override
+      protected void describeMismatchSafely(IsTextList item, Description mismatchDescription) {
+        mismatchDescription.appendText("errors ");
+        mismatchDescription.appendValueList("<", ", ", ">", ((StubTextList) item).getList());
       }
     };
   }
