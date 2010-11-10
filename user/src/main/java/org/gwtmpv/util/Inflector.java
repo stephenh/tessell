@@ -1,5 +1,8 @@
 package org.gwtmpv.util;
 
+import static org.gwtmpv.util.StringUtils.capitalize;
+import static org.gwtmpv.util.StringUtils.uncapitalize;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -23,11 +26,12 @@ public class Inflector {
     return name;
   }
 
-  public static String capitalize(final String str) {
-    if (str == null || str.length() == 0) {
-      return str;
+  public static String camelize(final String humanCased) {
+    String name = "";
+    for (final Iterator<String> i = split(humanCased).iterator(); i.hasNext();) {
+      name += i.next();
     }
-    return str.substring(0, 1).toUpperCase() + str.substring(1);
+    return uncapitalize(name);
   }
 
   /** Splits word into groups based on where underscores and case changes are. */
@@ -38,7 +42,7 @@ public class Inflector {
     final int length = word.length();
     for (int i = 0; i < length; i++) {
       final String c = word.substring(i, i + 1);
-      if ("_".equals(c)) {
+      if ("_".equals(c) || " ".equals(c)) {
         parts.add(word.substring(at, i));
         at = i + 1;
       } else if (wasLower && c.matches(upper)) {

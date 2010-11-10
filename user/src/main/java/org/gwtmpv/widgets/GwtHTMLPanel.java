@@ -2,7 +2,6 @@ package org.gwtmpv.widgets;
 
 import java.util.Iterator;
 
-import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.logical.shared.AttachEvent.Handler;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -135,7 +134,7 @@ public class GwtHTMLPanel implements IsHTMLPanel {
 
   @Override
   public void addAndReplaceElement(IsWidget widget, String id) {
-    panel.addAndReplaceElement(widget.asWidget(), (Element) panel.getElementById(id));
+    panel.addAndReplaceElement(widget.asWidget(), id);
   }
 
   @Override

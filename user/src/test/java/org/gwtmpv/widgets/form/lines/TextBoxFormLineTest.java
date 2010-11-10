@@ -14,38 +14,35 @@ public class TextBoxFormLineTest extends AbstractFormPresenterTest {
 
   @Test
   public void htmlOfOneTextBox() {
-    p.addTextBox(employee.firstName);
-    assertHtml("<div>",//
-      "<dl>",
-      "<dt>First Name</dt>",
-      "<dd><div id=\"mpv-hb-1\"/></dd>",
-      "<div id=\"mpv-hb-2\"/>",
-      "</dl>",
-      "</div>");
+    p.add(new TextBoxFormLine(employee.firstName));
+    assertHtml("<div class=\"form\"><ol>",//
+      "<li>",
+      "<div class=\"label\"><label for=\"p-firstName\">First Name</label></div>",
+      "<div class=\"value\"><div id=\"mpv-hb-1\"></div><div id=\"mpv-hb-2\"></div></div>",
+      "</li>",
+      "</ol></div>");
   }
 
   @Test
   public void htmlOfTwoTextBoxes() {
-    p.addTextBox(employee.firstName);
-    p.addTextBox(employee.lastName);
-    assertHtml("<div>",//
-      "<dl>",
-      "<dt>First Name</dt>",
-      "<dd><div id=\"mpv-hb-1\"/></dd>",
-      "<div id=\"mpv-hb-2\"/>",
-      "</dl>",
-      "<dl>",
-      "<dt>Last Name</dt>",
-      "<dd><div id=\"mpv-hb-3\"/></dd>",
-      "<div id=\"mpv-hb-4\"/>",
-      "</dl>",
-      "</div>");
+    p.add(new TextBoxFormLine(employee.firstName));
+    p.add(new TextBoxFormLine(employee.lastName));
+    assertHtml("<div class=\"form\"><ol>",//
+      "<li>",
+      "<div class=\"label\"><label for=\"p-firstName\">First Name</label></div>",
+      "<div class=\"value\"><div id=\"mpv-hb-1\"></div><div id=\"mpv-hb-2\"></div></div>",
+      "</li>",
+      "<li>",
+      "<div class=\"label\"><label for=\"p-lastName\">Last Name</label></div>",
+      "<div class=\"value\"><div id=\"mpv-hb-3\"></div><div id=\"mpv-hb-4\"></div></div>",
+      "</li>",
+      "</ol></div>");
   }
 
   @Test
   public void widgetsAreBoundForOneTextBox() {
     employee.firstName.set("bob");
-    p.addTextBox(employee.firstName);
+    p.add(new TextBoxFormLine(employee.firstName));
 
     assertThat(tb("mpv-hb-1").getText(), is("bob"));
   }
@@ -53,7 +50,7 @@ public class TextBoxFormLineTest extends AbstractFormPresenterTest {
   @Test
   public void widgetsAreBoundTwoWayForOneTextBox() {
     employee.firstName.set("bob");
-    p.addTextBox(employee.firstName);
+    p.add(new TextBoxFormLine(employee.firstName));
 
     tb("mpv-hb-1").type("fred");
     assertThat(employee.firstName.get(), is("fred"));

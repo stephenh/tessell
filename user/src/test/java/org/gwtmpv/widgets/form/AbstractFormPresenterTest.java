@@ -13,7 +13,7 @@ import org.junit.BeforeClass;
 
 public abstract class AbstractFormPresenterTest {
 
-  protected final FormPresenter p = new FormPresenter();
+  protected final FormPresenter p = new FormPresenter("p");
 
   @BeforeClass
   public static void useStubs() {
