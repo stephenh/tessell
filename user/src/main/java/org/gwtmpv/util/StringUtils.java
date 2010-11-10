@@ -1,7 +1,7 @@
 package org.gwtmpv.util;
 
-import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 public class StringUtils {
 
@@ -17,7 +17,7 @@ public class StringUtils {
     return a != null && a.trim().length() > 0 ? a : defaultString;
   }
 
-  public static String join(final ArrayList<String> things, final String on) {
+  public static String join(final List<String> things, final String on) {
     final StringBuilder sb = new StringBuilder();
     for (final Iterator<String> i = things.iterator(); i.hasNext();) {
       sb.append(i.next());
