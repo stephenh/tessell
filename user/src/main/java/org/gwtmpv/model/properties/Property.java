@@ -5,10 +5,10 @@ import org.gwtmpv.model.validation.Valid;
 import org.gwtmpv.model.validation.rules.Rule;
 import org.gwtmpv.model.values.Value;
 
-import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.event.shared.HasHandlers;
 
-public interface Property<P> extends HasRuleTriggers, Value<P> {
+public interface Property<P> extends HasHandlers, HasRuleTriggers, Value<P> {
 
   P get();
 
@@ -26,9 +26,6 @@ public interface Property<P> extends HasRuleTriggers, Value<P> {
 
   /** @return whether this property was invalid, does not rerun validation. */
   Valid wasValid();
-
-  /** For rules to fire events against our handlers. */
-  void fireEvent(GwtEvent<?> event);
 
   /** Adds {@code} downstream as a derivative of us. */
   <T extends Property<?>> T addDerived(final T downstream);
