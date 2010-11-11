@@ -4,6 +4,7 @@ import static org.gwtmpv.widgets.Widgets.newTextList;
 
 import org.gwtmpv.model.dsl.Binder;
 import org.gwtmpv.model.properties.Property;
+import org.gwtmpv.model.properties.PropertyGroup;
 import org.gwtmpv.util.HTMLPanelBuilder;
 import org.gwtmpv.util.Inflector;
 import org.gwtmpv.widgets.IsTextBox;
@@ -23,10 +24,11 @@ public abstract class TextBoxBaseFormLine implements FormLine {
   }
 
   @Override
-  public void bind(String formId, Binder binder) {
+  public void bind(String formId, PropertyGroup all, Binder binder) {
     id = formId + "-" + Inflector.camelize(property.getName());
     textBox.getIsElement().setId(id);
     binder.bind(property).to(textBox, errorList);
+    all.add(property);
   }
 
   @Override

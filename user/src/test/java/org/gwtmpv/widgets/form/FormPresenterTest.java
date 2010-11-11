@@ -1,9 +1,12 @@
 package org.gwtmpv.widgets.form;
 
+import static org.gwtmpv.model.properties.NewProperty.stringProperty;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import joist.util.Join;
 
+import org.gwtmpv.model.properties.StringProperty;
+import org.gwtmpv.model.validation.Valid;
 import org.gwtmpv.widgets.form.lines.TextBoxFormLine;
 import org.junit.Test;
 
@@ -23,6 +26,17 @@ public class FormPresenterTest extends AbstractFormPresenterTest {
         "</li>",//
         "</ol></div>" },
       "")));
+  }
+
+  @Test
+  public void allValid() {
+    final StringProperty name = stringProperty("name").max(10);
+    p.add(new TextBoxFormLine(name));
+    name.set("0123456789a");
+    assertThat(p.allValid().wasValid(), is(Valid.NO));
+
+    name.set("1");
+    assertThat(p.allValid().wasValid(), is(Valid.YES));
   }
 
 }

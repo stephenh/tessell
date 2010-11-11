@@ -5,6 +5,7 @@ import static org.gwtmpv.widgets.Widgets.newFlowPanel;
 import java.util.ArrayList;
 
 import org.gwtmpv.model.dsl.Binder;
+import org.gwtmpv.model.properties.PropertyGroup;
 import org.gwtmpv.presenter.BasicPresenter;
 import org.gwtmpv.util.HTMLPanelBuilder;
 import org.gwtmpv.widgets.IsFlowPanel;
@@ -17,6 +18,7 @@ public class FormPresenter extends BasicPresenter<IsFlowPanel> {
 
   private final ArrayList<FormLine> formLines = new ArrayList<FormLine>();
 
+  private final PropertyGroup all = new PropertyGroup("all", null);
   private final String id;
   private final Binder binder = new Binder(this);
   private final FormLayout layout;
@@ -34,6 +36,11 @@ public class FormPresenter extends BasicPresenter<IsFlowPanel> {
     registerHandler(view.addAttachHandler(new OnViewAttached()));
   }
 
+  /** @return a property that all of our fields are valid. */
+  public PropertyGroup allValid() {
+    return all;
+  }
+
   /** Renders all of our lines into our view. */
   private void render() {
     HTMLPanelBuilder hb = new HTMLPanelBuilder();
@@ -45,7 +52,7 @@ public class FormPresenter extends BasicPresenter<IsFlowPanel> {
   /** Adds {@code line}. */
   public void add(FormLine line) {
     formLines.add(line);
-    line.bind(id, binder);
+    line.bind(id, all, binder);
     needsRender = true;
   }
 
