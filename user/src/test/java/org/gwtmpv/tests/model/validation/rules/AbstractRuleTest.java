@@ -17,21 +17,20 @@ public abstract class AbstractRuleTest {
 
   protected final Map<Object, String> messages = new LinkedHashMap<Object, String>();
 
-  public void listenTo(final HasRuleTriggers... hasTriggersList) {
-    for (final HasRuleTriggers hasTriggers : hasTriggersList) {
-      hasTriggers.addRuleTriggeredHandler(new RuleTriggeredHandler() {
-        public void onTrigger(final RuleTriggeredEvent event) {
-          if (event.getMessage() != null) {
-            messages.put(event.getKey(), event.getMessage());
-          }
+  public <T extends HasRuleTriggers> T listenTo(final T hasTriggers) {
+    hasTriggers.addRuleTriggeredHandler(new RuleTriggeredHandler() {
+      public void onTrigger(final RuleTriggeredEvent event) {
+        if (event.getMessage() != null) {
+          messages.put(event.getKey(), event.getMessage());
         }
-      });
-      hasTriggers.addRuleUntriggeredHandler(new RuleUntriggeredHandler() {
-        public void onUntrigger(final RuleUntriggeredEvent event) {
-          messages.remove(event.getKey());
-        }
-      });
-    }
+      }
+    });
+    hasTriggers.addRuleUntriggeredHandler(new RuleUntriggeredHandler() {
+      public void onUntrigger(final RuleUntriggeredEvent event) {
+        messages.remove(event.getKey());
+      }
+    });
+    return hasTriggers;
   }
 
   protected void assertMessages(final String... messages) {

@@ -9,7 +9,9 @@ public class RuleGroupTest extends AbstractRuleTest {
 
   @Before
   public void listenToNameAndDesc() {
-    listenTo(f.name, f.description, f.all);
+    listenTo(f.name);
+    listenTo(f.description);
+    listenTo(f.all);
   }
 
   @Test
