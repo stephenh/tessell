@@ -4,6 +4,8 @@ import static java.lang.Boolean.FALSE;
 import static org.gwtmpv.model.properties.NewProperty.booleanProperty;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.gwtmpv.model.properties.BooleanProperty;
 import org.gwtmpv.model.properties.HasRuleTriggers;
@@ -16,6 +18,7 @@ import org.gwtmpv.model.validation.events.RuleUntriggeredHandler;
 
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.event.shared.HasHandlers;
 import com.google.gwt.event.shared.SimpleEventBus;
 
 /** Codifies a UI command that may have rules triggered. */
@@ -23,17 +26,17 @@ public abstract class UiCommand implements HasRuleTriggers {
 
   private final BooleanProperty enabled = booleanProperty("enabled", true);
   private final EventBus handlers = new SimpleEventBus();
-  private final ArrayList<String> errors = new ArrayList<String>();
+  private final Map<String, HasHandlers> errors = new HashMap<String, HasHandlers>();
   private final ArrayList<Property<Boolean>> onlyIf = new ArrayList<Property<Boolean>>();
 
   public void execute() {
     if (enabled.isTrue()) {
+      clearErrors();
       for (Property<Boolean> p : onlyIf) {
         if (p.touch() == Valid.NO || FALSE.equals(p.get())) {
           return;
         }
       }
-      clearErrors();
       doExecute();
     }
   }
@@ -45,17 +48,23 @@ public abstract class UiCommand implements HasRuleTriggers {
 
   protected abstract void doExecute();
 
-  protected void error(String message) {
-    if (errors.contains(message)) {
+  /** Fires an error message against this command's handlers. */
+  public void error(String message) {
+    error(handlers, message);
+  }
+
+  /** Fires an error message against the {@code errorTarget}'s handlers. */
+  public void error(HasHandlers errorTarget, String message) {
+    if (errors.containsKey(message)) {
       return;
     }
-    errors.add(message);
-    handlers.fireEvent(new RuleTriggeredEvent(message, message, new Boolean[] { false }));
+    errors.put(message, errorTarget);
+    errorTarget.fireEvent(new RuleTriggeredEvent(message, message, new Boolean[] { false }));
   }
 
   protected void clearErrors() {
-    for (String message : errors) {
-      handlers.fireEvent(new RuleUntriggeredEvent(message, message));
+    for (Map.Entry<String, HasHandlers> e : errors.entrySet()) {
+      e.getValue().fireEvent(new RuleUntriggeredEvent(e.getKey(), e.getKey()));
     }
     errors.clear();
   }
