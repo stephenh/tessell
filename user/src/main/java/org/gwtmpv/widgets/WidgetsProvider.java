@@ -6,6 +6,10 @@ import com.google.gwt.user.cellview.client.CellTable;
 
 public interface WidgetsProvider {
 
+  IsTimer newTimer(Runnable runnable);
+
+  IsWindow getWindow();
+
   IsElement newElement(String tag);
 
   IsTextBox newTextBox();

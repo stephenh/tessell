@@ -11,6 +11,18 @@ public class StubWidgetsProvider implements WidgetsProvider {
     Widgets.setProvider(new StubWidgetsProvider());
   }
 
+  private final StubWindow window = new StubWindow();
+
+  @Override
+  public IsTimer newTimer(Runnable runnable) {
+    return new StubTimer(runnable);
+  }
+
+  @Override
+  public IsWindow getWindow() {
+    return window;
+  }
+
   @Override
   public IsElement newElement(String tag) {
     return new StubElement();

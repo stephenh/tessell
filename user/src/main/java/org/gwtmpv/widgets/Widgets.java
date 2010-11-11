@@ -20,6 +20,14 @@ public class Widgets {
     Widgets.provider = provider;
   }
 
+  public static IsTimer newTimer(Runnable runnable) {
+    return provider.newTimer(runnable);
+  }
+
+  public static IsWindow getWindow() {
+    return provider.getWindow();
+  }
+
   public static IsElement newElement(String tag) {
     return provider.newElement(tag);
   }

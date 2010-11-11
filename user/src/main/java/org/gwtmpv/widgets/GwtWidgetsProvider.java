@@ -9,6 +9,18 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 /** A Widget factory. */
 public class GwtWidgetsProvider implements WidgetsProvider {
 
+  private final GwtWindow window = new GwtWindow();
+
+  @Override
+  public IsTimer newTimer(Runnable runnable) {
+    return new GwtTimer(runnable);
+  }
+
+  @Override
+  public IsWindow getWindow() {
+    return window;
+  }
+
   @Override
   public IsElement newElement(String tag) {
     return new GwtElement(DOM.createElement(tag));
