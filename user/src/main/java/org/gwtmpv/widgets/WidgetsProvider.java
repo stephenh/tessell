@@ -18,6 +18,10 @@ public interface WidgetsProvider {
 
   IsAnchor newAnchor();
 
+  IsPopupPanel newPopupPanel();
+
+  IsFocusPanel newFocusPanel();
+
   IsHyperlink newHyperline();
 
   IsInlineHyperlink newInlineHyperlink();

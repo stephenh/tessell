@@ -105,4 +105,15 @@ public class StubWidgetsProvider implements WidgetsProvider {
   public IsPasswordTextBox newPasswordTextBox() {
     return new StubPasswordTextBox();
   }
+
+  @Override
+  public IsPopupPanel newPopupPanel() {
+    return new StubPopupPanel();
+  }
+
+  @Override
+  public IsFocusPanel newFocusPanel() {
+    return new StubFocusPanel();
+  }
+
 }

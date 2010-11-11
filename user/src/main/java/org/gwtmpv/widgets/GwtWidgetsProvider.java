@@ -104,4 +104,14 @@ public class GwtWidgetsProvider implements WidgetsProvider {
     return new GwtPasswordTextBox();
   }
 
+  @Override
+  public IsPopupPanel newPopupPanel() {
+    return new GwtPopupPanel();
+  }
+
+  @Override
+  public IsFocusPanel newFocusPanel() {
+    return new GwtFocusPanel();
+  }
+
 }

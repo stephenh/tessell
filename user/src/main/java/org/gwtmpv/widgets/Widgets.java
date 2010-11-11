@@ -96,4 +96,12 @@ public class Widgets {
     return provider.newCellList(cell);
   }
 
+  public static IsPopupPanel newPopupPanel() {
+    return provider.newPopupPanel();
+  }
+
+  public static IsFocusPanel newFocusPanel() {
+    return provider.newFocusPanel();
+  }
+
 }
