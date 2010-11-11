@@ -99,4 +99,9 @@ public class GwtWidgetsProvider implements WidgetsProvider {
     return new GwtCheckBox();
   }
 
+  @Override
+  public IsPasswordTextBox newPasswordTextBox() {
+    return new GwtPasswordTextBox();
+  }
+
 }

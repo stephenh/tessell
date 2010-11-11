@@ -32,6 +32,10 @@ public class Widgets {
     return provider.newTextBox();
   }
 
+  public static IsPasswordTextBox newPasswordTextBox() {
+    return provider.newPasswordTextBox();
+  }
+
   public static IsTextList newTextList() {
     return provider.newTextList();
   }

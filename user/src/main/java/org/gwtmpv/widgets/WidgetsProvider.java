@@ -10,6 +10,8 @@ public interface WidgetsProvider {
 
   IsTextBox newTextBox();
 
+  IsPasswordTextBox newPasswordTextBox();
+
   IsTextList newTextList();
 
   IsCheckBox newCheckBox();

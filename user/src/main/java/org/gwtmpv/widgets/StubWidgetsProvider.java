@@ -100,4 +100,9 @@ public class StubWidgetsProvider implements WidgetsProvider {
   public IsCheckBox newCheckBox() {
     return new StubCheckBox();
   }
+
+  @Override
+  public IsPasswordTextBox newPasswordTextBox() {
+    return new StubPasswordTextBox();
+  }
 }
