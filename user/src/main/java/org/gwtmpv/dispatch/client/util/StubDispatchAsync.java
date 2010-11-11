@@ -53,6 +53,9 @@ public class StubDispatchAsync implements DispatchAsync {
   /** @return the last {@link AsyncCallback} for {@code actionType} */
   public <A extends Action<R>, R extends Result> AsyncCallback<R> getCallback(final Class<A> actionType) {
     final List<ExecuteCall<A, R>> calls = getCalls(actionType);
+    if (calls.size() == 0) {
+      throw new IllegalStateException("No calls for " + actionType);
+    }
     return calls.get(calls.size() - 1).callback;
   }
 
