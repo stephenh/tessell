@@ -9,6 +9,7 @@ import com.google.gwt.user.client.ui.TextBoxBase.TextAlignConstant;
 public class StubTextBoxBase extends StubFocusWidget implements IsTextBoxBase {
 
   private String value = "";
+  private boolean readOnly;
 
   public void type(final String value) {
     setValue(value, true);
@@ -53,27 +54,24 @@ public class StubTextBoxBase extends StubFocusWidget implements IsTextBoxBase {
 
   @Override
   public boolean isReadOnly() {
-    return false;
+    return readOnly;
   }
 
   @Override
   public void setCursorPos(final int pos) {
-
   }
 
   @Override
   public void setReadOnly(final boolean readOnly) {
-
+    this.readOnly = readOnly;
   }
 
   @Override
   public void setSelectionRange(final int pos, final int length) {
-
   }
 
   @Override
   public void setTextAlignment(final TextAlignConstant align) {
-
   }
 
   @Override
