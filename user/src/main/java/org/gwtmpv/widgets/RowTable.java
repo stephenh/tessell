@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.NodeList;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
@@ -38,21 +37,36 @@ public class RowTable extends Panel implements IsRowTable {
     setElement(table);
   }
 
+  @Override
+  public void addHeader(final IsWidget isWidget) {
+    addHeader(isWidget.asWidget());
+  }
+
   /** Assumes {@code widget} is a table and appends any of its TRs to our own table's header. */
   public void addHeader(final Widget widget) {
     addTo(widget, head);
   }
 
+  @Override
+  public void addRow(final IsWidget isWidget) {
+    addRow(isWidget.asWidget());
+  }
+
   /** Assumes {@code widget} is a table and appends any of its TRs to our own table's body. */
   public void addRow(final Widget widget) {
     addTo(widget, body);
+    rows.add(widget);
+  }
+
+  @Override
+  public void insertRow(final int index, final IsWidget isWidget) {
+    insertRow(index, isWidget.asWidget());
   }
 
   /** Assumes {@code widget} is a table and puts its first TR into row {@code i} of our own table's body. */
   public void insertRow(final int i, final Widget newWidget) {
-    // assume just one physical tr in the new widget
-    final Element newTr = newWidget.getElement().getElementsByTagName("TR").getItem(0);
-    assert newTr != null : "new tr is required";
+    final Element newTr = findTr(newWidget.getElement());
+    assert newTr != null : "newWidget did not contain a TR";
 
     newWidget.removeFromParent();
     // logical
@@ -72,7 +86,6 @@ public class RowTable extends Panel implements IsRowTable {
   public void replaceRow(final int i, final Widget newWidget) {
     // This will logically and physically remove the old widget
     removeRow(i);
-
     insertRow(i, newWidget);
   }
 
@@ -107,49 +120,21 @@ public class RowTable extends Panel implements IsRowTable {
     return widgets.iterator();
   }
 
-  private void addTo(final Widget widget, final Element element) {
-    widget.removeFromParent();
+  private void addTo(final Widget newWidget, final Element element) {
+    Element newTr = findTr(newWidget.getElement());
+    assert newTr != null : "newWidget did not contain a TR";
+    newWidget.removeFromParent();
     // Logical attach
-    widgets.add(widget);
+    widgets.add(newWidget);
     // Physical attach (all TRs)
-    final NodeList<Element> nodes = widget.getElement().getElementsByTagName("TR");
-    for (int i = 0; i < nodes.getLength(); i++) {
-      element.appendChild(nodes.getItem(i));
-    }
+    element.appendChild(newTr);
     // Adopt
-    adopt(widget);
-  }
-
-  @Override
-  public void addHeader(final IsWidget isWidget) {
-    addHeader(isWidget.asWidget());
-  }
-
-  @Override
-  public void addRow(final IsWidget isWidget) {
-    addRow(isWidget.asWidget());
-    rows.add(isWidget.asWidget());
-  }
-
-  @Override
-  public void insertRow(final int index, final IsWidget isWidget) {
-    insertRow(index, isWidget.asWidget());
-    rows.add(isWidget.asWidget());
+    adopt(newWidget);
   }
 
   @Override
   public void replaceRow(final int i, final IsWidget isWidget) {
     replaceRow(i, isWidget.asWidget());
-  }
-
-  private com.google.gwt.dom.client.Element findBodyTr(final int i) {
-    int j = 0;
-    Element tr = body.getFirstChildElement();
-    while (tr != null && j < i) {
-      tr = tr.getNextSiblingElement();
-      j++;
-    }
-    return tr;
   }
 
   @Override
@@ -170,6 +155,24 @@ public class RowTable extends Panel implements IsRowTable {
   @Override
   public IsElement getIsElement() {
     return new GwtElement(getElement());
+  }
+
+  private com.google.gwt.dom.client.Element findBodyTr(final int i) {
+    int j = 0;
+    Element tr = body.getFirstChildElement();
+    while (tr != null && j < i) {
+      tr = tr.getNextSiblingElement();
+      j++;
+    }
+    return tr;
+  }
+
+  private Element findTr(Element tableElement) {
+    Element current = tableElement;
+    while (current != null && !current.getTagName().equalsIgnoreCase("TR")) {
+      current = current.getFirstChildElement();
+    }
+    return current;
   }
 
 }
