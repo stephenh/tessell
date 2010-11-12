@@ -8,6 +8,7 @@ import org.gwtmpv.model.Model;
 import org.gwtmpv.model.values.BoundValue;
 import org.gwtmpv.model.values.DerivedValue;
 import org.gwtmpv.model.values.SetValue;
+import org.gwtmpv.model.values.Value;
 
 /** Lots of helper methods to constructor {@link Property}s out of bindings/{@link DerivedValue}s/etc. */
 public class NewProperty {
@@ -28,7 +29,7 @@ public class NewProperty {
     return new BooleanProperty(new SetValue<Boolean>(name, initialValue));
   }
 
-  public static BooleanProperty booleanProperty(final DerivedValue<Boolean> value) {
+  public static BooleanProperty booleanProperty(final Value<Boolean> value) {
     return new BooleanProperty(value);
   }
 
@@ -44,7 +45,7 @@ public class NewProperty {
     return new IntegerProperty(new SetValue<Integer>(name, i));
   }
 
-  public static IntegerProperty integerProperty(final DerivedValue<Integer> derived) {
+  public static IntegerProperty integerProperty(final Value<Integer> derived) {
     return new IntegerProperty(derived);
   }
 
@@ -62,6 +63,10 @@ public class NewProperty {
 
   public static StringProperty stringProperty(final Binding<String> binding) {
     return new StringProperty(new BoundValue<String>(binding));
+  }
+
+  public static StringProperty stringProperty(final Value<String> value) {
+    return new StringProperty(value);
   }
 
   public static <E> ListProperty<E> listProperty(final Binding<ArrayList<E>> binding) {
