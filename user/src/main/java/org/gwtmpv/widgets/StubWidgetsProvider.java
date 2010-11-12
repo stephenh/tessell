@@ -128,4 +128,9 @@ public class StubWidgetsProvider implements WidgetsProvider {
     return new StubFocusPanel();
   }
 
+  @Override
+  public IsLabel newLabel() {
+    return new StubLabel();
+  }
+
 }

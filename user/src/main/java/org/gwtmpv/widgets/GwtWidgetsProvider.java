@@ -126,4 +126,9 @@ public class GwtWidgetsProvider implements WidgetsProvider {
     return new GwtFocusPanel();
   }
 
+  @Override
+  public IsLabel newLabel() {
+    return new GwtLabel();
+  }
+
 }

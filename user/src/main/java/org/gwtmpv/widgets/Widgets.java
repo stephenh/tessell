@@ -64,12 +64,24 @@ public class Widgets {
     return provider.newInlineLabel();
   }
 
+  public static IsLabel newLabel() {
+    return provider.newLabel();
+  }
+
   public static IsImage newImage() {
     return provider.newImage();
   }
 
   public static IsFlowPanel newFlowPanel() {
     return provider.newFlowPanel();
+  }
+
+  public static IsFlowPanel newFlowPanel(IsWidget... widgets) {
+    IsFlowPanel p = provider.newFlowPanel();
+    for (IsWidget widget : widgets) {
+      p.add(widget);
+    }
+    return p;
   }
 
   public static IsScrollPanel newScrollPanel() {

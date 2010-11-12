@@ -10,6 +10,8 @@ public interface WidgetsProvider {
 
   IsWindow getWindow();
 
+  IsLabel newLabel();
+
   IsElement newElement(String tag);
 
   IsTextBox newTextBox();
