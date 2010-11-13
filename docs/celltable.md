@@ -17,6 +17,14 @@ CellTable is most appropriate when:
 * Rows have simple layout
 * Rows have simple logic
 
+Drawbacks
+---------
+
+* Cells are more complicated than regular widgets
+* Cells can't leverage existing Widget-based logic (style handling, validation, etc.)
+
+I generally find [RowTable](rowtable.html) easier to use unless your tables are really simple or have lots of data.
+
 Approach
 --------
 

@@ -18,6 +18,14 @@ RowTable is most appropriate when:
 * Rows have non-trivial logic that deserves it's own presenter
 * You want to reuse existing widgets
 
+Drawbacks
+---------
+
+* Uses conventional widgets so won't scale to 100s/1000s of rows
+* Involves multiple `ui.xml` files that can be unnecessary overhead for very simple layouts
+
+For really simple tables, or really large tables, [CellTable](celltable.html) is a better choice.
+
 Approach
 --------
 
