@@ -17,6 +17,10 @@ public class NewProperty {
     return new BasicProperty<P>(new SetValue<P>(name, value));
   }
 
+  public static <P> BasicProperty<P> derivedProperty(final DerivedValue<P> value) {
+    return new BasicProperty<P>(value);
+  }
+
   public static <P> BasicProperty<P> basicProperty(final Binding<P> binding) {
     return new BasicProperty<P>(new BoundValue<P>(binding));
   }
