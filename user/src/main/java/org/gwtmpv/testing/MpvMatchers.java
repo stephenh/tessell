@@ -181,8 +181,7 @@ public class MpvMatchers {
 
       @Override
       protected void describeMismatchSafely(StubEventBus bus, Description mismatchDescription) {
-        mismatchDescription.appendValue(bus);
-        mismatchDescription.appendText(" places are ");
+        mismatchDescription.appendText("places are ");
         mismatchDescription.appendValueList("[", ", ", "]", getRequests(bus));
       }
 
