@@ -13,6 +13,7 @@ import org.gwtmpv.widgets.HasStubCss;
 import org.gwtmpv.widgets.IsTextList;
 import org.gwtmpv.widgets.StubStyle;
 import org.gwtmpv.widgets.StubTextList;
+import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
@@ -191,6 +192,21 @@ public class MpvMatchers {
           requests.add(e.getRequest().toString());
         }
         return requests;
+      }
+    };
+  }
+
+  /** A matcher to assert based on toString. */
+  public static Matcher<Object> asString(final String expected) {
+    return new BaseMatcher<Object>() {
+      @Override
+      public boolean matches(Object item) {
+        return item != null && item.toString() != null && item.toString().equals(expected);
+      }
+
+      @Override
+      public void describeTo(Description description) {
+        description.appendText(expected);
       }
     };
   }
