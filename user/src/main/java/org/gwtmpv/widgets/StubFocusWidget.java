@@ -73,7 +73,11 @@ public class StubFocusWidget extends StubWidget implements IsFocusWidget {
   }
 
   public void keyUp() {
-    fireEvent(new DummyKeyUpEvent());
+    fireEvent(new DummyKeyUpEvent(0));
+  }
+
+  public void keyUp(int keyCode) {
+    fireEvent(new DummyKeyUpEvent(keyCode));
   }
 
   public void keyDown() {
@@ -236,6 +240,16 @@ public class StubFocusWidget extends StubWidget implements IsFocusWidget {
 
   public static class DummyKeyUpEvent extends KeyUpEvent {
     public boolean prevented = false;
+    private final int keyCode;
+
+    public DummyKeyUpEvent(int keyCode) {
+      this.keyCode = keyCode;
+    }
+
+    @Override
+    public int getNativeKeyCode() {
+      return keyCode;
+    }
 
     @Override
     public void preventDefault() {

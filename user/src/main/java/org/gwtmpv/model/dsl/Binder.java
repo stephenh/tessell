@@ -1,5 +1,7 @@
 package org.gwtmpv.model.dsl;
 
+import static com.google.gwt.event.dom.client.KeyCodes.KEY_TAB;
+
 import org.gwtmpv.bus.CanRegisterHandlers;
 import org.gwtmpv.model.commands.UiCommand;
 import org.gwtmpv.model.properties.Property;
@@ -58,6 +60,10 @@ public class Binder {
     for (final S source : sources) {
       registerHandler(source.addKeyUpHandler(new KeyUpHandler() {
         public void onKeyUp(final KeyUpEvent event) {
+          // if they have just tabbed into the field, we'll get a key up for tab, but ignore it.
+          if (event.getNativeKeyCode() == KEY_TAB) {
+            return;
+          }
           ValueChangeEvent.fire(source, source.getValue());
         }
       }));

@@ -1,5 +1,6 @@
 package org.gwtmpv.tests.model.dsl;
 
+import static com.google.gwt.event.dom.client.KeyCodes.KEY_TAB;
 import static org.gwtmpv.model.properties.NewProperty.booleanProperty;
 import static org.gwtmpv.model.properties.NewProperty.stringProperty;
 import static org.gwtmpv.testing.MpvMatchers.hasStyle;
@@ -8,6 +9,7 @@ import static org.gwtmpv.testing.MpvMatchers.shown;
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 import java.util.ArrayList;
@@ -147,6 +149,16 @@ public class BinderTest {
     list.add("foo");
     binder.when(b).is(true).add("foo").to(list);
     assertThat(list, not(hasItem("foo")));
+  }
+
+  @Test
+  public void enhanceIgnoresTabKeyUpEvent() {
+    StubTextBox b = new StubTextBox();
+    StringProperty s = stringProperty("s");
+    binder.bind(s).to(b);
+    binder.enhance(b);
+    b.keyUp(KEY_TAB);
+    assertThat(s.get(), is(nullValue()));
   }
 
 }
