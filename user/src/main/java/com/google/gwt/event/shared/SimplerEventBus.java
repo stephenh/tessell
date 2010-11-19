@@ -140,7 +140,7 @@ public class SimplerEventBus extends EventBus {
     // immediately mark the handler as removed
     final List<H> l = getHandlerList(type, source);
     final int handlerIndex = l.indexOf(handler);
-    assert handlerIndex > 0 : "handler was not registered " + handler;
+    assert handlerIndex >= 0 : "handler was not registered " + handler;
     l.set(handlerIndex, null);
     // defer the cleanup of the null marker
     needsCleaning.add(new ToClean<H>(type, source, l));
