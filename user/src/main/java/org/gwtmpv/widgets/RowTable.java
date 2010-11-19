@@ -106,7 +106,7 @@ public class RowTable extends Panel implements IsRowTable {
         final Element tr = findBodyTr(at);
         body.removeChild(tr);
         // put the oldTr back where we got it from
-        oldTable.getElement().appendChild(tr);
+        findTBody(oldTable.getElement()).appendChild(tr);
       }
       // logical
       widgets.remove(child);
@@ -171,6 +171,17 @@ public class RowTable extends Panel implements IsRowTable {
     Element current = tableElement;
     while (current != null && !current.getTagName().equalsIgnoreCase("TR")) {
       current = current.getFirstChildElement();
+    }
+    return current;
+  }
+
+  private Element findTBody(Element tableElement) {
+    Element current = tableElement;
+    while (current != null && !current.getTagName().equalsIgnoreCase("TBODY")) {
+      current = current.getFirstChildElement();
+    }
+    if (current == null) {
+      current = tableElement;
     }
     return current;
   }
