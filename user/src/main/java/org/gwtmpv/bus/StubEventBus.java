@@ -9,11 +9,11 @@ import com.google.gwt.event.shared.EventHandler;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.GwtEvent.Type;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.event.shared.SimpleEventBus;
+import com.google.gwt.event.shared.SimplerEventBus;
 
 public class StubEventBus extends EventBus {
 
-  private final EventBus m = new SimpleEventBus();
+  private final EventBus m = new SimplerEventBus();
   private static final Logger log = Logger.getLogger(StubEventBus.class.getName());
   private final List<GwtEvent<?>> events = new ArrayList<GwtEvent<?>>();
 

@@ -22,14 +22,14 @@ import com.google.gwt.event.shared.EventHandler;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.GwtEvent.Type;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.event.shared.SimpleEventBus;
+import com.google.gwt.event.shared.SimplerEventBus;
 
 /** Provides most of the validation/derived/etc. implementation guts of {@link Property}. */
 public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> implements Property<P> {
 
   private static final Logger log = Logger.getLogger("org.gwtmpv.model");
   // handlers
-  private final EventBus handlers = new SimpleEventBus();
+  private final EventBus handlers = new SimplerEventBus();
   // other properties that are validated off of our value
   protected final ArrayList<Property<?>> derived = new ArrayList<Property<?>>();
   // rules that validate against our value and fire against our handlers

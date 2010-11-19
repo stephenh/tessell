@@ -5,12 +5,12 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.event.shared.SimpleEventBus;
+import com.google.gwt.event.shared.SimplerEventBus;
 import com.google.gwt.user.client.ui.HasValue;
 
 public class StubHasValue<T> implements HasValue<T> {
 
-  private final EventBus handlers = new SimpleEventBus();
+  private final EventBus handlers = new SimplerEventBus();
   private T value;
 
   // By default we should fire events, so encourage tests to call this one

@@ -4,11 +4,11 @@ import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.event.shared.SimpleEventBus;
+import com.google.gwt.event.shared.SimplerEventBus;
 
 public class StubWindow implements IsWindow {
 
-  private final EventBus handlers = new SimpleEventBus();
+  private final EventBus handlers = new SimplerEventBus();
   public String open;
   public int x = -1;
   public int y = -1;

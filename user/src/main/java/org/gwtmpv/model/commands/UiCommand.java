@@ -19,13 +19,13 @@ import org.gwtmpv.model.validation.events.RuleUntriggeredHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.event.shared.HasHandlers;
-import com.google.gwt.event.shared.SimpleEventBus;
+import com.google.gwt.event.shared.SimplerEventBus;
 
 /** Codifies a UI command that may have rules triggered. */
 public abstract class UiCommand implements HasRuleTriggers {
 
   private final BooleanProperty enabled = booleanProperty("enabled", true);
-  private final EventBus handlers = new SimpleEventBus();
+  private final EventBus handlers = new SimplerEventBus();
   private final Map<String, HasHandlers> errors = new HashMap<String, HasHandlers>();
   private final ArrayList<Property<Boolean>> onlyIf = new ArrayList<Property<Boolean>>();
 

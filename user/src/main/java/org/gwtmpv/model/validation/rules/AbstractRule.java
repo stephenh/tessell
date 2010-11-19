@@ -17,7 +17,7 @@ import org.gwtmpv.model.values.Value;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.event.shared.SimpleEventBus;
+import com.google.gwt.event.shared.SimplerEventBus;
 
 /**
  * A base class with most of the common {@link Rule} functionality implemented
@@ -31,7 +31,7 @@ public abstract class AbstractRule<T, U extends AbstractRule<T, U>> implements R
 
   private static final Logger log = Logger.getLogger("org.gwtmpv.model");
   // handlers
-  protected final EventBus handlers = new SimpleEventBus();
+  protected final EventBus handlers = new SimplerEventBus();
   // The property that wraps our value
   protected final Property<T> property;
   // List of properties that must be true for this rule to run.

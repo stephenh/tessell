@@ -7,13 +7,13 @@ import com.google.gwt.event.logical.shared.AttachEvent.Handler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.event.shared.SimpleEventBus;
+import com.google.gwt.event.shared.SimplerEventBus;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Widget;
 
 public class StubWidget implements IsWidget, HasStubCss {
 
-  protected final EventBus handlers = new SimpleEventBus();
+  protected final EventBus handlers = new SimplerEventBus();
   private final StubElement element = new StubElement();
   public int absoluteTop;
   public int absoluteLeft;

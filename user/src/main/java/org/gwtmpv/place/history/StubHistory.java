@@ -6,11 +6,11 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.event.shared.SimpleEventBus;
+import com.google.gwt.event.shared.SimplerEventBus;
 
 public class StubHistory implements IsHistory, HasValueChangeHandlers<String> {
 
-  private final EventBus handlers = new SimpleEventBus();
+  private final EventBus handlers = new SimplerEventBus();
   private String token;
 
   public void setToken(final String token) {
