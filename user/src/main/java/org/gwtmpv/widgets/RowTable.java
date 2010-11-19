@@ -91,7 +91,7 @@ public class RowTable extends Panel implements IsRowTable {
 
   @Override
   public void removeRow(final int i) {
-    rows.get(i).removeFromParent();
+    remove(rows.get(i));
   }
 
   @Override
