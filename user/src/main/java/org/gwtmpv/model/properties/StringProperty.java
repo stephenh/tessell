@@ -73,6 +73,10 @@ public class StringProperty extends AbstractProperty<String, StringProperty> {
     }));
   }
 
+  public void setMaxLength(Integer maxLength) {
+    this.maxLength = maxLength;
+  }
+
   @Override
   protected StringProperty getThis() {
     return this;
