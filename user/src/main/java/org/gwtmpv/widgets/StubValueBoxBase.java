@@ -15,6 +15,7 @@ public class StubValueBoxBase<T> extends StubFocusWidget implements IsValueBoxBa
   @Override
   public void setValue(final T value, final boolean fireEvents) {
     final T oldValue = this.value;
+    this.value = value;
     if (fireEvents) {
       ValueChangeEvent.fireIfNotEqual(this, oldValue, value);
     }
