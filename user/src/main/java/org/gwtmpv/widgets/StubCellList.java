@@ -14,7 +14,7 @@ public class StubCellList<T> extends StubWidget implements IsCellList<T> {
   }
 
   @Override
-  public void setRowData(int start, List<T> values) {
+  public void setRowData(int start, List<? extends T> values) {
   }
 
 }

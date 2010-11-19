@@ -19,7 +19,7 @@ public interface IsCellTable<T> extends IsWidget, HasData<T> {
 
   void removeColumn(int index);
 
-  void setRowData(int start, List<T> values);
+  void setRowData(int start, List<? extends T> values);
 
   void setRowCount(int size, boolean isExact);
 
