@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import org.gwtmpv.model.dsl.Binder;
 import org.gwtmpv.model.properties.BooleanProperty;
 import org.gwtmpv.model.properties.StringProperty;
+import org.gwtmpv.widgets.StubFocusWidget;
 import org.gwtmpv.widgets.StubTextBox;
 import org.gwtmpv.widgets.StubWidget;
 import org.junit.Test;
@@ -159,6 +160,31 @@ public class BinderTest {
     binder.enhance(b);
     b.keyUp(KEY_TAB);
     assertThat(s.get(), is(nullValue()));
+  }
+
+  @Test
+  public void whenTrueEnableLeavesEnabled() {
+    BooleanProperty b = booleanProperty("b", true);
+    StubFocusWidget w = new StubFocusWidget();
+    binder.when(b).is(true).enable(w);
+    assertThat(w.isEnabled(), is(true));
+  }
+
+  @Test
+  public void whenTrueEnableIsFalseThenSetsDisabled() {
+    BooleanProperty b = booleanProperty("b", false);
+    StubFocusWidget w = new StubFocusWidget();
+    binder.when(b).is(true).enable(w);
+    assertThat(w.isEnabled(), is(false));
+  }
+
+  @Test
+  public void whenTrueEnableChangesToFalseThenSetsDisabled() {
+    BooleanProperty b = booleanProperty("b", true);
+    StubFocusWidget w = new StubFocusWidget();
+    binder.when(b).is(true).enable(w);
+    b.set(false);
+    assertThat(w.isEnabled(), is(false));
   }
 
 }

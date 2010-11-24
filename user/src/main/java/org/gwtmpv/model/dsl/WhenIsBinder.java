@@ -10,6 +10,7 @@ import org.gwtmpv.model.validation.events.RuleUntriggeredEvent;
 import org.gwtmpv.widgets.HasCss;
 
 import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.user.client.ui.HasEnabled;
 
 public class WhenIsBinder<P> {
 
@@ -52,6 +53,23 @@ public class WhenIsBinder<P> {
       }
     }));
     errorIfEq(message);
+  }
+
+  public void enable(final HasEnabled enabled) {
+    binder.registerHandler(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
+      public void onPropertyChanged(PropertyChangedEvent<P> event) {
+        update(enabled);
+      }
+    }));
+    update(enabled); // set initial value
+  }
+
+  private void update(HasEnabled enabled) {
+    if (eq(value, property.get())) {
+      enabled.setEnabled(true);
+    } else {
+      enabled.setEnabled(false);
+    }
   }
 
   private void errorIfEq(String message) {
