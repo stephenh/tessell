@@ -1,5 +1,6 @@
 package org.gwtmpv.widgets.cellview;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bindgen.BindingRoot;
@@ -42,6 +43,22 @@ public class Cells {
     return new BoundColumnValue<T, C>(binding);
   }
 
+  public static <T, C> ColumnValue<T, C> constantValue(final C value) {
+    return new ColumnValue<T, C>() {
+      public C get(T object) {
+        return value;
+      }
+    };
+  }
+
+  public static <T> ColumnValue<T, T> identityValue() {
+    return new ColumnValue<T, T>() {
+      public T get(T object) {
+        return object;
+      }
+    };
+  }
+
   public static <T, C> BoundColumnProperty<T, C> boundProperty(BindingRoot<T, ? extends Property<C>> binding) {
     return new BoundColumnProperty<T, C>(binding);
   }
@@ -68,6 +85,40 @@ public class Cells {
 
   public static <C> IsCompositeCell<C> newCompositeCell(List<HasCell<C, ?>> cells) {
     return provider.newCompositeCell(cells);
+  }
+
+  public static <T> IsColumn<T, ?> newCompositeColumn(HasCell<T, ?> c1, HasCell<T, ?> c2) {
+    List<HasCell<T, ?>> cells = new ArrayList<HasCell<T, ?>>();
+    cells.add(c1);
+    cells.add(c2);
+    return newColumn(Cells.<T> identityValue(), newCompositeCell(cells));
+  }
+
+  public static <T> IsColumn<T, ?> newCompositeColumn(HasCell<T, ?> c1, HasCell<T, ?> c2, HasCell<T, ?> c3) {
+    List<HasCell<T, ?>> cells = new ArrayList<HasCell<T, ?>>();
+    cells.add(c1);
+    cells.add(c2);
+    cells.add(c3);
+    return newColumn(Cells.<T> identityValue(), newCompositeCell(cells));
+  }
+
+  public static <T> IsColumn<T, ?> newCompositeColumn(HasCell<T, ?> c1, HasCell<T, ?> c2, HasCell<T, ?> c3, HasCell<T, ?> c4) {
+    List<HasCell<T, ?>> cells = new ArrayList<HasCell<T, ?>>();
+    cells.add(c1);
+    cells.add(c2);
+    cells.add(c3);
+    cells.add(c4);
+    return newColumn(Cells.<T> identityValue(), newCompositeCell(cells));
+  }
+
+  public static <T> IsColumn<T, ?> newCompositeColumn(HasCell<T, ?> c1, HasCell<T, ?> c2, HasCell<T, ?> c3, HasCell<T, ?> c4, HasCell<T, ?> c5) {
+    List<HasCell<T, ?>> cells = new ArrayList<HasCell<T, ?>>();
+    cells.add(c1);
+    cells.add(c2);
+    cells.add(c3);
+    cells.add(c4);
+    cells.add(c5);
+    return newColumn(Cells.<T> identityValue(), newCompositeCell(cells));
   }
 
   public static IsHyperlinkCell newHyperlinkCell() {
