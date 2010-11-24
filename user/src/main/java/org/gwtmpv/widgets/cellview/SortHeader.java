@@ -21,7 +21,7 @@ public class SortHeader<T, C extends Comparable<C>> extends DelegateIsHeader<Obj
     public int compare(final T o1, final T o2) {
       final C v1 = columnValue.get(o1);
       final C v2 = columnValue.get(o2);
-      return (v1 == null ? 1 : v1.compareTo(v2)) * sorted.offset();
+      return (v1 == null ? (v2 == null ? 0 : v2.compareTo(v1)) : v1.compareTo(v2)) * sorted.offset();
     }
   };
 
