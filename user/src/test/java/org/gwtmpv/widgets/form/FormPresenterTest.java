@@ -22,7 +22,7 @@ public class FormPresenterTest extends AbstractFormPresenterTest {
       "<div class=\"form\"><ol>",//
         "<li>",//
         "<div class=\"label\"><label for=\"p-firstName\">First Name</label></div>",//
-        "<div class=\"value\"><div id=\"mpv-hb-1\"></div><div id=\"mpv-hb-2\"></div></div>",//
+        "<div class=\"value\"><div id=\"mpv-hb-1\"></div><div class=\"errors\"><div id=\"mpv-hb-2\"></div></div></div>",//
         "</li>",//
         "</ol></div>" },
       "")));

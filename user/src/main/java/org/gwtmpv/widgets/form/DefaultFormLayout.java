@@ -19,6 +19,8 @@ public class DefaultFormLayout implements FormLayout {
     String value();
 
     String label();
+
+    String errors();
   }
 
   /** A static version of {@code Style} that returns non-obfuscated class names. */
@@ -36,6 +38,11 @@ public class DefaultFormLayout implements FormLayout {
     @Override
     public String label() {
       return "label";
+    }
+
+    @Override
+    public String errors() {
+      return "errors";
     }
   }
 
@@ -62,6 +69,9 @@ public class DefaultFormLayout implements FormLayout {
 
       valueBegin(p, hb);
       line.renderValue(hb);
+      errorsBegin(p, hb);
+      line.renderErrors(hb);
+      errorsEnd(p, hb);
       valueEnd(p, hb);
 
       lineEnd(p, hb);
@@ -117,6 +127,16 @@ public class DefaultFormLayout implements FormLayout {
 
   @Override
   public void valueEnd(FormPresenter p, HTMLPanelBuilder hb) {
+    hb.add("</div>");
+  }
+
+  @Override
+  public void errorsBegin(FormPresenter p, HTMLPanelBuilder hb) {
+    hb.add("<div class=\"" + style.errors() + "\">");
+  }
+
+  @Override
+  public void errorsEnd(FormPresenter p, HTMLPanelBuilder hb) {
     hb.add("</div>");
   }
 

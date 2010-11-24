@@ -25,4 +25,9 @@ public interface FormLayout {
   void valueBegin(FormPresenter p, HTMLPanelBuilder hb);
 
   void valueEnd(FormPresenter p, HTMLPanelBuilder hb);
+
+  void errorsBegin(FormPresenter p, HTMLPanelBuilder hb);
+
+  void errorsEnd(FormPresenter p, HTMLPanelBuilder hb);
+
 }

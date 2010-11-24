@@ -12,4 +12,6 @@ public interface FormLine {
 
   void renderValue(HTMLPanelBuilder hb);
 
+  void renderErrors(HTMLPanelBuilder hb);
+
 }

@@ -41,6 +41,10 @@ public abstract class TextBoxBaseFormLine implements FormLine {
   @Override
   public void renderValue(HTMLPanelBuilder hb) {
     hb.add(textBox);
+  }
+
+  @Override
+  public void renderErrors(HTMLPanelBuilder hb) {
     hb.add(errorList);
   }
 

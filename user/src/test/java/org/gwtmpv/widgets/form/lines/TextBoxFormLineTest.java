@@ -18,7 +18,7 @@ public class TextBoxFormLineTest extends AbstractFormPresenterTest {
     assertHtml("<div class=\"form\"><ol>",//
       "<li>",
       "<div class=\"label\"><label for=\"p-firstName\">First Name</label></div>",
-      "<div class=\"value\"><div id=\"mpv-hb-1\"></div><div id=\"mpv-hb-2\"></div></div>",
+      "<div class=\"value\"><div id=\"mpv-hb-1\"></div><div class=\"errors\"><div id=\"mpv-hb-2\"></div></div></div>",
       "</li>",
       "</ol></div>");
   }
@@ -30,11 +30,11 @@ public class TextBoxFormLineTest extends AbstractFormPresenterTest {
     assertHtml("<div class=\"form\"><ol>",//
       "<li>",
       "<div class=\"label\"><label for=\"p-firstName\">First Name</label></div>",
-      "<div class=\"value\"><div id=\"mpv-hb-1\"></div><div id=\"mpv-hb-2\"></div></div>",
+      "<div class=\"value\"><div id=\"mpv-hb-1\"></div><div class=\"errors\"><div id=\"mpv-hb-2\"></div></div></div>",
       "</li>",
       "<li>",
       "<div class=\"label\"><label for=\"p-lastName\">Last Name</label></div>",
-      "<div class=\"value\"><div id=\"mpv-hb-3\"></div><div id=\"mpv-hb-4\"></div></div>",
+      "<div class=\"value\"><div id=\"mpv-hb-3\"></div><div class=\"errors\"><div id=\"mpv-hb-4\"></div></div></div>",
       "</li>",
       "</ol></div>");
   }
