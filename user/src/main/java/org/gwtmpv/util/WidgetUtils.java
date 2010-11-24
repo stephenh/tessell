@@ -32,7 +32,7 @@ public class WidgetUtils {
   }
 
   public static void fadeIn(final HasCss css) {
-    fadeOut(css, 300);
+    fadeIn(css, 300);
   }
 
   public static void fadeIn(final HasCss css, int duration) {
