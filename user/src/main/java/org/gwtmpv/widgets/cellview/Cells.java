@@ -8,6 +8,7 @@ import org.gwtmpv.model.properties.Property;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.HasCell;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.text.shared.SafeHtmlRenderer;
 
 /**
  * Factory methods for cellview-related classes.
@@ -72,4 +73,9 @@ public class Cells {
   public static IsHyperlinkCell newHyperlinkCell() {
     return provider.newHyperlinkCell();
   }
+
+  public static <C> IsHtmlCell<C> newHtmlCell(SafeHtmlRenderer<C> renderer) {
+    return provider.newHtmlCell(renderer);
+  }
+
 }

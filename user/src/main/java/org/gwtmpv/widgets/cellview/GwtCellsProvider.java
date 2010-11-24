@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.HasCell;
+import com.google.gwt.text.shared.SafeHtmlRenderer;
 
 public class GwtCellsProvider implements CellsProvider {
 
@@ -45,6 +46,11 @@ public class GwtCellsProvider implements CellsProvider {
   @Override
   public IsHyperlinkCell newHyperlinkCell() {
     return new GwtHyperlinkCell();
+  }
+
+  @Override
+  public <C> IsHtmlCell<C> newHtmlCell(SafeHtmlRenderer<C> renderer) {
+    return new GwtHtmlCell<C>(renderer);
   }
 
 }
