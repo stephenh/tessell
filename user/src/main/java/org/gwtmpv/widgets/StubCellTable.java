@@ -22,6 +22,7 @@ public class StubCellTable<T> extends StubWidget implements IsCellTable<T> {
   private final List<IsHeader<?>> footers = new ArrayList<IsHeader<?>>();
   private final List<T> data = new ArrayList<T>();
   private int redraws = 0;
+  private int rowCount = -1;
 
   public StubCellTable() {
   }
@@ -69,6 +70,7 @@ public class StubCellTable<T> extends StubWidget implements IsCellTable<T> {
 
   @Override
   public void setRowCount(final int size, final boolean isExact) {
+    rowCount = size;
   }
 
   public List<T> getData() {
@@ -140,7 +142,7 @@ public class StubCellTable<T> extends StubWidget implements IsCellTable<T> {
 
   @Override
   public int getRowCount() {
-    return 0;
+    return rowCount;
   }
 
   @Override
@@ -155,6 +157,7 @@ public class StubCellTable<T> extends StubWidget implements IsCellTable<T> {
 
   @Override
   public void setRowCount(int count) {
+    setRowCount(count, true);
   }
 
   @Override
