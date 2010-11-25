@@ -4,6 +4,7 @@ import static org.gwtmpv.widgets.Widgets.newFlowPanel;
 
 import java.util.ArrayList;
 
+import org.gwtmpv.model.commands.UiCommand;
 import org.gwtmpv.model.dsl.Binder;
 import org.gwtmpv.model.properties.PropertyGroup;
 import org.gwtmpv.presenter.BasicPresenter;
@@ -14,15 +15,16 @@ import org.gwtmpv.widgets.form.lines.FormLine;
 
 import com.google.gwt.event.logical.shared.AttachEvent;
 
+/** Given a list of bindings, handles the boilerplate HTML layout/logic of forms. */
 public class FormPresenter extends BasicPresenter<IsFlowPanel> {
 
   private final ArrayList<FormLine> formLines = new ArrayList<FormLine>();
-
   private final PropertyGroup all = new PropertyGroup("all", null);
   private final String id;
   private final Binder binder = new Binder(this);
   private final FormLayout layout;
   private boolean needsRender = true;
+  private UiCommand defaultCommand;
 
   public FormPresenter(String id) {
     super(newFlowPanel());
@@ -52,7 +54,7 @@ public class FormPresenter extends BasicPresenter<IsFlowPanel> {
   /** Adds {@code line}. */
   public void add(FormLine line) {
     formLines.add(line);
-    line.bind(id, all, binder);
+    line.bind(this, all, binder);
     needsRender = true;
   }
 
@@ -63,8 +65,26 @@ public class FormPresenter extends BasicPresenter<IsFlowPanel> {
     view.add(panel);
   }
 
+  public String getId() {
+    return id;
+  }
+
   public ArrayList<FormLine> getFormLines() {
     return formLines;
+  }
+
+  public UiCommand getDefaultCommand() {
+    return defaultCommand;
+  }
+
+  public void setDefaultCommand(UiCommand defaultCommand) {
+    this.defaultCommand = defaultCommand;
+  }
+
+  public void triggerDefaultCommand() {
+    if (defaultCommand != null) {
+      defaultCommand.execute();
+    }
   }
 
   private final class OnViewAttached implements AttachEvent.Handler {

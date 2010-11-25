@@ -1,5 +1,6 @@
 package org.gwtmpv.widgets.form.lines;
 
+import static com.google.gwt.event.dom.client.KeyCodes.KEY_ENTER;
 import static org.gwtmpv.widgets.Widgets.newTextList;
 
 import org.gwtmpv.model.dsl.Binder;
@@ -9,6 +10,10 @@ import org.gwtmpv.util.HTMLPanelBuilder;
 import org.gwtmpv.util.Inflector;
 import org.gwtmpv.widgets.IsTextBox;
 import org.gwtmpv.widgets.IsTextList;
+import org.gwtmpv.widgets.form.FormPresenter;
+
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 
 /** Adds a {@link IsTextBox} to a form. */
 public abstract class TextBoxBaseFormLine implements FormLine {
@@ -18,15 +23,22 @@ public abstract class TextBoxBaseFormLine implements FormLine {
   private final IsTextBox textBox;
   private final IsTextList errorList = newTextList();
 
-  public TextBoxBaseFormLine(Property<String> property, IsTextBox textBox) {
+  protected TextBoxBaseFormLine(Property<String> property, IsTextBox textBox) {
     this.property = property;
     this.textBox = textBox;
   }
 
   @Override
-  public void bind(String formId, PropertyGroup all, Binder binder) {
-    id = formId + "-" + Inflector.camelize(property.getName());
+  public void bind(final FormPresenter p, PropertyGroup all, Binder binder) {
+    id = p.getId() + "-" + Inflector.camelize(property.getName());
     textBox.getIsElement().setId(id);
+    textBox.addKeyUpHandler(new KeyUpHandler() {
+      public void onKeyUp(KeyUpEvent event) {
+        if (event.getNativeKeyCode() == KEY_ENTER) {
+          p.triggerDefaultCommand();
+        }
+      }
+    });
     binder.bind(property).to(textBox, errorList);
     all.add(property);
   }

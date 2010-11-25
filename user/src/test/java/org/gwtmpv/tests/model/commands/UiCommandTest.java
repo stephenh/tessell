@@ -7,7 +7,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.gwtmpv.model.commands.UiCommand;
 import org.gwtmpv.model.properties.BooleanProperty;
 import org.gwtmpv.model.validation.events.RuleTriggeredEvent;
 import org.gwtmpv.model.validation.events.RuleUntriggeredEvent;
@@ -25,11 +24,11 @@ public class UiCommandTest extends AbstractRuleTest {
     DummyUiCommand command = new DummyUiCommand();
     listenTo(command);
 
-    command.fail = true;
+    command.setFail(true);
     command.execute();
     assertMessages("failed!");
 
-    command.fail = false;
+    command.setFail(false);
     command.execute();
     assertMessages();
   }
@@ -72,15 +71,15 @@ public class UiCommandTest extends AbstractRuleTest {
     c.addOnlyIf(p2);
 
     c.execute();
-    assertThat(c.executions, is(0));
+    assertThat(c.getExecutions(), is(0));
 
     p1.set(true);
     c.execute();
-    assertThat(c.executions, is(0));
+    assertThat(c.getExecutions(), is(0));
 
     p2.set(true);
     c.execute();
-    assertThat(c.executions, is(1));
+    assertThat(c.getExecutions(), is(1));
   }
 
   private final class DummyHandlers implements HasHandlers {
@@ -91,20 +90,6 @@ public class UiCommandTest extends AbstractRuleTest {
         messages.add(((RuleTriggeredEvent) event).getMessage());
       } else if (event instanceof RuleUntriggeredEvent) {
         messages.remove(((RuleUntriggeredEvent) event).getMessage());
-      }
-    }
-  }
-
-  /** Fails depending on the instance variable {@code fail}. */
-  private final class DummyUiCommand extends UiCommand {
-    private boolean fail = false;
-    private int executions = 0;
-
-    @Override
-    protected void doExecute() {
-      executions++;
-      if (fail) {
-        error("failed!");
       }
     }
   }
