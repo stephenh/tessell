@@ -1,5 +1,7 @@
 package org.gwtmpv.widgets;
 
+import org.gwtmpv.util.cookies.facade.IsCookies;
+
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
@@ -18,6 +20,10 @@ public class Widgets {
 
   public static void setProvider(WidgetsProvider provider) {
     Widgets.provider = provider;
+  }
+
+  public static IsCookies getCookies() {
+    return provider.getCookies();
   }
 
   public static IsTimer newTimer(Runnable runnable) {

@@ -1,5 +1,8 @@
 package org.gwtmpv.widgets;
 
+import org.gwtmpv.util.cookies.facade.IsCookies;
+import org.gwtmpv.util.cookies.facade.StubCookies;
+
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.cellview.client.CellTable.Resources;
@@ -12,6 +15,7 @@ public class StubWidgetsProvider implements WidgetsProvider {
   }
 
   private final StubWindow window = new StubWindow();
+  private final StubCookies cookies = new StubCookies();
 
   @Override
   public IsTimer newTimer(Runnable runnable) {
@@ -131,6 +135,11 @@ public class StubWidgetsProvider implements WidgetsProvider {
   @Override
   public IsLabel newLabel() {
     return new StubLabel();
+  }
+
+  @Override
+  public IsCookies getCookies() {
+    return cookies;
   }
 
 }

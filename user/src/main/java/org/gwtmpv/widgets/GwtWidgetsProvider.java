@@ -1,5 +1,8 @@
 package org.gwtmpv.widgets;
 
+import org.gwtmpv.util.cookies.facade.GwtCookies;
+import org.gwtmpv.util.cookies.facade.IsCookies;
+
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.cellview.client.CellTable.Resources;
@@ -10,6 +13,7 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 public class GwtWidgetsProvider implements WidgetsProvider {
 
   private final GwtWindow window = new GwtWindow();
+  private final GwtCookies cookies = new GwtCookies();
 
   @Override
   public IsTimer newTimer(Runnable runnable) {
@@ -129,6 +133,11 @@ public class GwtWidgetsProvider implements WidgetsProvider {
   @Override
   public IsLabel newLabel() {
     return new GwtLabel();
+  }
+
+  @Override
+  public IsCookies getCookies() {
+    return cookies;
   }
 
 }
