@@ -86,4 +86,11 @@ public class NewProperty {
     return new ListProperty<E>(new SetValue<ArrayList<E>>(name, new ArrayList<E>()));
   }
 
+  public static <P> SetValue<P> setValue(String name) {
+    return new SetValue<P>(name);
+  }
+
+  public static <P> SetValue<P> setValue(String name, P initialValue) {
+    return new SetValue<P>(name, initialValue);
+  }
 }

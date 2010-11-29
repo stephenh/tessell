@@ -1,6 +1,8 @@
 package org.gwtmpv.model;
 
-/** Model is a wrapper around a DTO {@code D} that has a collection of properties. */
+import org.gwtmpv.model.properties.Property;
+
+/** Model is a wrapper around a DTO {@code D} that has a collection of {@link Property}s. */
 public interface Model<D> {
 
   /** Merges the new values from {@code dto} into the model's properties. */
@@ -8,5 +10,7 @@ public interface Model<D> {
 
   /** @return the dto for this model */
   D getDto();
+
+  Property<Boolean> allValid();
 
 }

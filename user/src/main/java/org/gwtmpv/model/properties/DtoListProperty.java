@@ -10,6 +10,8 @@ import org.gwtmpv.model.events.ValueAddedEvent;
 import org.gwtmpv.model.events.ValueAddedHandler;
 import org.gwtmpv.model.events.ValueRemovedEvent;
 import org.gwtmpv.model.events.ValueRemovedHandler;
+import org.gwtmpv.model.validation.Valid;
+import org.gwtmpv.model.validation.rules.Custom;
 import org.gwtmpv.model.values.DerivedValue;
 import org.gwtmpv.model.values.Value;
 
@@ -78,6 +80,21 @@ public class DtoListProperty<E extends Model<F>, F extends Dto<E>> extends Abstr
     }
     lastValue = null; // force changed
     reassess();
+  }
+
+  /** Adds a rule that all models in this property must be valid. */
+  public DtoListProperty<E, F> reqAllValid() {
+    new Custom(this, "Some models are invalid", new DerivedValue<Boolean>() {
+      public Boolean get() {
+        for (E model : DtoListProperty.this.get()) {
+          if (model.allValid().touch() == Valid.NO) {
+            return false;
+          }
+        }
+        return true;
+      }
+    });
+    return this;
   }
 
   /** @return a derived property that reflects this list's size. */
