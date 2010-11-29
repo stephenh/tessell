@@ -38,7 +38,6 @@ public class FormattedProperty<DP, SP> implements Property<DP> {
         return true;
       }
     };
-    // ((DelegatedValue<DP>) getValue()).setDelegate(this);
     source.addPropertyChangedHandler(new PropertyChangedHandler<SP>() {
       public void onPropertyChanged(PropertyChangedEvent<SP> event) {
         isValid.set(true); // any real (non-formatted) value being set makes our old attempt worthless
