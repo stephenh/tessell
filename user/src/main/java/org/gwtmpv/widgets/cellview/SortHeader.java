@@ -56,6 +56,10 @@ public class SortHeader<T, C extends Comparable<C>> extends DelegateIsHeader<Obj
     sorted = sorted.toggle();
   }
 
+  public void triggerSort() {
+    headers.resortTable(SortHeader.this, comparator);
+  }
+
   /** When the header is clicked, sort/resort the table based on this column. */
   private final class SortHeaderValue extends HeaderValue<String> {
     public String get() {
@@ -63,7 +67,7 @@ public class SortHeader<T, C extends Comparable<C>> extends DelegateIsHeader<Obj
     }
 
     public void set(final String value) {
-      headers.resortTable(SortHeader.this, comparator);
+      triggerSort();
     }
   }
 
