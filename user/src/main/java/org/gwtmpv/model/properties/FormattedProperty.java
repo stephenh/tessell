@@ -1,5 +1,7 @@
 package org.gwtmpv.model.properties;
 
+import java.util.Map;
+
 import org.gwtmpv.model.events.PropertyChangedEvent;
 import org.gwtmpv.model.events.PropertyChangedHandler;
 import org.gwtmpv.model.validation.Valid;
@@ -144,6 +146,11 @@ public class FormattedProperty<DP, SP> implements Property<DP> {
   @Override
   public String getName() {
     return "formatted " + source.getName();
+  }
+
+  @Override
+  public Map<Object, String> getErrors() {
+    return source.getErrors();
   }
 
   @Override

@@ -1,5 +1,8 @@
 package org.gwtmpv.model.dsl;
 
+import java.util.Map;
+
+import org.gwtmpv.model.properties.Property;
 import org.gwtmpv.model.validation.events.RuleTriggeredEvent;
 import org.gwtmpv.model.validation.events.RuleTriggeredHandler;
 import org.gwtmpv.model.validation.events.RuleUntriggeredEvent;
@@ -13,6 +16,12 @@ public class TextListOnError implements RuleTriggeredHandler, RuleUntriggeredHan
 
   public TextListOnError(final IsTextList list) {
     this.list = list;
+  }
+
+  public void addExisting(Property<?> p) {
+    for (Map.Entry<Object, String> e : p.getErrors().entrySet()) {
+      list.add(e.getValue()); // need to check displayed, but only exists on the event
+    }
   }
 
   public void onTrigger(final RuleTriggeredEvent event) {

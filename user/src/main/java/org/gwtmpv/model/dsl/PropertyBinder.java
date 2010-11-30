@@ -64,6 +64,7 @@ public class PropertyBinder<P> {
     final TextListOnError i = new TextListOnError(errors);
     binder.registerHandler(p.addRuleTriggeredHandler(i));
     binder.registerHandler(p.addRuleUntriggeredHandler(i));
+    i.addExisting(p);
     return this;
   }
 

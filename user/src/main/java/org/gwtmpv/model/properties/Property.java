@@ -1,5 +1,7 @@
 package org.gwtmpv.model.properties;
 
+import java.util.Map;
+
 import org.gwtmpv.model.events.PropertyChangedHandler;
 import org.gwtmpv.model.validation.Valid;
 import org.gwtmpv.model.validation.rules.Rule;
@@ -36,5 +38,7 @@ public interface Property<P> extends HasHandlers, HasRuleTriggers, Value<P> {
   HandlerRegistration addPropertyChangedHandler(PropertyChangedHandler<P> handler);
 
   String getName();
+
+  Map<Object, String> getErrors();
 
 }

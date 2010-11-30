@@ -17,8 +17,10 @@ import java.util.ArrayList;
 import org.gwtmpv.model.dsl.Binder;
 import org.gwtmpv.model.properties.BooleanProperty;
 import org.gwtmpv.model.properties.StringProperty;
+import org.gwtmpv.model.validation.Valid;
 import org.gwtmpv.widgets.StubFocusWidget;
 import org.gwtmpv.widgets.StubTextBox;
+import org.gwtmpv.widgets.StubTextList;
 import org.gwtmpv.widgets.StubWidget;
 import org.junit.Test;
 
@@ -30,6 +32,7 @@ public class BinderTest {
   final Binder binder = new Binder(new StubCanRegisterHandlers());
   final StringProperty s = stringProperty("s");
   final StubTextBox box = new StubTextBox();
+  final StubTextList errors = new StubTextList();
 
   @Test
   public void propertyToWidget() {
@@ -62,6 +65,15 @@ public class BinderTest {
     });
     s.set("test");
     assertThat(changed[0], is(true));
+  }
+
+  @Test
+  public void errorsThatAlreadyFiredGetAddedToAnErrorList() {
+    s.req().touch();
+    assertThat(s.wasValid(), is(Valid.NO));
+
+    binder.bind(s).errorsTo(errors);
+    assertThat(errors.getList().size(), is(1));
   }
 
   @Test

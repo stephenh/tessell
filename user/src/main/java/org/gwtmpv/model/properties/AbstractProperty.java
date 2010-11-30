@@ -3,6 +3,8 @@ package org.gwtmpv.model.properties;
 import static org.gwtmpv.util.ObjectUtils.eq;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import org.gwtmpv.model.events.PropertyChangedEvent;
@@ -34,6 +36,8 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
   protected final ArrayList<Property<?>> derived = new ArrayList<Property<?>>();
   // rules that validate against our value and fire against our handlers
   private final ArrayList<Rule> rules = new ArrayList<Rule>();
+  // outstanding errors
+  private final Map<Object, String> errors = new HashMap<Object, String>();
   // our wrapped value
   private final Value<P> value;
   // snapshot of the value for diff purposes (e.g. derived values)
@@ -120,6 +124,14 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
 
   @Override
   public void fireEvent(final GwtEvent<?> event) {
+    if (event instanceof RuleTriggeredEvent) {
+      RuleTriggeredEvent t = (RuleTriggeredEvent) event;
+      errors.put(t.getKey(), t.getMessage());
+    }
+    if (event instanceof RuleUntriggeredEvent) {
+      RuleUntriggeredEvent t = (RuleUntriggeredEvent) event;
+      errors.remove(t.getKey());
+    }
     log.finest(this + " firing " + event);
     handlers.fireEventFromSource(event, this);
   }
@@ -178,6 +190,11 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
   @Override
   public String getName() {
     return Inflector.humanize(value.getName());
+  }
+
+  @Override
+  public Map<Object, String> getErrors() {
+    return errors;
   }
 
   protected abstract T getThis();
