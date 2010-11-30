@@ -51,9 +51,16 @@ public class DtoListProperty<E extends Model<F>, F extends Dto<E>> extends Abstr
 
   /** Adds {@code item}, firing a {@link ValueAddedEvent}. */
   public void add(final E item) {
+    add(item, true);
+  }
+
+  /** Adds {@code item}, firing a {@link ValueAddedEvent}. */
+  public void add(final E item, boolean touch) {
     get().add(item); // model
     dtoList().add(item.getDto()); // dto
-    setTouched(true);
+    if (touch) {
+      setTouched(true);
+    }
     fireEvent(new ValueAddedEvent<E>(this, item));
     lastValue = null; // force changed
     reassess();
@@ -86,12 +93,16 @@ public class DtoListProperty<E extends Model<F>, F extends Dto<E>> extends Abstr
   public DtoListProperty<E, F> reqAllValid() {
     new Custom(this, "Some models are invalid", new DerivedValue<Boolean>() {
       public Boolean get() {
+        if (!isTouched()) {
+          return false;
+        }
+        boolean allValid = true;
         for (E model : DtoListProperty.this.get()) {
           if (model.allValid().touch() == Valid.NO) {
-            return false;
+            allValid = false;
           }
         }
-        return true;
+        return allValid;
       }
     });
     return this;

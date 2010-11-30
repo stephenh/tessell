@@ -43,6 +43,37 @@ public class DtoListPropertyTest {
     assertThat(l.touch(), is(Valid.NO));
   }
 
+  @Test
+  public void allValidRuleTouchesAllEEntries() {
+    dtos.get().add(new D(null));
+    dtos.get().add(new D(null));
+    final DtoListProperty<M, D> l = new DtoListProperty<M, D>(models, dtos).reqAllValid();
+    assertThat(l.touch(), is(Valid.NO));
+    assertThat(models.get().get(0).name.isTouched(), is(true));
+    assertThat(models.get().get(1).name.isTouched(), is(true));
+  }
+
+  @Test
+  public void addTouchesTheList() {
+    final DtoListProperty<M, D> l = new DtoListProperty<M, D>(models, dtos).reqAllValid();
+    l.add(new M(null));
+    assertThat(l.isTouched(), is(true));
+  }
+
+  @Test
+  public void addWithoutTouchingTheList() {
+    final DtoListProperty<M, D> l = new DtoListProperty<M, D>(models, dtos).reqAllValid();
+    l.add(new M(null), false);
+    assertThat(l.isTouched(), is(false));
+  }
+
+  @Test
+  public void addWithoutTouchingDoesNotValidateAll() {
+    final DtoListProperty<M, D> l = new DtoListProperty<M, D>(models, dtos).reqAllValid();
+    l.add(new M(null), false);
+    assertThat(l.get().get(0).name.isTouched(), is(false));
+  }
+
   public static class M extends AbstractModel<D> {
     private final DBinding b = new DBinding();
     public final StringProperty name = stringProperty(b.name()).req().in(all);
