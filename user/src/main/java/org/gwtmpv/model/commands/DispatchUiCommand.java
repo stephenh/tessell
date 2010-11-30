@@ -2,21 +2,24 @@ package org.gwtmpv.model.commands;
 
 import static org.gwtmpv.model.properties.NewProperty.booleanProperty;
 
+import org.gwtmpv.dispatch.client.events.DispatchUnhandledFailureEvent;
 import org.gwtmpv.dispatch.client.util.OutstandingDispatchAsync;
 import org.gwtmpv.dispatch.shared.Action;
 import org.gwtmpv.dispatch.shared.Result;
 import org.gwtmpv.model.properties.BooleanProperty;
 
-import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 /** Maintains the state of a {@code gwt-dispatch}-style UiCommand. */
 public abstract class DispatchUiCommand<A extends Action<R>, R extends Result> extends UiCommand {
 
+  private final EventBus eventBus;
   private final OutstandingDispatchAsync async;
   private final BooleanProperty active = booleanProperty("active", false);
 
-  public DispatchUiCommand(OutstandingDispatchAsync async) {
+  public DispatchUiCommand(EventBus eventBus, OutstandingDispatchAsync async) {
+    this.eventBus = eventBus;
     this.async = async;
   }
 
@@ -50,13 +53,9 @@ public abstract class DispatchUiCommand<A extends Action<R>, R extends Result> e
   /** Implemented by subclasses to handle a successful result. */
   protected abstract void onResult(R result);
 
-  /** Calls {@link #error(String)} on failures, can be overridden by subclasses if needed. */
+  /** Fires a {@link DispatchUnhandledFailureEvent} on failures, can be overridden by subclasses if needed. */
   protected void onFailure(Throwable caught) {
-    // need smarter logging here
-    if (GWT.isClient()) {
-      GWT.log("Failure in " + this, caught);
-    }
-    error(caught == null ? null : caught.getMessage());
+    DispatchUnhandledFailureEvent.fire(eventBus, null, caught, null);
   }
 
   /** @return whether the call is currently active */

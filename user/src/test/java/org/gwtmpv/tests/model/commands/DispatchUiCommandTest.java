@@ -62,7 +62,7 @@ public class DispatchUiCommandTest extends AbstractRuleTest {
     private int createActionCalls = 0;
 
     public DummyUiCommand(OutstandingDispatchAsync async) {
-      super(async);
+      super(null, async);
     }
 
     @Override
