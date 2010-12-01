@@ -41,10 +41,16 @@ public class DtoListProperty<E extends Model<F>, F extends Dto<E>> extends Abstr
     // funny dance--check dtoList field because our base class constructor
     // calls this method and the dtoList field may not have been set yet
     if (dtoList != null && !hasCopiedDtos) {
-      for (F dto : dtoList()) {
-        super.get().add(dto.toModel());
+      if (dtoList.get() != null) {
+        for (F dto : dtoList.get()) {
+          super.get().add(dto.toModel());
+        }
+        // putting hasCopiedDtos here instead of outside of the null check
+        // is a hack because it means we'll automatically notice the /first/
+        // null->List change in our value, but no subsequent ones. So it
+        // will likely be surprising to the user.
+        hasCopiedDtos = true;
       }
-      hasCopiedDtos = true;
     }
     return super.get();
   }

@@ -76,6 +76,18 @@ public class DtoListPropertyTest {
     assertThat(l.get().get(0).name.isTouched(), is(false));
   }
 
+  @Test
+  public void nullInitialDtosValue() {
+    final Value<ArrayList<D>> nullDtos = setValue("dtos", null);
+    final DtoListProperty<M, D> l = new DtoListProperty<M, D>(models, nullDtos);
+    assertThat(l.get().size(), is(0));
+
+    // changing the value automatically gets picked up on the next get
+    nullDtos.set(new ArrayList<D>());
+    nullDtos.get().add(new D("d1"));
+    assertThat(l.get().size(), is(1));
+  }
+
   public static class M extends AbstractModel<D> {
     private final DBinding b = new DBinding();
     public final StringProperty name = stringProperty(b.name()).req().in(all);
