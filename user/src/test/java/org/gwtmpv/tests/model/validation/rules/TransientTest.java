@@ -1,9 +1,9 @@
-package org.gwtmpv.model.validation.rules;
+package org.gwtmpv.tests.model.validation.rules;
 
 import static org.gwtmpv.model.properties.NewProperty.stringProperty;
 
 import org.gwtmpv.model.properties.StringProperty;
-import org.gwtmpv.tests.model.validation.rules.AbstractRuleTest;
+import org.gwtmpv.model.validation.rules.Transient;
 import org.junit.Test;
 
 public class TransientTest extends AbstractRuleTest {

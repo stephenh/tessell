@@ -1,10 +1,11 @@
-package org.gwtmpv.model;
+package org.gwtmpv.tests.model;
 
 import static org.gwtmpv.model.properties.NewProperty.integerProperty;
 import static org.gwtmpv.model.properties.NewProperty.stringProperty;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import org.gwtmpv.model.AbstractModel;
 import org.gwtmpv.model.properties.IntegerProperty;
 import org.gwtmpv.model.properties.StringProperty;
 import org.gwtmpv.model.validation.Valid;

@@ -1,4 +1,4 @@
-package org.gwtmpv.model.properties;
+package org.gwtmpv.tests.model.properties;
 
 import static org.gwtmpv.model.properties.NewProperty.setValue;
 import static org.gwtmpv.model.properties.NewProperty.stringProperty;
@@ -10,9 +10,11 @@ import java.util.ArrayList;
 import org.bindgen.Bindable;
 import org.gwtmpv.model.AbstractModel;
 import org.gwtmpv.model.Dto;
-import org.gwtmpv.model.properties.dtoListPropertyTest.DBinding;
+import org.gwtmpv.model.properties.DtoListProperty;
+import org.gwtmpv.model.properties.StringProperty;
 import org.gwtmpv.model.validation.Valid;
 import org.gwtmpv.model.values.Value;
+import org.gwtmpv.tests.model.properties.dtoListPropertyTest.DBinding;
 import org.junit.Test;
 
 public class DtoListPropertyTest {
