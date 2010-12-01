@@ -74,9 +74,9 @@ public class DtoListProperty<E extends Model<F>, F extends Dto<E>> extends Abstr
 
   /** Removes {@code item}, firing a {@link ValueRemovedEvent}. */
   public void remove(final E item) {
-    // should be considered touched?
     if (get().remove(item)) { // model
       dtoList().remove(item.getDto()); // dto
+      setTouched(true);
       fireEvent(new ValueRemovedEvent<E>(this, item));
       lastValue = null; // force changed
       reassess();

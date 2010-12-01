@@ -77,6 +77,16 @@ public class DtoListPropertyTest {
   }
 
   @Test
+  public void removeTouchesTheList() {
+    dtos.get().add(new D(null));
+    final DtoListProperty<M, D> l = new DtoListProperty<M, D>(models, dtos);
+    assertThat(l.isTouched(), is(false));
+
+    l.remove(l.get().get(0));
+    assertThat(l.isTouched(), is(true));
+  }
+
+  @Test
   public void nullInitialDtosValue() {
     final Value<ArrayList<D>> nullDtos = setValue("dtos", null);
     final DtoListProperty<M, D> l = new DtoListProperty<M, D>(models, nullDtos);
