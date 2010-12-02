@@ -29,6 +29,7 @@ public class StubElement implements IsElement, HasStubCss {
   public int clientWidth;
   public int scrollHeight;
   public int scrollWidth;
+  public boolean wasRemovedFromParent;
 
   @Override
   public String getInnerText() {
@@ -191,6 +192,11 @@ public class StubElement implements IsElement, HasStubCss {
   @Override
   public int getScrollWidth() {
     return scrollWidth;
+  }
+
+  @Override
+  public void removeFromParent() {
+    wasRemovedFromParent = true;
   }
 
 }

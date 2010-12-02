@@ -151,4 +151,9 @@ public class GwtElement implements IsElement {
     element.setScrollLeft(scrollLeft);
   }
 
+  @Override
+  public void removeFromParent() {
+    element.removeFromParent();
+  }
+
 }

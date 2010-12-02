@@ -47,6 +47,8 @@ public interface IsElement extends HasCss, HasText {
 
   void appendChild(IsWidget widget);
 
+  void removeFromParent();
+
   Element asElement();
 
 }
