@@ -1,9 +1,10 @@
 package org.gwtmpv.util;
 
+import static org.gwtmpv.widgets.Widgets.newAnimation;
+
+import org.gwtmpv.widgets.AnimationLogic;
 import org.gwtmpv.widgets.HasCss;
 
-import com.google.gwt.animation.client.Animation;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Display;
 
 public class WidgetUtils {
@@ -13,22 +14,17 @@ public class WidgetUtils {
   }
 
   public static void fadeOut(final HasCss css, int duration) {
-    if (GWT.isClient()) {
-      new Animation() {
-        @Override
-        protected void onUpdate(double progress) {
-          css.getStyle().setOpacity(1 - progress);
-        }
+    newAnimation(new AnimationLogic() {
+      @Override
+      public void onUpdate(double progress) {
+        css.getStyle().setOpacity(1 - progress);
+      }
 
-        @Override
-        protected void onComplete() {
-          css.getStyle().setDisplay(Display.NONE);
-        }
-      }.run(duration);
-    } else {
-      css.getStyle().setOpacity(0.0);
-      css.getStyle().setDisplay(Display.NONE);
-    }
+      @Override
+      public void onComplete() {
+        css.getStyle().setDisplay(Display.NONE);
+      }
+    }).run(duration);
   }
 
   public static void fadeIn(final HasCss css) {
@@ -36,23 +32,18 @@ public class WidgetUtils {
   }
 
   public static void fadeIn(final HasCss css, int duration) {
-    if (GWT.isClient()) {
-      new Animation() {
-        @Override
-        protected void onUpdate(double progress) {
-          css.getStyle().setOpacity(progress);
-        }
+    newAnimation(new AnimationLogic() {
+      @Override
+      public void onStart() {
+        css.getStyle().clearDisplay();
+        css.getStyle().setOpacity(0.0);
+      }
 
-        @Override
-        protected void onStart() {
-          css.getStyle().clearDisplay();
-          css.getStyle().setOpacity(0.0);
-        }
-      }.run(duration);
-    } else {
-      css.getStyle().setOpacity(1.0);
-      css.getStyle().clearDisplay();
-    }
+      @Override
+      public void onUpdate(double progress) {
+        css.getStyle().setOpacity(progress);
+      }
+    }).run(duration);
   }
 
   /** Sets {@code display=none} on each element. */
