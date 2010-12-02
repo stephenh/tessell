@@ -52,16 +52,24 @@ public class StubAnimationTest {
     a.run(200);
     a.tick(0.0);
     a.tick(0.5);
+    assertThat(l.complete, is(false));
     a.tick(1.0);
+    assertThat(l.complete, is(true));
     assertThat(l.progresses, contains(0.0, 0.5, 1.0));
   }
 
-  private static class DummyLogic implements AnimationLogic {
+  private static class DummyLogic extends AnimationLogic {
     private final List<Double> progresses = new ArrayList<Double>();
+    private boolean complete;
 
     @Override
     public void onUpdate(double progress) {
       progresses.add(progress);
+    }
+
+    @Override
+    public void onComplete() {
+      complete = true;
     }
   }
 

@@ -1,12 +1,15 @@
 package org.gwtmpv.widgets;
 
 /**
- * An interface for animation logic that is not tied to a
+ * A base class for animation logic that is not tied to a
  * specific animation-running method (e.g. {@link GwtAnimation}
  * vs. {@link StubAnimation}).
  */
-public interface AnimationLogic {
+public abstract class AnimationLogic {
 
-  void onUpdate(double progress);
+  public abstract void onUpdate(double progress);
+
+  public void onComplete() {
+  }
 
 }

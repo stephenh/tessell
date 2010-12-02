@@ -27,6 +27,9 @@ public class StubAnimation implements IsAnimation {
       throw new IllegalStateException("Animation is not currently in progress");
     }
     logic.onUpdate(progress);
+    if (progress == 1.0) {
+      logic.onComplete();
+    }
     currentProgress = progress;
   }
 
