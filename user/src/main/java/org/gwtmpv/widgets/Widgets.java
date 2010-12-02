@@ -30,6 +30,10 @@ public class Widgets {
     return provider.newTimer(runnable);
   }
 
+  public static IsAnimation newAnimation(AnimationLogic logic) {
+    return provider.newAnimation(logic);
+  }
+
   public static IsWindow getWindow() {
     return provider.getWindow();
   }

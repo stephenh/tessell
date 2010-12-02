@@ -140,4 +140,9 @@ public class GwtWidgetsProvider implements WidgetsProvider {
     return cookies;
   }
 
+  @Override
+  public IsAnimation newAnimation(AnimationLogic logic) {
+    return new GwtAnimation(logic);
+  }
+
 }

@@ -12,6 +12,8 @@ public interface WidgetsProvider {
 
   IsTimer newTimer(Runnable runnable);
 
+  IsAnimation newAnimation(AnimationLogic logic);
+
   IsWindow getWindow();
 
   IsLabel newLabel();

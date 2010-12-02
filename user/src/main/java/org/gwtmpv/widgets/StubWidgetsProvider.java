@@ -142,4 +142,9 @@ public class StubWidgetsProvider implements WidgetsProvider {
     return cookies;
   }
 
+  @Override
+  public IsAnimation newAnimation(AnimationLogic logic) {
+    return new StubAnimation(logic);
+  }
+
 }
