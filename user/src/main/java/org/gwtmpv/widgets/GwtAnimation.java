@@ -23,12 +23,24 @@ public final class GwtAnimation extends Animation implements IsAnimation {
 
   @Override
   protected void onUpdate(final double progress) {
+    // progress is already interpolated by the Animation base class
     logic.onUpdate(progress);
+  }
+
+  @Override
+  public void onStart() {
+    logic.onStart();
   }
 
   @Override
   protected void onComplete() {
     logic.onComplete();
+  }
+
+  @Override
+  protected double interpolate(double progress) {
+    // defer to the user's interpolation method
+    return logic.interpolate(progress);
   }
 
   @Override

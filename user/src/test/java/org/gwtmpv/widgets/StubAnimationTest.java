@@ -51,6 +51,7 @@ public class StubAnimationTest {
     a.doNotAutoFinish();
     a.run(200);
     a.tick(0.0);
+    assertThat(l.started, is(true));
     a.tick(0.5);
     assertThat(l.complete, is(false));
     a.tick(1.0);
@@ -61,6 +62,7 @@ public class StubAnimationTest {
   private static class DummyLogic extends AnimationLogic {
     private final List<Double> progresses = new ArrayList<Double>();
     private boolean complete;
+    private boolean started;
 
     @Override
     public void onUpdate(double progress) {
@@ -68,8 +70,20 @@ public class StubAnimationTest {
     }
 
     @Override
+    public void onStart() {
+      started = true;
+      super.onStart();
+    }
+
+    @Override
     public void onComplete() {
       complete = true;
+      super.onComplete();
+    }
+
+    @Override
+    public double interpolate(double progress) {
+      return progress; // easier testing
     }
   }
 
