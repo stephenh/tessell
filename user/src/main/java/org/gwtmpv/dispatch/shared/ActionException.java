@@ -13,7 +13,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  * Given without the checked exception in an RPC interface, you won't be able to use exceptions anyway, your dispatch
  * results should use return codes for anything but a truly "reload-the-application-please" exception.
  */
-public class ActionException extends Exception implements IsSerializable {
+public class ActionException extends RuntimeException implements IsSerializable {
 
   private static final long serialVersionUID = 1L;
 
