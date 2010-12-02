@@ -17,7 +17,7 @@ public class WidgetUtils {
       new Animation() {
         @Override
         protected void onUpdate(double progress) {
-          css.getStyle().setOpacity(interpolate(1 - progress));
+          css.getStyle().setOpacity(1 - progress);
         }
 
         @Override
@@ -40,7 +40,7 @@ public class WidgetUtils {
       new Animation() {
         @Override
         protected void onUpdate(double progress) {
-          css.getStyle().setOpacity(interpolate(progress));
+          css.getStyle().setOpacity(progress);
         }
 
         @Override
