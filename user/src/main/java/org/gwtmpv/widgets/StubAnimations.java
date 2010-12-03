@@ -20,17 +20,21 @@ public class StubAnimations {
     }
   }
 
-  public static void doNextAnimation() {
+  public static void doAnimation() {
     StubAnimation a = captured.remove(0);
     a.tick(0);
     a.tick(1);
   }
 
-  public static void tickNextAnimation(double progress) {
+  public static void tickAnimation(double progress) {
     captured.get(0).tick(progress);
   }
 
-  public static int getNextAnimationDuration() {
+  public static void finishAnimation() {
+    captured.remove(0).tick(1);
+  }
+
+  public static int getAnimationDuration() {
     return captured.get(0).getRequestedDuration();
   }
 
