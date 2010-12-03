@@ -1,7 +1,7 @@
 package org.gwtmpv.widgets;
 
 /**
- * Implements {@IsAnimation} for unit tests.
+ * Implements {@link IsAnimation} for unit tests.
  *
  * By default, animations auto-finish. They assume most unit tests are
  * not interested in their animation functionality and so immediately
@@ -60,9 +60,8 @@ public class StubAnimation implements IsAnimation {
   }
 
   @Override
-  public IsAnimation newLogic(AnimationLogic logic) {
+  public void setNewLogic(AnimationLogic logic) {
     this.logic = logic;
-    return this;
   }
 
   public boolean isRunning() {

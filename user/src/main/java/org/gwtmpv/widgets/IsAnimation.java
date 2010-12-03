@@ -10,6 +10,6 @@ public interface IsAnimation {
   /** Method only applicable to stubs to tell them not to auto-finish this animation. */
   void doNotAutoFinish();
 
-  IsAnimation newLogic(AnimationLogic logic);
+  void setNewLogic(AnimationLogic logic);
 
 }

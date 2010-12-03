@@ -49,9 +49,8 @@ public final class GwtAnimation extends Animation implements IsAnimation {
   }
 
   @Override
-  public IsAnimation newLogic(AnimationLogic logic) {
+  public void setNewLogic(AnimationLogic logic) {
     this.logic = logic;
-    return this;
   }
 
 }
