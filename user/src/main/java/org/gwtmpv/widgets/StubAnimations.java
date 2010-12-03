@@ -30,6 +30,10 @@ public class StubAnimations {
     captured.get(0).tick(progress);
   }
 
+  public static int getNextAnimationDuration() {
+    return captured.get(0).getRequestedDuration();
+  }
+
   public static void clearCapture() {
     captured.clear();
     capture = false;

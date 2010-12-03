@@ -16,6 +16,7 @@ public class StubAnimation implements IsAnimation {
   private AnimationLogic logic;
   private boolean autoFinish = true;
   private double currentProgress = -1;
+  private int requestedDuration = -1;
 
   public StubAnimation(AnimationLogic logic) {
     this.logic = logic;
@@ -47,11 +48,20 @@ public class StubAnimation implements IsAnimation {
 
   @Override
   public void run(final int duration) {
+    requestedDuration = duration;
     currentProgress = 0;
     if (autoFinish) {
       tick(0);
       tick(1);
     }
+  }
+
+  public int getRequestedDuration() {
+    return requestedDuration;
+  }
+
+  public void setRequestedDuration(int requestedDuration) {
+    this.requestedDuration = requestedDuration;
   }
 
   @Override
