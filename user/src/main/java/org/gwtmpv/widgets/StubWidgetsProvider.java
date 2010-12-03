@@ -23,6 +23,13 @@ public class StubWidgetsProvider implements WidgetsProvider {
   }
 
   @Override
+  public IsAnimation newAnimation(AnimationLogic logic) {
+    StubAnimation a = new StubAnimation(logic);
+    StubAnimations.captureIfNeeded(a);
+    return a;
+  }
+
+  @Override
   public IsWindow getWindow() {
     return window;
   }
@@ -140,11 +147,6 @@ public class StubWidgetsProvider implements WidgetsProvider {
   @Override
   public IsCookies getCookies() {
     return cookies;
-  }
-
-  @Override
-  public IsAnimation newAnimation(AnimationLogic logic) {
-    return new StubAnimation(logic);
   }
 
 }
