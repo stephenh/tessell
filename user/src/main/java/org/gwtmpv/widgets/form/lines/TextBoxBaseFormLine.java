@@ -32,6 +32,7 @@ public abstract class TextBoxBaseFormLine implements FormLine {
   public void bind(final FormPresenter p, PropertyGroup all, Binder binder) {
     id = p.getId() + "-" + Inflector.camelize(property.getName());
     textBox.getIsElement().setId(id);
+    errorList.getIsElement().setId(id + "-errors");
     textBox.addKeyUpHandler(new KeyUpHandler() {
       public void onKeyUp(KeyUpEvent event) {
         if (event.getNativeKeyCode() == KEY_ENTER) {
