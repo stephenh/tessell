@@ -5,6 +5,8 @@ import com.google.gwt.event.shared.HandlerRegistration;
 
 public interface IsWindow {
 
+  void alert(String message);
+
   void open(String url, String name, String features);
 
   void scrollTo(int x, int y);
@@ -12,6 +14,10 @@ public interface IsWindow {
   int getScrollTop();
 
   int getScrollLeft();
+
+  int getScrollHeight();
+
+  int getScrollWidth();
 
   int getClientHeight();
 

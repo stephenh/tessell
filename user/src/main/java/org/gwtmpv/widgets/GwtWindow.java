@@ -1,5 +1,6 @@
 package org.gwtmpv.widgets;
 
+import com.google.gwt.dom.client.Document;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Window;
@@ -39,6 +40,21 @@ public class GwtWindow implements IsWindow {
   @Override
   public HandlerRegistration addResizeHandler(final ResizeHandler handler) {
     return Window.addResizeHandler(handler);
+  }
+
+  @Override
+  public void alert(String message) {
+    Window.alert(message);
+  }
+
+  @Override
+  public int getScrollHeight() {
+    return Document.get().getScrollHeight();
+  }
+
+  @Override
+  public int getScrollWidth() {
+    return Document.get().getScrollWidth();
   }
 
 }
