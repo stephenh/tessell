@@ -1,5 +1,6 @@
 package org.gwtmpv.widgets;
 
+import org.gwtmpv.place.history.IsHistory;
 import org.gwtmpv.util.cookies.facade.IsCookies;
 
 import com.google.gwt.cell.client.Cell;
@@ -36,6 +37,10 @@ public class Widgets {
 
   public static IsWindow getWindow() {
     return provider.getWindow();
+  }
+
+  public static IsHistory getHistory() {
+    return provider.getHistory();
   }
 
   public static IsElement newElement(String tag) {

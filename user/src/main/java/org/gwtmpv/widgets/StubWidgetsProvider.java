@@ -1,5 +1,7 @@
 package org.gwtmpv.widgets;
 
+import org.gwtmpv.place.history.IsHistory;
+import org.gwtmpv.place.history.StubHistory;
 import org.gwtmpv.util.cookies.facade.IsCookies;
 import org.gwtmpv.util.cookies.facade.StubCookies;
 
@@ -16,6 +18,7 @@ public class StubWidgetsProvider implements WidgetsProvider {
 
   private final StubWindow window = new StubWindow();
   private final StubCookies cookies = new StubCookies();
+  private final StubHistory history = new StubHistory();
 
   @Override
   public IsTimer newTimer(Runnable runnable) {
@@ -147,6 +150,11 @@ public class StubWidgetsProvider implements WidgetsProvider {
   @Override
   public IsCookies getCookies() {
     return cookies;
+  }
+
+  @Override
+  public IsHistory getHistory() {
+    return history;
   }
 
 }

@@ -1,5 +1,6 @@
 package org.gwtmpv.widgets;
 
+import org.gwtmpv.place.history.IsHistory;
 import org.gwtmpv.util.cookies.facade.IsCookies;
 
 import com.google.gwt.cell.client.Cell;
@@ -15,6 +16,8 @@ public interface WidgetsProvider {
   IsAnimation newAnimation(AnimationLogic logic);
 
   IsWindow getWindow();
+
+  IsHistory getHistory();
 
   IsLabel newLabel();
 

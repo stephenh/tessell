@@ -1,5 +1,7 @@
 package org.gwtmpv.widgets;
 
+import org.gwtmpv.place.history.GwtHistory;
+import org.gwtmpv.place.history.IsHistory;
 import org.gwtmpv.util.cookies.facade.GwtCookies;
 import org.gwtmpv.util.cookies.facade.IsCookies;
 
@@ -14,6 +16,7 @@ public class GwtWidgetsProvider implements WidgetsProvider {
 
   private final GwtWindow window = new GwtWindow();
   private final GwtCookies cookies = new GwtCookies();
+  private final GwtHistory history = new GwtHistory();
 
   @Override
   public IsTimer newTimer(Runnable runnable) {
@@ -143,6 +146,11 @@ public class GwtWidgetsProvider implements WidgetsProvider {
   @Override
   public IsAnimation newAnimation(AnimationLogic logic) {
     return new GwtAnimation(logic);
+  }
+
+  @Override
+  public IsHistory getHistory() {
+    return history;
   }
 
 }
