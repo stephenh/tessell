@@ -14,4 +14,12 @@ public interface IsTextList extends IsWidget {
 
   void setEnabled(boolean enabled);
 
+  String getChildTag();
+
+  void setChildTag(String childTag);
+
+  String getChildStyleName();
+
+  void setChildStyleName(String childStyleName);
+
 }

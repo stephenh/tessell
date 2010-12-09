@@ -7,6 +7,8 @@ public class StubTextList extends StubWidget implements IsTextList {
 
   private final List<String> list = new ArrayList<String>();
   private boolean enabled = true;
+  private String childTag;
+  private String childStyleName;
 
   @Override
   public void add(final String text) {
@@ -42,6 +44,26 @@ public class StubTextList extends StubWidget implements IsTextList {
   @Override
   public void setEnabled(final boolean enabled) {
     this.enabled = enabled;
+  }
+
+  @Override
+  public String getChildTag() {
+    return childTag;
+  }
+
+  @Override
+  public void setChildTag(String childTag) {
+    this.childTag = childTag;
+  }
+
+  @Override
+  public String getChildStyleName() {
+    return childStyleName;
+  }
+
+  @Override
+  public void setChildStyleName(String childStyleName) {
+    this.childStyleName = childStyleName;
   }
 
 }
