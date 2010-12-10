@@ -10,11 +10,13 @@ public class StubTextBoxBase extends StubValueBoxBase<String> implements IsTextB
     blur();
   }
 
-  public void press(final char c) {
-    keyDown();
-    setValue(getValue() + c, false);
-    keyPress();
-    keyUp();
+  public void press(final char... chars) {
+    for (char c : chars) {
+      keyDown();
+      setValue(getValue() + c, false);
+      keyPress();
+      keyUp();
+    }
   }
 
   @Override
