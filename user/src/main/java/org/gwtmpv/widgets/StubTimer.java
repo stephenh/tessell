@@ -77,6 +77,10 @@ public class StubTimer implements IsTimer {
     return delay;
   }
 
+  public void setDelay(int delay) {
+    this.delay = delay;
+  }
+
   public int getCancelCount() {
     return cancelCount;
   }
