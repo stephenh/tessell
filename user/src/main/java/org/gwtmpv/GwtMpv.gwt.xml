@@ -24,6 +24,7 @@
     <exclude name="**/*Spec"/>
   </source>
   <source path="widgets">
+    <exclude name="**/Dummy*"/>
     <exclude name="**/Stub*"/>
   </source>
   <super-source path="supersrc" />

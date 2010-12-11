@@ -4,7 +4,6 @@ import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
@@ -101,13 +100,11 @@ public class StubFocusWidget extends StubWidget implements IsFocusWidget {
   @Override
   public void setAccessKey(final char key) {
     throw new UnsupportedOperationException("This is a stub.");
-
   }
 
   @Override
   public void setTabIndex(final int index) {
     throw new UnsupportedOperationException("This is a stub.");
-
   }
 
   @Override
@@ -173,88 +170,6 @@ public class StubFocusWidget extends StubWidget implements IsFocusWidget {
   @Override
   public void setEnabled(final boolean enabled) {
     this.enabled = enabled;
-  }
-
-  public static class DummyClickEvent extends ClickEvent {
-    public boolean prevented = false;
-
-    @Override
-    public void preventDefault() {
-      prevented = true;
-    }
-  }
-
-  public static class DummyMouseOverEvent extends MouseOverEvent {
-    public boolean prevented = false;
-
-    @Override
-    public void preventDefault() {
-      prevented = true;
-    }
-  }
-
-  public static class DummyMouseOutEvent extends MouseOutEvent {
-    public boolean prevented = false;
-
-    @Override
-    public void preventDefault() {
-      prevented = true;
-    }
-  }
-
-  public static class DummyBlurEvent extends BlurEvent {
-    public boolean prevented = false;
-
-    @Override
-    public void preventDefault() {
-      prevented = true;
-    }
-  }
-
-  public static class DummyFocusEvent extends FocusEvent {
-    public boolean prevented = false;
-
-    @Override
-    public void preventDefault() {
-      prevented = true;
-    }
-  }
-
-  public static class DummyKeyDownEvent extends KeyDownEvent {
-    public boolean prevented = false;
-
-    @Override
-    public void preventDefault() {
-      prevented = true;
-    }
-  }
-
-  public static class DummyKeyPressEvent extends KeyPressEvent {
-    public boolean prevented = false;
-
-    @Override
-    public void preventDefault() {
-      prevented = true;
-    }
-  }
-
-  public static class DummyKeyUpEvent extends KeyUpEvent {
-    public boolean prevented = false;
-    private final int keyCode;
-
-    public DummyKeyUpEvent(int keyCode) {
-      this.keyCode = keyCode;
-    }
-
-    @Override
-    public int getNativeKeyCode() {
-      return keyCode;
-    }
-
-    @Override
-    public void preventDefault() {
-      prevented = true;
-    }
   }
 
 }
