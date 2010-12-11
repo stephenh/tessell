@@ -23,14 +23,16 @@ public class HTMLPanelBuilder {
   private final StringBuilder sb = new StringBuilder();
   private final ArrayList<ToPlace> places = new ArrayList<ToPlace>();
 
-  public void add(String html) {
+  public HTMLPanelBuilder add(String html) {
     sb.append(html);
+    return this;
   }
 
-  public void add(IsWidget widget) {
+  public HTMLPanelBuilder add(IsWidget widget) {
     final String id = "mpv-hb-" + String.valueOf(++nextId);
     sb.append("<div id=\"" + id + "\"></div>");
     places.add(new ToPlace(id, widget));
+    return this;
   }
 
   /** @return the buffered html and widgets as one {@link IsHTMLPanel}. */
