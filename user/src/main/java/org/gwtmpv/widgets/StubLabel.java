@@ -27,6 +27,14 @@ public class StubLabel extends StubWidget implements IsLabel {
     fireEvent(new DummyClickEvent());
   }
 
+  public void mouseOver() {
+    fireEvent(new DummyMouseOverEvent());
+  }
+
+  public void mouseOut() {
+    fireEvent(new DummyMouseOutEvent());
+  }
+
   @Override
   public HorizontalAlignmentConstant getHorizontalAlignment() {
     return align;
@@ -100,9 +108,6 @@ public class StubLabel extends StubWidget implements IsLabel {
   @Override
   public HandlerRegistration addMouseWheelHandler(final MouseWheelHandler handler) {
     return handlers.addHandler(MouseWheelEvent.getType(), handler);
-  }
-
-  private class DummyClickEvent extends ClickEvent {
   }
 
 }
