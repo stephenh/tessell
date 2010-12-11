@@ -47,4 +47,9 @@ public class GwtPopupPanel extends PopupPanel implements IsPopupPanel {
     return new GwtIsWidgetIteratorAdaptor(iterator());
   }
 
+  @Override
+  public IsWidget getIsWidget() {
+    return (IsWidget) getWidget();
+  }
+
 }

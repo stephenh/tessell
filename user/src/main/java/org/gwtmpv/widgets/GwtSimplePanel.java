@@ -42,4 +42,9 @@ public class GwtSimplePanel extends SimplePanel implements IsSimplePanel {
     return new GwtIsWidgetIteratorAdaptor(iterator());
   }
 
+  @Override
+  public IsWidget getIsWidget() {
+    return (IsWidget) getWidget();
+  }
+
 }

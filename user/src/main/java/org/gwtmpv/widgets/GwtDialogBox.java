@@ -47,4 +47,9 @@ public class GwtDialogBox extends DialogBox implements IsDialogBox {
     return new GwtIsWidgetIteratorAdaptor(iterator());
   }
 
+  @Override
+  public IsWidget getIsWidget() {
+    return (IsWidget) getWidget();
+  }
+
 }

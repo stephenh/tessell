@@ -42,4 +42,9 @@ public class StubSimplePanel extends StubPanel implements IsSimplePanel {
     return list.iterator();
   }
 
+  @Override
+  public IsWidget getIsWidget() {
+    return isWidget;
+  }
+
 }

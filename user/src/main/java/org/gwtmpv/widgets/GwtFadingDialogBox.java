@@ -47,4 +47,9 @@ public class GwtFadingDialogBox extends FadingDialogBox implements IsFadingDialo
     return new GwtIsWidgetIteratorAdaptor(iterator());
   }
 
+  @Override
+  public IsWidget getIsWidget() {
+    return (IsWidget) getWidget();
+  }
+
 }

@@ -42,4 +42,9 @@ public class GwtFocusPanel extends FocusPanel implements IsFocusPanel {
     return new GwtIsWidgetIteratorAdaptor(iterator());
   }
 
+  @Override
+  public IsWidget getIsWidget() {
+    return (IsWidget) getWidget();
+  }
+
 }

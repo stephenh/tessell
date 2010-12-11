@@ -42,4 +42,9 @@ public class GwtScrollPanel extends ScrollPanel implements IsScrollPanel {
     return new GwtIsWidgetIteratorAdaptor(iterator());
   }
 
+  @Override
+  public IsWidget getIsWidget() {
+    return (IsWidget) getWidget();
+  }
+
 }
