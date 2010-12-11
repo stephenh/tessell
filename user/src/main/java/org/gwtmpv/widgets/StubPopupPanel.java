@@ -4,6 +4,7 @@ import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 
 public class StubPopupPanel extends StubSimplePanel implements IsPopupPanel {
 
@@ -58,6 +59,12 @@ public class StubPopupPanel extends StubSimplePanel implements IsPopupPanel {
   public void setPopupPosition(final int left, final int top) {
     popupLeft = left;
     popopTop = top;
+  }
+
+  @Override
+  public void setPopupPositionAndShow(PositionCallback callback) {
+    show();
+    callback.setPosition(getOffsetWidth(), getOffsetHeight());
   }
 
   @Override
