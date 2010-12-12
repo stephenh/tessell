@@ -153,4 +153,9 @@ public class GwtWidgetsProvider implements WidgetsProvider {
     return history;
   }
 
+  @Override
+  public IsAbsolutePanel newAbsolutePanel() {
+    return new GwtAbsolutePanel();
+  }
+
 }

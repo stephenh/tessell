@@ -35,6 +35,8 @@ public interface WidgetsProvider {
 
   IsPopupPanel newPopupPanel();
 
+  IsAbsolutePanel newAbsolutePanel();
+
   IsFocusPanel newFocusPanel();
 
   IsHyperlink newHyperline();

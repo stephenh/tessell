@@ -157,4 +157,9 @@ public class StubWidgetsProvider implements WidgetsProvider {
     return history;
   }
 
+  @Override
+  public IsAbsolutePanel newAbsolutePanel() {
+    return new StubAbsolutePanel();
+  }
+
 }

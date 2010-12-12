@@ -135,6 +135,10 @@ public class Widgets {
     return provider.newPopupPanel();
   }
 
+  public static IsAbsolutePanel newAbsolutePanel() {
+    return provider.newAbsolutePanel();
+  }
+
   public static IsFocusPanel newFocusPanel() {
     return provider.newFocusPanel();
   }
