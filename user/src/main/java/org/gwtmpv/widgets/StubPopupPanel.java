@@ -1,5 +1,7 @@
 package org.gwtmpv.widgets;
 
+import static org.gwtmpv.widgets.Widgets.getRootPanel;
+
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -19,13 +21,19 @@ public class StubPopupPanel extends StubSimplePanel implements IsPopupPanel {
 
   @Override
   public void hide() {
-    shown = false;
-    CloseEvent.fire(this, null);
+    if (shown) {
+      getRootPanel().remove(this);
+      shown = false;
+      CloseEvent.fire(this, null);
+    }
   }
 
   @Override
   public void show() {
-    shown = true;
+    if (!shown) {
+      getRootPanel().add(this);
+      shown = true;
+    }
   }
 
   @Override
