@@ -1,5 +1,7 @@
 package org.gwtmpv.widgets;
 
+import static org.gwtmpv.widgets.Widgets.getHistory;
+
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 
@@ -7,6 +9,10 @@ public class StubHyperlink extends StubWidget implements IsHyperlink {
 
   private String targetHistoryToken;
   private String text;
+
+  public void click() {
+    getHistory().newItem(targetHistoryToken, true);
+  }
 
   @Override
   public String getTargetHistoryToken() {
