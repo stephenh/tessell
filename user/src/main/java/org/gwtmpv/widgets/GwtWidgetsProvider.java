@@ -10,6 +10,7 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.cellview.client.CellTable.Resources;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.RootPanel;
 
 /** A Widget factory. */
 public class GwtWidgetsProvider implements WidgetsProvider {
@@ -17,6 +18,7 @@ public class GwtWidgetsProvider implements WidgetsProvider {
   private final GwtWindow window = new GwtWindow();
   private final GwtCookies cookies = new GwtCookies();
   private final GwtHistory history = new GwtHistory();
+  private final IsAbsolutePanel root = new GwtAbsolutePanelDelegate(RootPanel.get());
 
   @Override
   public IsTimer newTimer(Runnable runnable) {
@@ -156,6 +158,11 @@ public class GwtWidgetsProvider implements WidgetsProvider {
   @Override
   public IsAbsolutePanel newAbsolutePanel() {
     return new GwtAbsolutePanel();
+  }
+
+  @Override
+  public IsAbsolutePanel getRootPanel() {
+    return root;
   }
 
 }

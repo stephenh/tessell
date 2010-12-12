@@ -19,6 +19,8 @@ public interface WidgetsProvider {
 
   IsHistory getHistory();
 
+  IsAbsolutePanel getRootPanel();
+
   IsLabel newLabel();
 
   IsElement newElement(String tag);

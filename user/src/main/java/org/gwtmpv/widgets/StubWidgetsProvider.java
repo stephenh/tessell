@@ -19,6 +19,7 @@ public class StubWidgetsProvider implements WidgetsProvider {
   private final StubWindow window = new StubWindow();
   private final StubCookies cookies = new StubCookies();
   private final StubHistory history = new StubHistory();
+  private final StubAbsolutePanel root = new StubAbsolutePanel();
 
   @Override
   public IsTimer newTimer(Runnable runnable) {
@@ -160,6 +161,11 @@ public class StubWidgetsProvider implements WidgetsProvider {
   @Override
   public IsAbsolutePanel newAbsolutePanel() {
     return new StubAbsolutePanel();
+  }
+
+  @Override
+  public IsAbsolutePanel getRootPanel() {
+    return root;
   }
 
 }

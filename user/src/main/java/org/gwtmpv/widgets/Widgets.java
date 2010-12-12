@@ -23,6 +23,10 @@ public class Widgets {
     Widgets.provider = provider;
   }
 
+  public static IsAbsolutePanel getRootPanel() {
+    return provider.getRootPanel();
+  }
+
   public static IsCookies getCookies() {
     return provider.getCookies();
   }
