@@ -2,6 +2,7 @@ package org.gwtmpv.tests.model.dsl;
 
 import static com.google.gwt.event.dom.client.KeyCodes.KEY_TAB;
 import static org.gwtmpv.model.properties.NewProperty.booleanProperty;
+import static org.gwtmpv.model.properties.NewProperty.enumProperty;
 import static org.gwtmpv.model.properties.NewProperty.stringProperty;
 import static org.gwtmpv.testing.MpvMatchers.hasStyle;
 import static org.gwtmpv.testing.MpvMatchers.hidden;
@@ -16,9 +17,12 @@ import java.util.ArrayList;
 
 import org.gwtmpv.model.dsl.Binder;
 import org.gwtmpv.model.properties.BooleanProperty;
+import org.gwtmpv.model.properties.EnumProperty;
 import org.gwtmpv.model.properties.StringProperty;
 import org.gwtmpv.model.validation.Valid;
+import org.gwtmpv.model.values.SetValue;
 import org.gwtmpv.widgets.StubFocusWidget;
+import org.gwtmpv.widgets.StubListBox;
 import org.gwtmpv.widgets.StubTextBox;
 import org.gwtmpv.widgets.StubTextList;
 import org.gwtmpv.widgets.StubWidget;
@@ -198,5 +202,63 @@ public class BinderTest {
     b.set(false);
     assertThat(w.isEnabled(), is(false));
   }
+
+  @Test
+  public void bindEnumCreatesItems() {
+    SetValue<Color> v = new SetValue<Color>("v", Color.Blue);
+    EnumProperty<Color> e = enumProperty(v);
+
+    StubListBox box = new StubListBox();
+    binder.bind(e).to(box, Color.values());
+    assertThat(box.getItemCount(), is(2));
+    assertThat(box.getItemText(0), is("Blue"));
+    assertThat(box.getItemText(1), is("Green"));
+  }
+
+  @Test
+  public void bindEnumSetsInitialValue() {
+    SetValue<Color> v = new SetValue<Color>("v", Color.Blue);
+    EnumProperty<Color> e = enumProperty(v);
+
+    StubListBox box = new StubListBox();
+    binder.bind(e).to(box, Color.values());
+    assertThat(box.getSelectedIndex(), is(0));
+  }
+
+  @Test
+  public void bindEnumAutoSelectsFirstValueIfNull() {
+    SetValue<Color> v = new SetValue<Color>("v", null);
+    EnumProperty<Color> e = enumProperty(v);
+
+    StubListBox box = new StubListBox();
+    binder.bind(e).to(box, Color.values());
+    assertThat(box.getSelectedIndex(), is(0));
+    assertThat(v.get(), is(Color.Blue));
+  }
+
+  @Test
+  public void bindEnumSetsInitialValueToOtherValue() {
+    SetValue<Color> v = new SetValue<Color>("v", Color.Green);
+    EnumProperty<Color> e = enumProperty(v);
+
+    StubListBox box = new StubListBox();
+    binder.bind(e).to(box, Color.values());
+    assertThat(box.getSelectedIndex(), is(1));
+  }
+
+  @Test
+  public void bindEnumSetsValueOnChange() {
+    SetValue<Color> v = new SetValue<Color>("v", Color.Green);
+    EnumProperty<Color> e = enumProperty(v);
+
+    StubListBox box = new StubListBox();
+    binder.bind(e).to(box, Color.values());
+    box.select("Blue");
+    assertThat(v.get(), is(Color.Blue));
+  }
+
+  public static enum Color {
+    Blue, Green
+  };
 
 }

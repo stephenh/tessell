@@ -93,4 +93,21 @@ public class NewProperty {
   public static <P> SetValue<P> setValue(String name, P initialValue) {
     return new SetValue<P>(name, initialValue);
   }
+
+  public static <E extends Enum<E>> EnumProperty<E> enumProperty(final Value<E> value) {
+    return new EnumProperty<E>(value);
+  }
+
+  public static <E extends Enum<E>> EnumProperty<E> enumProperty(final String name) {
+    return new EnumProperty<E>(new SetValue<E>(name));
+  }
+
+  public static <E extends Enum<E>> EnumProperty<E> enumProperty(final String name, E initialValue) {
+    return new EnumProperty<E>(new SetValue<E>(name, initialValue));
+  }
+
+  public static <E extends Enum<E>> EnumProperty<E> enumProperty(Binding<E> binding) {
+    return new EnumProperty<E>(new BoundValue<E>(binding));
+  }
+
 }
