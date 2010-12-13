@@ -6,26 +6,26 @@ import static org.gwtmpv.widgets.cellview.Cells.newHeader;
 import static org.gwtmpv.widgets.cellview.Cells.newTextCell;
 import static org.gwtmpv.widgets.cellview.Cells.newTextHeader;
 
-import java.util.Comparator;
-
 /** A header that can sort, all done client-side. */
-public class SortHeader<T, C extends Comparable<C>> extends DelegateIsHeader<Object> {
+public class SortHeader<T> extends DelegateIsHeader<Object> {
 
   /** References to all of the headers to mark-as-not-sorted the others when we sort. */
   private final SortHeaders<T> headers;
   private final String name;
-  private final ColumnValue<T, C> columnValue;
+  private final SortComparator<T> comparator;
   protected Sorted sorted = Sorted.NO;
-  private final Comparator<T> comparator = new Comparator<T>() {
-    @Override
-    public int compare(final T o1, final T o2) {
-      final C v1 = columnValue.get(o1);
-      final C v2 = columnValue.get(o2);
-      return (v1 == null ? (v2 == null ? 0 : v2.compareTo(v1)) : v1.compareTo(v2)) * sorted.offset();
-    }
-  };
 
-  public SortHeader(final SortHeaders<T> headers, final String name, final ColumnValue<T, C> columnValue) {
+  public <C extends Comparable<C>> SortHeader(final SortHeaders<T> headers, final String name, final ColumnValue<T, C> columnValue) {
+    this(headers, name, new SortComparator<T>() {
+      public int compare(final T o1, final T o2, int multiplier) {
+        final C v1 = columnValue.get(o1);
+        final C v2 = columnValue.get(o2);
+        return (v1 == null ? (v2 == null ? 0 : v2.compareTo(v1)) : v1.compareTo(v2)) * multiplier;
+      }
+    });
+  }
+
+  public SortHeader(final SortHeaders<T> headers, final String name, SortComparator<T> comparator) {
     super.delegate = newCompositeHeader(//
       newHeader(new SortHeaderValue(), newClickableTextCell()),//
       newTextHeader(" "),//
@@ -33,12 +33,12 @@ public class SortHeader<T, C extends Comparable<C>> extends DelegateIsHeader<Obj
     );
     this.headers = headers;
     this.name = name;
-    this.columnValue = columnValue;
+    this.comparator = comparator;
     headers.add(this);
   }
 
   /** Mark this column as already sorted by the server. */
-  public SortHeader<T, C> isAlreadySorted() {
+  public SortHeader<T> isAlreadySorted() {
     sorted = Sorted.ASC;
     return this;
   }

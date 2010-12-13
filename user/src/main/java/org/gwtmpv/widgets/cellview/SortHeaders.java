@@ -15,34 +15,39 @@ import org.gwtmpv.widgets.IsCellTable;
 public class SortHeaders<T> {
 
   private final IsCellTable<T> cellTable;
-  private final ArrayList<SortHeader<T, ?>> all = new ArrayList<SortHeader<T, ?>>();
+  private final ArrayList<SortHeader<T>> all = new ArrayList<SortHeader<T>>();
 
   public SortHeaders(final IsCellTable<T> cellTable) {
     this.cellTable = cellTable;
   }
 
   /** @return a new sort header for a given name, sorted by {@code binding}. */
-  public <U extends Comparable<U>> SortHeader<T, U> on(final String name, final BindingRoot<T, U> binding) {
-    return new SortHeader<T, U>(this, name, boundValue(binding));
+  public <U extends Comparable<U>> SortHeader<T> on(final String name, final BindingRoot<T, U> binding) {
+    return new SortHeader<T>(this, name, boundValue(binding));
   }
 
   /** @return a new sort header for a given name, sorted by {@code columnValue}. */
-  public <U extends Comparable<U>> SortHeader<T, U> on(final String name, final ColumnValue<T, U> columnValue) {
-    return new SortHeader<T, U>(this, name, columnValue);
+  public <C extends Comparable<C>> SortHeader<T> on(final String name, final ColumnValue<T, C> columnValue) {
+    return new SortHeader<T>(this, name, columnValue);
+  }
+
+  /** @return a new sort header for a given name, sorted by {@code comparator}. */
+  public SortHeader<T> on(final String name, final SortComparator<T> comparator) {
+    return new SortHeader<T>(this, name, comparator);
   }
 
   /** @return a new sort header for a given name, sorted by {@code binding}. */
-  public <U extends Comparable<U>> SortHeader<T, U> on(final BindingRoot<T, U> binding) {
-    return new SortHeader<T, U>(this, Inflector.humanize(binding.getName()), boundValue(binding));
+  public <U extends Comparable<U>> SortHeader<T> on(final BindingRoot<T, U> binding) {
+    return new SortHeader<T>(this, Inflector.humanize(binding.getName()), boundValue(binding));
   }
 
-  public void add(SortHeader<T, ?> header) {
+  public void add(SortHeader<T> header) {
     all.add(header);
   }
 
-  public void resortTable(final SortHeader<T, ?> on, final Comparator<T> c) {
+  public void resortTable(final SortHeader<T> on, final SortComparator<T> c) {
     // update the sorted state of all the column
-    for (final SortHeader<T, ?> other : all) {
+    for (final SortHeader<T> other : all) {
       if (other == on) {
         on.toggle();
       } else {
@@ -51,7 +56,11 @@ public class SortHeaders<T> {
     }
     // Assume we're only sorted the data we've got here on the screen
     final List<T> data = cellTable.getDisplayedItems();
-    Collections.sort(data, c);
+    Collections.sort(data, new Comparator<T>() {
+      public int compare(T o1, T o2) {
+        return c.compare(o1, o2, on.sorted.offset());
+      }
+    });
     cellTable.setRowData(0, data);
     cellTable.redrawHeaders();
   }
