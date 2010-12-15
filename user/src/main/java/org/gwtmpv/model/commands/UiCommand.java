@@ -32,13 +32,20 @@ public abstract class UiCommand implements HasRuleTriggers {
   public void execute() {
     if (enabled.isTrue()) {
       clearErrors();
-      for (Property<Boolean> p : onlyIf) {
-        if (p.touch() == Valid.NO || FALSE.equals(p.get())) {
-          return;
-        }
+      if (canExecute()) {
+        doExecute();
       }
-      doExecute();
     }
+  }
+
+  /** @return {@code true} if each onlyIf property, after touching, is valid. */
+  public boolean canExecute() {
+    for (Property<Boolean> p : onlyIf) {
+      if (p.touch() == Valid.NO || FALSE.equals(p.get())) {
+        return false;
+      }
+    }
+    return true;
   }
 
   public void addOnlyIf(Property<Boolean> onlyIf) {
