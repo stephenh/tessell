@@ -72,6 +72,58 @@ public class MpvMatchers {
     };
   }
 
+  /** A matcher to assert visible == hidden. */
+  public static Matcher<HasCss> visible() {
+    return new TypeSafeMatcher<HasCss>() {
+      @Override
+      protected boolean matchesSafely(HasCss item) {
+        return getVisible(item) == null || getVisible(item).equals("visible");
+      }
+
+      @Override
+      public void describeTo(Description description) {
+        description.appendText("invisible");
+      }
+
+      @Override
+      protected void describeMismatchSafely(HasCss item, Description mismatchDescription) {
+        mismatchDescription.appendValue(item);
+        mismatchDescription.appendText(" visibility is ");
+        mismatchDescription.appendValue(getVisible(item));
+      }
+
+      private String getVisible(HasCss item) {
+        return ((StubStyle) item.getStyle()).getStyle().get("visibility");
+      }
+    };
+  }
+
+  /** A matcher to assert visible == visible|unset. */
+  public static Matcher<HasCss> invisible() {
+    return new TypeSafeMatcher<HasCss>() {
+      @Override
+      protected boolean matchesSafely(HasCss item) {
+        return "hidden".equals(getVisible(item));
+      }
+
+      @Override
+      public void describeTo(Description description) {
+        description.appendText("invisible");
+      }
+
+      @Override
+      protected void describeMismatchSafely(HasCss item, Description mismatchDescription) {
+        mismatchDescription.appendValue(item);
+        mismatchDescription.appendText(" visibility is ");
+        mismatchDescription.appendValue(getVisible(item));
+      }
+
+      private String getVisible(HasCss item) {
+        return ((StubStyle) item.getStyle()).getStyle().get("visibility");
+      }
+    };
+  }
+
   /** A matcher to assert an arbitrary CSS property. */
   public static Matcher<HasCss> hasStyle(final String name, final String value) {
     return new TypeSafeMatcher<HasCss>() {
