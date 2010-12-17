@@ -22,106 +22,55 @@ public class MpvMatchers {
 
   /** A matcher to assert display != none. */
   public static Matcher<HasCss> shown() {
-    return new TypeSafeMatcher<HasCss>() {
-      @Override
-      protected boolean matchesSafely(HasCss item) {
-        return getDisplay(item) == null || getDisplay(item).equals("block") || getDisplay(item).equals("inline");
-      }
-
-      @Override
-      public void describeTo(Description description) {
-        description.appendText("shown");
-      }
-
-      @Override
-      protected void describeMismatchSafely(HasCss item, Description mismatchDescription) {
-        mismatchDescription.appendValue(item);
-        mismatchDescription.appendText(" display is ");
-        mismatchDescription.appendValue(getDisplay(item));
-      }
-
-      private String getDisplay(HasCss item) {
-        return ((StubStyle) item.getStyle()).getStyle().get("display");
-      }
-    };
+    return new AbstractCssMatcher("shown", "display", null, "block", "inline");
   }
 
   /** A matcher to assert display == none. */
   public static Matcher<HasCss> hidden() {
-    return new TypeSafeMatcher<HasCss>() {
-      @Override
-      protected boolean matchesSafely(HasCss item) {
-        return "none".equals(getDisplay(item));
-      }
-
-      @Override
-      public void describeTo(Description description) {
-        description.appendText("hidden");
-      }
-
-      @Override
-      protected void describeMismatchSafely(HasCss item, Description mismatchDescription) {
-        mismatchDescription.appendValue(item);
-        mismatchDescription.appendText(" display is ");
-        mismatchDescription.appendValue(getDisplay(item));
-      }
-
-      private String getDisplay(HasCss item) {
-        return ((StubStyle) item.getStyle()).getStyle().get("display");
-      }
-    };
+    return new AbstractCssMatcher("hidden", "display", "none");
   }
 
   /** A matcher to assert visible == hidden. */
   public static Matcher<HasCss> visible() {
-    return new TypeSafeMatcher<HasCss>() {
-      @Override
-      protected boolean matchesSafely(HasCss item) {
-        return getVisible(item) == null || getVisible(item).equals("visible");
-      }
-
-      @Override
-      public void describeTo(Description description) {
-        description.appendText("invisible");
-      }
-
-      @Override
-      protected void describeMismatchSafely(HasCss item, Description mismatchDescription) {
-        mismatchDescription.appendValue(item);
-        mismatchDescription.appendText(" visibility is ");
-        mismatchDescription.appendValue(getVisible(item));
-      }
-
-      private String getVisible(HasCss item) {
-        return ((StubStyle) item.getStyle()).getStyle().get("visibility");
-      }
-    };
+    return new AbstractCssMatcher("visible", "visibility", null, "visible");
   }
 
   /** A matcher to assert visible == visible|unset. */
   public static Matcher<HasCss> invisible() {
-    return new TypeSafeMatcher<HasCss>() {
-      @Override
-      protected boolean matchesSafely(HasCss item) {
-        return "hidden".equals(getVisible(item));
-      }
+    return new AbstractCssMatcher("invisible", "visibility", "hidden");
+  }
 
-      @Override
-      public void describeTo(Description description) {
-        description.appendText("invisible");
-      }
+  public static class AbstractCssMatcher extends TypeSafeMatcher<HasCss> {
+    private final String description;
+    private final String styleName;
+    private final List<String> goodValues;
 
-      @Override
-      protected void describeMismatchSafely(HasCss item, Description mismatchDescription) {
-        mismatchDescription.appendValue(item);
-        mismatchDescription.appendText(" visibility is ");
-        mismatchDescription.appendValue(getVisible(item));
-      }
+    public AbstractCssMatcher(String description, String styleName, String... goodValues) {
+      this.description = description;
+      this.styleName = styleName;
+      this.goodValues = Arrays.asList(goodValues);
+    }
 
-      private String getVisible(HasCss item) {
-        return ((StubStyle) item.getStyle()).getStyle().get("visibility");
-      }
-    };
+    @Override
+    public void describeTo(Description description) {
+      description.appendText(this.description);
+    }
+
+    @Override
+    protected boolean matchesSafely(HasCss item) {
+      return goodValues.contains(getValue(item));
+    }
+
+    @Override
+    protected void describeMismatchSafely(HasCss item, Description mismatchDescription) {
+      mismatchDescription.appendValue(item);
+      mismatchDescription.appendText(" " + styleName + " is ");
+      mismatchDescription.appendValue(getValue(item));
+    }
+
+    private String getValue(HasCss item) {
+      return ((StubStyle) item.getStyle()).getStyle().get(styleName);
+    }
   }
 
   /** A matcher to assert an arbitrary CSS property. */
