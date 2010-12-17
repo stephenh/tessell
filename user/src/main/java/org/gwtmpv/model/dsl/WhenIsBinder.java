@@ -10,6 +10,7 @@ import org.gwtmpv.model.validation.events.RuleUntriggeredEvent;
 import org.gwtmpv.widgets.HasCss;
 
 import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.dom.client.Style.Visibility;
 import com.google.gwt.user.client.ui.HasEnabled;
 
 public class WhenIsBinder<P> {
@@ -44,6 +45,15 @@ public class WhenIsBinder<P> {
       }
     }));
     showIfEq(css); // set initial
+  }
+
+  public void visible(final HasCss css) {
+    binder.registerHandler(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
+      public void onPropertyChanged(PropertyChangedEvent<P> event) {
+        visibleIfEq(css);
+      }
+    }));
+    visibleIfEq(css); // set initial
   }
 
   public void error(final String message) {
@@ -87,6 +97,14 @@ public class WhenIsBinder<P> {
       css.getStyle().clearDisplay();
     } else {
       css.getStyle().setDisplay(Display.NONE);
+    }
+  }
+
+  private void visibleIfEq(HasCss css) {
+    if (eq(value, property.get())) {
+      css.getStyle().clearVisibility();
+    } else {
+      css.getStyle().setVisibility(Visibility.HIDDEN);
     }
   }
 }
