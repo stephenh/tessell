@@ -6,14 +6,18 @@ import org.gwtmpv.model.validation.Valid;
 /** Validates that a property is not-null. */
 public class Required extends AbstractRule<Object, Required> {
 
+  private final Property<?> property;
+
   @SuppressWarnings("unchecked")
   public Required(final Property<? extends Object> property, final String message) {
     super((Property<Object>) property, message);
+    this.property = property;
   }
 
   @SuppressWarnings("unchecked")
   public Required(final Property<? extends Object> property) {
     super((Property<Object>) property, property.getName() + " is required");
+    this.property = property;
   }
 
   protected Valid isValid() {

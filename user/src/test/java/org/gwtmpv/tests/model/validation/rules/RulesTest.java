@@ -103,4 +103,13 @@ public class RulesTest extends AbstractRuleTest {
     assertMessages("name required");
   }
 
+  @Test
+  public void rulesCanBeAddedTwice() {
+    Required r = new Required(f.name, "name required");
+    f.name.addRule(r);
+
+    f.name.set(null);
+    assertMessages("name required");
+  }
+
 }

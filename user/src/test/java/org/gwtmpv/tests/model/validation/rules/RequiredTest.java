@@ -4,11 +4,9 @@ import static org.gwtmpv.model.properties.NewProperty.booleanProperty;
 import static org.gwtmpv.model.properties.NewProperty.stringProperty;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import junit.framework.Assert;
 
 import org.gwtmpv.model.properties.BooleanProperty;
 import org.gwtmpv.model.properties.StringProperty;
-import org.gwtmpv.model.validation.Valid;
 import org.gwtmpv.model.validation.rules.Required;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,11 +35,11 @@ public class RequiredTest extends AbstractRuleTest {
   }
 
   @Test
-  public void ruleDoesFireIfPropertyTouched() {
+  public void ruleValidationAloneDoesNotFireTheProperty() {
     f.name.touch();
     final Required r = new Required(f.name, "name invalid");
     r.validate();
-    assertMessages("name invalid");
+    assertMessages("");
   }
 
   @Test
@@ -62,35 +60,23 @@ public class RequiredTest extends AbstractRuleTest {
   }
 
   @Test
-  public void testUnfireIfSkippedLater() {
+  public void testUnfireIfSkippedLaterIsNotDoneAutomatically() {
     new Required(f.name, "name invalid").onlyIf(f.condition);
     f.name.set(null);
     assertMessages("name invalid");
 
     // Just setting the onlyIf percolates down to our Required rule
     f.condition.set(false);
+    assertMessages("name invalid");
+    // reassessing f.name is required for now
+    f.name.reassess();
     assertMessages("");
 
     // was left touched, e.g. even if onlyIf=true, requires Force.YES
     f.condition.set(true);
+    // reassessing f.name is required for now
+    f.name.reassess();
     assertMessages("name invalid");
-  }
-
-  @Test
-  public void testTickedDoesNotFireIfAlreadyInvalid() {
-    final Required r = new Required(f.name, "name invalid second");
-    f.name.set(null);
-    Assert.assertEquals(Valid.NO, r.validate());
-    assertMessages("");
-  }
-
-  @Test
-  public void testUnfiresIfAlreadyInvalid() {
-    final Required r1 = new Required(f.name, "name invalid");
-    f.name.set(null);
-    assertMessages("name invalid");
-    Assert.assertEquals(Valid.NO, r1.validate());
-    assertMessages("");
   }
 
 }

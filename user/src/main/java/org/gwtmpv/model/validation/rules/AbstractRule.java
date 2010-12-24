@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.gwtmpv.model.events.PropertyChangedEvent;
-import org.gwtmpv.model.events.PropertyChangedHandler;
 import org.gwtmpv.model.properties.Property;
 import org.gwtmpv.model.validation.Valid;
 import org.gwtmpv.model.validation.events.RuleTriggeredEvent;
@@ -32,8 +30,6 @@ public abstract class AbstractRule<T, U extends AbstractRule<T, U>> implements R
   private static final Logger log = Logger.getLogger("org.gwtmpv.model");
   // handlers
   protected final EventBus handlers = new SimplerEventBus();
-  // The property that wraps our value
-  protected final Property<T> property;
   // List of properties that must be true for this rule to run.
   private final ArrayList<Value<Boolean>> onlyIf = new ArrayList<Value<Boolean>>();
   // The error message to show the user
@@ -42,7 +38,6 @@ public abstract class AbstractRule<T, U extends AbstractRule<T, U>> implements R
   private boolean triggered = false;
 
   protected AbstractRule(final Property<T> property, final String message) {
-    this.property = property;
     this.message = message;
     if (property != null) {
       property.addRule(this);
@@ -56,30 +51,9 @@ public abstract class AbstractRule<T, U extends AbstractRule<T, U>> implements R
   @Override
   public final Valid validate() {
     if (onlyIfSaysToSkip()) {
-      untriggerIfNeeded();
       return Valid.YES;
     }
-
-    // TODO if unchanged (and not derived?), return the last result
-    // TODO prevent recursion by marking ourselves already validating
-    boolean propertyIsAlreadyInvalid = (property == null) ? false : property.wasValid() == Valid.NO;
-    if (propertyIsAlreadyInvalid) {
-      untriggerIfNeeded();
-      return Valid.NO;
-    }
-
-    final Valid valid = this.isValid();
-
-    if (valid == Valid.YES) {
-      untriggerIfNeeded();
-    } else {
-      if (property.isTouched()) {
-        triggerIfNeeded();
-      } else {
-        untriggerIfNeeded();
-      }
-    }
-    return valid;
+    return this.isValid();
   }
 
   @Override
@@ -93,20 +67,19 @@ public abstract class AbstractRule<T, U extends AbstractRule<T, U>> implements R
   }
 
   /** Only run this rule if {@code other} is true */
-  public U onlyIf(final Property<Boolean> other) {
-    other.addPropertyChangedHandler(new OnOnlyIfPropertyChanged());
+  public U onlyIf(final Value<Boolean> other) {
     this.onlyIf.add(other);
     return getThis();
   }
 
-  private void triggerIfNeeded() {
+  public void triggerIfNeeded() {
     if (!triggered && message != null) { // custom rules (PropertyGroup's) may not have explicit error messages
       fireEvent(new RuleTriggeredEvent(this, message, new Boolean[] { false }));
       triggered = true;
     }
   }
 
-  private void untriggerIfNeeded() {
+  public void untriggerIfNeeded() {
     if (triggered) {
       fireEvent(new RuleUntriggeredEvent(this, message));
       triggered = false;
@@ -126,9 +99,6 @@ public abstract class AbstractRule<T, U extends AbstractRule<T, U>> implements R
   private void fireEvent(final GwtEvent<?> event) {
     log.log(Level.FINEST, this + " firing " + event);
     handlers.fireEvent(event);
-    if (property != null) {
-      property.fireEvent(event);
-    }
   }
 
   // change this to push down too
@@ -139,19 +109,6 @@ public abstract class AbstractRule<T, U extends AbstractRule<T, U>> implements R
       }
     }
     return false;
-  }
-
-  /** Called when one of our guard properties changes. */
-  private final class OnOnlyIfPropertyChanged implements PropertyChangedHandler<Boolean> {
-    public void onPropertyChanged(PropertyChangedEvent<Boolean> event) {
-      // call reassess so that Property#validate sets valid is set back
-      // to YES, and we can know if we're the first invalid rule or not
-      if (property != null) {
-        property.reassess();
-      } else {
-        validate();
-      }
-    }
   }
 
 }

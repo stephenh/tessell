@@ -7,10 +7,12 @@ import org.gwtmpv.model.validation.Valid;
 public class Static extends AbstractRule<Object, Static> {
 
   private boolean valid = true;
+  private final Property<?> property;
 
   @SuppressWarnings("unchecked")
   public Static(final Property<?> property, final String message) {
     super((Property<Object>) property, message);
+    this.property = property;
   }
 
   @Override

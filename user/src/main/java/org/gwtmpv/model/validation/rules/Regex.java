@@ -15,10 +15,12 @@ public class Regex extends AbstractRule<String, Regex> {
   // numeric
   public static final String NUMERIC = "^[0-9]+$";
 
+  private final Property<String> property;
   private final String regex;
 
   public Regex(final Property<String> property, final String message, final String regex) {
     super(property, message);
+    this.property = property;
     this.regex = regex;
   }
 

@@ -13,4 +13,8 @@ public interface Rule extends HasRuleTriggers {
   /** Ugly hack to put static rule in {@link FormattedProperty} before required rules. */
   boolean isImportant();
 
+  void untriggerIfNeeded();
+
+  void triggerIfNeeded();
+
 }

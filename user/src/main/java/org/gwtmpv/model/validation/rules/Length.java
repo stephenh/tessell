@@ -6,6 +6,7 @@ import org.gwtmpv.model.validation.Valid;
 /** Validates that a string. */
 public class Length extends AbstractRule<String, Length> {
 
+  private final Property<String> property;
   private final int min;
   private final int max;
 
@@ -17,6 +18,7 @@ public class Length extends AbstractRule<String, Length> {
     super(property, message);
     this.min = min;
     this.max = max;
+    this.property = property;
   }
 
   @Override

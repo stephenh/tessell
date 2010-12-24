@@ -3,7 +3,7 @@ package org.gwtmpv.model.properties;
 import static org.gwtmpv.util.ObjectUtils.eq;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -36,8 +36,10 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
   protected final ArrayList<Property<?>> derived = new ArrayList<Property<?>>();
   // rules that validate against our value and fire against our handlers
   private final ArrayList<Rule> rules = new ArrayList<Rule>();
+  // for listening to events from our rules
+  private final RuleHandler ruleHandler = new RuleHandler();
   // outstanding errors
-  private final Map<Object, String> errors = new HashMap<Object, String>();
+  private final Map<Object, String> errors = new LinkedHashMap<Object, String>();
   // our wrapped value
   private final Value<P> value;
   // snapshot of the value for diff purposes (e.g. derived values)
@@ -115,23 +117,20 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
 
   @Override
   public void addRule(final Rule rule) {
+    if (rules.contains(rule)) {
+      return;
+    }
     if (rule.isImportant()) {
       rules.add(0, rule);
     } else {
       rules.add(rule);
     }
+    rule.addRuleTriggeredHandler(ruleHandler);
+    rule.addRuleUntriggeredHandler(ruleHandler);
   }
 
   @Override
   public void fireEvent(final GwtEvent<?> event) {
-    if (event instanceof RuleTriggeredEvent) {
-      RuleTriggeredEvent t = (RuleTriggeredEvent) event;
-      errors.put(t.getKey(), t.getMessage());
-    }
-    if (event instanceof RuleUntriggeredEvent) {
-      RuleUntriggeredEvent t = (RuleUntriggeredEvent) event;
-      errors.remove(t.getKey());
-    }
     log.finest(this + " firing " + event);
     handlers.fireEventFromSource(event, this);
   }
@@ -207,9 +206,34 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
   private void validate() {
     valid = Valid.YES; // start out valid
     for (final Rule rule : rules) {
-      if (rule.validate() == Valid.NO) {
-        valid = Valid.NO;
+      if (rule.validate() == Valid.YES) {
+        rule.untriggerIfNeeded();
+      } else {
+        // only trigger the first invalid rule
+        if (valid == Valid.YES) {
+          if (isTouched()) {
+            rule.triggerIfNeeded();
+          } else {
+            rule.untriggerIfNeeded();
+          }
+          valid = Valid.NO;
+        } else {
+          rule.untriggerIfNeeded();
+        }
       }
+    }
+  }
+
+  /** Percolates events from our rules to our own listeners. */
+  private class RuleHandler implements RuleTriggeredHandler, RuleUntriggeredHandler {
+    public void onUntrigger(RuleUntriggeredEvent event) {
+      errors.remove(event.getKey());
+      fireEvent(event);
+    }
+
+    public void onTrigger(RuleTriggeredEvent event) {
+      errors.put(event.getKey(), event.getMessage());
+      fireEvent(event);
     }
   }
 
