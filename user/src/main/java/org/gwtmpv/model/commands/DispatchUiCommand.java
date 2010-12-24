@@ -55,7 +55,9 @@ public abstract class DispatchUiCommand<A extends Action<R>, R extends Result> e
 
   /** Fires a {@link DispatchUnhandledFailureEvent} on failures, can be overridden by subclasses if needed. */
   protected void onFailure(Throwable caught) {
-    DispatchUnhandledFailureEvent.fire(eventBus, null, caught, null);
+    if (eventBus != null) {
+      DispatchUnhandledFailureEvent.fire(eventBus, null, caught, null);
+    }
   }
 
   /** @return whether the call is currently active */
