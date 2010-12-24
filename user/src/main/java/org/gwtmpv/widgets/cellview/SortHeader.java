@@ -60,6 +60,10 @@ public class SortHeader<T> extends DelegateIsHeader<Object> {
     headers.resortTable(SortHeader.this, comparator);
   }
 
+  public Sorted getSorted() {
+    return sorted;
+  }
+
   /** When the header is clicked, sort/resort the table based on this column. */
   private final class SortHeaderValue extends HeaderValue<String> {
     public String get() {

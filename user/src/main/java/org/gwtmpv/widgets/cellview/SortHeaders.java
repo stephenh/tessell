@@ -14,8 +14,8 @@ import org.gwtmpv.widgets.IsCellTable;
 /** A collection for all of the sort headers in a table so they can unsort each other as needed. */
 public class SortHeaders<T> {
 
-  private final IsCellTable<T> cellTable;
-  private final ArrayList<SortHeader<T>> all = new ArrayList<SortHeader<T>>();
+  protected final IsCellTable<T> cellTable;
+  protected final ArrayList<SortHeader<T>> all = new ArrayList<SortHeader<T>>();
 
   public SortHeaders(final IsCellTable<T> cellTable) {
     this.cellTable = cellTable;
