@@ -30,6 +30,7 @@
 		<mkdir dir="bin/sources"/>
 		<zip destfile="bin/sources/${ant.project.name}.jar">
 			<fileset dir="src/main/java" includes="**/*.java"/>
+			<fileset dir="bin/apt" includes="**/*.java"/>
 		</zip>
 	</target>
 
