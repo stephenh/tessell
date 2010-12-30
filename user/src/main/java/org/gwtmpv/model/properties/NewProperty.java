@@ -57,6 +57,22 @@ public class NewProperty {
     return new IntegerProperty(new BoundValue<Integer>(binding));
   }
 
+  public static LongProperty longProperty(final String name) {
+    return new LongProperty(new SetValue<Long>(name));
+  }
+
+  public static LongProperty longProperty(final String name, Long i) {
+    return new LongProperty(new SetValue<Long>(name, i));
+  }
+
+  public static LongProperty longProperty(final Value<Long> derived) {
+    return new LongProperty(derived);
+  }
+
+  public static LongProperty longProperty(final Binding<Long> binding) {
+    return new LongProperty(new BoundValue<Long>(binding));
+  }
+
   public static StringProperty stringProperty(final String name) {
     return new StringProperty(new SetValue<String>(name));
   }
