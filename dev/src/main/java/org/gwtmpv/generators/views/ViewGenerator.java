@@ -1,5 +1,7 @@
 package org.gwtmpv.generators.views;
 
+import static joist.sourcegen.Argument.arg;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -67,6 +69,7 @@ public class ViewGenerator {
     }
 
     generateAppViews();
+    generateAppViewsProvider();
     generateGwtViews();
     generateStubViews();
 
@@ -74,15 +77,30 @@ public class ViewGenerator {
   }
 
   private void generateAppViews() {
-    final GClass appViews = new GClass(packageName + ".AppViews").setInterface();
+    final GClass appViews = new GClass(packageName + ".AppViews");
+
     for (final UiXmlFile uiXml : uiXmlFiles) {
-      appViews.getMethod("new" + uiXml.baseName).returnType(uiXml.isView.getFullClassName());
+      GMethod m = appViews.getMethod("new" + uiXml.baseName).returnType(uiXml.isView.getFullClassName()).setStatic();
+      m.body.line("return provider.new{}();", uiXml.baseName);
     }
+
+    appViews.getField("provider").setStatic().type("AppViewsProvider");
+    GMethod m = appViews.getMethod("setProvider", arg("AppViewsProvider", "provider")).setStatic();
+    m.body.line("AppViews.provider = provider;");
+
     markAndSaveIfChanged(appViews);
   }
 
+  private void generateAppViewsProvider() {
+    final GClass appViewsProvider = new GClass(packageName + ".AppViewsProvider").setInterface();
+    for (final UiXmlFile uiXml : uiXmlFiles) {
+      appViewsProvider.getMethod("new" + uiXml.baseName).returnType(uiXml.isView.getFullClassName());
+    }
+    markAndSaveIfChanged(appViewsProvider);
+  }
+
   private void generateGwtViews() {
-    final GClass gwtViews = new GClass(packageName + ".GwtViews").implementsInterface("AppViews");
+    final GClass gwtViews = new GClass(packageName + ".GwtViewsProvider").implementsInterface("AppViewsProvider");
     final GMethod cstr = gwtViews.getConstructor();
 
     // ui:withs in separate files could use the same type but different
@@ -107,12 +125,17 @@ public class ViewGenerator {
   }
 
   private void generateStubViews() {
-    final GClass stubViews = new GClass(packageName + ".StubViews").implementsInterface("AppViews");
+    final GClass stubViews = new GClass(packageName + ".StubViewsProvider").implementsInterface("AppViewsProvider");
+
     for (final UiXmlFile uiXml : uiXmlFiles) {
       final GMethod m = stubViews.getMethod("new" + uiXml.baseName).returnType(uiXml.stubView.getFullClassName());
       m.addAnnotation("@Override");
       m.body.line("return new {}();", uiXml.stubView.getFullClassName());
     }
+
+    final GMethod i = stubViews.getMethod("install").setStatic();
+    i.body.line("AppViews.setProvider(new StubViewsProvider());");
+
     markAndSaveIfChanged(stubViews);
   }
 
