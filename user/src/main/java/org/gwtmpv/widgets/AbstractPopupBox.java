@@ -4,20 +4,24 @@ import static org.gwtmpv.widgets.Widgets.newFocusPanel;
 import static org.gwtmpv.widgets.Widgets.newPopupPanel;
 import static org.gwtmpv.widgets.Widgets.newTimer;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasAllMouseHandlers;
+import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 
 /** Renders a main content widget and pops up a detail panel on mouse over. */
-public class AbstractPopupBox<T extends HasAllMouseHandlers & IsWidget, U extends IsWidget> extends CompositeIsWidget {
+public class AbstractPopupBox<T extends HasClickHandlers & HasAllMouseHandlers & IsWidget, U extends IsWidget> extends CompositeIsWidget {
 
+  private static final int HIDE_DELAY_MILLIS = 500;
   protected final IsPopupPanel popupPanel = newPopupPanel();
   protected final IsFocusPanel popupFocus = newFocusPanel();
   protected final IsTimer hidePopupTimer = newTimer(new Runnable() {
     public void run() {
-      hidePopup();
+      hidePopupIfNeeded();
     }
   });
   protected final T mainContent;
@@ -37,6 +41,21 @@ public class AbstractPopupBox<T extends HasAllMouseHandlers & IsWidget, U extend
     popupFocus.addMouseOutHandler(m);
     mainContent.addMouseOverHandler(m);
     mainContent.addMouseOutHandler(m);
+    mainContent.addClickHandler(m);
+  }
+
+  protected final void showPopupIfNeeded() {
+    if (!popupPanel.isShowing()) {
+      showPopup();
+    }
+    hidePopupTimer.cancel();
+  }
+
+  protected final void hidePopupIfNeeded() {
+    if (popupPanel.isShowing()) {
+      hidePopup();
+    }
+    hidePopupTimer.cancel();
   }
 
   /** Shows the popup panel, setting it's top/left relative to the textbox's position. */
@@ -50,18 +69,23 @@ public class AbstractPopupBox<T extends HasAllMouseHandlers & IsWidget, U extend
   /** Hides the popup panel. */
   protected void hidePopup() {
     popupPanel.hide();
-    hidePopupTimer.cancel();
   }
 
-  /** On mouseover popup or textbox, show the pop--on mouseout, start the timer to hide it. */
-  private final class MouseHandler implements MouseOverHandler, MouseOutHandler {
+  /** On click/mouseover show the popup; on mouseout, start the timer to hide it. */
+  private final class MouseHandler implements MouseOverHandler, MouseOutHandler, ClickHandler {
+    @Override
     public void onMouseOver(final MouseOverEvent event) {
-      showPopup();
-      hidePopupTimer.cancel();
+      showPopupIfNeeded();
     }
 
+    @Override
+    public void onClick(ClickEvent event) {
+      showPopupIfNeeded();
+    }
+
+    @Override
     public void onMouseOut(final MouseOutEvent event) {
-      hidePopupTimer.schedule(350);
+      hidePopupTimer.schedule(HIDE_DELAY_MILLIS);
     }
   }
 
