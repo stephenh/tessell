@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.gwtmpv.place.events.PlaceRequestEvent;
+import org.gwtmpv.util.ObjectUtils;
 
 /**
  * This class represents a 'request' for a place location. It includes the 'id' of the place as well as any parameter
@@ -68,8 +69,8 @@ public class PlaceRequest {
    *          The new parameter value.
    * @return The new place request instance.
    */
-  public PlaceRequest with(final String name, final String value) {
-    return new PlaceRequest(this, name, value);
+  public PlaceRequest with(final String name, final Object value) {
+    return new PlaceRequest(this, name, ObjectUtils.toStr(value, ""));
   }
 
   /** @return a new {@link PlaceRequestEvent} for this {@link PlaceRequest}. */
