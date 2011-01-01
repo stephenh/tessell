@@ -16,6 +16,9 @@ public class DelegateIsWidget implements IsWidget {
 
   @Override
   public Widget asWidget() {
+    if (widget == null) {
+      throw new IllegalStateException("DelegateIsWidget.setWidget was not called");
+    }
     return widget;
   }
 

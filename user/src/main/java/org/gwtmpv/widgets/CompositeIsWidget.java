@@ -45,6 +45,9 @@ public class CompositeIsWidget implements IsWidget {
 
   @Override
   public Widget asWidget() {
+    if (widget == null) {
+      throw new IllegalStateException("CompositeIsWidget.setWidget was not called");
+    }
     return widget.asWidget();
   }
 
