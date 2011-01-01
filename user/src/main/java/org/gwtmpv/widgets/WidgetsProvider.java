@@ -45,6 +45,8 @@ public interface WidgetsProvider {
 
   IsInlineHyperlink newInlineHyperlink();
 
+  IsInlineHTML newInlineHTML();
+
   IsInlineLabel newInlineLabel();
 
   IsImage newImage();

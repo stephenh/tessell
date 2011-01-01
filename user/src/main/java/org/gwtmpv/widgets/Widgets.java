@@ -6,6 +6,7 @@ import org.gwtmpv.util.cookies.facade.IsCookies;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.user.cellview.client.CellTable.Resources;
 
 /** A Widget factory. */
@@ -81,6 +82,22 @@ public class Widgets {
 
   public static IsInlineLabel newInlineLabel() {
     return provider.newInlineLabel();
+  }
+
+  public static IsInlineHTML newInlineHTML() {
+    return provider.newInlineHTML();
+  }
+
+  public static IsInlineHTML newInlineHTML(String html) {
+    IsInlineHTML h = provider.newInlineHTML();
+    h.setHTML(html);
+    return h;
+  }
+
+  public static IsInlineHTML newInlineHTML(SafeHtml html) {
+    IsInlineHTML h = provider.newInlineHTML();
+    h.setHTML(html.asString());
+    return h;
   }
 
   public static IsLabel newLabel() {

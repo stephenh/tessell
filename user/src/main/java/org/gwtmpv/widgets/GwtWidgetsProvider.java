@@ -165,4 +165,9 @@ public class GwtWidgetsProvider implements WidgetsProvider {
     return root;
   }
 
+  @Override
+  public IsInlineHTML newInlineHTML() {
+    return new GwtInlineHTML();
+  }
+
 }

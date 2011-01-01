@@ -168,4 +168,9 @@ public class StubWidgetsProvider implements WidgetsProvider {
     return root;
   }
 
+  @Override
+  public IsInlineHTML newInlineHTML() {
+    return new StubInlineHTML();
+  }
+
 }
