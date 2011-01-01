@@ -1,6 +1,5 @@
 package org.gwtmpv.widgets.form.lines;
 
-import static com.google.gwt.event.dom.client.KeyCodes.KEY_ENTER;
 import static org.gwtmpv.widgets.Widgets.newTextList;
 
 import org.gwtmpv.model.dsl.Binder;
@@ -11,9 +10,6 @@ import org.gwtmpv.util.Inflector;
 import org.gwtmpv.widgets.IsTextBox;
 import org.gwtmpv.widgets.IsTextList;
 import org.gwtmpv.widgets.form.FormPresenter;
-
-import com.google.gwt.event.dom.client.KeyUpEvent;
-import com.google.gwt.event.dom.client.KeyUpHandler;
 
 /** Adds a {@link IsTextBox} to a form. */
 public abstract class TextBoxBaseFormLine implements FormLine {
@@ -33,13 +29,7 @@ public abstract class TextBoxBaseFormLine implements FormLine {
     id = p.getId() + "-" + Inflector.camelize(property.getName());
     textBox.getIsElement().setId(id);
     errorList.getIsElement().setId(id + "-errors");
-    textBox.addKeyUpHandler(new KeyUpHandler() {
-      public void onKeyUp(KeyUpEvent event) {
-        if (event.getNativeKeyCode() == KEY_ENTER) {
-          p.triggerDefaultCommand();
-        }
-      }
-    });
+    p.watchForEnterKey(textBox);
     binder.bind(property).to(textBox, errorList);
     all.add(property);
   }

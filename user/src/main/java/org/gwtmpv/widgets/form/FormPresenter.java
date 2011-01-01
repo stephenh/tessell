@@ -1,5 +1,6 @@
 package org.gwtmpv.widgets.form;
 
+import static com.google.gwt.event.dom.client.KeyCodes.KEY_ENTER;
 import static org.gwtmpv.widgets.Widgets.newFlowPanel;
 
 import java.util.ArrayList;
@@ -13,6 +14,9 @@ import org.gwtmpv.widgets.IsFlowPanel;
 import org.gwtmpv.widgets.IsHTMLPanel;
 import org.gwtmpv.widgets.form.lines.FormLine;
 
+import com.google.gwt.event.dom.client.HasKeyUpHandlers;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.logical.shared.AttachEvent;
 
 /** Given a list of bindings, handles the boilerplate HTML layout/logic of forms. */
@@ -85,6 +89,16 @@ public class FormPresenter extends BasicPresenter<IsFlowPanel> {
     if (defaultCommand != null) {
       defaultCommand.execute();
     }
+  }
+
+  public void watchForEnterKey(final HasKeyUpHandlers source) {
+    source.addKeyUpHandler(new KeyUpHandler() {
+      public void onKeyUp(KeyUpEvent event) {
+        if (event.getNativeKeyCode() == KEY_ENTER) {
+          triggerDefaultCommand();
+        }
+      }
+    });
   }
 
   private final class OnViewAttached implements AttachEvent.Handler {
