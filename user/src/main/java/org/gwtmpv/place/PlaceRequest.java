@@ -53,7 +53,7 @@ public class PlaceRequest {
 
   public String getParameter(final String key, final String defaultValue) {
     final String value = params.get(key);
-    if (value == null) {
+    if (value == null || "".equals(value)) {
       return defaultValue;
     }
     return value;
