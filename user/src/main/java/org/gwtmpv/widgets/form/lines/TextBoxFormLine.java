@@ -9,7 +9,8 @@ import org.gwtmpv.widgets.IsTextBox;
 public class TextBoxFormLine extends TextBoxBaseFormLine {
 
   public TextBoxFormLine(Property<String> property) {
-    super(property, newTextBox());
+    super(property);
+    setTextBox(newTextBox());
   }
 
 }

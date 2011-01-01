@@ -9,7 +9,8 @@ import org.gwtmpv.widgets.IsPasswordTextBox;
 public class PasswordTextBoxFormLine extends TextBoxBaseFormLine {
 
   public PasswordTextBoxFormLine(Property<String> property) {
-    super(property, newPasswordTextBox());
+    super(property);
+    setTextBox(newPasswordTextBox());
   }
 
 }

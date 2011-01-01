@@ -14,14 +14,13 @@ import org.gwtmpv.widgets.form.FormPresenter;
 /** Adds a {@link IsTextBox} to a form. */
 public abstract class TextBoxBaseFormLine implements FormLine {
 
-  private String id;
-  private final Property<String> property;
-  private final IsTextBox textBox;
-  private final IsTextList errorList = newTextList();
+  protected final Property<String> property;
+  protected final IsTextList errorList = newTextList();
+  protected String id;
+  protected IsTextBox textBox;
 
-  protected TextBoxBaseFormLine(Property<String> property, IsTextBox textBox) {
+  protected TextBoxBaseFormLine(Property<String> property) {
     this.property = property;
-    this.textBox = textBox;
   }
 
   @Override
@@ -57,6 +56,11 @@ public abstract class TextBoxBaseFormLine implements FormLine {
 
   public IsTextList getErrorList() {
     return errorList;
+  }
+
+  // used to a cstr param, but changed due to overly restrictive super semantics place on subclasses
+  protected void setTextBox(IsTextBox textBox) {
+    this.textBox = textBox;
   }
 
 }
