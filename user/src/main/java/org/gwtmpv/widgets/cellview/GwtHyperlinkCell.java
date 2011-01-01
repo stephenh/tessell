@@ -1,6 +1,7 @@
 package org.gwtmpv.widgets.cellview;
 
 import com.google.gwt.cell.client.AbstractCell;
+import com.google.gwt.cell.client.Cell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.safehtml.client.SafeHtmlTemplates;
 import com.google.gwt.safehtml.shared.SafeHtml;
@@ -17,7 +18,7 @@ public class GwtHyperlinkCell extends AbstractCell<IsHyperlinkCell.Data> impleme
   }
 
   @Override
-  public void render(Data value, Object key, SafeHtmlBuilder sb) {
+  public void render(Cell.Context context, Data value, SafeHtmlBuilder sb) {
     sb.append(t.link(value.href, value.content));
   }
 

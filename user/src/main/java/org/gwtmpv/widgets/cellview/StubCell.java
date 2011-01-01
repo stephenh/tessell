@@ -10,7 +10,7 @@ import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.cellview.client.CellTable;
 
 /** A base stub cell for testing the non-DOM aspects of cell/{@link CellTable}. */
-public class StubCell<C> implements Cell<C> {
+public abstract class StubCell<C> implements Cell<C> {
 
   /** Stub owners give us a hook for the test to interface interrogate them. */
   public static interface StubCellValue<C> {
@@ -36,6 +36,31 @@ public class StubCell<C> implements Cell<C> {
   }
 
   @Override
+  public void render(com.google.gwt.cell.client.Cell.Context context, C value, SafeHtmlBuilder sb) {
+    throw new IllegalStateException("This is a stub");
+  }
+
+  @Override
+  public boolean isEditing(Cell.Context context, Element parent, C value) {
+    throw new IllegalStateException("This is a stub");
+  }
+
+  @Override
+  public void onBrowserEvent(Cell.Context context, Element parent, C value, NativeEvent event, ValueUpdater<C> valueUpdater) {
+    throw new IllegalStateException("This is a stub");
+  }
+
+  @Override
+  public boolean resetFocus(Cell.Context context, Element parent, C value) {
+    throw new IllegalStateException("This is a stub");
+  }
+
+  @Override
+  public void setValue(Cell.Context context, Element parent, C value) {
+    throw new IllegalStateException("This is a stub");
+  }
+
+  @Override
   public boolean dependsOnSelection() {
     return false;
   }
@@ -48,31 +73,6 @@ public class StubCell<C> implements Cell<C> {
   @Override
   public boolean handlesSelection() {
     return false;
-  }
-
-  @Override
-  public boolean isEditing(Element parent, C value, Object key) {
-    return false;
-  }
-
-  @Override
-  public void onBrowserEvent(Element parent, C value, Object key, NativeEvent event, ValueUpdater<C> valueUpdater) {
-    throw new UnsupportedOperationException("This is a stub");
-  }
-
-  @Override
-  public void render(C value, Object key, SafeHtmlBuilder sb) {
-    throw new UnsupportedOperationException("This is a stub");
-  }
-
-  @Override
-  public boolean resetFocus(Element parent, C value, Object key) {
-    return false;
-  }
-
-  @Override
-  public void setValue(Element parent, C value, Object key) {
-    throw new UnsupportedOperationException("This is a stub");
   }
 
   private StubCellValue<C> stubCellValue() {

@@ -9,6 +9,7 @@ import org.gwtmpv.widgets.cellview.IsHeader;
 import org.gwtmpv.widgets.cellview.StubColumn;
 
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.view.client.CellPreviewEvent;
 import com.google.gwt.view.client.Range;
 import com.google.gwt.view.client.RangeChangeEvent;
 import com.google.gwt.view.client.RangeChangeEvent.Handler;
@@ -136,8 +137,13 @@ public class StubCellTable<T> extends StubWidget implements IsCellTable<T> {
   }
 
   @Override
-  public HandlerRegistration addRowCountChangeHandler(com.google.gwt.view.client.RowCountChangeEvent.Handler handler) {
+  public HandlerRegistration addRowCountChangeHandler(RowCountChangeEvent.Handler handler) {
     return handlers.addHandler(RowCountChangeEvent.getType(), handler);
+  }
+
+  @Override
+  public HandlerRegistration addCellPreviewHandler(CellPreviewEvent.Handler<T> handler) {
+    return handlers.addHandler(CellPreviewEvent.getType(), handler);
   }
 
   @Override
@@ -186,6 +192,28 @@ public class StubCellTable<T> extends StubWidget implements IsCellTable<T> {
 
   public int getRedraws() {
     return redraws;
+  }
+
+  @Override
+  public T getVisibleItem(int indexOnPage) {
+    return null;
+  }
+
+  @Override
+  public int getVisibleItemCount() {
+    return 0;
+  }
+
+  @Override
+  public Iterable<T> getVisibleItems() {
+    return null;
+  }
+
+  @Override
+  public void setRowData(List<? extends T> values) {
+    setRowCount(values.size());
+    setVisibleRange(0, values.size());
+    setRowData(0, values);
   }
 
 }

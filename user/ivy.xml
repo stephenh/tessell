@@ -14,11 +14,11 @@
   <dependencies defaultconfmapping="%->default,sources()">
     <!-- build time only dependencies -->
     <dependency org="org.gwtmpv" name="gwt-mpv-apt" rev="1.12" conf="build"/>
-    <dependency org="com.google.gwt" name="gwt-user" rev="2.1.0" conf="build"/>
+    <dependency org="com.google.gwt" name="gwt-user" rev="2.1.1" conf="build"/>
     <dependency org="javax.servlet" name="servlet-api" rev="2.4" conf="build" />
 
-    <!-- dfeault (compile, runtime) dependencies -->
-    <dependency org="com.google.gwt" name="gwt-servlet" rev="2.1.0" conf="default"/>
+    <!-- default (compile, runtime) dependencies -->
+    <dependency org="com.google.gwt" name="gwt-servlet" rev="2.1.1" conf="default"/>
     <dependency org="org.bindgen" name="bindgen-gwt" rev="2.19" conf="default"/>
 
     <!-- test time only dependencies -->
