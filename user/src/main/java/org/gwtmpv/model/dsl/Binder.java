@@ -101,13 +101,13 @@ public class Binder {
   /*
    * Properties might need two kinds of values--current and changing. E.g. property.changing()
    * is the same value, except that it includes results from key up events. Then derivative
-   * properties can be made off of either the current or changing property
+   * properties can be made off of either the current or changing property.
    * 
    * Think of the login email box case:
    *
    * 1. User starts typing "foo@" -- do not do validation.
    * 1a. The 'remaining' box is counting down from 100, 99, 98... chars left
-   * 2. User finishes typing "foo@bar.com!" -- stays in the box -- changed after X seconds (fancy, probably not)
+   * 2. User finishes typing "foo@bar.com!" -- stays in the box -- (auto-fire changed after X seconds? fancy, probably not)
    * 3. User tabs out of the email box, blur/change fires, do validation
    * 4. User fixes email by removing "!", redo validation as soon as key up is fired
    *
@@ -207,6 +207,17 @@ public class Binder {
   private static class BlurThenKeyUp<P> implements KeyUpHandler, BlurHandler {
     private final HasValue<P> source;
     private boolean hasBlurred = false;
+
+    /*
+     * Instead of only firing key-up-change if post-hasBlurred, it should be
+     * only firing key-up-change is the property is currenty invalid. Then
+     * a currently valid property would not eagerly invalidated as the user is
+     * changing it from 1 valid value to another valid value. It's only when
+     * properties are invalid that we want to fix things as soon as possible.
+     * 
+     * For validation anyway...for characters left, that seems better suited to
+     * a separate "property.changing" derived property.
+     */
 
     private BlurThenKeyUp(HasValue<P> source) {
       this.source = source;
