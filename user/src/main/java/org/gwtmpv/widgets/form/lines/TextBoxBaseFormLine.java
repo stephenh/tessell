@@ -30,6 +30,7 @@ public abstract class TextBoxBaseFormLine implements FormLine {
     errorList.getIsElement().setId(id + "-errors");
     p.watchForEnterKey(textBox);
     binder.bind(property).to(textBox, errorList);
+    binder.fireChangeOnBlur(textBox);
     all.add(property);
   }
 

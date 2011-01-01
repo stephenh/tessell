@@ -2,11 +2,13 @@ package org.gwtmpv.widgets.form.lines;
 
 import static com.google.gwt.event.dom.client.KeyCodes.KEY_ENTER;
 import static com.google.gwt.event.dom.client.KeyCodes.KEY_LEFT;
+import static org.gwtmpv.testing.MpvMatchers.hasErrors;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.gwtmpv.tests.model.commands.DummyUiCommand;
 import org.gwtmpv.widgets.StubTextBox;
+import org.gwtmpv.widgets.StubTextList;
 import org.gwtmpv.widgets.form.AbstractFormPresenterTest;
 import org.gwtmpv.widgets.form.EmployeeModel;
 import org.junit.Test;
@@ -60,6 +62,15 @@ public class TextBoxFormLineTest extends AbstractFormPresenterTest {
   }
 
   @Test
+  public void widgetsAreChangedOnBlur() {
+    employee.firstName.req();
+    p.add(new TextBoxFormLine(employee.firstName));
+
+    tb("mpv-hb-1").blur();
+    assertThat(errors("mpv-hb-2"), hasErrors("First Name is required"));
+  }
+
+  @Test
   public void enterKeySubmitsTheForm() {
     DummyUiCommand command = new DummyUiCommand();
     p.setDefaultCommand(command);
@@ -79,6 +90,10 @@ public class TextBoxFormLineTest extends AbstractFormPresenterTest {
 
   private StubTextBox tb(String id) {
     return (StubTextBox) html().getReplaced(id);
+  }
+
+  private StubTextList errors(String id) {
+    return (StubTextList) html().getReplaced(id);
   }
 
 }
