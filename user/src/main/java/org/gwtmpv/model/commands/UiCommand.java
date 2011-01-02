@@ -76,6 +76,10 @@ public abstract class UiCommand implements HasRuleTriggers {
     errors.clear();
   }
 
+  public Property<Boolean> enabled() {
+    return enabled;
+  }
+
   @Override
   public HandlerRegistration addRuleTriggeredHandler(RuleTriggeredHandler handler) {
     return handlers.addHandler(RuleTriggeredEvent.getType(), handler);
