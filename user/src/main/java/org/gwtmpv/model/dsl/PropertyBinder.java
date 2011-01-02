@@ -51,7 +51,11 @@ public class PropertyBinder<P> {
     if (!p.isReadOnly()) {
       binder.registerHandler(source.addValueChangeHandler(new ValueChangeHandler<P>() {
         public void onValueChange(ValueChangeEvent<P> event) {
-          p.set(source.getValue());
+          if ("".equals(source.getValue())) {
+            p.set(null);
+          } else {
+            p.set(source.getValue());
+          }
         }
       }));
     }

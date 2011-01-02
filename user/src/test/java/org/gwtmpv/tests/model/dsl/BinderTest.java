@@ -257,6 +257,14 @@ public class BinderTest {
     assertThat(v.get(), is(Color.Blue));
   }
 
+  @Test
+  public void emptyStringIsTreatedAsNull() {
+    s.set("a");
+    binder.bind(s).to(box);
+    box.setValue("", true);
+    assertThat(s.get(), is(nullValue()));
+  }
+
   public static enum Color {
     Blue, Green
   };
