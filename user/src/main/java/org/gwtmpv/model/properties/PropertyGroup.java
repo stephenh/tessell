@@ -1,6 +1,8 @@
 package org.gwtmpv.model.properties;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import org.gwtmpv.model.validation.events.RuleTriggeredEvent;
 import org.gwtmpv.model.validation.events.RuleTriggeredHandler;
@@ -16,6 +18,7 @@ public class PropertyGroup extends AbstractProperty<Boolean, PropertyGroup> {
   // All of the rules in this group
   private final ArrayList<Property<?>> properties = new ArrayList<Property<?>>();
   private final ArrayList<Object> invalid = new ArrayList<Object>();
+  private Snapshot snapshot;
 
   public PropertyGroup(final String name, final String message) {
     super(new SetValue<Boolean>(name));
@@ -52,6 +55,20 @@ public class PropertyGroup extends AbstractProperty<Boolean, PropertyGroup> {
     super.setTouched(touched);
   }
 
+  public void capture() {
+    Snapshot s = new Snapshot();
+    for (Property<?> p : getProperties()) {
+      s.save(p);
+    }
+    snapshot = s;
+  }
+
+  public void restore() {
+    for (Property<?> p : getProperties()) {
+      snapshot.restore(p);
+    }
+  }
+
   @Override
   protected PropertyGroup getThis() {
     return this;
@@ -70,5 +87,18 @@ public class PropertyGroup extends AbstractProperty<Boolean, PropertyGroup> {
       reassess();
     }
   };
+
+  private static class Snapshot {
+    private final Map<Property<?>, Object> state = new LinkedHashMap<Property<?>, Object>();
+
+    private <P> void save(Property<P> p) {
+      state.put(p, p.get());
+    }
+
+    @SuppressWarnings("unchecked")
+    private <P> void restore(Property<P> p) {
+      p.set((P) state.get(p));
+    }
+  }
 
 }
