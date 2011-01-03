@@ -30,4 +30,12 @@ public interface FormLayout {
 
   void errorsEnd(FormPresenter p, HTMLPanelBuilder hb);
 
+  void actionsBegin(FormPresenter p, HTMLPanelBuilder hb);
+
+  void actionsEnd(FormPresenter p, HTMLPanelBuilder hb);
+
+  void actionBegin(FormPresenter p, HTMLPanelBuilder hb);
+
+  void actionEnd(FormPresenter p, HTMLPanelBuilder hb);
+
 }

@@ -1,6 +1,7 @@
 package org.gwtmpv.widgets.form;
 
 import org.gwtmpv.util.HTMLPanelBuilder;
+import org.gwtmpv.widgets.form.actions.FormAction;
 import org.gwtmpv.widgets.form.lines.FormLine;
 
 /**
@@ -21,6 +22,12 @@ public class DefaultFormLayout implements FormLayout {
     String label();
 
     String errors();
+
+    String action();
+
+    String actions();
+
+    String lines();
   }
 
   /** A static version of {@code Style} that returns non-obfuscated class names. */
@@ -44,6 +51,21 @@ public class DefaultFormLayout implements FormLayout {
     public String errors() {
       return "errors";
     }
+
+    @Override
+    public String action() {
+      return "action";
+    }
+
+    @Override
+    public String actions() {
+      return "actions";
+    }
+
+    @Override
+    public String lines() {
+      return "lines";
+    }
   }
 
   private final Style style;
@@ -59,6 +81,7 @@ public class DefaultFormLayout implements FormLayout {
   @Override
   public void render(FormPresenter p, HTMLPanelBuilder hb) {
     formBegin(p, hb);
+
     linesBegin(p, hb);
     for (FormLine line : p.getFormLines()) {
       lineBegin(p, hb);
@@ -77,6 +100,17 @@ public class DefaultFormLayout implements FormLayout {
       lineEnd(p, hb);
     }
     linesEnd(p, hb);
+
+    if (p.getFormActions().size() > 0) {
+      actionsBegin(p, hb);
+      for (FormAction action : p.getFormActions()) {
+        actionBegin(p, hb);
+        action.renderAction(hb);
+        actionEnd(p, hb);
+      }
+      actionsEnd(p, hb);
+    }
+
     formEnd(p, hb);
   }
 
@@ -102,12 +136,14 @@ public class DefaultFormLayout implements FormLayout {
 
   @Override
   public void linesBegin(FormPresenter p, HTMLPanelBuilder hb) {
+    hb.add("<div class=\"" + style.lines() + "\">");
     hb.add("<ol>");
   }
 
   @Override
   public void linesEnd(FormPresenter p, HTMLPanelBuilder hb) {
     hb.add("</ol>");
+    hb.add("</div>");
   }
 
   @Override
@@ -138,6 +174,26 @@ public class DefaultFormLayout implements FormLayout {
   @Override
   public void errorsEnd(FormPresenter p, HTMLPanelBuilder hb) {
     hb.add("</div>");
+  }
+
+  @Override
+  public void actionsBegin(FormPresenter p, HTMLPanelBuilder hb) {
+    hb.add("<div class=\"" + style.actions() + "\">");
+  }
+
+  @Override
+  public void actionsEnd(FormPresenter p, HTMLPanelBuilder hb) {
+    hb.add("</div>");
+  }
+
+  @Override
+  public void actionBegin(FormPresenter p, HTMLPanelBuilder hb) {
+    hb.add("<span class=\"" + style.action() + "\">");
+  }
+
+  @Override
+  public void actionEnd(FormPresenter p, HTMLPanelBuilder hb) {
+    hb.add("</span>");
   }
 
 }

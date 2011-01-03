@@ -6,11 +6,14 @@ import static org.gwtmpv.testing.MpvMatchers.hasErrors;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.gwtmpv.tests.model.commands.DummyUiCommand;
+import org.gwtmpv.model.dsl.Binder;
+import org.gwtmpv.util.HTMLPanelBuilder;
 import org.gwtmpv.widgets.StubTextBox;
 import org.gwtmpv.widgets.StubTextList;
 import org.gwtmpv.widgets.form.AbstractFormPresenterTest;
 import org.gwtmpv.widgets.form.EmployeeModel;
+import org.gwtmpv.widgets.form.FormPresenter;
+import org.gwtmpv.widgets.form.actions.FormAction;
 import org.junit.Test;
 
 public class TextBoxFormLineTest extends AbstractFormPresenterTest {
@@ -20,19 +23,22 @@ public class TextBoxFormLineTest extends AbstractFormPresenterTest {
   @Test
   public void htmlOfOneTextBox() {
     p.add(new TextBoxFormLine(employee.firstName));
-    assertHtml("<div class=\"form\"><ol>",//
+    assertHtml("<div class=\"form\">",//
+      "<div class=\"lines\"><ol>",
       "<li>",
       "<div class=\"label\"><label for=\"p-firstName\">First Name</label></div>",
       "<div class=\"value\"><div id=\"mpv-hb-1\"></div><div class=\"errors\"><div id=\"mpv-hb-2\"></div></div></div>",
       "</li>",
-      "</ol></div>");
+      "</ol></div>",
+      "</div>");
   }
 
   @Test
   public void htmlOfTwoTextBoxes() {
     p.add(new TextBoxFormLine(employee.firstName));
     p.add(new TextBoxFormLine(employee.lastName));
-    assertHtml("<div class=\"form\"><ol>",//
+    assertHtml("<div class=\"form\">",//
+      "<div class=\"lines\"><ol>",
       "<li>",
       "<div class=\"label\"><label for=\"p-firstName\">First Name</label></div>",
       "<div class=\"value\"><div id=\"mpv-hb-1\"></div><div class=\"errors\"><div id=\"mpv-hb-2\"></div></div></div>",
@@ -41,7 +47,8 @@ public class TextBoxFormLineTest extends AbstractFormPresenterTest {
       "<div class=\"label\"><label for=\"p-lastName\">Last Name</label></div>",
       "<div class=\"value\"><div id=\"mpv-hb-3\"></div><div class=\"errors\"><div id=\"mpv-hb-4\"></div></div></div>",
       "</li>",
-      "</ol></div>");
+      "</ol></div>",
+      "</div>");
   }
 
   @Test
@@ -72,20 +79,20 @@ public class TextBoxFormLineTest extends AbstractFormPresenterTest {
 
   @Test
   public void enterKeySubmitsTheForm() {
-    DummyUiCommand command = new DummyUiCommand();
-    p.setDefaultCommand(command);
+    DummyAction action = new DummyAction();
+    p.setDefaultAction(action);
     p.add(new TextBoxFormLine(employee.firstName));
     tb("mpv-hb-1").keyUp(KEY_ENTER);
-    assertThat(command.getExecutions(), is(1));
+    assertThat(action.triggered, is(true));
   }
 
   @Test
   public void otherKeysDoNotSubmitTheForm() {
-    DummyUiCommand command = new DummyUiCommand();
-    p.setDefaultCommand(command);
+    DummyAction action = new DummyAction();
+    p.setDefaultAction(action);
     p.add(new TextBoxFormLine(employee.firstName));
     tb("mpv-hb-1").keyUp(KEY_LEFT);
-    assertThat(command.getExecutions(), is(0));
+    assertThat(action.triggered, is(false));
   }
 
   private StubTextBox tb(String id) {
@@ -94,6 +101,23 @@ public class TextBoxFormLineTest extends AbstractFormPresenterTest {
 
   private StubTextList errors(String id) {
     return (StubTextList) html().getReplaced(id);
+  }
+
+  private static final class DummyAction implements FormAction {
+    private boolean triggered;
+
+    @Override
+    public void bind(FormPresenter p, Binder binder) {
+    }
+
+    @Override
+    public void renderAction(HTMLPanelBuilder hb) {
+    }
+
+    @Override
+    public void trigger() {
+      triggered = true;
+    }
   }
 
 }

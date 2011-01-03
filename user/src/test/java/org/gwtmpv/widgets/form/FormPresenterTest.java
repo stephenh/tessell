@@ -19,12 +19,14 @@ public class FormPresenterTest extends AbstractFormPresenterTest {
     p.add(new TextBoxFormLine(employee.firstName));
 
     assertThat(html().getHtml(), is(Join.join(new String[] {//
-      "<div class=\"form\"><ol>",//
-        "<li>",//
+      "<div class=\"form\">",//
+        "<div class=\"lines\"><ol>",
+        "<li>",
         "<div class=\"label\"><label for=\"p-firstName\">First Name</label></div>",//
         "<div class=\"value\"><div id=\"mpv-hb-1\"></div><div class=\"errors\"><div id=\"mpv-hb-2\"></div></div></div>",//
-        "</li>",//
-        "</ol></div>" },
+        "</li>",
+        "</ol></div>",
+        "</div>" },
       "")));
   }
 

@@ -5,13 +5,13 @@ import static org.gwtmpv.widgets.Widgets.newFlowPanel;
 
 import java.util.ArrayList;
 
-import org.gwtmpv.model.commands.UiCommand;
 import org.gwtmpv.model.dsl.Binder;
 import org.gwtmpv.model.properties.PropertyGroup;
 import org.gwtmpv.presenter.BasicPresenter;
 import org.gwtmpv.util.HTMLPanelBuilder;
 import org.gwtmpv.widgets.IsFlowPanel;
 import org.gwtmpv.widgets.IsHTMLPanel;
+import org.gwtmpv.widgets.form.actions.FormAction;
 import org.gwtmpv.widgets.form.lines.FormLine;
 
 import com.google.gwt.event.dom.client.HasKeyUpHandlers;
@@ -23,12 +23,13 @@ import com.google.gwt.event.logical.shared.AttachEvent;
 public class FormPresenter extends BasicPresenter<IsFlowPanel> {
 
   private final ArrayList<FormLine> formLines = new ArrayList<FormLine>();
+  private final ArrayList<FormAction> formActions = new ArrayList<FormAction>();
   private final PropertyGroup all = new PropertyGroup("all", null);
   private final String id;
   private final Binder binder = new Binder(this);
   private final FormLayout layout;
   private boolean needsRender = true;
-  private UiCommand defaultCommand;
+  private FormAction defaultAction;
 
   public FormPresenter(String id) {
     super(newFlowPanel());
@@ -62,6 +63,14 @@ public class FormPresenter extends BasicPresenter<IsFlowPanel> {
     needsRender = true;
   }
 
+  /** Adds {@code action}. */
+  public void add(FormAction action) {
+    formActions.add(action);
+    action.bind(this, binder);
+    needsRender = true;
+    defaultAction = action;
+  }
+
   private void insertHtml(IsHTMLPanel panel) {
     if (view.getWidgetCount() > 0) {
       view.remove(0);
@@ -77,25 +86,21 @@ public class FormPresenter extends BasicPresenter<IsFlowPanel> {
     return formLines;
   }
 
-  public UiCommand getDefaultCommand() {
-    return defaultCommand;
+  public ArrayList<FormAction> getFormActions() {
+    return formActions;
   }
 
-  public void setDefaultCommand(UiCommand defaultCommand) {
-    this.defaultCommand = defaultCommand;
-  }
-
-  public void triggerDefaultCommand() {
-    if (defaultCommand != null) {
-      defaultCommand.execute();
-    }
+  public void setDefaultAction(FormAction defaultAction) {
+    this.defaultAction = defaultAction;
   }
 
   public void watchForEnterKey(final HasKeyUpHandlers source) {
     source.addKeyUpHandler(new KeyUpHandler() {
       public void onKeyUp(KeyUpEvent event) {
         if (event.getNativeKeyCode() == KEY_ENTER) {
-          triggerDefaultCommand();
+          if (defaultAction != null) {
+            defaultAction.trigger();
+          }
         }
       }
     });
