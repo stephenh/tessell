@@ -32,6 +32,7 @@ import com.google.gwt.resources.client.TextResource;
 public class ResourcesGenerator {
 
   private static final Pattern urlPattern = Pattern.compile("url\\(([^\\)]+)\\)");
+  private static final Pattern plusKeywordPattern = Pattern.compile("\\+([a-z-]+): *([^;]+);");
   private final File inputDirectory;
   private final Cleanup cleanup;
   private final String packageName;
@@ -78,7 +79,10 @@ public class ResourcesGenerator {
 
     // Copy the file and do any url(...) => @url replacement
     File cssFileCopy = fileInOutputDirectory(cssFile, ".css", ".gen.css");
-    doUrlSubstitution(cssFile, cssFileCopy);
+    String cssContent = FileUtils.readFileToString(cssFile);
+    cssContent = doUrlSubstitution(cssContent);
+    cssContent = doMozWebkitSubstitution(cssContent);
+    GenUtils.saveIfChanged(cssFileCopy, cssContent);
     cleanup.markOkay(cssFileCopy);
 
     final GMethod m = appResources.getMethod(methodName).returnType(newInterfaceName);
@@ -112,15 +116,14 @@ public class ResourcesGenerator {
   }
 
   /** Finds {@code url(...)} in the css and replaces it with GWT @url declarations. */
-  private void doUrlSubstitution(File originalFile, File generatedFile) throws Exception {
+  private static String doUrlSubstitution(String cssContent) throws Exception {
     // keep track of urls we've already defined so we don't redefine them
     Set<String> defined = new HashSet<String>();
     // buffer for @url definitions, to be prepended at the end
     StringBuffer defs = new StringBuffer();
     // buffer to hold the transformed css, to be appended at the end
     StringBuffer sb = new StringBuffer();
-
-    Matcher m = urlPattern.matcher(FileUtils.readFileToString(originalFile));
+    Matcher m = urlPattern.matcher(cssContent);
     while (m.find()) {
       String path = m.group(1);
       String methodName = GenUtils.toMethodName(substringBeforeLast(new File(path).getName(), "."));
@@ -131,9 +134,24 @@ public class ResourcesGenerator {
       m.appendReplacement(sb, aliasName);
     }
     m.appendTail(sb);
+    return defs.toString() + sb.toString();
+  }
 
-    String newContent = defs.toString() + sb.toString();
-    GenUtils.saveIfChanged(generatedFile, newContent);
+  private static String doMozWebkitSubstitution(String cssContent) {
+    StringBuffer sb = new StringBuffer();
+    Matcher m = plusKeywordPattern.matcher(cssContent);
+    while (m.find()) {
+      String property = m.group(1);
+      String value = m.group(2);
+      String normal = property + ": " + value + ";";
+      String moz = " -moz-" + property + ": " + value + ";";
+      String webkit = " -webkit-" + property + ": " + value + ";";
+      m.appendReplacement(sb, normal + moz + webkit);
+
+    }
+    m.appendTail(sb);
+    return sb.toString();
+
   }
 
   public void addImage(final File imageFile) throws Exception {
