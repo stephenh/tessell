@@ -17,6 +17,10 @@ public class StubListBox extends StubFocusWidget implements IsListBox {
     setSelectedIndex(getItemIndex(item));
   }
 
+  public String getSelectedText() {
+    return getItemText(getSelectedIndex());
+  }
+
   public int getItemIndex(final String item) {
     for (int i = 0; i < items.size(); i++) {
       if (items.get(i).item.equals(item)) {
