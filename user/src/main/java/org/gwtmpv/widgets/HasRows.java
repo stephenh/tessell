@@ -4,19 +4,22 @@ package org.gwtmpv.widgets;
 public interface HasRows {
 
   /** Assumes {@code view} is a table and appends any of its TRs to our own table's header. */
-  void addHeader(final IsWidget isWidget);
+  void addHeader(final IsWidget view);
 
   /** Assumes {@code view} is a table and appends any of its TRs to our own table's body. */
-  void addRow(final IsWidget isWidget);
+  void addRow(final IsWidget view);
 
   /** Assumes {@code view} is a table and puts its first TR into row {@code i} of our own table's body. */
-  void insertRow(int i, final IsWidget isWidget);
+  void insertRow(int i, final IsWidget view);
 
   /** Assumes {@code view} is a table and puts its first TR into row {@code i} of our own table's body. */
-  void replaceRow(int i, final IsWidget isWidget);
+  void replaceRow(int i, final IsWidget view);
 
-  /** Assumes row {@code i}. */
+  /** Removes row {@code i}. */
   void removeRow(int i);
+
+  /** Removes row {@code view}. */
+  void removeRow(final IsWidget view);
 
   /** @return the number of rows shown */
   int size();

@@ -38,6 +38,11 @@ public class StubRowTable extends StubWidget implements IsRowTable {
   }
 
   @Override
+  public void removeRow(IsWidget view) {
+    removeRow(rows.indexOf(view));
+  }
+
+  @Override
   public int size() {
     return rows.size();
   }

@@ -95,6 +95,11 @@ public class RowTable extends Panel implements IsRowTable {
   }
 
   @Override
+  public void removeRow(final IsWidget view) {
+    remove(view.asWidget());
+  }
+
+  @Override
   public boolean remove(final Widget child) {
     if (widgets.contains(child)) {
       // orphan
