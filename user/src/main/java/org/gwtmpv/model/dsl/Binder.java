@@ -4,6 +4,8 @@ import static com.google.gwt.event.dom.client.KeyCodes.KEY_TAB;
 
 import org.gwtmpv.bus.CanRegisterHandlers;
 import org.gwtmpv.model.commands.UiCommand;
+import org.gwtmpv.model.events.PropertyChangedEvent;
+import org.gwtmpv.model.events.PropertyChangedHandler;
 import org.gwtmpv.model.properties.EnumProperty;
 import org.gwtmpv.model.properties.Property;
 import org.gwtmpv.model.properties.StringProperty;
@@ -62,6 +64,15 @@ public class Binder {
 
   public <P> WhenBinder<P> when(Property<P> property) {
     return new WhenBinder<P>(this, property);
+  }
+
+  public <P> void bind(final WhenResult result, final When<P> whener) {
+    registerHandler(whener.property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
+      public void onPropertyChanged(PropertyChangedEvent<P> event) {
+        result.update(whener.condition.evaluate(whener.property));
+      }
+    }));
+    result.update(whener.condition.evaluate(whener.property)); // initial result
   }
 
   /** Enhances each {@code source} to fire change events on key up and blur. */
