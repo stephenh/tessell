@@ -69,7 +69,7 @@ public abstract class UiCommand implements HasRuleTriggers {
     errorTarget.fireEvent(new RuleTriggeredEvent(message, message, new Boolean[] { false }));
   }
 
-  protected void clearErrors() {
+  public void clearErrors() {
     for (Map.Entry<String, HasHandlers> e : errors.entrySet()) {
       e.getValue().fireEvent(new RuleUntriggeredEvent(e.getKey(), e.getKey()));
     }
