@@ -15,6 +15,7 @@ public class StubWidget implements IsWidget, HasStubCss {
 
   protected final EventBus handlers = new SimplerEventBus();
   private final StubElement element = new StubElement();
+  private boolean attached = false;
   public int absoluteTop;
   public int absoluteLeft;
   public int offsetWidth;
@@ -26,10 +27,12 @@ public class StubWidget implements IsWidget, HasStubCss {
   }
 
   public void fireAttached() {
+    attached = true;
     AttachEvent.fire(this, true);
   }
 
   public void fireDetached() {
+    attached = false;
     AttachEvent.fire(this, false);
   }
 
@@ -111,6 +114,11 @@ public class StubWidget implements IsWidget, HasStubCss {
   @Override
   public HandlerRegistration addAttachHandler(Handler handler) {
     return handlers.addHandler(AttachEvent.getType(), handler);
+  }
+
+  @Override
+  public boolean isAttached() {
+    return attached;
   }
 
 }

@@ -23,6 +23,8 @@ public interface IsWidget extends EventListener, HasHandlers, HasCss, HasAttachH
 
   void ensureDebugId(String id);
 
+  boolean isAttached();
+
   IsElement getIsElement();
 
   Widget asWidget();

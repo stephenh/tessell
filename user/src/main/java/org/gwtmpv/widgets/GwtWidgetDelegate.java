@@ -84,4 +84,9 @@ public class GwtWidgetDelegate implements IsWidget {
     return delegate.addAttachHandler(handler);
   }
 
+  @Override
+  public boolean isAttached() {
+    return delegate.isAttached();
+  }
+
 }

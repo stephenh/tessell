@@ -116,4 +116,9 @@ public class CompositeIsWidget implements IsWidget {
     return widget.addAttachHandler(handler);
   }
 
+  @Override
+  public boolean isAttached() {
+    return widget.isAttached();
+  }
+
 }

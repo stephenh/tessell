@@ -142,4 +142,9 @@ public class GwtHTMLPanel implements IsHTMLPanel {
     return panel.addAttachHandler(handler);
   }
 
+  @Override
+  public boolean isAttached() {
+    return panel.isAttached();
+  }
+
 }

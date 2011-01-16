@@ -87,4 +87,9 @@ public class DelegateIsWidget implements IsWidget {
     return widget.addAttachHandler(handler);
   }
 
+  @Override
+  public boolean isAttached() {
+    return widget.isAttached();
+  }
+
 }

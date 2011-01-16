@@ -238,4 +238,9 @@ public class GwtRadioButton implements IsRadioButton {
     return button.addAttachHandler(handler);
   }
 
+  @Override
+  public boolean isAttached() {
+    return button.isAttached();
+  }
+
 }
