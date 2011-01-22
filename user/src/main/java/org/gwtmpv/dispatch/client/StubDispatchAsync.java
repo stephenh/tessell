@@ -1,9 +1,8 @@
-package org.gwtmpv.dispatch.client.util;
+package org.gwtmpv.dispatch.client;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.gwtmpv.dispatch.client.DispatchAsync;
 import org.gwtmpv.dispatch.shared.Action;
 import org.gwtmpv.dispatch.shared.Result;
 

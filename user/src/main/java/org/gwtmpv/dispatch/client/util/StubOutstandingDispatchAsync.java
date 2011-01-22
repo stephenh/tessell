@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.gwtmpv.bus.StubEventBus;
-import org.gwtmpv.dispatch.client.util.StubDispatchAsync.ExecuteCall;
+import org.gwtmpv.dispatch.client.StubDispatchAsync;
+import org.gwtmpv.dispatch.client.StubDispatchAsync.ExecuteCall;
 import org.gwtmpv.dispatch.shared.Action;
 import org.gwtmpv.dispatch.shared.Result;
 
