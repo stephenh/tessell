@@ -1,6 +1,5 @@
 package org.gwtmpv.dispatch.shared;
 
-import org.gwtmpv.dispatch.client.DispatchService;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 

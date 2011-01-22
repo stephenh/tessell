@@ -1,10 +1,8 @@
-package org.gwtmpv.dispatch.client;
-
-import org.gwtmpv.dispatch.shared.Action;
-import org.gwtmpv.dispatch.shared.Result;
+package org.gwtmpv.dispatch.shared;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+/** The client-side interface for {@link DispatchService}. */
 public interface DispatchServiceAsync {
 
   void execute(String sessionId, Action<?> action, AsyncCallback<Result> callback);

@@ -1,12 +1,16 @@
-package org.gwtmpv.dispatch.client;
+package org.gwtmpv.dispatch.shared;
 
-import org.gwtmpv.dispatch.shared.Action;
-import org.gwtmpv.dispatch.shared.ActionException;
-import org.gwtmpv.dispatch.shared.Result;
+import org.gwtmpv.dispatch.client.DispatchAsync;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
+/**
+ * The GWT-RPC interface used to execute actions.
+ * 
+ * This is the raw-type version of {@link DispatchAsync},
+ * which adds tighter bounds on its Action/Result parameters.
+ */
 @RemoteServiceRelativePath("dispatch")
 public interface DispatchService extends RemoteService {
 

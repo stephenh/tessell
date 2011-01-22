@@ -2,12 +2,12 @@ package org.gwtmpv.dispatch.server.servlet;
 
 import static org.gwtmpv.util.ObjectUtils.eq;
 
-import org.gwtmpv.dispatch.client.DispatchService;
 import org.gwtmpv.dispatch.server.ActionDispatch;
 import org.gwtmpv.dispatch.server.ExecutionContext;
 import org.gwtmpv.dispatch.server.SessionIdValidator;
 import org.gwtmpv.dispatch.shared.Action;
 import org.gwtmpv.dispatch.shared.ActionException;
+import org.gwtmpv.dispatch.shared.DispatchService;
 import org.gwtmpv.dispatch.shared.Result;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;

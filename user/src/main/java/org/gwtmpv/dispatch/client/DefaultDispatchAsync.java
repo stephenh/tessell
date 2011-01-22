@@ -4,6 +4,8 @@ import static org.gwtmpv.util.StringUtils.substringAfterLast;
 
 import org.gwtmpv.dispatch.server.ActionDispatch;
 import org.gwtmpv.dispatch.shared.Action;
+import org.gwtmpv.dispatch.shared.DispatchService;
+import org.gwtmpv.dispatch.shared.DispatchServiceAsync;
 import org.gwtmpv.dispatch.shared.Result;
 
 import com.google.gwt.core.client.GWT;
