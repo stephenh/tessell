@@ -21,7 +21,7 @@ public class DefaultActionDispatch implements ActionDispatch {
       throw ae; // allow ActionException subclasses to go back
     } catch (Exception e) {
       log(action, context, e);
-      throw new ActionException("A server error occurred"); // don't leak the raw exception message
+      throw wrapInActionException(e);
     }
   }
 
@@ -41,6 +41,11 @@ public class DefaultActionDispatch implements ActionDispatch {
 
   /** Subclasses should override to provide logging. */
   protected void log(final Action<?> action, final ExecutionContext context, Exception e) {
+  }
+
+  /** Subclasses can override to change the ActionException construction. */
+  protected ActionException wrapInActionException(Exception e) {
+    return new ActionException("A server error occurred"); // don't leak the raw exception message
   }
 
   protected ActionHandlerRegistry getHandlerRegistry() {
