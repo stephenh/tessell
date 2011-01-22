@@ -25,9 +25,9 @@ public class StubCheckBox extends StubButtonBase implements IsCheckBox {
 
   @Override
   public void click() {
-    super.click();
     final Boolean newValue = (value == null) ? true : !value;
     setValue(newValue, true);
+    super.click();
   }
 
   public void set(final Boolean value) {
