@@ -36,8 +36,12 @@ public abstract class AbstractFormPresenterTest {
   }
 
   protected void assertHtml(String... html) {
-    ((StubWidget) p.getView()).fireAttached();
     assertThat(html().getHtml(), is(Join.join(html, "")));
+  }
+
+  protected void assertHtml(HTMLPanelBuilder hb, String... html) {
+    StubHTMLPanel p = (StubHTMLPanel) hb.toHTMLPanel();
+    assertThat(p.getHtml(), is(Join.join(html, "")));
   }
 
 }

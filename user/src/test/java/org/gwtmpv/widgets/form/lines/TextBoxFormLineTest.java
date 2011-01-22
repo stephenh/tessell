@@ -52,6 +52,14 @@ public class TextBoxFormLineTest extends AbstractFormPresenterTest {
   }
 
   @Test
+  public void customLabel() {
+    TextBoxBaseFormLine a = new TextBoxFormLine(employee.firstName).label("foo");
+    HTMLPanelBuilder hb = new HTMLPanelBuilder();
+    a.renderLabel(hb);
+    assertHtml(hb, "<label for=\"null\">foo</label>");
+  }
+
+  @Test
   public void widgetsAreBoundForOneTextBox() {
     employee.firstName.set("bob");
     p.add(new TextBoxFormLine(employee.firstName));

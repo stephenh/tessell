@@ -18,9 +18,11 @@ public abstract class TextBoxBaseFormLine implements FormLine {
   protected final IsTextList errorList = newTextList();
   protected String id;
   protected IsTextBox textBox;
+  private String label;
 
   protected TextBoxBaseFormLine(Property<String> property) {
     this.property = property;
+    label = property.getName();
   }
 
   @Override
@@ -37,7 +39,7 @@ public abstract class TextBoxBaseFormLine implements FormLine {
   @Override
   public void renderLabel(HTMLPanelBuilder hb) {
     hb.add("<label for=\"" + id + "\">");
-    hb.add(property.getName());
+    hb.add(label);
     hb.add("</label>");
   }
 
@@ -62,6 +64,19 @@ public abstract class TextBoxBaseFormLine implements FormLine {
   // used to a cstr param, but changed due to overly restrictive super semantics place on subclasses
   protected void setTextBox(IsTextBox textBox) {
     this.textBox = textBox;
+  }
+
+  public String getLabel() {
+    return label;
+  }
+
+  public void setLabel(String label) {
+    this.label = label;
+  }
+
+  public TextBoxBaseFormLine label(String label) {
+    setLabel(label);
+    return this;
   }
 
 }
