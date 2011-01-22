@@ -12,6 +12,10 @@ import org.gwtmpv.dispatch.shared.Result;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
+/**
+ * Provides a basic {@link DispatchService} implementation that defers to subclasses
+ * for the {@link SessionIdValidator} and {@link ActionDispatch} instances.
+ */
 public abstract class AbstractDispatchServiceServlet extends RemoteServiceServlet implements DispatchService {
 
   private static final long serialVersionUID = 1L;
@@ -24,13 +28,13 @@ public abstract class AbstractDispatchServiceServlet extends RemoteServiceServle
       }
       ActionDispatch d = getActionDispatch();
       if (d == null) {
-        throw new IllegalStateException("Null ActionDispatch");
+        throw new IllegalStateException("Null ActionDispatch, ensure the server started correctly");
       }
       return d.execute(action, context);
     } catch (final ActionException ae) {
       throw ae;
     } catch (final Exception e) {
-      throw new ActionException(e.getMessage());
+      throw new ActionException("A server error occured."); // don't leak the raw exception message
     }
   }
 

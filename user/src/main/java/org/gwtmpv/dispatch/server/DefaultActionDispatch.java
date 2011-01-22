@@ -21,7 +21,7 @@ public class DefaultActionDispatch implements ActionDispatch {
       throw ae; // allow ActionException subclasses to go back
     } catch (Exception e) {
       log(action, context, e);
-      throw new ActionException(e.getMessage());
+      throw new ActionException("A server error occurred"); // don't leak the raw exception message
     }
   }
 
