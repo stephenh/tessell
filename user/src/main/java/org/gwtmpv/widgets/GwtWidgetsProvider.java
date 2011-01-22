@@ -170,4 +170,9 @@ public class GwtWidgetsProvider implements WidgetsProvider {
     return new GwtInlineHTML();
   }
 
+  @Override
+  public IsButton newButton() {
+    return new GwtButton();
+  }
+
 }

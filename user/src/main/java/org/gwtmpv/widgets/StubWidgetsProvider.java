@@ -173,4 +173,9 @@ public class StubWidgetsProvider implements WidgetsProvider {
     return new StubInlineHTML();
   }
 
+  @Override
+  public IsButton newButton() {
+    return new StubButton();
+  }
+
 }

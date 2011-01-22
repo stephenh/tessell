@@ -35,6 +35,8 @@ public interface WidgetsProvider {
 
   IsAnchor newAnchor();
 
+  IsButton newButton();
+
   IsPopupPanel newPopupPanel();
 
   IsAbsolutePanel newAbsolutePanel();

@@ -72,6 +72,10 @@ public class Widgets {
     return provider.newAnchor();
   }
 
+  public static IsButton newButton() {
+    return provider.newButton();
+  }
+
   public static IsHyperlink newHyperline() {
     return provider.newHyperline();
   }
