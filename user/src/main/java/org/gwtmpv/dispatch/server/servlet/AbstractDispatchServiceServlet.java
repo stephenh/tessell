@@ -22,7 +22,13 @@ public abstract class AbstractDispatchServiceServlet extends RemoteServiceServle
       if (getSessionValidator() != null && !eq(sessionId, getSessionValidator().get(context))) {
         throw new IllegalStateException("Invalid session");
       }
-      return getActionDispatch().execute(action, context);
+      ActionDispatch d = getActionDispatch();
+      if (d == null) {
+        throw new IllegalStateException("Null ActionDispatch");
+      }
+      return d.execute(action, context);
+    } catch (final ActionException ae) {
+      throw ae;
     } catch (final Exception e) {
       throw new ActionException(e.getMessage());
     }
