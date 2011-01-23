@@ -179,7 +179,7 @@ public class Binder {
       this.ep = ep;
     }
 
-    public EnumPropertyBinder<E> to(final IsListBox source, final E[] values) {
+    public HandlerRegistrations to(final IsListBox source, final E[] values) {
       int i = 0;
       for (E value : values) {
         source.addItem(value.toString(), Integer.toString(i++));
@@ -189,7 +189,7 @@ public class Binder {
         ep.set(values[0]);
       }
       source.setSelectedIndex(indexOf(values, ep.get()));
-      source.addChangeHandler(new ChangeHandler() {
+      HandlerRegistration a = source.addChangeHandler(new ChangeHandler() {
         public void onChange(ChangeEvent event) {
           int i = source.getSelectedIndex();
           if (i == -1) {
@@ -199,7 +199,7 @@ public class Binder {
           }
         }
       });
-      return this;
+      return new HandlerRegistrations(a);
     }
   }
 
