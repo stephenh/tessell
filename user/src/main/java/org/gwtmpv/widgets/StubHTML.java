@@ -2,14 +2,16 @@ package org.gwtmpv.widgets;
 
 public class StubHTML extends StubLabel implements IsHTML {
 
+  private String html;
+
   @Override
   public String getHTML() {
-    return getText();
+    return html;
   }
 
   @Override
   public void setHTML(final String html) {
-    setText(html);
+    this.html = html;
   }
 
 }
