@@ -10,6 +10,7 @@ import org.gwtmpv.widgets.IsTextList;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.ui.HasHTML;
 import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.HasValue;
 
@@ -29,6 +30,19 @@ public class PropertyBinder<P> {
     PropertyChangedHandler<P> h = new PropertyChangedHandler<P>() {
       public void onPropertyChanged(final PropertyChangedEvent<P> event) {
         element.setText(toStr(p.get(), ""));
+      }
+    };
+    // set initial value
+    h.onPropertyChanged(new PropertyChangedEvent<P>(p));
+    binder.registerHandler(p.addPropertyChangedHandler(h));
+    return this;
+  }
+
+  /** Binds our property to {@code element} (one-way). */
+  public PropertyBinder<P> toHtmlOf(final HasHTML element) {
+    PropertyChangedHandler<P> h = new PropertyChangedHandler<P>() {
+      public void onPropertyChanged(final PropertyChangedEvent<P> event) {
+        element.setHTML(toStr(p.get(), ""));
       }
     };
     // set initial value
