@@ -71,6 +71,12 @@ public class FormPresenter extends BasicPresenter<IsFlowPanel> {
     defaultAction = action;
   }
 
+  public void focusFirstLine() {
+    if (formLines.size() > 0) {
+      formLines.get(0).focus();
+    }
+  }
+
   private void insertHtml(IsHTMLPanel panel) {
     if (view.getWidgetCount() > 0) {
       view.remove(0);

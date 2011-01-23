@@ -7,6 +7,7 @@ import org.gwtmpv.model.properties.Property;
 import org.gwtmpv.model.properties.PropertyGroup;
 import org.gwtmpv.util.HTMLPanelBuilder;
 import org.gwtmpv.util.Inflector;
+import org.gwtmpv.util.WidgetUtils;
 import org.gwtmpv.widgets.IsTextBox;
 import org.gwtmpv.widgets.IsTextList;
 import org.gwtmpv.widgets.form.FormPresenter;
@@ -51,6 +52,11 @@ public abstract class TextBoxBaseFormLine implements FormLine {
   @Override
   public void renderErrors(HTMLPanelBuilder hb) {
     hb.add(errorList);
+  }
+
+  @Override
+  public void focus() {
+    WidgetUtils.focus(textBox);
   }
 
   public IsTextBox getTextBox() {

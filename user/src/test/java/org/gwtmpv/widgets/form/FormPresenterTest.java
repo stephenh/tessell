@@ -7,6 +7,7 @@ import joist.util.Join;
 
 import org.gwtmpv.model.properties.StringProperty;
 import org.gwtmpv.model.validation.Valid;
+import org.gwtmpv.widgets.StubTextBox;
 import org.gwtmpv.widgets.form.lines.TextBoxFormLine;
 import org.junit.Test;
 
@@ -39,6 +40,14 @@ public class FormPresenterTest extends AbstractFormPresenterTest {
 
     name.set("1");
     assertThat(p.allValid().wasValid(), is(Valid.YES));
+  }
+
+  @Test
+  public void focusFirstLine() {
+    TextBoxFormLine l = new TextBoxFormLine(employee.firstName);
+    p.add(l);
+    p.focusFirstLine();
+    assertThat(((StubTextBox) l.getTextBox()).isFocused(), is(true));
   }
 
 }
