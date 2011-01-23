@@ -26,7 +26,7 @@ public abstract class AbstractDispatchServiceServlet extends RemoteServiceServle
     try {
       final ExecutionContext context = new ExecutionContext(getThreadLocalRequest(), getThreadLocalResponse());
       if (getSessionValidator() != null && !eq(sessionId, getSessionValidator().get(context))) {
-        throw new IllegalStateException("Invalid session");
+        throw invalidSession(context);
       }
       ActionDispatch d = getActionDispatch();
       if (d == null) {
@@ -50,6 +50,11 @@ public abstract class AbstractDispatchServiceServlet extends RemoteServiceServle
   /** Allows subclasses to create their own "runtime exception" subclass of {@link ActionException}. */
   protected ActionException wrapInActionException(Exception e) {
     return new ActionException("A server error occured."); // don't leak the raw exception message
+  }
+
+  /** Allows subclasses to create their own invalid session subclasses of {@link ActionException}. */
+  protected Exception invalidSession(ExecutionContext context) {
+    return new IllegalStateException("Invalid session");
   }
 
   protected abstract SessionIdValidator getSessionValidator();
