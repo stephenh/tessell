@@ -90,7 +90,7 @@ public class TextBoxFormLineTest extends AbstractFormPresenterTest {
     DummyAction action = new DummyAction();
     p.setDefaultAction(action);
     p.add(new TextBoxFormLine(employee.firstName));
-    tb("mpv-hb-1").keyUp(KEY_ENTER);
+    tb("mpv-hb-1").keyDown(KEY_ENTER);
     assertThat(action.triggered, is(true));
   }
 

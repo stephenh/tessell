@@ -14,9 +14,9 @@ import org.gwtmpv.widgets.IsHTMLPanel;
 import org.gwtmpv.widgets.form.actions.FormAction;
 import org.gwtmpv.widgets.form.lines.FormLine;
 
-import com.google.gwt.event.dom.client.HasKeyUpHandlers;
-import com.google.gwt.event.dom.client.KeyUpEvent;
-import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.event.dom.client.HasKeyDownHandlers;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.logical.shared.AttachEvent;
 
 /** Given a list of bindings, handles the boilerplate HTML layout/logic of forms. */
@@ -100,9 +100,12 @@ public class FormPresenter extends BasicPresenter<IsFlowPanel> {
     this.defaultAction = defaultAction;
   }
 
-  public void watchForEnterKey(final HasKeyUpHandlers source) {
-    source.addKeyUpHandler(new KeyUpHandler() {
-      public void onKeyUp(KeyUpEvent event) {
+  public void watchForEnterKey(final HasKeyDownHandlers source) {
+    // watch key down instead of key up so that if a button "enter"
+    // causes {@code source} to get focus, we don't inadvertently
+    // catch the key up event and immediately fire the default action
+    source.addKeyDownHandler(new KeyDownHandler() {
+      public void onKeyDown(KeyDownEvent event) {
         if (event.getNativeKeyCode() == KEY_ENTER) {
           if (defaultAction != null) {
             defaultAction.trigger();

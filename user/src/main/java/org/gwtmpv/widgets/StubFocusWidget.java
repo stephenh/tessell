@@ -80,7 +80,11 @@ public class StubFocusWidget extends StubWidget implements IsFocusWidget {
   }
 
   public void keyDown() {
-    fireEvent(new DummyKeyDownEvent());
+    fireEvent(new DummyKeyDownEvent(0));
+  }
+
+  public void keyDown(int keyCode) {
+    fireEvent(new DummyKeyDownEvent(keyCode));
   }
 
   public void keyPress() {
