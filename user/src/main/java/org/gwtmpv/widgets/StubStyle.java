@@ -277,4 +277,14 @@ public class StubStyle implements IsStyle {
     style.remove("padding");
   }
 
+  @Override
+  public void clearOpacity() {
+    style.remove("opacity");
+  }
+
+  @Override
+  public void clearWidth() {
+    style.remove("width");
+  }
+
 }

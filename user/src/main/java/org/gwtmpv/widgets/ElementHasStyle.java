@@ -274,4 +274,14 @@ public class ElementHasStyle implements IsStyle {
     element.getStyle().clearPadding();
   }
 
+  @Override
+  public void clearOpacity() {
+    element.getStyle().clearOpacity();
+  }
+
+  @Override
+  public void clearWidth() {
+    element.getStyle().clearWidth();
+  }
+
 }
