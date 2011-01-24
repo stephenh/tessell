@@ -32,7 +32,7 @@ import com.google.gwt.resources.client.TextResource;
 public class ResourcesGenerator {
 
   private static final Pattern urlPattern = Pattern.compile("url\\(([^\\)]+)\\)");
-  private static final Pattern plusKeywordPattern = Pattern.compile("\\+([a-z-]+): *([^;]+);");
+  private static final Pattern plusKeywordPattern = Pattern.compile("\\-X-([a-z-]+): *([^;]+);");
   private final File inputDirectory;
   private final Cleanup cleanup;
   private final String packageName;
