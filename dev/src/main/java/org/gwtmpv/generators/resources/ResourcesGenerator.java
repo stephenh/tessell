@@ -143,11 +143,11 @@ public class ResourcesGenerator {
     while (m.find()) {
       String property = m.group(1);
       String value = m.group(2);
-      String moz = "-moz-" + property + ": " + value + ";";
-      String webkit = " -webkit-" + property + ": " + value + ";";
-      String opera = " -o-" + property + ": " + value + ";";
-      String normal = " " + property + ": " + value + ";";
-      m.appendReplacement(sb, moz + webkit + opera + normal);
+      String newValue = "";
+      for (String prefix : new String[] { "-moz-", "-webkit-", "-o-", "-ms-", "" }) {
+        newValue = newValue + prefix + property + ": " + value + "; ";
+      }
+      m.appendReplacement(sb, newValue.trim());
     }
     m.appendTail(sb);
     return sb.toString();
