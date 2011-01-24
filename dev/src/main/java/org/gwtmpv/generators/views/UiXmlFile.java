@@ -43,7 +43,7 @@ class UiXmlFile {
   UiXmlFile(ViewGenerator viewGenerator, final File uiXml) {
     this.viewGenerator = viewGenerator;
     this.uiXml = uiXml;
-    uiXmlCopy = ResourcesGenerator.fileInOutputDirectory(viewGenerator.input, viewGenerator.output, uiXml, ".ui.xml", ".gen.ui.xml");
+    uiXmlCopy = ResourcesGenerator.fileInOutputDirectory(viewGenerator.input, viewGenerator.output, uiXml, ".ui.xml", "-gen.ui.xml");
 
     final String templateClassName = deriveClassName();
     final String packageName = StringUtils.substringBeforeLast(templateClassName, ".");
@@ -104,7 +104,7 @@ class UiXmlFile {
       // uibinder
       final GClass uibinder = gwtView.getInnerClass("MyUiBinder").setInterface();
       uibinder.baseClassName("{}<{}, {}>", UiBinder.class.getName(), handler.firstTagType, gwtView.getSimpleClassName());
-      uibinder.addAnnotation("@UiTemplate(\"{}\")", uiXml.getName().replace(".ui.xml", ".gen.ui.xml"));
+      uibinder.addAnnotation("@UiTemplate(\"{}\")", uiXml.getName().replace(".ui.xml", "-gen.ui.xml"));
       gwtView.addImports(UiTemplate.class);
 
       gwtView.getField("binder").type("MyUiBinder").setStatic().setFinal().initialValue("GWT.create(MyUiBinder.class)");
