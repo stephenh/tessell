@@ -146,12 +146,11 @@ public class ResourcesGenerator {
       String normal = property + ": " + value + ";";
       String moz = " -moz-" + property + ": " + value + ";";
       String webkit = " -webkit-" + property + ": " + value + ";";
-      m.appendReplacement(sb, normal + moz + webkit);
-
+      String opera = " -o-" + property + ": " + value + ";";
+      m.appendReplacement(sb, normal + moz + webkit + opera);
     }
     m.appendTail(sb);
     return sb.toString();
-
   }
 
   public void addImage(final File imageFile) throws Exception {
