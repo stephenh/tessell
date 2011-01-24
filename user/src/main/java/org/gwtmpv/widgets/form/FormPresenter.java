@@ -14,8 +14,6 @@ import org.gwtmpv.widgets.IsHTMLPanel;
 import org.gwtmpv.widgets.form.actions.FormAction;
 import org.gwtmpv.widgets.form.lines.FormLine;
 
-import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.dom.client.HasAllKeyHandlers;
 import com.google.gwt.event.logical.shared.AttachEvent;
 
@@ -73,11 +71,7 @@ public class FormPresenter extends BasicPresenter<IsFlowPanel> {
 
   public void focusFirstLine() {
     if (formLines.size() > 0) {
-      Scheduler.get().scheduleFinally(new ScheduledCommand() {
-        public void execute() {
-          formLines.get(0).focus();
-        }
-      });
+      formLines.get(0).focus();
     }
   }
 
