@@ -1,6 +1,5 @@
 package org.gwtmpv.widgets.form;
 
-import static com.google.gwt.event.dom.client.KeyCodes.KEY_ENTER;
 import static org.gwtmpv.widgets.Widgets.newFlowPanel;
 
 import java.util.ArrayList;
@@ -9,14 +8,15 @@ import org.gwtmpv.model.dsl.Binder;
 import org.gwtmpv.model.properties.PropertyGroup;
 import org.gwtmpv.presenter.BasicPresenter;
 import org.gwtmpv.util.HTMLPanelBuilder;
+import org.gwtmpv.util.OnEnterKeyHandler;
 import org.gwtmpv.widgets.IsFlowPanel;
 import org.gwtmpv.widgets.IsHTMLPanel;
 import org.gwtmpv.widgets.form.actions.FormAction;
 import org.gwtmpv.widgets.form.lines.FormLine;
 
-import com.google.gwt.event.dom.client.HasKeyDownHandlers;
-import com.google.gwt.event.dom.client.KeyDownEvent;
-import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.event.dom.client.HasAllKeyHandlers;
 import com.google.gwt.event.logical.shared.AttachEvent;
 
 /** Given a list of bindings, handles the boilerplate HTML layout/logic of forms. */
@@ -73,7 +73,11 @@ public class FormPresenter extends BasicPresenter<IsFlowPanel> {
 
   public void focusFirstLine() {
     if (formLines.size() > 0) {
-      formLines.get(0).focus();
+      Scheduler.get().scheduleFinally(new ScheduledCommand() {
+        public void execute() {
+          formLines.get(0).focus();
+        }
+      });
     }
   }
 
@@ -100,19 +104,16 @@ public class FormPresenter extends BasicPresenter<IsFlowPanel> {
     this.defaultAction = defaultAction;
   }
 
-  public void watchForEnterKey(final HasKeyDownHandlers source) {
-    // watch key down instead of key up so that if a button "enter"
-    // causes {@code source} to get focus, we don't inadvertently
-    // catch the key up event and immediately fire the default action
-    source.addKeyDownHandler(new KeyDownHandler() {
-      public void onKeyDown(KeyDownEvent event) {
-        if (event.getNativeKeyCode() == KEY_ENTER) {
-          if (defaultAction != null) {
-            defaultAction.trigger();
-          }
+  public void watchForEnterKey(final HasAllKeyHandlers source) {
+    OnEnterKeyHandler h = new OnEnterKeyHandler(new Runnable() {
+      public void run() {
+        if (defaultAction != null) {
+          defaultAction.trigger();
         }
       }
     });
+    source.addKeyUpHandler(h);
+    source.addKeyDownHandler(h);
   }
 
   private final class OnViewAttached implements AttachEvent.Handler {

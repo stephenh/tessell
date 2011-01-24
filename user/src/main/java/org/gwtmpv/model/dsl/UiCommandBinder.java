@@ -1,17 +1,14 @@
 package org.gwtmpv.model.dsl;
 
-import static com.google.gwt.event.dom.client.KeyCodes.KEY_ENTER;
-
 import org.gwtmpv.model.commands.UiCommand;
 import org.gwtmpv.model.properties.Property;
+import org.gwtmpv.util.OnEnterKeyHandler;
 import org.gwtmpv.widgets.IsTextList;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.HasAllKeyHandlers;
 import com.google.gwt.event.dom.client.HasClickHandlers;
-import com.google.gwt.event.dom.client.HasKeyDownHandlers;
-import com.google.gwt.event.dom.client.KeyDownEvent;
-import com.google.gwt.event.dom.client.KeyDownHandler;
 
 /** Binds various things to a command. */
 public class UiCommandBinder {
@@ -30,18 +27,15 @@ public class UiCommandBinder {
   }
 
   /** Binds "enter" from key down handlers to our command. */
-  public UiCommandBinder toEnterKey(final HasKeyDownHandlers... keyDowns) {
-    // listen to key down instead of key up so that the user hit "enter",
-    // and then our source got focus on the place change, that we don't
-    // immediately respond to the the enter key up event
-    for (HasKeyDownHandlers keyDown : keyDowns) {
-      binder.registerHandler(keyDown.addKeyDownHandler(new KeyDownHandler() {
-        public void onKeyDown(KeyDownEvent event) {
-          if (event.getNativeKeyCode() == KEY_ENTER) {
-            command.execute();
-          }
+  public UiCommandBinder toEnterKey(final HasAllKeyHandlers... allKeys) {
+    for (HasAllKeyHandlers allKey : allKeys) {
+      OnEnterKeyHandler h = new OnEnterKeyHandler(new Runnable() {
+        public void run() {
+          command.execute();
         }
-      }));
+      });
+      binder.registerHandler(allKey.addKeyDownHandler(h));
+      binder.registerHandler(allKey.addKeyDownHandler(h));
     }
     return this;
   }
