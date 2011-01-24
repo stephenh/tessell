@@ -78,7 +78,7 @@ public class ResourcesGenerator {
     final String stubName = packageName + ".Stub" + suffixIfNeeded(Inflector.capitalize(methodName), "Style");
 
     // Copy the file and do any url(...) => @url replacement
-    File cssFileCopy = fileInOutputDirectory(cssFile, ".css", ".gen.css");
+    File cssFileCopy = fileInOutputDirectory(inputDirectory, outputDirectory, cssFile, ".css", ".gen.css");
     String cssContent = FileUtils.readFileToString(cssFile);
     cssContent = doUrlSubstitution(cssContent);
     cssContent = doMozWebkitSubstitution(cssContent);
@@ -108,7 +108,7 @@ public class ResourcesGenerator {
   }
 
   /** @return a file in the same package as {@code file} but in the output (generated) directory */
-  private File fileInOutputDirectory(File file, String extMatch, String extReplace) {
+  public static File fileInOutputDirectory(File inputDirectory, File outputDirectory, File file, String extMatch, String extReplace) {
     return new File(//
       file.getAbsolutePath()//
         .replace(inputDirectory.getAbsolutePath(), outputDirectory.getAbsolutePath())
@@ -137,7 +137,7 @@ public class ResourcesGenerator {
     return defs.toString() + sb.toString();
   }
 
-  private static String doMozWebkitSubstitution(String cssContent) {
+  public static String doMozWebkitSubstitution(String cssContent) {
     StringBuffer sb = new StringBuffer();
     Matcher m = plusKeywordPattern.matcher(cssContent);
     while (m.find()) {

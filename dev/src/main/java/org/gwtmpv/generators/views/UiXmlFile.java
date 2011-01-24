@@ -8,9 +8,12 @@ import joist.sourcegen.GClass;
 import joist.sourcegen.GField;
 import joist.sourcegen.GMethod;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
+import org.gwtmpv.generators.GenUtils;
 import org.gwtmpv.generators.css.CssGenerator;
 import org.gwtmpv.generators.css.CssStubGenerator;
+import org.gwtmpv.generators.resources.ResourcesGenerator;
 import org.gwtmpv.widgets.DelegateIsWidget;
 import org.gwtmpv.widgets.GwtElement;
 import org.gwtmpv.widgets.IsWidget;
@@ -28,6 +31,7 @@ class UiXmlFile {
 
   private final ViewGenerator viewGenerator;
   private final File uiXml;
+  final File uiXmlCopy;
   final String baseName;
   final GClass gwtView;
   final GClass isView;
@@ -39,6 +43,7 @@ class UiXmlFile {
   UiXmlFile(ViewGenerator viewGenerator, final File uiXml) {
     this.viewGenerator = viewGenerator;
     this.uiXml = uiXml;
+    uiXmlCopy = ResourcesGenerator.fileInOutputDirectory(viewGenerator.input, viewGenerator.output, uiXml, ".ui.xml", ".gen.ui.xml");
 
     final String templateClassName = deriveClassName();
     final String packageName = StringUtils.substringBeforeLast(templateClassName, ".");
@@ -99,10 +104,17 @@ class UiXmlFile {
       // uibinder
       final GClass uibinder = gwtView.getInnerClass("MyUiBinder").setInterface();
       uibinder.baseClassName("{}<{}, {}>", UiBinder.class.getName(), handler.firstTagType, gwtView.getSimpleClassName());
-      uibinder.addAnnotation("@UiTemplate(\"{}\")", uiXml.getName());
+      uibinder.addAnnotation("@UiTemplate(\"{}\")", uiXml.getName().replace(".ui.xml", ".gen.ui.xml"));
       gwtView.addImports(UiTemplate.class);
 
       gwtView.getField("binder").type("MyUiBinder").setStatic().setFinal().initialValue("GWT.create(MyUiBinder.class)");
+    }
+
+    {
+      String uiXmlContent = FileUtils.readFileToString(uiXml);
+      uiXmlContent = ResourcesGenerator.doMozWebkitSubstitution(uiXmlContent);
+      GenUtils.saveIfChanged(uiXmlCopy, uiXmlContent);
+      viewGenerator.cleanup.markOkay(uiXmlCopy);
     }
 
     // for each ui:with, add a @UiField(provided=true) field and a constructor arg

@@ -62,6 +62,7 @@ public class ViewGenerator {
       cleanup.markOkay(uiXml.isView);
       cleanup.markOkay(uiXml.gwtView);
       cleanup.markOkay(uiXml.stubView);
+      cleanup.markOkay(uiXml.uiXmlCopy);
       for (final UiStyleDeclaration style : uiXml.getStylesPossiblyCached()) {
         cleanup.markTypeOkay(style.type);
         cleanup.markTypeOkay(style.getStubClassName());
