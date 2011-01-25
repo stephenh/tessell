@@ -26,11 +26,17 @@ public class SortHeader<T> extends DelegateIsHeader<Object> {
   }
 
   public SortHeader(final SortHeaders<T> headers, final String name, SortComparator<T> comparator) {
-    super.delegate = newCompositeHeader(//
+    this(headers, new CompositeHeaderFactory() {
+      public IsHeader<Object> newHeader(IsHeader<String> text, IsHeader<String> arrow) {
+        return newCompositeHeader(text, newTextHeader(" "), arrow);
+      }
+    }, name, comparator);
+  }
+
+  public SortHeader(SortHeaders<T> headers, CompositeHeaderFactory factory, String name, SortComparator<T> comparator) {
+    super.delegate = factory.newHeader(//
       newHeader(new SortHeaderValue(), newClickableTextCell()),//
-      newTextHeader(" "),//
-      newHeader(new SortTextValue(), newTextCell())//
-    );
+      newHeader(new SortTextValue(), newTextCell()));
     this.headers = headers;
     this.name = name;
     this.comparator = comparator;
@@ -79,6 +85,11 @@ public class SortHeader<T> extends DelegateIsHeader<Object> {
     public String get() {
       return sorted.icon();
     }
+  }
+
+  /** Allows clients to create a custom composite header based on the initial text/arrow headers. */
+  public interface CompositeHeaderFactory {
+    IsHeader<Object> newHeader(IsHeader<String> text, IsHeader<String> arrow);
   }
 
 }

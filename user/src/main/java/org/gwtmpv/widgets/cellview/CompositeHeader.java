@@ -28,8 +28,12 @@ public class CompositeHeader extends DelegateIsHeader<Object> {
     super(newHeader(new ConstantHeaderValue<Object>(null), newCompositeCell(toHasCells(headers))));
   }
 
+  public CompositeHeader(final IsCompositeCell<Object> cell) {
+    super(newHeader(new ConstantHeaderValue<Object>(null), cell));
+  }
+
   /** @return {@code headers} wrapped into fake {@link HasCell}s for {@link CompositeCell}. */
-  private static List<HasCell<Object, ?>> toHasCells(final IsHeader<?>... headers) {
+  public static List<HasCell<Object, ?>> toHasCells(final IsHeader<?>... headers) {
     final List<HasCell<Object, ?>> cells = new ArrayList<HasCell<Object, ?>>();
     for (final IsHeader<?> header : headers) {
       cells.add(newHasCell(header));
