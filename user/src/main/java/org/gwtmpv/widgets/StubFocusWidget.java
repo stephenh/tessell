@@ -4,6 +4,7 @@ import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
@@ -30,6 +31,8 @@ public class StubFocusWidget extends StubWidget implements IsFocusWidget {
   private static StubFocusWidget lastFocus;
   private boolean enabled = true;
   private boolean focus;
+  private int tabIndex;
+  private char accessKey;
 
   public void click() {
     // is only-click if enabled true for all FocusWidgets?
@@ -98,22 +101,26 @@ public class StubFocusWidget extends StubWidget implements IsFocusWidget {
 
   @Override
   public int getTabIndex() {
-    throw new UnsupportedOperationException("This is a stub.");
+    return tabIndex;
+  }
+
+  public char getAccessKey() {
+    return accessKey;
   }
 
   @Override
   public void setAccessKey(final char key) {
-    throw new UnsupportedOperationException("This is a stub.");
+    accessKey = key;
   }
 
   @Override
   public void setTabIndex(final int index) {
-    throw new UnsupportedOperationException("This is a stub.");
+    tabIndex = index;
   }
 
   @Override
   public HandlerRegistration addFocusHandler(final FocusHandler handler) {
-    throw new UnsupportedOperationException("This is a stub.");
+    return handlers.addHandler(FocusEvent.getType(), handler);
   }
 
   @Override
