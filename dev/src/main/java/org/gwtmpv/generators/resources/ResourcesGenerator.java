@@ -31,7 +31,8 @@ import com.google.gwt.resources.client.TextResource;
 /** A utility class for generating resource interfaces from files in directory. */
 public class ResourcesGenerator {
 
-  private static final Pattern urlPattern = Pattern.compile("url\\(([^\\)]+)\\)");
+  // ignore literal('url(...)') with a negative look behind
+  private static final Pattern urlPattern = Pattern.compile("(?<!literal\\(')url\\(([^\\)]+)\\)");
   private static final Pattern plusKeywordPattern = Pattern.compile("\\-X-([a-z-]+): *([^;]+);");
   private final File inputDirectory;
   private final Cleanup cleanup;
