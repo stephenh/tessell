@@ -34,3 +34,10 @@ Notes
   * have the codegen make both the dtos and the mapping
   * List<Entity> <-> List<String> names
 
+EventBus Todo
+-------------
+
+* `addHandler` should take `CanRegisterHandlers`--enforced registration, implicit is too magical for now
+* `AbstractTypedHandler` with a `getType()` instance method
+
+
