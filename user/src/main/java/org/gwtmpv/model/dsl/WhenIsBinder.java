@@ -47,6 +47,15 @@ public class WhenIsBinder<P> {
     showIfEq(csses); // set initial
   }
 
+  public void hide(final HasCss... csses) {
+    binder.registerHandler(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
+      public void onPropertyChanged(PropertyChangedEvent<P> event) {
+        hideIfEq(csses);
+      }
+    }));
+    hideIfEq(csses); // set initial
+  }
+
   public void visible(final HasCss css) {
     binder.registerHandler(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
       public void onPropertyChanged(PropertyChangedEvent<P> event) {
@@ -100,6 +109,18 @@ public class WhenIsBinder<P> {
     } else {
       for (HasCss css : csses) {
         css.getStyle().setDisplay(Display.NONE);
+      }
+    }
+  }
+
+  private void hideIfEq(HasCss... csses) {
+    if (eq(value, property.get())) {
+      for (HasCss css : csses) {
+        css.getStyle().setDisplay(Display.NONE);
+      }
+    } else {
+      for (HasCss css : csses) {
+        css.getStyle().clearDisplay();
       }
     }
   }
