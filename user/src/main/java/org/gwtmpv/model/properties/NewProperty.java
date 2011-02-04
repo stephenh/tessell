@@ -25,6 +25,10 @@ public class NewProperty {
     return new BasicProperty<P>(new BoundValue<P>(binding));
   }
 
+  public static <P> BasicProperty<P> basicProperty(final String name, P initialValue) {
+    return new BasicProperty<P>(new SetValue<P>(name, initialValue));
+  }
+
   public static BooleanProperty booleanProperty(final String name) {
     return new BooleanProperty(new SetValue<Boolean>(name));
   }
