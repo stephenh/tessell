@@ -2,6 +2,7 @@ package org.gwtmpv.model.dsl;
 
 import static com.google.gwt.event.dom.client.KeyCodes.KEY_TAB;
 
+
 import org.gwtmpv.bus.CanRegisterHandlers;
 import org.gwtmpv.model.commands.UiCommand;
 import org.gwtmpv.model.events.PropertyChangedEvent;
@@ -10,13 +11,10 @@ import org.gwtmpv.model.properties.EnumProperty;
 import org.gwtmpv.model.properties.Property;
 import org.gwtmpv.model.properties.StringProperty;
 import org.gwtmpv.model.validation.rules.Rule;
-import org.gwtmpv.widgets.IsListBox;
 import org.gwtmpv.widgets.IsTextBox;
 
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
-import com.google.gwt.event.dom.client.ChangeEvent;
-import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.HasBlurHandlers;
 import com.google.gwt.event.dom.client.HasKeyUpHandlers;
 import com.google.gwt.event.dom.client.KeyUpEvent;
@@ -54,7 +52,7 @@ public class Binder {
 
   /** @return a fluent {@link EnumPropertyBinder} against {@code property}. */
   public <E extends Enum<E>> EnumPropertyBinder<E> bind(EnumProperty<E> property) {
-    return new EnumPropertyBinder<E>(property);
+    return new EnumPropertyBinder<E>(this, property);
   }
 
   /** @return a fluent {@link UiCommandBinder} against {@code command}. */
@@ -168,50 +166,6 @@ public class Binder {
       super.to(source);
       return this;
     }
-  }
-
-  /** Binds {@link EnumProperty}s to widgets. handling). */
-  public class EnumPropertyBinder<E extends Enum<E>> extends PropertyBinder<E> {
-    private final EnumProperty<E> ep;
-
-    private EnumPropertyBinder(EnumProperty<E> ep) {
-      super(Binder.this, ep);
-      this.ep = ep;
-    }
-
-    public HandlerRegistrations to(final IsListBox source, final E[] values) {
-      int i = 0;
-      for (E value : values) {
-        source.addItem(value.toString(), Integer.toString(i++));
-      }
-      if (ep.get() == null) {
-        // TODO don't currently support an empty option
-        ep.set(values[0]);
-      }
-      source.setSelectedIndex(indexOf(values, ep.get()));
-      HandlerRegistration a = source.addChangeHandler(new ChangeHandler() {
-        public void onChange(ChangeEvent event) {
-          int i = source.getSelectedIndex();
-          if (i == -1) {
-            ep.set(null);
-          } else {
-            ep.set(values[i]);
-          }
-        }
-      });
-      return new HandlerRegistrations(a);
-    }
-  }
-
-  private <E> int indexOf(E[] values, E value) {
-    int i = 0;
-    for (E other : values) {
-      if (value == other) {
-        return i;
-      }
-      i++;
-    }
-    return -1;
   }
 
   /** Fires {@link ValueChangeEvent} on blur (always) and key up (after a blur has been fired). */
