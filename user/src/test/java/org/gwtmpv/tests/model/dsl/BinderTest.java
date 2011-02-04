@@ -72,6 +72,30 @@ public class BinderTest {
   }
 
   @Test
+  public void propertyToListBoxUpdatesListBoxWhenPropertyChanges() {
+    StubListBox listBox = new StubListBox();
+    ArrayList<String> values = new ArrayList<String>();
+    values.add("a");
+    values.add("b");
+
+    binder.bind(s).to(listBox, values);
+    s.set("b");
+    assertThat(listBox.getSelectedIndex(), is(1));
+  }
+
+  @Test
+  public void propertyToListBoxUpdatesPropertyWhenListBoxChange() {
+    StubListBox listBox = new StubListBox();
+    ArrayList<String> values = new ArrayList<String>();
+    values.add("a");
+    values.add("b");
+
+    binder.bind(s).to(listBox, values);
+    listBox.select("b");
+    assertThat(s.get(), is("b"));
+  }
+
+  @Test
   public void errorsThatAlreadyFiredGetAddedToAnErrorList() {
     s.req().touch();
     assertThat(s.wasValid(), is(Valid.NO));

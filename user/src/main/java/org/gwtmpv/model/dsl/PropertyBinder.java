@@ -2,14 +2,20 @@ package org.gwtmpv.model.dsl;
 
 import static org.gwtmpv.util.ObjectUtils.toStr;
 
+import java.util.ArrayList;
+
 import org.gwtmpv.model.events.PropertyChangedEvent;
 import org.gwtmpv.model.events.PropertyChangedHandler;
 import org.gwtmpv.model.properties.Property;
+import org.gwtmpv.widgets.IsListBox;
 import org.gwtmpv.widgets.IsTextList;
 
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.HasHTML;
 import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.HasValue;
@@ -75,6 +81,34 @@ public class PropertyBinder<P> {
     }
     binder.registerHandler(p.addPropertyChangedHandler(h));
     return this;
+  }
+
+  public HandlerRegistrations to(final IsListBox source, final ArrayList<P> values) {
+    int i = 0;
+    for (P value : values) {
+      source.addItem(value.toString(), Integer.toString(i++));
+    }
+    if (p.get() == null) {
+      // TODO don't currently support an empty option
+      p.set(values.get(0));
+    }
+    source.setSelectedIndex(values.indexOf(p.get()));
+    HandlerRegistration a = source.addChangeHandler(new ChangeHandler() {
+      public void onChange(ChangeEvent event) {
+        int i = source.getSelectedIndex();
+        if (i == -1) {
+          p.set(null);
+        } else {
+          p.set(values.get(i));
+        }
+      }
+    });
+    HandlerRegistration b = p.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
+      public void onPropertyChanged(PropertyChangedEvent<P> event) {
+        source.setSelectedIndex(values.indexOf(p.get()));
+      }
+    });
+    return new HandlerRegistrations(a, b);
   }
 
   /** Binds errors for our property to {@code errors}. */
