@@ -46,6 +46,10 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
   protected P lastValue;
   // whether the user has touched this field on the screen yet
   private boolean touched;
+  // whether we're currently reassessing
+  private boolean reassessing;
+  // whether we're currently touching
+  private boolean touching;
   // the result of the last validate()
   private Valid valid;
 
@@ -72,19 +76,27 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
 
   @Override
   public void reassess() {
-    // log.log(Level.FINEST, this + " reassessing");
-    final P newValue = get();
-    final boolean changed = !eq(lastValue, newValue);
-    lastValue = newValue;
-    if (changed) {
-      // log.log(Level.FINER, this + " changed");
-      fireEvent(new PropertyChangedEvent<P>(this));
+    if (reassessing) {
+      return;
     }
+    try {
+      reassessing = true;
+      // log.log(Level.FINEST, this + " reassessing");
+      final P newValue = get();
+      final boolean changed = !eq(lastValue, newValue);
+      lastValue = newValue;
+      if (changed) {
+        // log.log(Level.FINER, this + " changed");
+        fireEvent(new PropertyChangedEvent<P>(this));
+      }
 
-    validate();
+      validate();
 
-    for (final Property<?> other : derived) {
-      other.reassess();
+      for (final Property<?> other : derived) {
+        other.reassess();
+      }
+    } finally {
+      reassessing = false;
     }
   }
 
@@ -160,11 +172,19 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
 
   @Override
   public void setTouched(final boolean touched) {
-    this.touched = touched;
-    for (final Property<?> other : derived) {
-      other.setTouched(touched);
+    if (touching) {
+      return;
     }
-    reassess();
+    try {
+      touching = true;
+      this.touched = touched;
+      for (final Property<?> other : derived) {
+        other.setTouched(touched);
+      }
+      reassess();
+    } finally {
+      touching = false;
+    }
   }
 
   @Override
