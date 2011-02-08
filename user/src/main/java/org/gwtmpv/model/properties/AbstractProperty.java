@@ -43,7 +43,7 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
   // our wrapped value
   private final Value<P> value;
   // snapshot of the value for diff purposes (e.g. derived values)
-  protected P lastValue;
+  private P lastValue;
   // whether the user has touched this field on the screen yet
   private boolean touched;
   // whether we're currently reassessing
@@ -55,7 +55,7 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
 
   public AbstractProperty(final Value<P> value) {
     this.value = value;
-    lastValue = get();
+    lastValue = copyLastValue(value.get());
   }
 
   @Override
@@ -84,13 +84,13 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
       // log.log(Level.FINEST, this + " reassessing");
       final P newValue = get();
       final boolean changed = !eq(lastValue, newValue);
-      lastValue = newValue;
 
       // run validation before firing change so that
       // change handlers see a correct wasValid value
       validate();
 
       if (changed) {
+        lastValue = copyLastValue(newValue);
         // log.log(Level.FINER, this + " changed");
         fireEvent(new PropertyChangedEvent<P>(this));
       }
@@ -108,6 +108,11 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
     } finally {
       reassessing = false;
     }
+  }
+
+  /** Allow subclasses to deep copy values if needed. */
+  protected P copyLastValue(P newValue) {
+    return newValue;
   }
 
   @Override

@@ -24,7 +24,6 @@ public class ListProperty<E> extends AbstractProperty<ArrayList<E>, ListProperty
     get().add(item);
     setTouched(true);
     fireEvent(new ValueAddedEvent<E>(this, item));
-    lastValue = null; // force changed
     reassess();
   }
 
@@ -33,7 +32,6 @@ public class ListProperty<E> extends AbstractProperty<ArrayList<E>, ListProperty
     // should be considered touched?
     if (get().remove(item)) {
       fireEvent(new ValueRemovedEvent<E>(this, item));
-      lastValue = null; // force changed
       reassess();
     }
   }
@@ -45,7 +43,6 @@ public class ListProperty<E> extends AbstractProperty<ArrayList<E>, ListProperty
       final E value = get().remove(i);
       fireEvent(new ValueRemovedEvent<E>(this, value));
     }
-    lastValue = null; // force changed
     reassess();
   }
 
@@ -72,6 +69,14 @@ public class ListProperty<E> extends AbstractProperty<ArrayList<E>, ListProperty
   @Override
   protected ListProperty<E> getThis() {
     return this;
+  }
+
+  @Override
+  protected ArrayList<E> copyLastValue(ArrayList<E> newValue) {
+    if (newValue == null) {
+      return null;
+    }
+    return new ArrayList<E>(newValue);
   }
 
 }

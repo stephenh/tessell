@@ -68,7 +68,6 @@ public class DtoListProperty<E extends Model<F>, F extends Dto<E>> extends Abstr
       setTouched(true);
     }
     fireEvent(new ValueAddedEvent<E>(this, item));
-    lastValue = null; // force changed
     reassess();
   }
 
@@ -78,7 +77,6 @@ public class DtoListProperty<E extends Model<F>, F extends Dto<E>> extends Abstr
       dtoList().remove(item.getDto()); // dto
       setTouched(true);
       fireEvent(new ValueRemovedEvent<E>(this, item));
-      lastValue = null; // force changed
       reassess();
     }
   }
@@ -91,7 +89,6 @@ public class DtoListProperty<E extends Model<F>, F extends Dto<E>> extends Abstr
       dtoList().remove(value.getDto()); // dto
       fireEvent(new ValueRemovedEvent<E>(this, value));
     }
-    lastValue = null; // force changed
     reassess();
   }
 
@@ -137,6 +134,14 @@ public class DtoListProperty<E extends Model<F>, F extends Dto<E>> extends Abstr
   @Override
   protected DtoListProperty<E, F> getThis() {
     return this;
+  }
+
+  @Override
+  protected ArrayList<E> copyLastValue(ArrayList<E> newValue) {
+    if (newValue == null) {
+      return null;
+    }
+    return new ArrayList<E>(newValue);
   }
 
   private ArrayList<F> dtoList() {

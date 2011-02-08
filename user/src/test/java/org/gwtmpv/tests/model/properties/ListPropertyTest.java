@@ -37,6 +37,23 @@ public class ListPropertyTest {
     p.add("foo");
     assertThat(adds.count, is(1));
     assertThat(changes.count, is(1));
+
+    p.add("bar");
+    assertThat(adds.count, is(2));
+    assertThat(changes.count, is(2));
+  }
+
+  @Test
+  public void addingFiresValueAddedAndChangedWhenUsedViaTheCstr() {
+    ListProperty<String> b = new ListProperty<String>(new SetValue<ArrayList<String>>("b", new ArrayList<String>()));
+    b.addValueAddedHandler(adds);
+    b.addPropertyChangedHandler(changes);
+    assertThat(adds.count, is(0));
+    assertThat(changes.count, is(0));
+
+    b.add("blah");
+    assertThat(adds.count, is(1));
+    assertThat(changes.count, is(1));
   }
 
   @Test
