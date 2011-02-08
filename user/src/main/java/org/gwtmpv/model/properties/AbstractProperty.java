@@ -85,11 +85,21 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
       final P newValue = get();
       final boolean changed = !eq(lastValue, newValue);
       lastValue = newValue;
+
+      // run validation before firing change so that
+      // change handlers see a correct wasValid value
+      validate();
+
       if (changed) {
         // log.log(Level.FINER, this + " changed");
         fireEvent(new PropertyChangedEvent<P>(this));
       }
 
+      // rerun validation because our change handlers
+      // might have changed some of the static rules.
+      // this is less than ideal because now the change
+      // handlers might have been lied to. Punting for
+      // now.
       validate();
 
       for (final Property<?> other : derived) {
