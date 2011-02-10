@@ -76,4 +76,18 @@ public class PropertyGroupTest extends AbstractRuleTest {
     assertThat(all.get(), is(true));
   }
 
+  @Test
+  public void addingAlreadyInvalidPropertyMakesGroupInvalid() {
+    PropertyGroup all = new PropertyGroup("all", "some message");
+
+    StringProperty p1 = stringProperty("p1").max(5);
+    p1.set("123456");
+
+    all.add(p1);
+    assertThat(all.wasValid(), is(Valid.NO));
+
+    p1.set("1234");
+    assertThat(all.wasValid(), is(Valid.YES));
+  }
+
 }

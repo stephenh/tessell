@@ -43,7 +43,11 @@ public class PropertyGroup extends AbstractProperty<Boolean, PropertyGroup> {
   public void add(final Property<?>... properties) {
     for (final Property<?> property : properties) {
       this.properties.add(new PropertyWithHandlers(property));
+      for (Map.Entry<Object, String> e : property.getErrors().entrySet()) {
+        invalid.add(new PropertyError(property, e.getKey()));
+      }
     }
+    reassess();
   }
 
   /** Removes {@code property} from the group. */
