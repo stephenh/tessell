@@ -63,4 +63,17 @@ public class PropertyGroupTest extends AbstractRuleTest {
     assertThat(all.wasValid(), is(Valid.YES));
   }
 
+  @Test
+  public void changesItsValueBasedOnBeingValid() {
+    PropertyGroup all = new PropertyGroup("all", "some message");
+    assertThat(all.get(), is(true));
+
+    StringProperty p1 = stringProperty("p1").in(all).max(5);
+    p1.set("123456");
+    assertThat(all.get(), is(false));
+
+    all.remove(p1);
+    assertThat(all.get(), is(true));
+  }
+
 }

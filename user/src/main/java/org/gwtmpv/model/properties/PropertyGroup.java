@@ -15,21 +15,28 @@ import org.gwtmpv.model.values.SetValue;
 
 import com.google.gwt.event.shared.HandlerRegistration;
 
-/** Groups a set of {@link Property}s together. This is pretty hacky. It might go away. */
+/** Groups a set of {@link Property}s together. */
 public class PropertyGroup extends AbstractProperty<Boolean, PropertyGroup> {
 
-  // All of the rules in this group
+  // All of the properties in this group
   private final ArrayList<PropertyWithHandlers> properties = new ArrayList<PropertyWithHandlers>();
+  // Any outstanding errors from properties in this group
   private final ArrayList<PropertyError> invalid = new ArrayList<PropertyError>();
   private Snapshot snapshot;
 
   public PropertyGroup(final String name, final String message) {
-    super(new SetValue<Boolean>(name));
+    super(new SetValue<Boolean>(name, true));
     new Custom(this, message, new DerivedValue<Boolean>() {
       public Boolean get() {
         return invalid.size() == 0;
       }
     });
+  }
+
+  @Override
+  public void reassess() {
+    ((SetValue<Boolean>) getValue()).set(invalid.size() == 0);
+    super.reassess();
   }
 
   /** Adds properties to the group to validate as a group. */
@@ -54,11 +61,6 @@ public class PropertyGroup extends AbstractProperty<Boolean, PropertyGroup> {
       }
     }
     reassess();
-  }
-
-  @Override
-  public void set(final Boolean value) {
-    throw new IllegalArgumentException("PropertyGroups cannot be set, call validate");
   }
 
   public ArrayList<Property<?>> getProperties() {
