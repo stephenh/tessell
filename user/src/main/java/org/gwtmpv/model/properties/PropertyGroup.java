@@ -1,6 +1,7 @@
 package org.gwtmpv.model.properties;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -12,12 +13,14 @@ import org.gwtmpv.model.validation.rules.Custom;
 import org.gwtmpv.model.values.DerivedValue;
 import org.gwtmpv.model.values.SetValue;
 
+import com.google.gwt.event.shared.HandlerRegistration;
+
 /** Groups a set of {@link Property}s together. This is pretty hacky. It might go away. */
 public class PropertyGroup extends AbstractProperty<Boolean, PropertyGroup> {
 
   // All of the rules in this group
-  private final ArrayList<Property<?>> properties = new ArrayList<Property<?>>();
-  private final ArrayList<Object> invalid = new ArrayList<Object>();
+  private final ArrayList<PropertyWithHandlers> properties = new ArrayList<PropertyWithHandlers>();
+  private final ArrayList<PropertyError> invalid = new ArrayList<PropertyError>();
   private Snapshot snapshot;
 
   public PropertyGroup(final String name, final String message) {
@@ -32,10 +35,25 @@ public class PropertyGroup extends AbstractProperty<Boolean, PropertyGroup> {
   /** Adds properties to the group to validate as a group. */
   public void add(final Property<?>... properties) {
     for (final Property<?> property : properties) {
-      this.properties.add(property);
-      property.addRuleTriggeredHandler(triggered);
-      property.addRuleUntriggeredHandler(untriggered);
+      this.properties.add(new PropertyWithHandlers(property));
     }
+  }
+
+  /** Removes {@code property} from the group. */
+  public void remove(Property<?> property) {
+    for (Iterator<PropertyWithHandlers> i = properties.iterator(); i.hasNext();) {
+      PropertyWithHandlers pwd = i.next();
+      if (pwd.property == property) {
+        pwd.removeHandlers();
+        i.remove();
+      }
+    }
+    for (Iterator<PropertyError> i = invalid.iterator(); i.hasNext();) {
+      if (i.next().property == property) {
+        i.remove();
+      }
+    }
+    reassess();
   }
 
   @Override
@@ -44,13 +62,17 @@ public class PropertyGroup extends AbstractProperty<Boolean, PropertyGroup> {
   }
 
   public ArrayList<Property<?>> getProperties() {
+    ArrayList<Property<?>> properties = new ArrayList<Property<?>>();
+    for (PropertyWithHandlers pwh : this.properties) {
+      properties.add(pwh.property);
+    }
     return properties;
   }
 
   @Override
   public void setTouched(final boolean touched) {
-    for (final Property<?> other : properties) {
-      other.setTouched(touched);
+    for (final PropertyWithHandlers other : properties) {
+      other.property.setTouched(touched);
     }
     super.setTouched(touched);
   }
@@ -74,20 +96,7 @@ public class PropertyGroup extends AbstractProperty<Boolean, PropertyGroup> {
     return this;
   }
 
-  private final RuleTriggeredHandler triggered = new RuleTriggeredHandler() {
-    public void onTrigger(final RuleTriggeredEvent event) {
-      invalid.add(event.getKey());
-      reassess();
-    }
-  };
-
-  private final RuleUntriggeredHandler untriggered = new RuleUntriggeredHandler() {
-    public void onUntrigger(final RuleUntriggeredEvent event) {
-      invalid.remove(event.getKey());
-      reassess();
-    }
-  };
-
+  /** Remembers the state of all of the properties in our group so that we can roll back when needed (e.g. on cancel). */
   private static class Snapshot {
     private final Map<Property<?>, Object> state = new LinkedHashMap<Property<?>, Object>();
 
@@ -98,6 +107,49 @@ public class PropertyGroup extends AbstractProperty<Boolean, PropertyGroup> {
     @SuppressWarnings("unchecked")
     private <P> void restore(Property<P> p) {
       p.set((P) state.get(p));
+    }
+  }
+
+  /** Holds a property + its handler registrations (in case we have to remove it). */
+  private class PropertyWithHandlers {
+    private final Property<?> property;
+    private final HandlerRegistration triggered;
+    private final HandlerRegistration untriggered;
+
+    private PropertyWithHandlers(final Property<?> property) {
+      this.property = property;
+      triggered = property.addRuleTriggeredHandler(new RuleTriggeredHandler() {
+        public void onTrigger(final RuleTriggeredEvent event) {
+          invalid.add(new PropertyError(property, event.getKey()));
+          reassess();
+        }
+      });
+      untriggered = property.addRuleUntriggeredHandler(new RuleUntriggeredHandler() {
+        public void onUntrigger(final RuleUntriggeredEvent event) {
+          for (Iterator<PropertyError> i = invalid.iterator(); i.hasNext();) {
+            if (i.next().key.equals(event.getKey())) {
+              i.remove();
+            }
+          }
+          reassess();
+        }
+      });
+    }
+
+    private void removeHandlers() {
+      triggered.removeHandler();
+      untriggered.removeHandler();
+    }
+  }
+
+  /** Holds a rule triggered key + the property that caused it (in case we have to remove it). */
+  private class PropertyError {
+    private final Property<?> property;
+    private final Object key;
+
+    private PropertyError(Property<?> property, Object key) {
+      this.property = property;
+      this.key = key;
     }
   }
 
