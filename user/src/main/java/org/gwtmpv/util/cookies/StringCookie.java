@@ -9,13 +9,13 @@ public class StringCookie extends AbstractCookie<String> {
   }
 
   @Override
-  public String get() {
-    return cookies.get(name);
+  protected String fromString(String value) {
+    return value;
   }
 
   @Override
-  public void set(final String value) {
-    cookies.set(name, value == null ? "" : value.toString());
+  protected String toString(String value) {
+    return value;
   }
 
 }

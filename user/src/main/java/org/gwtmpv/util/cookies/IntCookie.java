@@ -9,17 +9,17 @@ public class IntCookie extends AbstractCookie<Integer> {
   }
 
   @Override
-  public Integer get() {
+  public Integer fromString(String value) {
     try {
-      return new Integer(cookies.get(name));
+      return new Integer(value);
     } catch (final Exception e) {
       return null;
     }
   }
 
   @Override
-  public void set(final Integer value) {
-    cookies.set(name, value == null ? "" : value.toString());
+  public String toString(Integer value) {
+    return value == null ? "" : value.toString();
   }
 
 }
