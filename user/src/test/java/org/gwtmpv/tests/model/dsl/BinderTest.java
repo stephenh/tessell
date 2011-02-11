@@ -21,6 +21,8 @@ import org.gwtmpv.model.properties.EnumProperty;
 import org.gwtmpv.model.properties.StringProperty;
 import org.gwtmpv.model.validation.Valid;
 import org.gwtmpv.model.values.SetValue;
+import org.gwtmpv.util.cookies.StringCookie;
+import org.gwtmpv.util.cookies.facade.StubCookies;
 import org.gwtmpv.widgets.StubFocusWidget;
 import org.gwtmpv.widgets.StubListBox;
 import org.gwtmpv.widgets.StubTextBox;
@@ -287,6 +289,28 @@ public class BinderTest {
     binder.bind(s).to(box);
     box.setValue("", true);
     assertThat(s.get(), is(nullValue()));
+  }
+
+  @Test
+  public void propertyToCookie() {
+    StubCookies cookies = new StubCookies();
+    StringCookie c = new StringCookie(cookies, "c");
+    binder.bind(s).to(c);
+    assertThat(s.get(), is(nullValue()));
+    assertThat(cookies.get("c"), is(nullValue()));
+
+    s.set("foo");
+    assertThat(cookies.get("c"), is("foo"));
+  }
+
+  @Test
+  public void propertyToCookieGetsInitialCookieValue() {
+    StubCookies cookies = new StubCookies();
+    StringCookie c = new StringCookie(cookies, "c");
+    cookies.set("c", "foo");
+    binder.bind(s).to(c);
+
+    assertThat(s.get(), is("foo"));
   }
 
   public static enum Color {

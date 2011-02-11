@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import org.gwtmpv.model.events.PropertyChangedEvent;
 import org.gwtmpv.model.events.PropertyChangedHandler;
 import org.gwtmpv.model.properties.Property;
+import org.gwtmpv.util.cookies.Cookie;
 import org.gwtmpv.widgets.IsListBox;
 import org.gwtmpv.widgets.IsTextList;
 
@@ -109,6 +110,20 @@ public class PropertyBinder<P> {
       }
     });
     return new HandlerRegistrations(a, b);
+  }
+
+  /** Binds changes of {@code p} to {@code cookie} (not two-way as cookies don't fire change events). */
+  public HandlerRegistrations to(final Cookie<P> cookie) {
+    HandlerRegistration a = p.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
+      public void onPropertyChanged(PropertyChangedEvent<P> event) {
+        cookie.set(p.get());
+      }
+    });
+    // set the initial value
+    if (cookie.get() != null) {
+      p.set(cookie.get());
+    }
+    return new HandlerRegistrations(a);
   }
 
   /** Binds errors for our property to {@code errors}. */
