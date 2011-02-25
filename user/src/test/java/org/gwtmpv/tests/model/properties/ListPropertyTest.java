@@ -1,6 +1,7 @@
 package org.gwtmpv.tests.model.properties;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.contains;
 import static org.junit.Assert.assertThat;
 
 import java.util.ArrayList;
@@ -82,6 +83,16 @@ public class ListPropertyTest {
     p.clear();
     assertThat(removes.count, is(2));
     assertThat(changes.count, is(3));
+  }
+
+  @Test
+  public void setMakesACopy() {
+    ArrayList<String> l = new ArrayList<String>();
+    l.add("foo");
+    p.set(l);
+
+    l.add("bar");
+    assertThat(p.get(), contains("foo"));
   }
 
   public static class CountingChanges<P> implements PropertyChangedHandler<P> {

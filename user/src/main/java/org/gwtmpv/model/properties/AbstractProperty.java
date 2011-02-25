@@ -70,7 +70,7 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
 
   @Override
   public void set(final P value) {
-    this.value.set(value);
+    this.value.set(copyLastValue(value));
     setTouched(true); // even if unchanged, treat this as touching
   }
 
