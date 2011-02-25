@@ -22,7 +22,7 @@ public class StringUtils {
     for (final Iterator<?> i = things.iterator(); i.hasNext();) {
       sb.append(i.next());
       if (i.hasNext()) {
-        sb.append(" ");
+        sb.append(on);
       }
     }
     return sb.toString();
@@ -33,7 +33,7 @@ public class StringUtils {
     for (int i = 0, len = things.length; i < len; i++) {
       sb.append(things[i]);
       if (i < len - 1) {
-        sb.append(" ");
+        sb.append(on);
       }
     }
     return sb.toString();
