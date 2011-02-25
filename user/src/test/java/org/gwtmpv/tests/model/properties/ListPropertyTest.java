@@ -95,6 +95,24 @@ public class ListPropertyTest {
     assertThat(p.get(), contains("foo"));
   }
 
+  @Test
+  public void setFiresADiff() {
+    ArrayList<String> l = new ArrayList<String>();
+    l.add("foo");
+    l.add("bar");
+    p.set(l);
+    assertThat(adds.count, is(2));
+    assertThat(changes.count, is(1));
+
+    // remove foo, add zaz, keep bar
+    l.remove("foo");
+    l.add("zaz");
+    p.set(l);
+    assertThat(adds.count, is(3));
+    assertThat(removes.count, is(1));
+    assertThat(changes.count, is(2));
+  }
+
   public static class CountingChanges<P> implements PropertyChangedHandler<P> {
     public int count;
 

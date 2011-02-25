@@ -19,6 +19,19 @@ public class ListProperty<E> extends AbstractProperty<ArrayList<E>, ListProperty
     super(value);
   }
 
+  @Override
+  public void set(final ArrayList<E> items) {
+    ArrayList<E> added = diff(get(), items);
+    ArrayList<E> removed = diff(items, get());
+    super.set(items);
+    for (E add : added) {
+      fireEvent(new ValueAddedEvent<E>(this, add));
+    }
+    for (E remove : removed) {
+      fireEvent(new ValueRemovedEvent<E>(this, remove));
+    }
+  }
+
   /** Adds {@code item}, firing a {@link ValueAddedEvent}. */
   public void add(final E item) {
     get().add(item);
@@ -77,6 +90,20 @@ public class ListProperty<E> extends AbstractProperty<ArrayList<E>, ListProperty
       return null;
     }
     return new ArrayList<E>(newValue);
+  }
+
+  /** @return the elements in two that are not in one */
+  private static <E> ArrayList<E> diff(ArrayList<E> one, ArrayList<E> two) {
+    ArrayList<E> diff = new ArrayList<E>();
+    if (one == null || two == null) {
+      return diff;
+    }
+    for (E t : two) {
+      if (!one.contains(t)) {
+        diff.add(t);
+      }
+    }
+    return diff;
   }
 
 }
