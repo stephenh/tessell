@@ -5,6 +5,8 @@ import com.google.gwt.event.shared.HandlerRegistration;
 
 public interface IsWindow {
 
+  void reload();
+
   void alert(String message);
 
   void open(String url, String name, String features);

@@ -14,6 +14,7 @@ public class StubWindow implements IsWindow {
   private final EventBus handlers = new SimplerEventBus();
   public final List<String> alerts = new ArrayList<String>();
   public String open;
+  public boolean reloaded;
   public int x = -1;
   public int y = -1;
 
@@ -66,6 +67,11 @@ public class StubWindow implements IsWindow {
   @Override
   public void alert(String message) {
     alerts.add(message);
+  }
+
+  @Override
+  public void reload() {
+    reloaded = true;
   }
 
 }

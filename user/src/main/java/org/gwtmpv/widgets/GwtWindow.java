@@ -57,4 +57,9 @@ public class GwtWindow implements IsWindow {
     return Document.get().getScrollWidth();
   }
 
+  @Override
+  public void reload() {
+    Window.Location.reload();
+  }
+
 }
