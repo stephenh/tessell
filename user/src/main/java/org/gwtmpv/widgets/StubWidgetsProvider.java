@@ -8,6 +8,7 @@ import org.gwtmpv.util.cookies.facade.StubCookies;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.cellview.client.CellTable.Resources;
+import com.google.gwt.user.client.ui.SuggestOracle;
 
 /** A Widget factory. */
 public class StubWidgetsProvider implements WidgetsProvider {
@@ -176,6 +177,11 @@ public class StubWidgetsProvider implements WidgetsProvider {
   @Override
   public IsButton newButton() {
     return new StubButton();
+  }
+
+  @Override
+  public IsSuggestBox newSuggestBox(SuggestOracle oracle) {
+    return new StubSuggestBox(oracle);
   }
 
 }

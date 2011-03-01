@@ -8,6 +8,8 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.user.cellview.client.CellTable.Resources;
+import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
+import com.google.gwt.user.client.ui.SuggestOracle;
 
 /** A Widget factory. */
 public class Widgets {
@@ -166,6 +168,14 @@ public class Widgets {
 
   public static IsFocusPanel newFocusPanel() {
     return provider.newFocusPanel();
+  }
+
+  public static IsSuggestBox newSuggestBox() {
+    return provider.newSuggestBox(new MultiWordSuggestOracle());
+  }
+
+  public static IsSuggestBox newSuggestBox(SuggestOracle oracle) {
+    return provider.newSuggestBox(oracle);
   }
 
 }
