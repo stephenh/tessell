@@ -28,10 +28,11 @@ public class StubTimer implements IsTimer {
     if (delay == -1) {
       throw new IllegalStateException("Not scheduled");
     }
-    runnable.run();
+    // mark us as cancelled before calling runnable.run in case it reschedules us
     if (!isRepeating) {
       delay = -1;
     }
+    runnable.run();
   }
 
   /**
