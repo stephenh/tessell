@@ -10,7 +10,7 @@ import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.cellview.client.CellTable;
 
 /** A base stub cell for testing the non-DOM aspects of cell/{@link CellTable}. */
-public abstract class StubCell<C> implements Cell<C> {
+public class StubCell<C> implements Cell<C> {
 
   /** Stub owners give us a hook for the test to interface interrogate them. */
   public static interface StubCellValue<C> {
