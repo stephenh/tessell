@@ -8,28 +8,17 @@ import org.gwtmpv.widgets.cellview.IsColumn;
 import org.gwtmpv.widgets.cellview.IsHeader;
 import org.gwtmpv.widgets.cellview.StubColumn;
 
-import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.view.client.CellPreviewEvent;
-import com.google.gwt.view.client.Range;
-import com.google.gwt.view.client.RangeChangeEvent;
-import com.google.gwt.view.client.RangeChangeEvent.Handler;
-import com.google.gwt.view.client.RowCountChangeEvent;
-import com.google.gwt.view.client.SelectionModel;
-
-public class StubCellTable<T> extends StubWidget implements IsCellTable<T> {
+public class StubCellTable<T> extends AbstractStubHasDataWidget<T> implements IsCellTable<T> {
 
   private final List<IsColumn<T, ?>> columns = new ArrayList<IsColumn<T, ?>>();
   private final List<IsHeader<?>> headers = new ArrayList<IsHeader<?>>();
   private final List<IsHeader<?>> footers = new ArrayList<IsHeader<?>>();
-  private final List<T> data = new ArrayList<T>();
-  private int redraws = 0;
-  private int rowCount = -1;
 
   public StubCellTable() {
   }
 
   public StubCellTable(int pageSize) {
-    // set page size
+    super(pageSize);
   }
 
   /** @return the stub headers for testing. */
@@ -59,26 +48,6 @@ public class StubCellTable<T> extends StubWidget implements IsCellTable<T> {
   }
 
   @Override
-  public void setRowData(final int start, final List<? extends T> values) {
-    for (int i = 0; i < values.size(); i++) {
-      if (i < data.size()) {
-        data.set(i, values.get(i));
-      } else {
-        data.add(start + i, values.get(i));
-      }
-    }
-  }
-
-  @Override
-  public void setRowCount(final int size, final boolean isExact) {
-    rowCount = size;
-  }
-
-  public List<T> getData() {
-    return data;
-  }
-
-  @Override
   public void addColumn(final IsColumn<T, ?> col) {
     addColumn(col, null, null);
   }
@@ -97,81 +66,13 @@ public class StubCellTable<T> extends StubWidget implements IsCellTable<T> {
   }
 
   @Override
-  public List<T> getDisplayedItems() {
-    return data;
-  }
-
-  @Override
-  public void redraw() {
-    redraws++;
-  }
-
-  @Override
-  public void setPageSize(final int pageSize) {
-  }
-
-  @Override
   public void redrawHeaders() {
+    redraw();
   }
 
   @Override
   public void redrawFooters() {
-  }
-
-  @Override
-  public SelectionModel<? super T> getSelectionModel() {
-    return null;
-  }
-
-  @Override
-  public void setSelectionModel(SelectionModel<? super T> selectionModel) {
-  }
-
-  @Override
-  public void setVisibleRangeAndClearData(Range range, boolean forceRangeChangeEvent) {
-  }
-
-  @Override
-  public HandlerRegistration addRangeChangeHandler(Handler handler) {
-    return handlers.addHandler(RangeChangeEvent.getType(), handler);
-  }
-
-  @Override
-  public HandlerRegistration addRowCountChangeHandler(RowCountChangeEvent.Handler handler) {
-    return handlers.addHandler(RowCountChangeEvent.getType(), handler);
-  }
-
-  @Override
-  public HandlerRegistration addCellPreviewHandler(CellPreviewEvent.Handler<T> handler) {
-    return handlers.addHandler(CellPreviewEvent.getType(), handler);
-  }
-
-  @Override
-  public int getRowCount() {
-    return rowCount;
-  }
-
-  @Override
-  public Range getVisibleRange() {
-    return null;
-  }
-
-  @Override
-  public boolean isRowCountExact() {
-    return false;
-  }
-
-  @Override
-  public void setRowCount(int count) {
-    setRowCount(count, true);
-  }
-
-  @Override
-  public void setVisibleRange(int start, int length) {
-  }
-
-  @Override
-  public void setVisibleRange(Range range) {
+    redraw();
   }
 
   @Override
@@ -184,36 +85,6 @@ public class StubCellTable<T> extends StubWidget implements IsCellTable<T> {
     columns.remove(index);
     headers.remove(index);
     footers.remove(index);
-  }
-
-  public void resetRedraws() {
-    redraws = 0;
-  }
-
-  public int getRedraws() {
-    return redraws;
-  }
-
-  @Override
-  public T getVisibleItem(int indexOnPage) {
-    return null;
-  }
-
-  @Override
-  public int getVisibleItemCount() {
-    return 0;
-  }
-
-  @Override
-  public Iterable<T> getVisibleItems() {
-    return null;
-  }
-
-  @Override
-  public void setRowData(List<? extends T> values) {
-    setRowCount(values.size());
-    setVisibleRange(0, values.size());
-    setRowData(0, values);
   }
 
 }

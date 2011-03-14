@@ -1,9 +1,11 @@
 package org.gwtmpv.widgets;
 
-import java.util.List;
+import com.google.gwt.safehtml.shared.SafeHtml;
 
-public interface IsCellList<T> extends IsWidget {
+public interface IsCellList<T> extends IsWidget, IsAbstractHasData<T> {
 
-  void setRowData(int start, List<? extends T> values);
+  SafeHtml getEmptyListMessage();
+
+  void setEmptyListMessage(SafeHtml safeHtml);
 
 }

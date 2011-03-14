@@ -33,13 +33,13 @@ public class StubColumn<T, C> implements IsColumn<T, C>, StubCell.StubCellValue<
 
   @Override
   public C getValue(int displayedIndex) {
-    T item = stubCellTable.getDisplayedItems().get(displayedIndex);
+    T item = stubCellTable.getVisibleItem(displayedIndex);
     return columnValue.get(item);
   }
 
   @Override
   public void setValue(int displayedIndex, C value) {
-    T item = stubCellTable.getDisplayedItems().get(displayedIndex);
+    T item = stubCellTable.getVisibleItem(displayedIndex);
     columnValue.set(item, value);
   }
 

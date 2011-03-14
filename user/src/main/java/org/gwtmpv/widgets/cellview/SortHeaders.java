@@ -55,7 +55,7 @@ public class SortHeaders<T> {
       }
     }
     // Assume we're only sorted the data we've got here on the screen
-    final List<T> data = new ArrayList<T>(cellTable.getDisplayedItems());
+    final List<T> data = new ArrayList<T>(cellTable.getVisibleItems());
     Collections.sort(data, new Comparator<T>() {
       public int compare(T o1, T o2) {
         return c.compare(o1, o2, on.sorted.offset());
