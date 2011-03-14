@@ -1,9 +1,9 @@
 package org.gwtmpv.widgets;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.cellview.client.ExposedHasDataPresenter;
 import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.Range;
 import com.google.gwt.view.client.RangeChangeEvent;
@@ -12,7 +12,8 @@ import com.google.gwt.view.client.SelectionModel;
 
 public class AbstractStubHasDataWidget<T> extends StubWidget implements IsAbstractHasData<T> {
 
-  private final ExposedHasDataPresenter<T> presenter;
+  private final List<T> data = new ArrayList<T>();
+  private SelectionModel<? super T> selectionModel;
   private int redraws = 0;
 
   public AbstractStubHasDataWidget() {
@@ -20,7 +21,7 @@ public class AbstractStubHasDataWidget<T> extends StubWidget implements IsAbstra
   }
 
   public AbstractStubHasDataWidget(int pageSize) {
-    presenter = new ExposedHasDataPresenter<T>(this, pageSize, null);
+    // setPageSize(pageSize);
   }
 
   public void resetRedraws() {
@@ -33,99 +34,105 @@ public class AbstractStubHasDataWidget<T> extends StubWidget implements IsAbstra
 
   @Override
   public void setRowData(List<? extends T> values) {
-    setRowCount(values.size());
-    setVisibleRange(0, values.size());
+    // setRowCount(values.size());
+    // setVisibleRange(0, values.size());
     setRowData(0, values);
   }
 
   @Override
   public SelectionModel<? super T> getSelectionModel() {
-    return presenter.getSelectionModel();
+    return selectionModel;
   }
 
   @Override
   public T getVisibleItem(int indexOnPage) {
-    return presenter.getVisibleItem(indexOnPage);
+    return getVisibleItems().get(indexOnPage);
   }
 
   @Override
   public int getVisibleItemCount() {
-    return presenter.getVisibleItemCount();
+    throw fail();
   }
 
   @Override
   public List<T> getVisibleItems() {
-    return presenter.getVisibleItems();
+    return data; // not really visible--just all
   }
 
   @Override
   public void setRowData(int start, List<? extends T> values) {
-    presenter.setRowData(start, values);
+    for (int i = 0; i < values.size(); i++) {
+      if (i < data.size()) {
+        data.set(i, values.get(i));
+      } else {
+        data.add(start + i, values.get(i));
+      }
+    }
   }
 
   @Override
   public void setSelectionModel(SelectionModel<? super T> selectionModel) {
-    presenter.setSelectionModel(selectionModel);
+    this.selectionModel = selectionModel;
   }
 
   @Override
   public void setVisibleRangeAndClearData(Range range, boolean forceRangeChangeEvent) {
-    presenter.setVisibleRangeAndClearData(range, forceRangeChangeEvent);
+    throw fail();
   }
 
   @Override
   public HandlerRegistration addRangeChangeHandler(RangeChangeEvent.Handler handler) {
-    return presenter.addRangeChangeHandler(handler);
+    throw fail();
   }
 
   @Override
   public HandlerRegistration addRowCountChangeHandler(RowCountChangeEvent.Handler handler) {
-    return presenter.addRowCountChangeHandler(handler);
+    throw fail();
   }
 
   @Override
   public int getRowCount() {
-    return presenter.getRowCount();
+    throw fail();
   }
 
   @Override
   public Range getVisibleRange() {
-    return presenter.getVisibleRange();
+    throw fail();
   }
 
   @Override
   public boolean isRowCountExact() {
-    return presenter.isRowCountExact();
+    throw fail();
   }
 
   @Override
   public void setRowCount(int count) {
-    presenter.setRowCount(count);
+    throw fail();
   }
 
   @Override
   public void setRowCount(int count, boolean isExact) {
-    presenter.setRowCount(count, isExact);
+    throw fail();
   }
 
   @Override
   public void setVisibleRange(int start, int length) {
-    presenter.setVisibleRange(start, length);
+    throw fail();
   }
 
   @Override
   public void setVisibleRange(Range range) {
-    presenter.setVisibleRange(range);
+    throw fail();
   }
 
   @Override
   public HandlerRegistration addCellPreviewHandler(com.google.gwt.view.client.CellPreviewEvent.Handler<T> handler) {
-    return presenter.addCellPreviewHandler(handler);
+    throw fail();
   }
 
   @Override
   public ProvidesKey<T> getKeyProvider() {
-    return presenter.getKeyProvider();
+    throw fail();
   }
 
   @Override
@@ -147,22 +154,22 @@ public class AbstractStubHasDataWidget<T> extends StubWidget implements IsAbstra
 
   @Override
   public KeyboardPagingPolicy getKeyboardPagingPolicy() {
-    return presenter.getKeyboardPagingPolicy();
+    throw fail();
   }
 
   @Override
   public void setKeyboardPagingPolicy(KeyboardPagingPolicy policy) {
-    presenter.setKeyboardPagingPolicy(policy);
+    throw fail();
   }
 
   @Override
   public KeyboardSelectionPolicy getKeyboardSelectionPolicy() {
-    return presenter.getKeyboardSelectionPolicy();
+    throw fail();
   }
 
   @Override
   public void setKeyboardSelectionPolicy(KeyboardSelectionPolicy policy) {
-    presenter.setKeyboardSelectionPolicy(policy);
+    throw fail();
   }
 
   @Override
@@ -188,6 +195,10 @@ public class AbstractStubHasDataWidget<T> extends StubWidget implements IsAbstra
   @Override
   public void redraw() {
     redraws++;
+  }
+
+  private RuntimeException fail() {
+    return new UnsupportedOperationException("The stub is not fancy enough yet");
   }
 
 }
