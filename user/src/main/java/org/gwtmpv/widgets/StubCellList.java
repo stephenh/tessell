@@ -7,7 +7,7 @@ import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.ValueUpdater;
 import com.google.gwt.safehtml.shared.SafeHtml;
 
-public class StubCellList<T> extends AbstractStubHasDataWidget<T> implements IsCellList<T> {
+public class StubCellList<T> extends StubAbstractHasDataWidget<T> implements IsCellList<T> {
 
   @SuppressWarnings("unused")
   private final Cell<T> cell;

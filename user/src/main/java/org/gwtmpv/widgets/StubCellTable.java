@@ -8,7 +8,7 @@ import org.gwtmpv.widgets.cellview.IsColumn;
 import org.gwtmpv.widgets.cellview.IsHeader;
 import org.gwtmpv.widgets.cellview.StubColumn;
 
-public class StubCellTable<T> extends AbstractStubHasDataWidget<T> implements IsCellTable<T> {
+public class StubCellTable<T> extends StubAbstractHasDataWidget<T> implements IsCellTable<T> {
 
   private final List<IsColumn<T, ?>> columns = new ArrayList<IsColumn<T, ?>>();
   private final List<IsHeader<?>> headers = new ArrayList<IsHeader<?>>();

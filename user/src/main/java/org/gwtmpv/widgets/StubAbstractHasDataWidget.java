@@ -10,17 +10,17 @@ import com.google.gwt.view.client.RangeChangeEvent;
 import com.google.gwt.view.client.RowCountChangeEvent;
 import com.google.gwt.view.client.SelectionModel;
 
-public class AbstractStubHasDataWidget<T> extends StubWidget implements IsAbstractHasData<T> {
+public class StubAbstractHasDataWidget<T> extends StubWidget implements IsAbstractHasData<T> {
 
   private final List<T> data = new ArrayList<T>();
   private SelectionModel<? super T> selectionModel;
   private int redraws = 0;
 
-  public AbstractStubHasDataWidget() {
+  public StubAbstractHasDataWidget() {
     this(15);
   }
 
-  public AbstractStubHasDataWidget(int pageSize) {
+  public StubAbstractHasDataWidget(int pageSize) {
     // setPageSize(pageSize);
   }
 
