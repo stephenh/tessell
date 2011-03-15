@@ -35,7 +35,7 @@ We'll start by looking at [ClientView.ui.xml](http://github.com/stephenh/gwt-hac
     </ui:UiBinder>
 {: class=brush:xml}
 
-This is [UiBinder](http://code.google.com/webtoolkit/doc/latest/DevGuideUiBinder.html), GWT client-side templating. At compile-time, GWT turns it into a variety of `DOM.createElement`, `new TextBox`, and `innerHTML` calls.
+This is [UiBinder](http://code.google.com/webtoolkit/doc/latest/DevGuideUiBinder.html), GWT client-side templating. At compile-time, GWT turns it into a variety of `DOM.createElement`, `new TextBox`, and `innerHTML` calls in the generated JavaScript.
 
 The `ui:field` attributes are GWT-specific and allow us access to the elements/widgets in the template (e.g. `view.heading().setInnerText(somethingElse)`).
 
@@ -52,9 +52,11 @@ Our goal for this tutorial/page is simple:
 Changing the View
 -----------------
 
-gwt-mpv's forte is using the `ClientView.ui.xml` file as the source for generating other artifacts that in traditional GWT MVP are hand-maintained. If you edit `ClientView.ui.xml`, make a change, and hit save, you should see the console output:
+gwt-mpv's forte is using the `ClientView.ui.xml` file as the source for generating other artifacts that in traditional GWT MVP are hand-maintained.
 
-    <path>/gwt-hack/src/main/java/com/bizo/gwthack/client/views/ClientView.ui.xml
+If you edit `ClientView.ui.xml`, make a change, and hit save, you should see the console output:
+
+    gwt-hack/src/main/java/com/bizo/gwthack/client/views/ClientView.ui.xml
 {: class=brush:plain}
 
 The gwt-hack project has a views external tool builder configured to automatically run anytime a file is changed in the `views` package. The builder runs gwt-mpv's `ViewGenerator`, and created:
@@ -79,7 +81,7 @@ Going through its source in pieces, we first declare `ClientPresenter` as a pres
 For the constructor, we take the application's `AppRegistry` (add link here) and the `ClientModel` we are to display.
 
       public ClientPresenter(final AppRegistry registry, final ClientModel client) {
-        super(registry.getAppViews().getClientView(), registry);
+        super(newClientView(), registry);
         this.client = client;
         nameLeft = makeNameleft();
       }
@@ -87,8 +89,8 @@ For the constructor, we take the application's `AppRegistry` (add link here) and
 
 We also assigned two fields:
 
-* `client` is our model
-* `nameLeft` is a custom `StringProperty` for displaying the `X left` text (we'll cover this later)
+* `client` is our rich model of the current client the user is looking at
+* `nameLeft` is a custom `StringProperty` for displaying the `X left` text (see below)
 
 The main logic of our presenter is in the `onBind` method, which is called when our presenter should be bound to our view:
 
@@ -109,7 +111,7 @@ The second `binder.bind` call sets up one-one binding from our custom `nameLeft`
 The third `binder.bind` call sets up `saveCommand` to be called when `submit` is clicked. `saveCommand` is a `DispatchUiCommand` that sends an action to the server and waits for the result:
 
       /** Saves the client and returns to the client list. */
-      private final UiCommand saveCommand = new DispatchUiCommand<SaveClientAction, SaveClientResult>(async) {
+      private final UiCommand saveCommand = new DispatchUiCommand<SaveClientAction, SaveClientResult>(eventBus, async) {
         protected SaveClientAction createAction() {
           return new SaveClientAction(client.getDto());
         }
@@ -140,8 +142,6 @@ Finally, coming back to the `nameLeft` field, it is created by the `makeNameLeft
 
 The `DerivedValue` inner class returns the new value of the property and `depends(remaining)` means the `nameLeft` property will be re-evaluated each time the `remaining` property of `name` changes (which in turn changes each time `name` changes).
 
-(`makeNameLeft` needs a sexier, pectin-like DSL.)
-
 A Place
 -------
 
@@ -160,7 +160,7 @@ One part of the `ClientPresenter` that I skipped was the static `show` method:
 
 Places are part of traditional GWT MPV and denote different bookmarks in an application: `#clients`, `#client;id=4`, etc.
 
-Each token generally has a class it is mapped to, e.g. `#clients` -> `ClientsPlace`, that knows how to kick-start the UI for that page (e.g. create a `ClientPresenter`).
+Each token has a class it is mapped to, e.g. `#clients` -> `ClientsPlace`, that knows how to kick-start the UI for that page (e.g. create a `ClientPresenter`).
 
 The `@GenPlace` annotation comes from the gwt-mpv-apt annotation processor, and generates most of the `XxxPlace` class boilerplate. This include [GWT.runAsync](http://code.google.com/webtoolkit/doc/latest/DevGuideCodeSplitting.html)-based code splitting.
 
@@ -189,12 +189,12 @@ We assume each of our test methods will use a `dto`, model `client`, presenter `
     public void fillsInFieldsOnBind() {
       dto.name = "foo";
       p.bind();
-      assertThat(v.name.getText(), is("foo"));
-      assertThat(v.nameLeft.getText(), is("47 left"));
+      assertThat(v.name().getText(), is("foo"));
+      assertThat(v.nameLeft().getText(), is("47 left"));
     }
 {: class=brush:java}
 
-The first test just asserts that as soon as our presenter is bound, the model's values are set into the view's widgets. Here `v.name` is a `StubTextBox`, and it's `getText()` method is just getting from an internal `text` field instead of any normal `TextBox` DOM coupling.
+The first test just asserts that as soon as our presenter is bound, the model's values are set into the view's widgets. Here `v.name()` is a `StubTextBox`, and it's `getText()` method is just getting from an internal `text` field instead of any normal `TextBox` DOM coupling.
 
 The next test ensures that the "X left" label updates as the user types:
 
@@ -202,11 +202,11 @@ The next test ensures that the "X left" label updates as the user types:
     public void keyUpChangesNameLeft() {
       dto.name = "foo";
       p.bind();
-      assertThat(v.name.getText(), is("foo"));
-      assertThat(v.nameLeft.getText(), is("47 left"));
+      assertThat(v.name().getText(), is("foo"));
+      assertThat(v.nameLeft().getText(), is("47 left"));
 
       v.name.press('b');
-      assertThat(v.nameLeft.getText(), is("46 left"));
+      assertThat(v.nameLeft().getText(), is("46 left"));
     }
 {: class=brush:java}
 
@@ -218,8 +218,8 @@ The last test tests the submit button:
     public void saving() {
       dto.name = "foo";
       p.bind();
-      v.name.type("bar");
-      v.submit.click();
+      v.name().type("bar");
+      v.submit().click();
 
       // action went to the server
       assertThat(async.getAction(SaveClientAction.class).getClient().name, is("bar"));
