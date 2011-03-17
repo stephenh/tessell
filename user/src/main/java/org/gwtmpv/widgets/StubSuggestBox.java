@@ -1,7 +1,5 @@
 package org.gwtmpv.widgets;
 
-import static org.apache.commons.lang.StringUtils.isBlank;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +40,7 @@ public class StubSuggestBox extends StubWidget implements IsSuggestBox {
 
   /** The user types some text, but focus doesn't leave the box. */
   public void typeSome(String query) {
-    if (isBlank(query)) {
+    if (query == null || "".equals(query)) {
       oracle.requestDefaultSuggestions(new Request(null, limit), new Callback() {
         public void onSuggestionsReady(Request request, Response response) {
           lastSuggestions.clear();
