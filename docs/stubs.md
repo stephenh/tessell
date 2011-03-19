@@ -8,91 +8,93 @@ Stubs
 
 Stubs are not a part of traditional MVP, but they are used extensively in `gwt-mpv`.
 
-Each `IsXxx` widget interface is accompanied by the real `GwtXxx` implementation and also a `StubXxx` implementation. For example [IsTextBox](http://github.com/stephenh/gwt-mpv/blob/master/user/src/main/java/org/gwtmpv/widgets/IsTextBox.java), [GwtTextBox](http://github.com/stephenh/gwt-mpv/blob/master/user/src/main/java/org/gwtmpv/widgets/GwtTextBox.java) and [StubTextBox](http://github.com/stephenh/gwt-mpv/blob/master/user/src/main/java/org/gwtmpv/widgets/StubTextBox.java).
+Their purpose is to provide "dummy browser" behavior in just one place (each stub widget) and not repeated for every view in your application.
 
-While the `GwtXxx` implementation will likely use `GWT.*` and `DOM.*` methods that only work in `GWTTestCase`, the `StubXxx` implementations are pure Java and so can run in blazing fast unit tests.
+To do this, each `IsXxx` widget interface (see [View Generation](./viewgeneration.html)) has two implementations:
 
-The strategy of using stubs is in contrast to the supposedly dumb views of [traditional MVP part II](http://code.google.com/webtoolkit/articles/mvp-architecture-2.html). Instead of each MVP view having to recode something like:
+1. A `GwtXxx` implementation. This is the real GWT widget, so uses `GWT.*`, `DOM.*`, etc. methods that only work in the browser or `GWTTestCase`.
 
-    @UiHandler("contactsTable")
-    void onTableClicked(ClickEvent event) {
-      if (presenter != null) {
-        EventTarget target = event.getNativeEvent().getEventTarget();
-        Node node = Node.as(target);
-        TableCellElement cell = findNearestParentCell(node);
-        if (cell == null) {
-          return;
-        }
+2. A `StubXxx` implementation. This is pure Java so can run in fast unit tests.
 
-        TableRowElement tr = TableRowElement.as(cell.getParentElement());
-        int row = tr.getSectionRowIndex();
+gwt-mpv provides `GwtXxx` and `StubXxx` implementations out-of-the-box for most GWT widgets. For an example trio see: [IsTextBox][IsTextBox], [GwtTextBox][GwtTextBox] and [StubTextBox][StubTextBox].
 
-        if (cell != null) {
-          if (shouldFireClickEvent(cell)) {
-            presenter.onItemClicked(rowData.get(row));
-          }
-          if (shouldFireSelectEvent(cell)) {
-            presenter.onItemSelected(rowData.get(row));
-          }
-        }
-     }
-{: class=brush:java}
+Test Infrastructure For Free
+----------------------------
 
-Each and every time you want to use a `Table` widget, the `StubTable` encapsulates this logic just once, that then each truly dumb view can reuse.
+Since gwt-mpv is already generating the `XxxView` implementations for each `ui.xml` file in your project, it also generates a `StubXxxView` for testing.
 
-**Disclaimer: In theory, it has worked for everything else but I haven't actually done a 2.1-style table example yet.**
-
-Stub Per View
--------------
-
-Since `gwt-mpv` is [already generating](viewgeneration.html) the real `XxxView` anyway, it is easy to also generate a `StubXxxView` for testing.
-
-The real `XxxView` will have `@UiField`-annotated fields of the real GWT widgets used at production time, e.g.:
+The real `XxxView` will have `@UiField`-annotated fields of the real GWT widgets used at production time, just like you would code by hand, e.g.:
 
     @UiField(provided = true)
     final TextBox name = new org.gwtmpv.widgets.GwtTextBox();
 {: class=brush:java}
 
-While the `StubXxxView` will have `StubXxx` widgets to use at test time, e.g.:
+While the `StubXxxView` will simply instantiate the `StubXxx` version of each widget in the `ui.xml` file to use at test time, e.g.:
 
     final StubTextBox name = new org.gwtmpv.widgets.StubTextBox();
 {: class=brush:java}
 
-So, just as the `IsXxx` widget interfaces allowed the real `ClientView` to be so truly dumb that it could be generated, the `StubXxx` widget implementations allows the test `StubClientView` to be so truly dumb that it can be generated as well.
+These "for free" `StubXxxView` classes make testing very easy to do--seeing the [Tests](./tests.html) page for examples.
 
-`AppViews` Interface
---------------------
+AppViews Interface
+------------------
 
-To manage which view should be used (`XxxView` vs. `StubXxxView`) when your presenter needs it, `gwt-mpv` also generates an `AppView` interface with methods to create each of your views.
+To manage which view (`XxxView` or `StubXxxView`) should be used when your presenter needs it, gwt-mpv also generates an `AppViews` class with factory methods to create each of your views.
 
-For example, `gwt-hack` looks something like:
+For example, gwt-hack's `AppViews` class looks something like:
 
-    public interface AppViews {
-        IsAppView getAppView();
+    public class AppViews {
+      public static IsAppView newAppView() {
+        ...
+      }
 
-        IsClientView getClientView();
+      public static IsClientView netClientView() {
+        ...
+      }
 
-        IsClientListView getClientListView();
-
-        IsEmployeeView getEmployeeView();
-
-        IsEmployeeListView getEmployeeListView();
+      public static IsClientListView newClientListView() {
+        ...
+      }
     }
 {: class=brush:java}
 
-Two implementations of `AppViews` are generated as well:
+When your presenter wants to instantiate its view, it can use the appropriate `AppViews` static method, e.g.:
 
-* `GwtViews`, whose methods return the corresponding real UiBinder-powered `XxxView`, and
-* `StubViews`, whose methods return the corresponding doubled `StubXxxView`.
+    public class ClientPresenter extends AbstractPresenter<IsClientView> {
+      public ClientPresenter() {
+        super(newAppView());
+      }
+    }
+{: class=brush:java}
 
-This means instead of having to repeat the conditional "bind the real `XxxView` or the stub `StubXxxView`" for every single view in your app, you can make just one decision of `GwtViews` vs. `StubViews` in your gin module/`AppRegistry`.
+How Dumb?
+---------
+
+When you're testing, the stub widgets attempt to mimic browser behavior, so you can do things like "press a key" or "type":
+
+    public void testKeyPress() {
+      view.nameTextBox().press('a');
+      view.nameTextBox().type("my name");
+    }
+{: class=brush:java}
+
+And the `StubTextBox` will, for `press`, fire key down, key press, and key up events and, for `type`, fire value change and blur events.
+
+This behavior is generally "good enough" for 95% of the business logic you're testing.
+
+However, the stubs do not go out of their way to truly simulate a DOM-based browser. Nor do the stubs' behavior correspond to any given browser implementation.
+
+For example, if you set `display:none` on a parent stub widget, a child stub widget will still think it's displayed--there is no cross-widget rendering/etc. logic as this rendering logic would be non-trivial (to write and to run, hence slowing down tests) and, for the far majority of the cases, it isn't needed.
 
 Stubs Are Great
 ---------------
 
 For more on stubs, see:
 
-* [Mocks aren't Stubs](http://martinfowler.com/articles/mocksArentStubs.html), and
-* [Why I Don't Like Mocks](http://www.draconianoverlord.com/2010/07/09/why-i-dont-like-mocks.html)
+* Martin Fowler's article [Mocks aren't Stubs](http://martinfowler.com/articles/mocksArentStubs.html), and
+* My own post [Why I Don't Like Mocks](http://www.draconianoverlord.com/2010/07/09/why-i-dont-like-mocks.html)
 
+[IsTextBox]: http://github.com/stephenh/gwt-mpv/blob/master/user/src/main/java/org/gwtmpv/widgets/IsTextBox.java
+[GwtTextBox]: http://github.com/stephenh/gwt-mpv/blob/master/user/src/main/java/org/gwtmpv/widgets/GwtTextBox.java
+[StubTextBox]: http://github.com/stephenh/gwt-mpv/blob/master/user/src/main/java/org/gwtmpv/widgets/StubTextBox.java
 
