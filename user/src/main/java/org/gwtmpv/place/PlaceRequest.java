@@ -37,7 +37,12 @@ public class PlaceRequest {
     this.name = name;
   }
 
-  private PlaceRequest(final PlaceRequest req, final String name, final String value) {
+  protected PlaceRequest(final PlaceRequest req) {
+    name = req.name;
+    params.putAll(req.params);
+  }
+
+  protected PlaceRequest(final PlaceRequest req, final String name, final String value) {
     this.name = req.name;
     params.putAll(req.params);
     params.put(name, value);
