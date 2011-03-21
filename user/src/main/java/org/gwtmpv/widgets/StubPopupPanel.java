@@ -10,6 +10,9 @@ import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 
 public class StubPopupPanel extends StubSimplePanel implements IsPopupPanel {
 
+  private boolean modal;
+  private boolean autoHide;
+  private boolean autoHideOnHistoryEvents;
   private boolean shown;
   public int popupLeft;
   public int popopTop;
@@ -77,6 +80,36 @@ public class StubPopupPanel extends StubSimplePanel implements IsPopupPanel {
 
   @Override
   public void addAutoHidePartner(IsElement element) {
+  }
+
+  @Override
+  public boolean isAutoHideEnabled() {
+    return autoHide;
+  }
+
+  @Override
+  public void setAutoHideEnabled(boolean autoHide) {
+    this.autoHide = autoHide;
+  }
+
+  @Override
+  public boolean isAutoHideOnHistoryEventsEnabled() {
+    return autoHideOnHistoryEvents;
+  }
+
+  @Override
+  public void setAutoHideOnHistoryEventsEnabled(boolean enabled) {
+    autoHideOnHistoryEvents = enabled;
+  }
+
+  @Override
+  public boolean isModal() {
+    return modal;
+  }
+
+  @Override
+  public void setModal(boolean modal) {
+    this.modal = modal;
   }
 
 }

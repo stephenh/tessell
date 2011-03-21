@@ -7,7 +7,6 @@ import static org.gwtmpv.widgets.Widgets.newScrollPanel;
 import org.gwtmpv.presenter.BasicPresenter;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Unit;
@@ -16,7 +15,6 @@ import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.ui.FadingDialogBox;
 import com.google.gwt.user.client.ui.PopupPanel;
 
 /** For showing views in a lightbox popup. */
@@ -113,9 +111,7 @@ public abstract class AbstractLightboxPresenter<V extends IsWidget> extends Basi
 
   /** Means the user cannot close the popup by clicking around. */
   protected void setSuperModal() {
-    if (GWT.isClient()) {
-      ((FadingDialogBox) box).addAutoHidePartner(Document.get().getBody());
-    }
+    box.setAutoHideEnabled(false);
   }
 
   /** Make sure we stay centered. */

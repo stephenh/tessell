@@ -25,4 +25,16 @@ public interface IsPopupPanel extends IsSimplePanel, HasAnimation, HasCloseHandl
 
   void addAutoHidePartner(IsElement element);
 
+  boolean isAutoHideEnabled();
+
+  void setAutoHideEnabled(boolean autoHide);
+
+  boolean isAutoHideOnHistoryEventsEnabled();
+
+  void setAutoHideOnHistoryEventsEnabled(boolean enabled);
+
+  boolean isModal();
+
+  void setModal(boolean modal);
+
 }
