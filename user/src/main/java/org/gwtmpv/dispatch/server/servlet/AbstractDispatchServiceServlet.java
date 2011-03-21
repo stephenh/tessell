@@ -22,6 +22,7 @@ public abstract class AbstractDispatchServiceServlet extends RemoteServiceServle
 
   private static final long serialVersionUID = 1L;
 
+  @Override
   public Result execute(final String sessionId, final Action<?> action) throws ActionException {
     try {
       final ExecutionContext context = new ExecutionContext(getThreadLocalRequest(), getThreadLocalResponse());

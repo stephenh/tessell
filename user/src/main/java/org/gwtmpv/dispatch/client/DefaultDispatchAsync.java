@@ -28,6 +28,7 @@ public class DefaultDispatchAsync implements DispatchAsync {
     this.sessionIdAccessor = sessionIdAccessor;
   }
 
+  @Override
   public <A extends Action<R>, R extends Result> void execute(final A action, final AsyncCallback<R> callback) {
     final String sessionId = sessionIdAccessor == null ? null : sessionIdAccessor.getSessionId();
     // Append action class name as extra path info
