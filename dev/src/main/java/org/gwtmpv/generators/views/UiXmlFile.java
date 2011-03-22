@@ -1,7 +1,9 @@
 package org.gwtmpv.generators.views;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import joist.sourcegen.Access;
 import joist.sourcegen.GClass;
@@ -15,7 +17,10 @@ import org.gwtmpv.generators.css.CssGenerator;
 import org.gwtmpv.generators.css.CssStubGenerator;
 import org.gwtmpv.generators.resources.ResourcesGenerator;
 import org.gwtmpv.widgets.DelegateIsWidget;
+import org.gwtmpv.widgets.GwtDockLayoutPanelWrapper;
 import org.gwtmpv.widgets.GwtElement;
+import org.gwtmpv.widgets.GwtHTMLPanelWrapper;
+import org.gwtmpv.widgets.GwtRadioButton;
 import org.gwtmpv.widgets.IsWidget;
 import org.gwtmpv.widgets.StubWidget;
 
@@ -23,11 +28,21 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiTemplate;
+import com.google.gwt.user.client.ui.DockLayoutPanel;
+import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
 
 /** A {@code ui.xml} file. */
 class UiXmlFile {
+
+  private static final Map<String, String> widgetsWithoutNoParamCstrs = new HashMap<String, String>();
+  static {
+    widgetsWithoutNoParamCstrs.put(HTMLPanel.class.getName(), GwtHTMLPanelWrapper.class.getName());
+    widgetsWithoutNoParamCstrs.put(RadioButton.class.getName(), GwtRadioButton.class.getName());
+    widgetsWithoutNoParamCstrs.put(DockLayoutPanel.class.getName(), GwtDockLayoutPanelWrapper.class.getName());
+  }
 
   private final ViewGenerator viewGenerator;
   private final File uiXml;
@@ -141,9 +156,10 @@ class UiXmlFile {
       if (field.isElement) {
         f.type(field.type).setAccess(Access.PACKAGE).addAnnotation("@UiField");
         m.body.line("return new {}({});", GwtElement.class.getName(), field.name);
-      } else if (field.type.endsWith("HTMLPanel") || field.type.endsWith("RadioButton")) {
+      } else if (widgetsWithoutNoParamCstrs.keySet().contains(field.type)) {
         f.type(field.type).setAccess(Access.PACKAGE).addAnnotation("@UiField");
-        m.body.line("return new {}({});", subType, field.name);
+        // _xxx gets added later
+        m.body.line("return _{};", field.name);
       } else {
         f.type(subType).setFinal().setAccess(Access.PACKAGE).addAnnotation("@UiField(provided = true)").initialValue("new {}()", subType);
         m.body.line("return {};", field.name);
@@ -159,6 +175,16 @@ class UiXmlFile {
 
     cstr.body.line("setWidget(binder.createAndBindUi(this));");
     cstr.body.line("setDebugId(\"{}\");", gwtView.getSimpleClassNameWithoutGeneric().replaceAll("View$", "").replaceAll("^Gwt", ""));
+
+    // go back and assign field values for things created by uibinder
+    for (final UiFieldDeclaration field : handler.uiFields) {
+      if (widgetsWithoutNoParamCstrs.keySet().contains(field.type)) {
+        final String wrapperType = widgetsWithoutNoParamCstrs.get(field.type);
+        final GField wrapped = gwtView.getField("_" + field.name);
+        wrapped.type(wrapperType).setFinal().setAccess(Access.PACKAGE);
+        cstr.body.line("_{} = new {}({});", field.name, wrapperType, field.name);
+      }
+    }
 
     viewGenerator.markAndSave(gwtView);
   }
