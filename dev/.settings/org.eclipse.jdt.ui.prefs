@@ -1,8 +1,12 @@
-#Thu Aug 05 16:52:54 CDT 2010
+#Mon Mar 21 23:23:18 CDT 2011
 eclipse.preferences.version=1
 editor_save_participant_org.eclipse.jdt.ui.postsavelistener.cleanup=true
 formatter_profile=_gwt-mpv-formatting
 formatter_settings_version=11
+org.eclipse.jdt.ui.ignorelowercasenames=true
+org.eclipse.jdt.ui.importorder=java;javax;org;com;
+org.eclipse.jdt.ui.ondemandthreshold=15
+org.eclipse.jdt.ui.staticondemandthreshold=15
 sp_cleanup.add_default_serial_version_id=true
 sp_cleanup.add_generated_serial_version_id=false
 sp_cleanup.add_missing_annotations=false
