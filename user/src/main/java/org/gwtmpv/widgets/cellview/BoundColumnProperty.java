@@ -12,6 +12,7 @@ import org.gwtmpv.model.properties.Property;
  * 
  * E.g.:
  * <code>
+ *     // Foo.name is a StringProperty, e.g. Foo is rich model object
  *     FooBinding b = new FooBinding();
  *     t.addColumn(newColumn(boundProperty(b.name()), newTextCell()));
  * </code>
