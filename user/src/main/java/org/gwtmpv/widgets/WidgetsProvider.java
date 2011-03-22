@@ -22,6 +22,10 @@ public interface WidgetsProvider {
 
   IsAbsolutePanel getRootPanel();
 
+  IsDockLayoutPanel newDockLayoutPanel(Unit unit);
+
+  IsSimplePanel newSimplePanel();
+
   IsLabel newLabel();
 
   IsElement newElement(String tag);

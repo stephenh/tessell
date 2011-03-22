@@ -184,4 +184,14 @@ public class StubWidgetsProvider implements WidgetsProvider {
     return new StubSuggestBox(oracle);
   }
 
+  @Override
+  public IsDockLayoutPanel newDockLayoutPanel(Unit unit) {
+    return new StubDockLayoutPanel();
+  }
+
+  @Override
+  public IsSimplePanel newSimplePanel() {
+    return new StubSimplePanel();
+  }
+
 }

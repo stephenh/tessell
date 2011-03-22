@@ -26,6 +26,14 @@ public class Widgets {
     Widgets.provider = provider;
   }
 
+  public static IsDockLayoutPanel newDockLayoutPanel(Unit unit) {
+    return provider.newDockLayoutPanel(unit);
+  }
+
+  public static IsSimplePanel newSimplePanel() {
+    return provider.newSimplePanel();
+  }
+
   public static IsAbsolutePanel getRootPanel() {
     return provider.getRootPanel();
   }

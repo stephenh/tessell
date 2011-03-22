@@ -181,4 +181,14 @@ public class GwtWidgetsProvider implements WidgetsProvider {
     return new GwtSuggestBox(oracle);
   }
 
+  @Override
+  public IsDockLayoutPanel newDockLayoutPanel(Unit unit) {
+    return new GwtDockLayoutPanel(unit);
+  }
+
+  @Override
+  public IsSimplePanel newSimplePanel() {
+    return new GwtSimplePanel();
+  }
+
 }
