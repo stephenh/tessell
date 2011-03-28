@@ -84,29 +84,45 @@ public class PropertyBinder<P> {
     return this;
   }
 
-  public HandlerRegistrations to(final IsListBox source, final ArrayList<P> values) {
+  public HandlerRegistrations to(final IsListBox source, final ArrayList<P> options) {
+    return to(source, options, new ListBoxIdentityAdaptor<P>());
+  }
+
+  public <O> HandlerRegistrations to(final IsListBox source, final ArrayList<O> options, final ListBoxAdaptor<P, O> adaptor) {
     int i = 0;
-    for (P value : values) {
-      source.addItem(value.toString(), Integer.toString(i++));
+    for (O option : options) {
+      source.addItem(adaptor.toDisplay(option), Integer.toString(i++));
     }
     if (p.get() == null) {
       // TODO don't currently support an empty option
-      p.set(values.get(0));
+      p.set(adaptor.toValue(options.get(0)));
     }
-    source.setSelectedIndex(values.indexOf(p.get()));
+    source.setSelectedIndex(options.indexOf(p.get()));
     HandlerRegistration a = source.addChangeHandler(new ChangeHandler() {
       public void onChange(ChangeEvent event) {
         int i = source.getSelectedIndex();
         if (i == -1) {
           p.set(null);
         } else {
-          p.set(values.get(i));
+          p.set(adaptor.toValue(options.get(i)));
         }
       }
     });
     HandlerRegistration b = p.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
       public void onPropertyChanged(PropertyChangedEvent<P> event) {
-        source.setSelectedIndex(values.indexOf(p.get()));
+        source.setSelectedIndex(indexInOptions());
+      }
+
+      // can't use indexOf because we can't map value -> option, only option -> value
+      private int indexInOptions() {
+        int i = 0;
+        for (O option : options) {
+          if (adaptor.toValue(option).equals(p.get())) {
+            return i;
+          }
+          i++;
+        }
+        return -1;
       }
     });
     return new HandlerRegistrations(a, b);
