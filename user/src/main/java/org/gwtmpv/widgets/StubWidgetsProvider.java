@@ -194,4 +194,9 @@ public class StubWidgetsProvider implements WidgetsProvider {
     return new StubSimplePanel();
   }
 
+  @Override
+  public IsListBox newListBox() {
+    return new StubListBox();
+  }
+
 }

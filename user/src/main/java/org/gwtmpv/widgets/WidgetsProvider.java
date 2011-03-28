@@ -28,6 +28,8 @@ public interface WidgetsProvider {
 
   IsLabel newLabel();
 
+  IsListBox newListBox();
+
   IsElement newElement(String tag);
 
   IsTextBox newTextBox();

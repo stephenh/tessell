@@ -190,4 +190,9 @@ public class GwtWidgetsProvider implements WidgetsProvider {
     return new GwtSimplePanel();
   }
 
+  @Override
+  public IsListBox newListBox() {
+    return new GwtListBox();
+  }
+
 }

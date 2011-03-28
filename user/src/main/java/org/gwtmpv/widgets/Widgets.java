@@ -118,6 +118,10 @@ public class Widgets {
     return provider.newLabel();
   }
 
+  public static IsListBox newListBox() {
+    return provider.newListBox();
+  }
+
   public static IsImage newImage() {
     return provider.newImage();
   }
