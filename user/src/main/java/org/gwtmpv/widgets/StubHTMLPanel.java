@@ -1,6 +1,7 @@
 package org.gwtmpv.widgets;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 public class StubHTMLPanel extends StubComplexPanel implements IsHTMLPanel {
@@ -34,6 +35,16 @@ public class StubHTMLPanel extends StubComplexPanel implements IsHTMLPanel {
   public void addAndReplaceElement(IsWidget widget, String id) {
     super.add(widget);
     replaced.put(id, widget);
+  }
+
+  public IsWidget getElementById(String id) {
+    for (Iterator<IsWidget> i = iteratorIsWidgets(); i.hasNext();) {
+      IsWidget w = i.next();
+      if (id.equals(w.getIsElement().getId())) {
+        return w;
+      }
+    }
+    throw new IllegalArgumentException("Element not found with id " + id);
   }
 
   public IsWidget getReplaced(String id) {
