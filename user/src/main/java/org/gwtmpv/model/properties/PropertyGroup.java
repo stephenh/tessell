@@ -146,6 +146,11 @@ public class PropertyGroup extends AbstractProperty<Boolean, PropertyGroup> {
       triggered.removeHandler();
       untriggered.removeHandler();
     }
+
+    @Override
+    public String toString() {
+      return property.toString();
+    }
   }
 
   /** Holds a rule triggered key + the property that caused it (in case we have to remove it). */
