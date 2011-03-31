@@ -6,35 +6,30 @@ import org.gwtmpv.model.dsl.Binder;
 import org.gwtmpv.model.properties.Property;
 import org.gwtmpv.model.properties.PropertyGroup;
 import org.gwtmpv.util.HTMLPanelBuilder;
-import org.gwtmpv.util.Inflector;
 import org.gwtmpv.util.WidgetUtils;
 import org.gwtmpv.widgets.IsTextBox;
 import org.gwtmpv.widgets.IsTextList;
 import org.gwtmpv.widgets.form.FormPresenter;
 
 /** Adds a {@link IsTextBox} to a form. */
-public abstract class TextBoxBaseFormLine implements FormLine {
+public abstract class TextBoxBaseFormLine extends AbstractFormLine<String> {
 
-  protected final Property<String> property;
   protected final IsTextList errorList = newTextList();
-  protected String id;
-  protected IsTextBox textBox;
-  private String label;
+  protected final IsTextBox textBox;
 
-  protected TextBoxBaseFormLine(Property<String> property) {
-    this.property = property;
-    label = property.getName();
+  protected TextBoxBaseFormLine(Property<String> property, IsTextBox textBox) {
+    super(property);
+    this.textBox = textBox;
   }
 
   @Override
   public void bind(final FormPresenter p, PropertyGroup all, Binder binder) {
-    id = p.getId() + "-" + Inflector.camelize(property.getName());
+    super.bind(p, all, binder);
     textBox.getIsElement().setId(id);
     errorList.getIsElement().setId(id + "-errors");
     p.watchForEnterKey(textBox);
     binder.bind(property).to(textBox, errorList);
     binder.fireChangeOnBlur(textBox);
-    all.add(property);
   }
 
   @Override
@@ -65,19 +60,6 @@ public abstract class TextBoxBaseFormLine implements FormLine {
 
   public IsTextList getErrorList() {
     return errorList;
-  }
-
-  // used to a cstr param, but changed due to overly restrictive super semantics place on subclasses
-  protected void setTextBox(IsTextBox textBox) {
-    this.textBox = textBox;
-  }
-
-  public String getLabel() {
-    return label;
-  }
-
-  public void setLabel(String label) {
-    this.label = label;
   }
 
   public TextBoxBaseFormLine label(String label) {
