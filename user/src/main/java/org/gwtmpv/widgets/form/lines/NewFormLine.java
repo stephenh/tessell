@@ -34,6 +34,7 @@ public class NewFormLine {
 
   public static <P, O> ListBoxFormLine<P, O> newListBoxFormLine(String label, Property<P> p, ArrayList<O> options, ListBoxAdaptor<P, O> adaptor) {
     ListBoxFormLine<P, O> l = new ListBoxFormLine<P, O>(p, options, adaptor);
+    l.setLabel(label);
     return l;
   }
 
