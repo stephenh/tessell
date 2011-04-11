@@ -4,12 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.event.shared.EventHandler;
-import com.google.gwt.event.shared.GwtEvent;
+import com.google.gwt.event.shared.*;
 import com.google.gwt.event.shared.GwtEvent.Type;
-import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.event.shared.SimplerEventBus;
 
 public class StubEventBus extends EventBus {
 
@@ -39,6 +35,10 @@ public class StubEventBus extends EventBus {
     log.fine(event.toString());
     events.add(event);
     m.fireEventFromSource(event, source);
+  }
+
+  public List<GwtEvent<?>> getEvents() {
+    return events;
   }
 
   @SuppressWarnings("unchecked")
