@@ -7,6 +7,9 @@ import org.gwtmpv.dispatch.client.events.DispatchFailureHandler;
 import org.gwtmpv.dispatch.client.events.DispatchResultEvent;
 import org.gwtmpv.dispatch.client.events.DispatchResultHandler;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.HasText;
@@ -18,6 +21,7 @@ public class OutstandingWatcher {
   private final HasText totalText;
   private int outstanding;
   private int total;
+  private boolean isUpdateScheduled;
 
   public OutstandingWatcher(HasText outstandingText, HasText totalText) {
     this.outstandingText = outstandingText;
@@ -32,25 +36,53 @@ public class OutstandingWatcher {
     return new HandlerRegistration[] { a, b, c };
   }
 
-  /** Increment outstanding. */
+  private void scheduleUpdate() {
+    // to ensure any ajax results that lead to more requests
+    // don't temporarily bounce the outstanding to zero, defer
+    // updating the view until leaving the event loop
+    if (GWT.isClient()) {
+      if (!isUpdateScheduled) {
+        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+          public void execute() {
+            update();
+            isUpdateScheduled = false;
+          }
+        });
+        isUpdateScheduled = true;
+      }
+    } else {
+      // during unit tests just update the view immediately
+      update();
+    }
+  }
+
+  private void update() {
+    outstandingText.setText(Integer.toString(outstanding));
+    totalText.setText(Integer.toString(total));
+  }
+
+  /** Increment total/outstanding. */
   private class OnAction implements DispatchActionHandler {
     public void onDispatchAction(DispatchActionEvent event) {
-      outstandingText.setText(Integer.toString(++outstanding));
-      totalText.setText(Integer.toString(++total));
+      outstanding++;
+      total++;
+      scheduleUpdate();
     }
   }
 
   /** Decrement outstanding. */
   private class OnResult implements DispatchResultHandler {
     public void onDispatchResult(DispatchResultEvent event) {
-      outstandingText.setText(Integer.toString(--outstanding));
+      outstanding--;
+      scheduleUpdate();
     }
   }
 
   /** Decrement outstanding. */
   private class OnFailure implements DispatchFailureHandler {
     public void onDispatchFailure(DispatchFailureEvent event) {
-      outstandingText.setText(Integer.toString(--outstanding));
+      outstanding--;
+      scheduleUpdate();
     }
   }
 
