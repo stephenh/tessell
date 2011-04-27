@@ -8,6 +8,10 @@ public class StubCookies implements IsCookies {
 
   private final Map<String, StubCookie> cookies = new LinkedHashMap<String, StubCookie>();
 
+  public StubCookie getCookie(String name) {
+    return cookies.get(name);
+  }
+
   @Override
   public void remove(final String name) {
     cookies.remove(name);
