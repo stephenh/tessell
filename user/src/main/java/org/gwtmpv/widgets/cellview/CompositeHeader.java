@@ -6,11 +6,10 @@ import static org.gwtmpv.widgets.cellview.Cells.newHeader;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gwt.cell.client.Cell;
-import com.google.gwt.cell.client.CompositeCell;
-import com.google.gwt.cell.client.FieldUpdater;
-import com.google.gwt.cell.client.HasCell;
-import com.google.gwt.cell.client.ValueUpdater;
+import com.google.gwt.cell.client.*;
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.NativeEvent;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 
 /**
  * Renders multiple headers as one header.
@@ -48,14 +47,28 @@ public class CompositeHeader extends DelegateIsHeader<Object> {
 
   public static final class HeaderHasCell<X> implements HasCell<Object, X> {
     private final IsHeader<X> header;
+    private final Cell<X> headerCell;
 
-    private HeaderHasCell(IsHeader<X> header) {
+    private HeaderHasCell(final IsHeader<X> header) {
       this.header = header;
+      headerCell = new DelegateCell<X>(header.getCell()) {
+        /** Instead of rendering the cell directly, give the header a chance to run it's render logic. */
+        @Override
+        public void render(Cell.Context context, X value, SafeHtmlBuilder sb) {
+          header.asHeader().render(context, sb);
+        }
+
+        /** Instead of passing the event to the cell directly, give the header a chance to run it's event logic. */
+        @Override
+        public void onBrowserEvent(Context context, Element parent, X value, NativeEvent event, ValueUpdater<X> valueUpdater) {
+          header.asHeader().onBrowserEvent(context, parent, event);
+        }
+      };
     }
 
     @Override
     public Cell<X> getCell() {
-      return header.getCell();
+      return headerCell;
     }
 
     @Override
