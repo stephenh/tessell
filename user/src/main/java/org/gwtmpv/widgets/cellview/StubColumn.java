@@ -6,24 +6,19 @@ import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.user.cellview.client.Column;
 
-public class StubColumn<T, C> implements IsColumn<T, C>, StubCell.StubCellValue<C> {
+public class StubColumn<T, C> extends Column<T, C> implements IsColumn<T, C>, StubCell.StubCellValue<C> {
 
   private final ColumnValue<T, C> columnValue;
-  private final Cell<C> cell;
   private StubCellTable<T> stubCellTable;
 
   public StubColumn(final ColumnValue<T, C> columnValue, final Cell<C> cell) {
+    super(cell);
     this.columnValue = columnValue;
-    this.cell = cell;
     ((StubCell<C>) cell).setStubCellValue(this); // tell the stub about us
   }
 
   public void setStubCellTable(StubCellTable<T> stubCellTable) {
     this.stubCellTable = stubCellTable;
-  }
-
-  public Cell<C> getCell() {
-    return cell;
   }
 
   @Override
@@ -55,6 +50,12 @@ public class StubColumn<T, C> implements IsColumn<T, C>, StubCell.StubCellValue<
   @Override
   public C getValue(T object) {
     return columnValue.get(object);
+  }
+
+  @Override
+  public IsColumn<T, C> sorted() {
+    setSortable(true);
+    return this;
   }
 
 }

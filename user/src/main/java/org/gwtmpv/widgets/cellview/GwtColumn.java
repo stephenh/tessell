@@ -30,4 +30,10 @@ public class GwtColumn<T, C> extends Column<T, C> implements FieldUpdater<T, C>,
     return this;
   }
 
+  @Override
+  public IsColumn<T, C> sorted() {
+    setSortable(true);
+    return this;
+  }
+
 }
