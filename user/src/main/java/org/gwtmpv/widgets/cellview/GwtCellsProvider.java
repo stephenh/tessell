@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.HasCell;
+import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.text.shared.SafeHtmlRenderer;
 
 public class GwtCellsProvider implements CellsProvider {
@@ -56,6 +57,11 @@ public class GwtCellsProvider implements CellsProvider {
   @Override
   public IsSafeHtmlCell newSafeHtmlCell() {
     return new GwtSafeHtmlCell();
+  }
+
+  @Override
+  public IsSafeHtmlHeader newSafeHtmlHeader(SafeHtml html) {
+    return new GwtSafeHtmlHeader(html);
   }
 
 }

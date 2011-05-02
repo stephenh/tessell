@@ -9,6 +9,7 @@ import org.gwtmpv.model.properties.Property;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.HasCell;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.text.shared.SafeHtmlRenderer;
 
 /**
@@ -85,6 +86,10 @@ public class Cells {
 
   public static IsTextHeader newTextHeader(String text) {
     return provider.newTextHeader(text);
+  }
+
+  public static IsSafeHtmlHeader newSafeHtmlHeader(SafeHtml html) {
+    return provider.newSafeHtmlHeader(html);
   }
 
   public static <C> IsCompositeCell<C> newCompositeCell(List<HasCell<C, ?>> cells) {
