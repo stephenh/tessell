@@ -53,4 +53,9 @@ public class GwtCellsProvider implements CellsProvider {
     return new GwtHtmlCell<C>(renderer);
   }
 
+  @Override
+  public IsSafeHtmlCell newSafeHtmlCell() {
+    return new GwtSafeHtmlCell();
+  }
+
 }

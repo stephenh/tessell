@@ -57,4 +57,9 @@ public class StubCellsProvider implements CellsProvider {
     return new StubHtmlCell<C>(renderer);
   }
 
+  @Override
+  public IsSafeHtmlCell newSafeHtmlCell() {
+    return new StubSafeHtmlCell();
+  }
+
 }

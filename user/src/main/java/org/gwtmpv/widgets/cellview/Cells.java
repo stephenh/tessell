@@ -71,6 +71,10 @@ public class Cells {
     return provider.newTextCell();
   }
 
+  public static IsSafeHtmlCell newSafeHtmlCell() {
+    return provider.newSafeHtmlCell();
+  }
+
   public static IsClickableTextCell newClickableTextCell() {
     return provider.newClickableTextCell();
   }
