@@ -36,7 +36,7 @@ public class StubCell<C> implements Cell<C> {
   }
 
   @Override
-  public void render(com.google.gwt.cell.client.Cell.Context context, C value, SafeHtmlBuilder sb) {
+  public void render(Cell.Context context, C value, SafeHtmlBuilder sb) {
     throw new IllegalStateException("This is a stub");
   }
 
