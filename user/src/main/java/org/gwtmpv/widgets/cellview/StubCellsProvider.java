@@ -68,4 +68,9 @@ public class StubCellsProvider implements CellsProvider {
     return new StubSafeHtmlHeader(html);
   }
 
+  @Override
+  public IsClickableSafeHtmlCell newClickableSafeHtmlCell() {
+    return new StubClickableSafeHtmlCell();
+  }
+
 }

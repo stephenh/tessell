@@ -19,6 +19,8 @@ public interface CellsProvider {
 
   IsSafeHtmlCell newSafeHtmlCell();
 
+  IsClickableSafeHtmlCell newClickableSafeHtmlCell();
+
   <C> IsHtmlCell<C> newHtmlCell(SafeHtmlRenderer<C> renderer);
 
   <T, C> IsColumn<T, C> newColumn(ColumnValue<T, C> value, Cell<C> cell);

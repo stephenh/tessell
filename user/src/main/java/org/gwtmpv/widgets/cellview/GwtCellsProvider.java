@@ -2,6 +2,8 @@ package org.gwtmpv.widgets.cellview;
 
 import java.util.List;
 
+import org.gwtmpv.widgets.ClickableSafeHtmlCell;
+
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.HasCell;
 import com.google.gwt.safehtml.shared.SafeHtml;
@@ -62,6 +64,11 @@ public class GwtCellsProvider implements CellsProvider {
   @Override
   public IsSafeHtmlHeader newSafeHtmlHeader(SafeHtml html) {
     return new GwtSafeHtmlHeader(html);
+  }
+
+  @Override
+  public IsClickableSafeHtmlCell newClickableSafeHtmlCell() {
+    return new ClickableSafeHtmlCell();
   }
 
 }
