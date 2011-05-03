@@ -16,6 +16,10 @@ public class DelegateCell<C> implements Cell<C> {
     this.delegate = delegate;
   }
 
+  public Cell<C> getDelegate() {
+    return delegate;
+  }
+
   @Override
   public boolean dependsOnSelection() {
     return delegate.dependsOnSelection();
