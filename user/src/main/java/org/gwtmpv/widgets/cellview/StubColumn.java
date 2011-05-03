@@ -23,7 +23,8 @@ public class StubColumn<T, C> extends Column<T, C> implements IsColumn<T, C>, St
 
   @Override
   public Column<T, C> asColumn() {
-    throw new IllegalStateException("This is a stub");
+    // lots of GWT APIs use column, so cheat and let us be considered as a real Column
+    return this;
   }
 
   @Override
