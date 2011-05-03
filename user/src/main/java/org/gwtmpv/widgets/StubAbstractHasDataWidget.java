@@ -1,19 +1,18 @@
 package org.gwtmpv.widgets;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.event.shared.EventHandler;
+import com.google.gwt.event.shared.GwtEvent.Type;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.view.client.ProvidesKey;
-import com.google.gwt.view.client.Range;
-import com.google.gwt.view.client.RangeChangeEvent;
-import com.google.gwt.view.client.RowCountChangeEvent;
-import com.google.gwt.view.client.SelectionModel;
+import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.user.cellview.client.PublicHasDataPresenter;
+import com.google.gwt.view.client.*;
 
 public class StubAbstractHasDataWidget<T> extends StubWidget implements IsAbstractHasData<T> {
 
-  private final List<T> data = new ArrayList<T>();
-  private SelectionModel<? super T> selectionModel;
+  private final PublicHasDataPresenter<T> p;
   private int redraws = 0;
 
   public StubAbstractHasDataWidget() {
@@ -21,7 +20,8 @@ public class StubAbstractHasDataWidget<T> extends StubWidget implements IsAbstra
   }
 
   public StubAbstractHasDataWidget(int pageSize) {
-    // setPageSize(pageSize);
+    p = new PublicHasDataPresenter<T>(this, new FakeView(), pageSize, null);
+    setPageSize(pageSize);
   }
 
   public void resetRedraws() {
@@ -41,7 +41,7 @@ public class StubAbstractHasDataWidget<T> extends StubWidget implements IsAbstra
 
   @Override
   public SelectionModel<? super T> getSelectionModel() {
-    return selectionModel;
+    return p.getSelectionModel();
   }
 
   @Override
@@ -51,88 +51,94 @@ public class StubAbstractHasDataWidget<T> extends StubWidget implements IsAbstra
 
   @Override
   public int getVisibleItemCount() {
-    throw fail();
+    return p.getVisibleItemCount();
   }
 
   @Override
   public List<T> getVisibleItems() {
-    return data; // not really visible--just all
+    return p.getVisibleItems();
   }
 
   @Override
-  public void setRowData(int start, List<? extends T> values) {
-    for (int i = 0; i < values.size(); i++) {
-      if (i < data.size()) {
-        data.set(i, values.get(i));
-      } else {
-        data.add(start + i, values.get(i));
+  public void setRowData(final int start, final List<? extends T> values) {
+    StubScheduler.get().runWithDeferred(new Runnable() {
+      public void run() {
+        p.setRowData(start, values);
       }
-    }
+    });
   }
 
   @Override
   public void setSelectionModel(SelectionModel<? super T> selectionModel) {
-    this.selectionModel = selectionModel;
+    p.setSelectionModel(selectionModel);
   }
 
   @Override
   public void setVisibleRangeAndClearData(Range range, boolean forceRangeChangeEvent) {
-    throw fail();
+    p.setVisibleRangeAndClearData(range, forceRangeChangeEvent);
   }
 
   @Override
   public HandlerRegistration addRangeChangeHandler(RangeChangeEvent.Handler handler) {
-    throw fail();
+    return p.addRangeChangeHandler(handler);
   }
 
   @Override
   public HandlerRegistration addRowCountChangeHandler(RowCountChangeEvent.Handler handler) {
-    throw fail();
+    return p.addRowCountChangeHandler(handler);
   }
 
   @Override
   public int getRowCount() {
-    throw fail();
+    return p.getRowCount();
   }
 
   @Override
   public Range getVisibleRange() {
-    throw fail();
+    return p.getVisibleRange();
   }
 
   @Override
   public boolean isRowCountExact() {
-    throw fail();
+    return p.isRowCountExact();
   }
 
   @Override
-  public void setRowCount(int count) {
-    throw fail();
+  public void setRowCount(final int count) {
+    StubScheduler.get().runWithDeferred(new Runnable() {
+      public void run() {
+        p.setRowCount(count);
+      }
+    });
   }
 
   @Override
-  public void setRowCount(int count, boolean isExact) {
-    throw fail();
+  public void setRowCount(final int count, final boolean isExact) {
+    StubScheduler.get().runWithDeferred(new Runnable() {
+      public void run() {
+        p.setRowCount(count, isExact);
+      }
+    });
   }
 
   @Override
   public void setVisibleRange(int start, int length) {
-    throw fail();
+    setVisibleRange(new Range(start, length));
   }
 
   @Override
   public void setVisibleRange(Range range) {
-    throw fail();
+    p.setVisibleRange(range);
   }
 
   @Override
-  public HandlerRegistration addCellPreviewHandler(com.google.gwt.view.client.CellPreviewEvent.Handler<T> handler) {
-    throw fail();
+  public HandlerRegistration addCellPreviewHandler(CellPreviewEvent.Handler<T> handler) {
+    return p.addCellPreviewHandler(handler);
   }
 
   @Override
   public ProvidesKey<T> getKeyProvider() {
-    throw fail();
+    return p.getKeyProvider();
   }
 
   @Override
@@ -154,22 +160,22 @@ public class StubAbstractHasDataWidget<T> extends StubWidget implements IsAbstra
 
   @Override
   public KeyboardPagingPolicy getKeyboardPagingPolicy() {
-    throw fail();
+    return p.getKeyboardPagingPolicy();
   }
 
   @Override
   public void setKeyboardPagingPolicy(KeyboardPagingPolicy policy) {
-    throw fail();
+    p.setKeyboardPagingPolicy(policy);
   }
 
   @Override
   public KeyboardSelectionPolicy getKeyboardSelectionPolicy() {
-    throw fail();
+    return p.getKeyboardSelectionPolicy();
   }
 
   @Override
   public void setKeyboardSelectionPolicy(KeyboardSelectionPolicy policy) {
-    throw fail();
+    p.setKeyboardSelectionPolicy(policy);
   }
 
   @Override
@@ -197,8 +203,30 @@ public class StubAbstractHasDataWidget<T> extends StubWidget implements IsAbstra
     redraws++;
   }
 
-  private RuntimeException fail() {
-    return new UnsupportedOperationException("The stub is not fancy enough yet");
+  private final class FakeView extends PublicHasDataPresenter.PublicView<T> {
+    public <H extends EventHandler> HandlerRegistration addHandler(H handler, Type<H> type) {
+      return null;
+    }
+
+    @Override
+    public void render(SafeHtmlBuilder sb, List<T> values, int start, SelectionModel<? super T> selectionModel) {
+    }
+
+    @Override
+    public void replaceAllChildren(List<T> values, SafeHtml html, boolean stealFocus) {
+    }
+
+    @Override
+    public void replaceChildren(List<T> values, int start, SafeHtml html, boolean stealFocus) {
+    }
+
+    @Override
+    public void resetFocus() {
+    }
+
+    @Override
+    public void setKeyboardSelected(int index, boolean selected, boolean stealFocus) {
+    }
   }
 
 }
