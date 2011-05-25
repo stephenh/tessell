@@ -8,7 +8,7 @@ Stubs
 
 Stubs are not a part of traditional MVP, but they are used extensively in `gwt-mpv`.
 
-Their purpose is to provide "dummy browser" behavior in just one place (each stub widget) and not repeated for every view in your application.
+Their purpose is to provide "dummy browser" behavior in just one place (each stub widget) and not repeated for every view in your application (or in every test in your application as mock specifications).
 
 To do this, each `IsXxx` widget interface (see [View Generation](./viewgeneration.html)) has two implementations:
 
@@ -35,37 +35,6 @@ While the `StubXxxView` will simply instantiate the `StubXxx` version of each wi
 {: class=brush:java}
 
 These "for free" `StubXxxView` classes make testing very easy to do--seeing the [Tests](./tests.html) page for examples.
-
-AppViews Interface
-------------------
-
-To manage which view (`XxxView` or `StubXxxView`) should be used when your presenter needs it, gwt-mpv also generates an `AppViews` class with factory methods to create each of your views.
-
-For example, gwt-hack's `AppViews` class looks something like:
-
-    public class AppViews {
-      public static IsAppView newAppView() {
-        ...
-      }
-
-      public static IsClientView netClientView() {
-        ...
-      }
-
-      public static IsClientListView newClientListView() {
-        ...
-      }
-    }
-{: class=brush:java}
-
-When your presenter wants to instantiate its view, it can use the appropriate `AppViews` static method, e.g.:
-
-    public class ClientPresenter extends AbstractPresenter<IsClientView> {
-      public ClientPresenter() {
-        super(newAppView());
-      }
-    }
-{: class=brush:java}
 
 How Dumb?
 ---------

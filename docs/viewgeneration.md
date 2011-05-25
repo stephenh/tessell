@@ -149,7 +149,9 @@ But suddenly we went from **8** lines of UiBinder code to **86** lines of deriva
 `HasXxx` vs. `IsXxx`
 ====================
 
-One source of cruft are GWT's `HasXxx` interfaces. It is tedious to add a brand new `Display` interface method plus `ClientView` implementation method for each `HasXxx` interface (`HasValue`, `HasAllKeyHandlers`, `HasStyle`, etc.) the presenter requires when they all come from the same widget.
+One source of cruft are GWT's `HasXxx` interfaces (typically called "characteristic interfaces" as each defines a very small, specific characteristic that may apply to several different widgets).
+
+It is tedious to add a brand new `Display` interface method plus `ClientView` implementation method for each `HasXxx` interface (`HasValue`, `HasAllKeyHandlers`, `HasStyle`, etc.) the presenter requires when they all come from the same widget.
 
 The `HasXxx` interfaces are just a band-aid around the GWT widgets not having their own mockable interfaces--a better solution is to just add widget-specific interfaces and be done with it.
 
@@ -157,9 +159,9 @@ This is what `gwt-mpv` does. For example, `Anchor` has `IsAnchor`, `TextBox` has
 
 This also solves the very annoying problem that many GWT widget methods aren't in `HasXxx` interfaces at all. So you end up having to make them up, e.g. `HasStyle`.
 
-`IsXxx` interfaces also open the door to automation because the programmer no longer has to decide which `HasXxx` interfaces for each widget will be exposed--each widget in the `ui.xml` file is just exposed in the `Display` interface as it's `IsXxx` equivalent.
+`IsXxx` interfaces are the key to automation because the programmer no longer has to decide which `HasXxx` interfaces for each widget will be exposed--each widget in the `ui.xml` file is just exposed in the `Display` interface as its `IsXxx` equivalent.
 
-The presenter can now access as few or as many widget methods as it needs without changing the `Display` and `ClientView` classes.
+The presenter can now access as few or as many widget methods as it needs without changing the `Display` or `ClientView` classes.
 
 `gwt-mpv` Generated Views
 -------------------------
@@ -296,6 +298,37 @@ And the stub (generated):
 So, with the stub, it's ~90 lines of code generated from 8 lines of the `client.ui.xml`. An **order of magnitude** decrease in code a programmer has to type out.
 
 (For more on stubs and why they are generated, see [stubs](/stubs.html) and [tests](/tests.html).)
+
+AppViews Interface
+------------------
+
+To manage which view (`XxxView` or `StubXxxView`) should be used when your presenter needs it, gwt-mpv also generates an `AppViews` class with factory methods to create each of your views.
+
+For example, gwt-hack's `AppViews` class looks something like:
+
+    public class AppViews {
+      public static IsAppView newAppView() {
+        ...
+      }
+
+      public static IsClientView netClientView() {
+        ...
+      }
+
+      public static IsClientListView newClientListView() {
+        ...
+      }
+    }
+{: class=brush:java}
+
+When your presenter wants to instantiate its view, it can use the appropriate `AppViews` static method, e.g.:
+
+    public class ClientPresenter extends AbstractPresenter<IsClientView> {
+      public ClientPresenter() {
+        super(newAppView());
+      }
+    }
+{: class=brush:java}
 
 Presenters
 ----------

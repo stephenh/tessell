@@ -6,10 +6,10 @@ title: gwt-mpv
 gwt-mpv
 =======
 
-gwt-mpv is an application framework for writing GWT applications. It's purpose is to enable you to easily:
+gwt-mpv is an application framework for writing GWT applications. It enables you to:
 
 * Write GWT applications with lots of really fast unit tests
-* Follow a Model View Presenter (MVP`*`) architecture without violating DRY
+* Follow a Model View Presenter (MVP`*`) architecture without boilerplate
 
 Features
 --------

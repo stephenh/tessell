@@ -21,7 +21,7 @@ To follow along using Eclipse, you can:
 A View
 ------
 
-We'll start by looking at [ClientView.ui.xml](http://github.com/stephenh/gwt-hack/blob/master/src/main/java/com/bizo/gwthack/client/views/ClientView.ui.xml):
+We'll start by looking at [ClientView.ui.xml](http://github.com/stephenh/gwt-hack/blob/master/src/main/java/com/bizo/gwthack/client/views/ClientView.ui.xml), which is a simple form for editing a Client domain object:
 
     <ui:UiBinder
       xmlns:ui="urn:ui:com.google.gwt.uibinder"
@@ -39,10 +39,6 @@ This is [UiBinder](http://code.google.com/webtoolkit/doc/latest/DevGuideUiBinder
 
 The `ui:field` attributes are GWT-specific and allow us access to the elements/widgets in the template (e.g. `view.heading().setInnerText(somethingElse)`).
 
-(Note that UiBinder strongly discourages using the `id` attribute, as a given `ui.xml` template may be included multiple times in a single page, resulting in any hard-coded DOM ids conflicting. You can still use `id` attributes in the `ui.xml` file, but only on elements that do not also have a `ui:field` attribute.)
-
-(Tangentially: widgets vs. elements--GWT differentiates between elements (pure DOM objects) and widgets (wrapper objects, e.g. `TextBox`). While elements are lighter weight, widgets have more logic to fix cross-browser idiosyncrasies. For example, in IE6 any GC cycle involving a DOM element leaks memory, so GWT's widgets roll their own `Window`-based event handling system.)
-
 Our goal for this tutorial/page is simple:
 
 * Set the initial value of the `name` text box
@@ -59,7 +55,7 @@ If you edit `ClientView.ui.xml`, make a change, and hit save, you should see the
     gwt-hack/src/main/java/com/bizo/gwthack/client/views/ClientView.ui.xml
 {: class=brush:plain}
 
-The gwt-hack project has a views external tool builder configured to automatically run anytime a file is changed in the `views` package. The builder runs gwt-mpv's `ViewGenerator`, and created:
+The gwt-hack Eclipse project has a "views" External Tool Builder configured to automatically run anytime a file is changed in the `views` directory. The builder runs gwt-mpv's `ViewGenerator` and creates:
 
 * `IsClientView`: a pure-Java interface for the `ClientView.ui.xml`
 * `GwtClientView`: the GWT/UiBinder version of `ClientView.ui.xml`
@@ -104,9 +100,9 @@ The main logic of our presenter is in the `onBind` method, which is called when 
       }
 {: class=brush:java}
 
-The first `binder.bind` call sets up two-way binding between the `client.name` model and the `view.name()` text box widget. If the model changes, the text box is updated; if the text box changes, the model is updated.
+The first `binder.bind` call sets up two-way binding between the `client.name` property and the `view.name()` text box widget. If the model changes, the text box is updated; if the text box changes, the model is updated.
 
-The second `binder.bind` call sets up one-one binding from our custom `nameLeft` model to the text of the `nameLeft` label widget.
+The second `binder.bind` call sets up one-way binding from our custom `nameLeft` property to the text of the `nameLeft` label widget.
 
 The third `binder.bind` call sets up `saveCommand` to be called when `submit` is clicked. `saveCommand` is a `DispatchUiCommand` that sends an action to the server and waits for the result:
 
@@ -122,9 +118,9 @@ The third `binder.bind` call sets up `saveCommand` to be called when `submit` is
       };
 {: class=brush:java}
 
-The `DispatchUiCommand` base class encapsulates the logic that only allows "Submit" to be clicked once, and can optionally disable/enable `submit` as needed (todo).
+The `DispatchUiCommand` base class encapsulates the logic that only allows "Submit" to be clicked once, and can optionally disable/enable `submit` as needed.
 
-If save is successful, `goTo(PlaceRequest)` is called, which causes the `#clients` page to be loaded (see place notes here).
+If save is successful, `goTo(PlaceRequest)` is called, which causes the `#clients` page to be loaded (see [places](./places.html) for more details).
 
 If save is unsuccessful, our application-wide error logic will kick in and show an error message to the user, ask them to reload the application, etc.
 
@@ -160,18 +156,14 @@ One part of the `ClientPresenter` that I skipped was the static `show` method:
 
 Places are part of traditional GWT MPV and denote different bookmarks in an application: `#clients`, `#client;id=4`, etc.
 
-Each token has a class it is mapped to, e.g. `#clients` -> `ClientsPlace`, that knows how to kick-start the UI for that page (e.g. create a `ClientPresenter`).
+Each token has a class it is mapped to, e.g. `#clients -> ClientsPlace`, that knows how to kick-start the UI for that page (e.g. create a `ClientPresenter`).
 
 The `@GenPlace` annotation comes from the gwt-mpv-apt annotation processor, and generates most of the `XxxPlace` class boilerplate. This include [GWT.runAsync](http://code.google.com/webtoolkit/doc/latest/DevGuideCodeSplitting.html)-based code splitting.
-
-(link to more place docs)
 
 A Test
 ------
 
-Finally, the reason we're doing all this, [ClientPresenterTest]():
-
-Again, annotated in pieces:
+Finally, the reason we're doing all this MVP abstraction is for great testing. Annotated in steps, the [ClientPresenterTest]() looks like:
 
     public class ClientPresenterTest extends AbstractPresenterTest {
       private final ClientDto dto = new ClientDto();
@@ -181,9 +173,11 @@ Again, annotated in pieces:
     }
 {: class=brush:java}
 
-We assume each of our test methods will use a `dto`, model `client`, presenter `p`, and view `v`, and declare these as fields. Note our view is actually a `StubClientView`.
+We assume each of our test methods will use a `dto`, model `client`, presenter `p`, and view `v`, and declare these as fields. Note our view is actually a `StubClientView`, which was code-generated to include stub widgets/elements for all of the `ui:field`-marked elements in the `ui.xml` file.
 
-`AbstractPresenterTest` sets up a few infrastructure things, notably our `StubAppRegistry` (link here) that has stub versions of all of our otherwise GWT dependencies.
+Also note that the base class `AbstractPresenterTest` sets up a few infrastructure things, in particular our `StubAppRegistry` (link here) that has stub versions of the application-wide dependencies.
+
+On to the test methods themselves, the first asserts that the view's values are correctly set when it's loaded:
 
     @Test
     public void fillsInFieldsOnBind() {
@@ -194,7 +188,7 @@ We assume each of our test methods will use a `dto`, model `client`, presenter `
     }
 {: class=brush:java}
 
-The first test just asserts that as soon as our presenter is bound, the model's values are set into the view's widgets. Here `v.name()` is a `StubTextBox`, and it's `getText()` method is just getting from an internal `text` field instead of any normal `TextBox` DOM coupling.
+Here `v.name()` is a `StubTextBox`, and it's `getText()` method is just getting from a `StubTextBox.text` field instead of any normal `TextBox` DOM coupling.
 
 The next test ensures that the "X left" label updates as the user types:
 
@@ -212,7 +206,7 @@ The next test ensures that the "X left" label updates as the user types:
 
 `StubTextBox.press` is a helper method that takes a char and fires dummy key down, key press, and key up events (but no change event or blur event). After calling `press('b')`, we see that the `nameLeft` label got updated to "46 left".
 
-The last test tests the submit button:
+The last test asserts the submit button works:
 
     @Test
     public void saving() {
@@ -236,8 +230,9 @@ The last test tests the submit button:
     }
 {: class=brush:java}
 
-And has two asserts:
+Note that we check that:
 
-* That `SaveClientAction` was submitted to the server with a DTO with the new name "bar"
-* That after the call succeeded, a new place request for `#clients` was fired on the event bus
+* `SaveClientAction` was submitted to the server with a DTO with the new name "bar"
+* After the call succeeded, a new place request for `#clients` was fired on the event bus
+
 
