@@ -7,8 +7,14 @@ import com.google.gwt.event.shared.GwtEvent.Type;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.user.cellview.client.LoadingStateChangeEvent.LoadingState;
 import com.google.gwt.user.cellview.client.PublicHasDataPresenter;
-import com.google.gwt.view.client.*;
+import com.google.gwt.view.client.CellPreviewEvent;
+import com.google.gwt.view.client.ProvidesKey;
+import com.google.gwt.view.client.Range;
+import com.google.gwt.view.client.RangeChangeEvent;
+import com.google.gwt.view.client.RowCountChangeEvent;
+import com.google.gwt.view.client.SelectionModel;
 
 public class StubAbstractHasDataWidget<T> extends StubWidget implements IsAbstractHasData<T> {
 
@@ -226,6 +232,10 @@ public class StubAbstractHasDataWidget<T> extends StubWidget implements IsAbstra
 
     @Override
     public void setKeyboardSelected(int index, boolean selected, boolean stealFocus) {
+    }
+
+    @Override
+    public void setLoadingState(LoadingState state) {
     }
   }
 

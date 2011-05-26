@@ -12,6 +12,7 @@
 		<javac srcdir="src/main/java" destdir="bin/main" debug="true" nowarn="yes" source="1.6" target="1.6" encoding="utf8">
 			<compilerarg value="-s"/>
 			<compilerarg value="bin/apt"/>
+			<compilerarg value="-XprintRounds"/>
 			<classpath>
 				<fileset dir="bin/lib/build/jars" includes="*.jar"/>
 				<fileset dir="bin/lib/default/jars" includes="*.jar"/>

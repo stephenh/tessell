@@ -1,5 +1,6 @@
 package com.google.gwt.user.cellview.client;
 
+import com.google.gwt.user.cellview.client.LoadingStateChangeEvent.LoadingState;
 import com.google.gwt.view.client.HasData;
 import com.google.gwt.view.client.ProvidesKey;
 
