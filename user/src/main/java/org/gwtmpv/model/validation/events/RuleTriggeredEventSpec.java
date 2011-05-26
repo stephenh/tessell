@@ -3,7 +3,7 @@ package org.gwtmpv.model.validation.events;
 import org.gwtmpv.GenEvent;
 import org.gwtmpv.Param;
 
-@GenEvent(methodName = "onTrigger")
+@GenEvent(methodName = "onTrigger", gwtEvent = true)
 public class RuleTriggeredEventSpec {
   @Param(1)
   Object key;

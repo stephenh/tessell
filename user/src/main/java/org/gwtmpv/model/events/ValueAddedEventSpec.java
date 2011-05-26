@@ -6,7 +6,7 @@ import org.gwtmpv.GenEvent;
 import org.gwtmpv.Param;
 import org.gwtmpv.model.properties.Property;
 
-@GenEvent
+@GenEvent(gwtEvent = true)
 public class ValueAddedEventSpec<P> {
   @Param(1)
   Property<ArrayList<P>> property;
