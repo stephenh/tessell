@@ -9,8 +9,8 @@ import org.gwtmpv.dispatch.client.StubDispatchAsync.ExecuteCall;
 import org.gwtmpv.dispatch.shared.Action;
 import org.gwtmpv.dispatch.shared.Result;
 
-import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.web.bindery.event.shared.EventBus;
 
 /**
  * Unifies the {@link StubDispatchAsync} methods (via delegation) with the {@link OutstandingDispatchAsync} methods (Via

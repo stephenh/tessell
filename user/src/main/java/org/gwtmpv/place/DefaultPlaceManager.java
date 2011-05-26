@@ -12,7 +12,7 @@ import org.gwtmpv.place.tokenizer.TokenizerException;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.event.shared.EventBus;
+import com.google.web.bindery.event.shared.EventBus;
 
 public class DefaultPlaceManager implements PlaceManager {
 

@@ -14,13 +14,15 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 /** Maintains the state of a {@code gwt-dispatch}-style UiCommand. */
 public abstract class DispatchUiCommand<A extends Action<R>, R extends Result> extends UiCommand {
 
-  private final EventBus eventBus;
   private final OutstandingDispatchAsync async;
   private final BooleanProperty active = booleanProperty("active", false);
 
-  public DispatchUiCommand(EventBus eventBus, OutstandingDispatchAsync async) {
-    this.eventBus = eventBus;
+  public DispatchUiCommand(OutstandingDispatchAsync async) {
     this.async = async;
+  }
+
+  public DispatchUiCommand(EventBus eventBus, OutstandingDispatchAsync async) {
+    this(async);
   }
 
   @Override
@@ -55,9 +57,7 @@ public abstract class DispatchUiCommand<A extends Action<R>, R extends Result> e
 
   /** Fires a {@link DispatchUnhandledFailureEvent} on failures, can be overridden by subclasses if needed. */
   protected void onFailure(Throwable caught) {
-    if (eventBus != null) {
-      DispatchUnhandledFailureEvent.fire(eventBus, null, caught, null);
-    }
+    async.unhandledFailure(caught);
   }
 
   /** @return whether the call is currently active */

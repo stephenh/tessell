@@ -12,8 +12,8 @@ import org.gwtmpv.dispatch.client.events.DispatchUnhandledFailureEvent;
 import org.gwtmpv.dispatch.shared.Action;
 import org.gwtmpv.dispatch.shared.Result;
 
-import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.web.bindery.event.shared.EventBus;
 
 /**
  * Fires events outstanding dispatch calls so tests can know when to continue.
@@ -105,6 +105,10 @@ public class OutstandingDispatchAsync implements DispatchAsync {
         callback.onFailure(caught);
       }
     });
+  }
+
+  public void unhandledFailure(Throwable caught) {
+    eventBus.fireEvent(new DispatchUnhandledFailureEvent(null, caught, null));
   }
 
   /** @return whether there are action calls that have not returned from the server for {@code actionType} */

@@ -13,7 +13,9 @@ public class HandlerRegistrations {
 
   public void remove() {
     for (HandlerRegistration hr : hrs) {
-      hr.removeHandler();
+      if (hr != null) {
+        hr.removeHandler();
+      }
     }
   }
 

@@ -3,9 +3,9 @@ package org.gwtmpv.util;
 import org.gwtmpv.place.events.PlaceChangedEvent;
 import org.gwtmpv.place.events.PlaceChangedHandler;
 
-import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.HasText;
+import com.google.web.bindery.event.shared.EventBus;
+import com.google.web.bindery.event.shared.HandlerRegistration;
 
 /** Updates a {@code HasText} with the name of the place we're on, for testing. */
 public class PlaceWatcher {

@@ -13,8 +13,12 @@ public class StringUtils {
     return a != null ? a : defaultString;
   }
 
-  public static String emptyString(final String a, final String defaultString) {
+  public static String blankString(final String a, final String defaultString) {
     return a != null && a.trim().length() > 0 ? a : defaultString;
+  }
+
+  public static String emptyString(final String a, final String defaultString) {
+    return a != null && a.length() > 0 ? a : defaultString;
   }
 
   public static String join(final List<?> things, final String on) {
