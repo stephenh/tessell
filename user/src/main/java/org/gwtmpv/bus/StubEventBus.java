@@ -8,6 +8,7 @@ import com.google.web.bindery.event.shared.Event;
 import com.google.web.bindery.event.shared.Event.Type;
 import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.HandlerRegistration;
+import com.google.web.bindery.event.shared.SimplerEventBus;
 
 public class StubEventBus extends EventBus {
 
