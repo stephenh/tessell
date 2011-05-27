@@ -14,7 +14,7 @@
  * the License.
  */
 
-package com.google.gwt.event.shared;
+package com.google.web.bindery.event.shared;
 
 import java.util.HashSet;
 
@@ -24,6 +24,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.shared.EventHandler;
 
 /** Support code for handler tests. */
 public abstract class HandlerTestBase extends TestCase {

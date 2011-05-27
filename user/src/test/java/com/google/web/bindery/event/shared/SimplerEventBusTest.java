@@ -14,7 +14,7 @@
  * the License.
  */
 
-package com.google.gwt.event.shared;
+package com.google.web.bindery.event.shared;
 
 import java.util.Set;
 
@@ -25,7 +25,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.DomEvent.Type;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
-import com.google.gwt.event.shared.testing.CountingEventBus;
+import com.google.web.bindery.event.shared.testing.CountingEventBus;
 
 public class SimplerEventBusTest extends HandlerTestBase {
 
