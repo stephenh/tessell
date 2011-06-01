@@ -9,7 +9,6 @@ import java.util.List;
 import org.gwtmpv.bus.StubEventBus;
 import org.gwtmpv.place.events.PlaceRequestEvent;
 import org.gwtmpv.widgets.HasCss;
-import org.gwtmpv.widgets.HasStubCss;
 import org.gwtmpv.widgets.IsTextList;
 import org.gwtmpv.widgets.StubStyle;
 import org.gwtmpv.widgets.StubTextList;
@@ -104,7 +103,7 @@ public class MpvMatchers {
     return new TypeSafeMatcher<HasCss>() {
       @Override
       protected boolean matchesSafely(HasCss item) {
-        return ((HasStubCss) item).getStyleNames().contains(className);
+        return (" " + item.getStyleName() + " ").indexOf(" " + className + " ") > -1;
       }
 
       @Override

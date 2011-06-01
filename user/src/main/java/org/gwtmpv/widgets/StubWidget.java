@@ -1,7 +1,5 @@
 package org.gwtmpv.widgets;
 
-import java.util.List;
-
 import com.google.gwt.event.logical.shared.AttachEvent;
 import com.google.gwt.event.logical.shared.AttachEvent.Handler;
 import com.google.gwt.event.shared.EventBus;
@@ -11,7 +9,7 @@ import com.google.gwt.event.shared.SimplerEventBus;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Widget;
 
-public class StubWidget implements IsWidget, HasStubCss {
+public class StubWidget implements IsWidget {
 
   protected final EventBus handlers = new SimplerEventBus();
   private final StubElement element = new StubElement();
@@ -64,11 +62,6 @@ public class StubWidget implements IsWidget, HasStubCss {
   @Override
   public int getAbsoluteLeft() {
     return absoluteLeft;
-  }
-
-  @Override
-  public List<String> getStyleNames() {
-    return element.getStyleNames();
   }
 
   @Override

@@ -9,7 +9,7 @@ import java.util.Map;
 
 import com.google.gwt.dom.client.Element;
 
-public class StubElement implements IsElement, HasStubCss {
+public class StubElement implements IsElement {
 
   private String id;
   private String debugId;
