@@ -3,6 +3,7 @@ package org.gwtmpv.widgets;
 import org.gwtmpv.widgets.cellview.IsColumn;
 import org.gwtmpv.widgets.cellview.IsHeader;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.ui.Widget;
@@ -80,6 +81,16 @@ public class GwtCellTable<T> extends CellTable<T> implements IsCellTable<T> {
   @Override
   public int getColumnIndex(IsColumn<T, ?> column) {
     return getColumnIndex(column.asColumn());
+  }
+
+  @Override
+  public void setColumnWidth(IsColumn<T, ?> col, String width) {
+    setColumnWidth(col.asColumn(), width);
+  }
+
+  @Override
+  public void setColumnWidth(IsColumn<T, ?> col, double width, Unit unit) {
+    setColumnWidth(col.asColumn(), width, unit);
   }
 
 }

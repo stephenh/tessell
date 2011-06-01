@@ -11,6 +11,7 @@ import org.gwtmpv.widgets.cellview.IsColumn;
 import org.gwtmpv.widgets.cellview.IsHeader;
 import org.gwtmpv.widgets.cellview.StubColumn;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.user.cellview.client.ColumnSortEvent;
@@ -142,6 +143,18 @@ public class StubCellTable<T> extends StubAbstractHasDataWidget<T> implements Is
 
   @Override
   public void setWidth(String width, boolean isFixedLayout) {
+  }
+
+  @Override
+  public void setColumnWidth(IsColumn<T, ?> col, String width) {
+  }
+
+  @Override
+  public void setColumnWidth(IsColumn<T, ?> col, double width, Unit unit) {
+  }
+
+  @Override
+  public void setTableLayoutFixed(boolean isFixed) {
   }
 
 }
