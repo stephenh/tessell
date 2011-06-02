@@ -58,6 +58,18 @@ public class PropertyBinder<P> {
     return this;
   }
 
+  public PropertyBinder<P> to(final Property<P> other) {
+    PropertyChangedHandler<P> h = new PropertyChangedHandler<P>() {
+      public void onPropertyChanged(final PropertyChangedEvent<P> event) {
+        other.set(event.getProperty().get());
+      }
+    };
+    // set initial value
+    h.onPropertyChanged(new PropertyChangedEvent<P>(p));
+    binder.registerHandler(p.addPropertyChangedHandler(h));
+    return this;
+  }
+
   /** Binds our property to {@code source} (two-way). */
   public PropertyBinder<P> to(final HasValue<P> source) {
     PropertyChangedHandler<P> h = new PropertyChangedHandler<P>() {
