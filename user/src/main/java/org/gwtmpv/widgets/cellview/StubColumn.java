@@ -1,6 +1,6 @@
 package org.gwtmpv.widgets.cellview;
 
-import org.gwtmpv.widgets.StubCellTable;
+import org.gwtmpv.widgets.StubAbstractCellTable;
 
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.FieldUpdater;
@@ -9,7 +9,7 @@ import com.google.gwt.user.cellview.client.Column;
 public class StubColumn<T, C> extends Column<T, C> implements IsColumn<T, C>, StubCell.StubCellValue<C> {
 
   private final ColumnValue<T, C> columnValue;
-  private StubCellTable<T> stubCellTable;
+  private StubAbstractCellTable<T> stubCellTable;
 
   public StubColumn(final ColumnValue<T, C> columnValue, final Cell<C> cell) {
     super(cell);
@@ -17,7 +17,7 @@ public class StubColumn<T, C> extends Column<T, C> implements IsColumn<T, C>, St
     ((StubCell<C>) cell).setStubCellValue(this); // tell the stub about us
   }
 
-  public void setStubCellTable(StubCellTable<T> stubCellTable) {
+  public void setStubCellTable(StubAbstractCellTable<T> stubCellTable) {
     this.stubCellTable = stubCellTable;
   }
 

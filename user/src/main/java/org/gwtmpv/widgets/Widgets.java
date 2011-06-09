@@ -7,7 +7,8 @@ import com.google.gwt.cell.client.Cell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.safehtml.shared.SafeHtml;
-import com.google.gwt.user.cellview.client.CellTable.Resources;
+import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.DataGrid;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.SuggestOracle;
 
@@ -162,8 +163,16 @@ public class Widgets {
     return provider.newCellTable();
   }
 
-  public static <T> IsCellTable<T> newCellTable(int pageSize, Resources resources) {
+  public static <T> IsCellTable<T> newCellTable(int pageSize, CellTable.Resources resources) {
     return provider.newCellTable(pageSize, resources);
+  }
+
+  public static <T> IsDataGrid<T> newDataGrid() {
+    return provider.newDataGrid();
+  }
+
+  public static <T> IsDataGrid<T> newDataGrid(int pageSize, DataGrid.Resources resources) {
+    return provider.newDataGrid(pageSize, resources);
   }
 
   public static <T> IsCellList<T> newCellList(Cell<T> cell) {
@@ -188,6 +197,16 @@ public class Widgets {
 
   public static IsSuggestBox newSuggestBox(SuggestOracle oracle) {
     return provider.newSuggestBox(oracle);
+  }
+
+  public static IsResizeLayoutPanel newResizeLayoutPanel() {
+    return provider.newResizeLayoutPanel();
+  }
+
+  public static IsResizeLayoutPanel newResizeLayoutPanel(IsWidget widget) {
+    IsResizeLayoutPanel p = newResizeLayoutPanel();
+    p.add(widget);
+    return p;
   }
 
 }

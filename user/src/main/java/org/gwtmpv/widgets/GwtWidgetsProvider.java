@@ -8,6 +8,7 @@ import org.gwtmpv.util.cookies.facade.IsCookies;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.cellview.client.CellTable.Resources;
+import com.google.gwt.user.cellview.client.DataGrid;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SuggestOracle;
@@ -193,6 +194,21 @@ public class GwtWidgetsProvider implements WidgetsProvider {
   @Override
   public IsListBox newListBox() {
     return new GwtListBox();
+  }
+
+  @Override
+  public <T> IsDataGrid<T> newDataGrid() {
+    return new GwtDataGrid<T>();
+  }
+
+  @Override
+  public <T> IsDataGrid<T> newDataGrid(int pageSize, DataGrid.Resources resources) {
+    return new GwtDataGrid<T>(pageSize, resources);
+  }
+
+  @Override
+  public IsResizeLayoutPanel newResizeLayoutPanel() {
+    return new GwtResizeLayoutPanel();
   }
 
 }

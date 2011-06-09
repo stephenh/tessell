@@ -199,4 +199,19 @@ public class StubWidgetsProvider implements WidgetsProvider {
     return new StubListBox();
   }
 
+  @Override
+  public <T> IsDataGrid<T> newDataGrid() {
+    return new StubDataGrid<T>();
+  }
+
+  @Override
+  public <T> IsDataGrid<T> newDataGrid(int pageSize, com.google.gwt.user.cellview.client.DataGrid.Resources resources) {
+    return new StubDataGrid<T>(pageSize);
+  }
+
+  @Override
+  public IsResizeLayoutPanel newResizeLayoutPanel() {
+    return new StubResizeLayoutPanel();
+  }
+
 }

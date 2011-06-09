@@ -6,6 +6,7 @@ import org.gwtmpv.util.cookies.facade.IsCookies;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.DataGrid;
 import com.google.gwt.user.client.ui.SuggestOracle;
 
 public interface WidgetsProvider {
@@ -76,8 +77,14 @@ public interface WidgetsProvider {
 
   <T> IsCellTable<T> newCellTable(int pageSize, CellTable.Resources resources);
 
+  <T> IsDataGrid<T> newDataGrid();
+
+  <T> IsDataGrid<T> newDataGrid(int pageSize, DataGrid.Resources resources);
+
   <T> IsCellList<T> newCellList(Cell<T> cell);
 
   IsSuggestBox newSuggestBox(SuggestOracle oracle);
+
+  IsResizeLayoutPanel newResizeLayoutPanel();
 
 }
