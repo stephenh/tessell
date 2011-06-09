@@ -1,6 +1,8 @@
 package org.gwtmpv.widgets;
 
 import com.google.gwt.resources.client.DataResource;
+import com.google.gwt.safehtml.shared.SafeUri;
+import com.google.gwt.safehtml.shared.UriUtils;
 
 public class StubDataResource implements DataResource {
 
@@ -20,6 +22,11 @@ public class StubDataResource implements DataResource {
   @Override
   public String getName() {
     return name;
+  }
+
+  @Override
+  public SafeUri getSafeUri() {
+    return UriUtils.fromTrustedString(url);
   }
 
 }
