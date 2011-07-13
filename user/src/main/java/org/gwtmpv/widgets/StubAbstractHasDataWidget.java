@@ -219,7 +219,7 @@ public class StubAbstractHasDataWidget<T> extends StubWidget implements IsAbstra
     }
 
     @Override
-    public void replaceAllChildren(List<T> values, SafeHtml html, boolean stealFocus) {
+    public void replaceAllChildren(List<T> values, SafeHtml html, boolean stealFocus, boolean other) {
     }
 
     @Override
