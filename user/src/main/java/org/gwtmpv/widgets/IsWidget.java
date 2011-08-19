@@ -5,7 +5,7 @@ import com.google.gwt.event.shared.HasHandlers;
 import com.google.gwt.user.client.EventListener;
 import com.google.gwt.user.client.ui.Widget;
 
-public interface IsWidget extends EventListener, HasHandlers, HasCss, HasAttachHandlers {
+public interface IsWidget extends EventListener, HasHandlers, HasCss, HasAttachHandlers, com.google.gwt.user.client.ui.IsWidget {
 
   // HasCss addStyleName/removeStyleName is really from IsUIObject
 
