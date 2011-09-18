@@ -2,6 +2,8 @@ package org.gwtmpv.widgets;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.DoubleClickEvent;
+import com.google.gwt.event.dom.client.DoubleClickHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
@@ -25,6 +27,10 @@ public class StubLabel extends StubWidget implements IsLabel {
 
   public void click() {
     fireEvent(new DummyClickEvent());
+  }
+
+  public void doubleClick() {
+    fireEvent(new DummyDoubleClickEvent());
   }
 
   public void mouseOver() {
@@ -108,6 +114,11 @@ public class StubLabel extends StubWidget implements IsLabel {
   @Override
   public HandlerRegistration addMouseWheelHandler(final MouseWheelHandler handler) {
     return handlers.addHandler(MouseWheelEvent.getType(), handler);
+  }
+
+  @Override
+  public HandlerRegistration addDoubleClickHandler(DoubleClickHandler handler) {
+    return handlers.addHandler(DoubleClickEvent.getType(), handler);
   }
 
 }
