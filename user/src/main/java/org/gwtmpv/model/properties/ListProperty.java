@@ -15,6 +15,8 @@ import com.google.gwt.event.shared.HandlerRegistration;
 
 public class ListProperty<E> extends AbstractProperty<ArrayList<E>, ListProperty<E>> {
 
+  private IntegerProperty size;
+
   public ListProperty(final Value<ArrayList<E>> value) {
     super(value);
   }
@@ -61,12 +63,15 @@ public class ListProperty<E> extends AbstractProperty<ArrayList<E>, ListProperty
 
   /** @return a derived property that reflects this list's size. */
   public IntegerProperty size() {
-    return addDerived(integerProperty(new DerivedValue<Integer>() {
-      public Integer get() {
-        final ArrayList<E> current = ListProperty.this.get();
-        return (current == null) ? null : current.size();
-      }
-    }));
+    if (size == null) {
+      size = addDerived(integerProperty(new DerivedValue<Integer>() {
+        public Integer get() {
+          final ArrayList<E> current = ListProperty.this.get();
+          return (current == null) ? null : current.size();
+        }
+      }));
+    }
+    return size;
   }
 
   /** Registers {@code handler} to be called when new values are added. */
