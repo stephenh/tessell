@@ -34,6 +34,11 @@ Changes
 
 Following the [gwt-mpv](https://github.com/stephenh/gwt-mpv) github project is the best way to stay in the loop on changes.
 
+Community
+---------
+
+* [gwt-mpv mailing list](https://groups.google.com/forum/?hl=en#!forum/gwtmpv)
+
 Credits
 -------
 
