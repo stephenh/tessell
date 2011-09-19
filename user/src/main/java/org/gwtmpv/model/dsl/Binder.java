@@ -7,6 +7,7 @@ import org.gwtmpv.model.commands.UiCommand;
 import org.gwtmpv.model.events.PropertyChangedEvent;
 import org.gwtmpv.model.events.PropertyChangedHandler;
 import org.gwtmpv.model.properties.EnumProperty;
+import org.gwtmpv.model.properties.ListProperty;
 import org.gwtmpv.model.properties.Property;
 import org.gwtmpv.model.properties.StringProperty;
 import org.gwtmpv.model.validation.rules.Rule;
@@ -38,6 +39,11 @@ public class Binder {
   /** @return a fluent {@link PropertyBinder} against {@code property}. */
   public <P> PropertyBinder<P> bind(Property<P> property) {
     return new PropertyBinder<P>(this, property);
+  }
+
+  /** @return a fluent {@link ListPropertyBinder} against {@code property}. */
+  public <P> ListPropertyBinder<P> bind(ListProperty<P> property) {
+    return new ListPropertyBinder<P>(this, property);
   }
 
   public RuleBinder bind(Rule rule) {
