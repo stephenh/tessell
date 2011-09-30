@@ -28,6 +28,7 @@ import com.google.gwt.event.shared.SimplerEventBus;
 public abstract class AbstractRule<T, U extends AbstractRule<T, U>> implements Rule {
 
   private static final Logger log = Logger.getLogger("org.gwtmpv.model");
+  protected final Property<T> property;
   // handlers
   protected final EventBus handlers = new SimplerEventBus();
   // List of properties that must be true for this rule to run.
@@ -39,6 +40,7 @@ public abstract class AbstractRule<T, U extends AbstractRule<T, U>> implements R
 
   protected AbstractRule(final Property<T> property, final String message) {
     this.message = message;
+    this.property = property;
     if (property != null) {
       property.addRule(this);
     }
@@ -99,6 +101,8 @@ public abstract class AbstractRule<T, U extends AbstractRule<T, U>> implements R
   private void fireEvent(final GwtEvent<?> event) {
     log.log(Level.FINEST, this + " firing " + event);
     handlers.fireEvent(event);
+    // after all of our handlers have seen event, delegate it up.
+    property.fireEvent(event);
   }
 
   // change this to push down too

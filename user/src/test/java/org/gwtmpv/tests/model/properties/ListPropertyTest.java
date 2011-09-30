@@ -58,8 +58,17 @@ public class ListPropertyTest {
   }
 
   @Test
-  public void addingTouchesDerived() {
+  public void derivedPropertiesAreTouchedOnCreationIfNeeded() {
     final IntegerProperty size = p.size();
+    assertThat(p.isTouched(), is(true));
+    assertThat(size.isTouched(), is(true));
+  }
+
+  @Test
+  public void addingTouchesDerived() {
+    p.setTouched(false);
+    final IntegerProperty size = p.size();
+    assertThat(p.isTouched(), is(false));
     assertThat(size.isTouched(), is(false));
 
     p.add("foo");

@@ -4,12 +4,18 @@ import static org.gwtmpv.model.properties.NewProperty.booleanProperty;
 import static org.gwtmpv.model.properties.NewProperty.stringProperty;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.Matchers.contains;
 import static org.junit.Assert.assertThat;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.gwtmpv.model.properties.BooleanProperty;
 import org.gwtmpv.model.properties.StringProperty;
 import org.gwtmpv.model.validation.Valid;
+import org.gwtmpv.model.validation.events.RuleTriggeredEvent;
+import org.gwtmpv.model.validation.events.RuleTriggeredHandler;
 import org.gwtmpv.model.validation.rules.Custom;
 import org.gwtmpv.model.validation.rules.Length;
 import org.gwtmpv.model.validation.rules.Required;
@@ -112,4 +118,23 @@ public class RulesTest extends AbstractRuleTest {
     assertMessages("name required");
   }
 
+  @Test
+  public void ruleHandlersAreFiredBeforeThePropertysHandlers() {
+    Required r = new Required(f.name, "name required");
+
+    final List<String> order = new ArrayList<String>();
+    r.addRuleTriggeredHandler(new RuleTriggeredHandler() {
+      public void onTrigger(RuleTriggeredEvent event) {
+        order.add("rule");
+      }
+    });
+    f.name.addRuleTriggeredHandler(new RuleTriggeredHandler() {
+      public void onTrigger(RuleTriggeredEvent event) {
+        order.add("property");
+      }
+    });
+
+    f.name.touch();
+    assertThat(order, contains("rule", "property"));
+  }
 }

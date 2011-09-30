@@ -10,12 +10,13 @@ public class Transient<T> extends AbstractRule<T, Transient<T>> {
 
   private boolean hasChanged;
 
-  public Transient(Property<T> property, String message) {
+  public Transient(final Property<T> property, String message) {
     super(property, message);
     property.reassess();
     property.addPropertyChangedHandler(new PropertyChangedHandler<T>() {
       public void onPropertyChanged(PropertyChangedEvent<T> event) {
         hasChanged = true;
+        property.reassess();
       }
     });
   }
