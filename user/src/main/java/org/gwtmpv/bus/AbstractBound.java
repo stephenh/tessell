@@ -9,7 +9,7 @@ public abstract class AbstractBound implements Bound, CanRegisterHandlers {
 
   private boolean bound = false;
   private boolean hasBeenUnbound = false;
-  private final ArrayList<HandlerRegistration> registrations = new ArrayList<HandlerRegistration>();
+  private final ArrayList<com.google.web.bindery.event.shared.HandlerRegistration> registrations = new ArrayList<com.google.web.bindery.event.shared.HandlerRegistration>();
 
   @Override
   public final void bind() {
@@ -45,6 +45,11 @@ public abstract class AbstractBound implements Bound, CanRegisterHandlers {
     registrations.add(handlerRegistration);
   }
 
+  /** Registers a handler to be removed on {@link #unbind()}. */
+  public final void registerHandler(final com.google.web.bindery.event.shared.HandlerRegistration handlerRegistration) {
+    registrations.add(handlerRegistration);
+  }
+
   /** Register handlers to be removed on {@link #unbind()}. */
   public final void registerHandlers(final HandlerRegistration... handlerRegistrations) {
     for (final HandlerRegistration handlerRegistration : handlerRegistrations) {
@@ -67,7 +72,7 @@ public abstract class AbstractBound implements Bound, CanRegisterHandlers {
   /** This method is called when unbinding the instance. */
   protected void onUnbind() {
     bound = false; // set here so we can catch subclasses not calling super.onUnbind
-    for (final HandlerRegistration registration : registrations) {
+    for (final com.google.web.bindery.event.shared.HandlerRegistration registration : registrations) {
       registration.removeHandler();
     }
     registrations.clear();
