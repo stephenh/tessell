@@ -1,5 +1,6 @@
 package org.gwtmpv.model.dsl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,7 +14,7 @@ import org.gwtmpv.widgets.IsPanel;
 import org.gwtmpv.widgets.IsWidget;
 
 /** Fluent binding methods for {@link ListProperty}s. */
-public class ListPropertyBinder<P> {
+public class ListPropertyBinder<P> extends PropertyBinder<ArrayList<P>> {
 
   public interface ListViewFactory<P> {
     IsWidget create(P value);
@@ -27,6 +28,7 @@ public class ListPropertyBinder<P> {
   private final ListProperty<P> p;
 
   public ListPropertyBinder(Binder binder, ListProperty<P> p) {
+    super(binder, p);
     this.binder = binder;
     this.p = p;
   }
