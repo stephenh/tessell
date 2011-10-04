@@ -63,4 +63,30 @@ public class PropertyTest extends AbstractRuleTest {
     assertThat(wasInvalidOnChange[0], is(true));
   }
 
+  @Test
+  public void validationOfDerivedValuesHappensBeforeChange() {
+    final IntegerProperty a = integerProperty("a");
+    final IntegerProperty b = integerProperty("b");
+    new Custom(b, "b must be greater than a", new DerivedValue<Boolean>() {
+      public Boolean get() {
+        return b.get() == null || a.get() == null || b.get() > a.get();
+      }
+    });
+    b.depends(a);
+
+    // set with good values
+    a.set(1);
+    b.set(2);
+
+    final Boolean[] asWasInvalid = { null };
+    a.addPropertyChangedHandler(new PropertyChangedHandler<Integer>() {
+      public void onPropertyChanged(PropertyChangedEvent<Integer> event) {
+        asWasInvalid[0] = b.wasValid() == Valid.NO;
+      }
+    });
+
+    a.set(3);
+    assertThat(asWasInvalid[0], is(true));
+  }
+
 }

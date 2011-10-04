@@ -76,22 +76,27 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
   public void reassess() {
     final P newValue = get();
     final boolean valueChanged = !eq(lastValue, newValue);
+    if (valueChanged) {
+      lastValue = copyLastValue(newValue);
+    }
 
     // run validation before firing change so handlers see latest wasValid
     final Valid oldValid = valid;
     validate();
     final boolean validChanged = oldValid != valid;
 
-    if (valueChanged) {
-      lastValue = copyLastValue(newValue);
-      fireEvent(new PropertyChangedEvent<P>(this));
-    }
-
-    // only reassess derived if needed
+    // only reassess derived if needed. this is somehwat odd, but we reassess
+    // our derived properties before firing our own change event. this is so
+    // that if someone listening to us is also going to check a derived
+    // property's state, it would be good for them to be up to date
     if (valueChanged || validChanged) {
       for (final Property<?> other : derived) {
         other.reassess();
       }
+    }
+
+    if (valueChanged) {
+      fireEvent(new PropertyChangedEvent<P>(this));
     }
   }
 
