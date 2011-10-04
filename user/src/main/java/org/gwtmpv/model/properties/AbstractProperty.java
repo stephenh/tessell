@@ -107,9 +107,11 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
 
   /** Track {@code other} as derived on us, so we'll forward changed/changing events to it. */
   public <P1 extends Property<?>> P1 addDerived(final P1 other) {
-    derived.add(other);
-    if (touched) {
-      other.setTouched(touched);
+    if (!derived.contains(other)) {
+      derived.add(other);
+      if (touched) {
+        other.setTouched(touched);
+      }
     }
     return other;
   }
