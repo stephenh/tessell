@@ -1,11 +1,6 @@
 package org.gwtmpv.util;
 
-import org.gwtmpv.dispatch.client.events.DispatchActionEvent;
-import org.gwtmpv.dispatch.client.events.DispatchActionHandler;
-import org.gwtmpv.dispatch.client.events.DispatchFailureEvent;
-import org.gwtmpv.dispatch.client.events.DispatchFailureHandler;
-import org.gwtmpv.dispatch.client.events.DispatchResultEvent;
-import org.gwtmpv.dispatch.client.events.DispatchResultHandler;
+import org.gwtmpv.dispatch.client.events.*;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
@@ -37,11 +32,16 @@ public class OutstandingWatcher {
   }
 
   private void scheduleUpdate() {
-    // to ensure any ajax results that lead to more requests
-    // don't temporarily bounce the outstanding to zero, defer
-    // updating the view until leaving the event loop
     if (GWT.isClient()) {
-      if (!isUpdateScheduled) {
+      if (outstanding > 0) {
+        // if outstanding > 0, we want to update the DOM right away
+        update();
+      } else if (!isUpdateScheduled) {
+        // but if outstanding == 0, just because this request is done
+        // doesn't mean another won't be started within this event loop
+        // by some other business logic. to avoid selenium potentially
+        // seems a very brief "0", defer this update until the current
+        // loop is finished.
         Scheduler.get().scheduleDeferred(new ScheduledCommand() {
           public void execute() {
             update();
