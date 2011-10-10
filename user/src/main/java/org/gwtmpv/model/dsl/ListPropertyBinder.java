@@ -9,6 +9,7 @@ import org.gwtmpv.model.events.ValueAddedHandler;
 import org.gwtmpv.model.events.ValueRemovedEvent;
 import org.gwtmpv.model.events.ValueRemovedHandler;
 import org.gwtmpv.model.properties.ListProperty;
+import org.gwtmpv.presenter.BasicPresenter;
 import org.gwtmpv.presenter.Presenter;
 import org.gwtmpv.widgets.IsPanel;
 import org.gwtmpv.widgets.IsWidget;
@@ -63,26 +64,29 @@ public class ListPropertyBinder<P> extends PropertyBinder<ArrayList<P>> {
    *
    * Also adds/removes the child presenters to the {@code parent} presenter for proper binding/unbinding.
    */
-  public void to(final Presenter parent, final IsPanel panel, final ListPresenterFactory<P> factory) {
+  public void to(final BasicPresenter<?> parent, final IsPanel panel, final ListPresenterFactory<P> factory) {
     // map to remember the model->presenter mapping so we know which view to remove later
     final Map<P, Presenter> views = new HashMap<P, Presenter>();
     for (P value : p.get()) {
       Presenter child = factory.create(value);
+      parent.addPresenter(child);
       views.put(value, child);
       panel.add(child.getView());
     }
     binder.registerHandler(p.addValueAddedHandler(new ValueAddedHandler<P>() {
       public void onValueAdded(ValueAddedEvent<P> event) {
         Presenter child = factory.create(event.getValue());
+        parent.addPresenter(child);
         views.put(event.getValue(), child);
         panel.add(child.getView());
       }
     }));
     binder.registerHandler(p.addValueRemovedHandler(new ValueRemovedHandler<P>() {
       public void onValueRemoved(ValueRemovedEvent<P> event) {
-        Presenter view = views.remove(event.getValue());
-        if (view != null) {
-          panel.remove(view.getView());
+        Presenter child = views.remove(event.getValue());
+        if (child != null) {
+          panel.remove(child.getView());
+          parent.removePresenter(child);
         }
       }
     }));

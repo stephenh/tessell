@@ -4,9 +4,14 @@ import static org.gwtmpv.model.properties.NewProperty.listProperty;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+import java.util.ArrayList;
+
 import org.gwtmpv.model.dsl.Binder;
+import org.gwtmpv.model.dsl.ListPropertyBinder.ListPresenterFactory;
 import org.gwtmpv.model.dsl.ListPropertyBinder.ListViewFactory;
 import org.gwtmpv.model.properties.ListProperty;
+import org.gwtmpv.presenter.BasicPresenter;
+import org.gwtmpv.presenter.Presenter;
 import org.gwtmpv.widgets.IsWidget;
 import org.gwtmpv.widgets.StubFlowPanel;
 import org.gwtmpv.widgets.StubLabel;
@@ -22,6 +27,14 @@ public class ListPropertyBinderTest {
       StubLabel label = new StubLabel();
       label.setText(value);
       return label;
+    }
+  };
+  final ListPresenterFactory<String> presenterFactory = new ListPresenterFactory<String>() {
+    public Presenter create(String value) {
+      StubLabel label = new StubLabel();
+      label.setText(value);
+      return new BasicPresenter<IsWidget>(label) {
+      };
     }
   };
 
@@ -53,7 +66,57 @@ public class ListPropertyBinderTest {
     assertLabel(panel.getIsWidget(0), "two");
   }
 
+  @Test
+  public void initialPresentersAreAddedToPanel() {
+    names.add("one");
+    names.add("two");
+    ParentPresenter parent = bind(new ParentPresenter());
+    binder.bind(names).to(parent, panel, presenterFactory);
+    assertLabel(panel.getIsWidget(0), "one");
+    assertLabel(panel.getIsWidget(1), "two");
+    assertThat(parent.getChildren().size(), is(2));
+  }
+
+  @Test
+  public void newPresentersAreAddedToPanel() {
+    ParentPresenter parent = bind(new ParentPresenter());
+    binder.bind(names).to(parent, panel, presenterFactory);
+    assertThat(panel.getWidgetCount(), is(0));
+    names.add("one");
+    assertLabel(panel.getIsWidget(0), "one");
+    assertThat(parent.getChildren().size(), is(1));
+  }
+
+  @Test
+  public void oldPresentersAreRemovedFromPanel() {
+    ParentPresenter parent = bind(new ParentPresenter());
+    binder.bind(names).to(parent, panel, presenterFactory);
+    names.add("one");
+    names.add("two");
+    assertThat(panel.getWidgetCount(), is(2));
+    assertThat(parent.getChildren().size(), is(2));
+    names.remove("one");
+    assertThat(panel.getWidgetCount(), is(1));
+    assertLabel(panel.getIsWidget(0), "two");
+    assertThat(parent.getChildren().size(), is(1));
+  }
+
   private static void assertLabel(IsWidget label, String text) {
     assertThat(((StubLabel) label).getText(), is(text));
+  }
+
+  private static final class ParentPresenter extends BasicPresenter<IsWidget> {
+    public ParentPresenter() {
+      super(new StubFlowPanel());
+    }
+
+    private ArrayList<Presenter> getChildren() {
+      return children();
+    }
+  }
+
+  private static <P extends Presenter> P bind(P p) {
+    p.bind();
+    return p;
   }
 }

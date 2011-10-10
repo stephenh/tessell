@@ -65,7 +65,7 @@ public abstract class BasicPresenter<V extends IsWidget> extends AbstractBound i
   }
 
   /** @return our list of child presenters, lazily instantiated. */
-  private ArrayList<Presenter> children() {
+  protected ArrayList<Presenter> children() {
     if (children == null) {
       children = new ArrayList<Presenter>();
     }
