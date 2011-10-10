@@ -78,6 +78,8 @@ public class Config {
     map(ScrollPanel.class, IsScrollPanel.class, GwtScrollPanel.class, StubScrollPanel.class);
     map(Button.class, IsButton.class, GwtButton.class, StubButton.class);
     map(DockLayoutPanel.class, IsDockLayoutPanel.class, GwtDockLayoutPanel.class, StubDockLayoutPanel.class);
+    map(CellPanel.class, IsCellPanel.class, GwtCellPanel.class, StubCellPanel.class);
+    map(HorizontalPanel.class, IsHorizontalPanel.class, GwtHorizontalPanel.class, StubHorizontalPanel.class);
 
     map(DatePicker.class, IsDatePicker.class, GwtDatePicker.class, StubDatePicker.class);
     map(CellTable.class, IsCellTable.class, GwtCellTable.class, StubCellTable.class);
