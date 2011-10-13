@@ -97,6 +97,10 @@ public class NewProperty {
     return new ListProperty<E>(new BoundValue<ArrayList<E>>(binding));
   }
 
+  public static <E> ListProperty<E> listProperty(final String name, final ArrayList<E> list) {
+    return new ListProperty<E>(new SetValue<ArrayList<E>>(name, list));
+  }
+
   public static <E extends Model<F>, F extends Dto<E>> DtoListProperty<E, F> dtoListProperty(final Binding<ArrayList<F>> binding) {
     final SetValue<ArrayList<E>> modelListValue = new SetValue<ArrayList<E>>("modelList", new ArrayList<E>());
     return new DtoListProperty<E, F>(modelListValue, new BoundValue<ArrayList<F>>(binding));
