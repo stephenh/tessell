@@ -64,11 +64,7 @@ public class ResourcesGenerator {
         || file.getName().endsWith(".jpg")
         || file.getName().endsWith(".bmp")
         || file.getName().endsWith("htc")) {
-        if (file.getName().indexOf("sprite") > -1) {
-          addImageSprite(file);
-        } else {
-          addImageData(file);
-        }
+        addImage(file);
       } else if (file.getName().endsWith(".html") || file.getName().endsWith("js")) {
         addText(file);
       }
@@ -135,9 +131,10 @@ public class ResourcesGenerator {
     while (m.find()) {
       String path = m.group(1);
       String methodName = GenUtils.toMethodName(substringBeforeLast(new File(path).getName(), "."));
-      String aliasName = methodName + "Url";
+      String aliasName = "_" + methodName + "Url";
+      String resourceName = methodName + "Data"; // for the DataResource
       if (defined.add(aliasName)) {
-        defs.append("@url " + aliasName + " " + methodName + ";\n");
+        defs.append("@url " + aliasName + " " + resourceName + ";\n");
       }
       m.appendReplacement(sb, aliasName);
     }
@@ -161,30 +158,33 @@ public class ResourcesGenerator {
     return sb.toString();
   }
 
-  public void addImageData(final File imageFile) throws Exception {
+  public void addImage(final File imageFile) throws Exception {
     final String methodName = GenUtils.toMethodName(StringUtils.substringBeforeLast(imageFile.getName(), "."));
-
-    final GMethod m = appResources.getMethod(methodName).returnType(DataResource.class);
-    m.addAnnotation("@Source(\"{}\")", getRelativePath(imageFile));
-
-    // stub
-    final GField sf = stubResources.getField(methodName).type(DataResource.class).setFinal();
-    sf.initialValue("new StubDataResource(\"{}\", \"{}\")", methodName, imageFile.getName());
-    stubResources.getMethod(methodName).returnType(DataResource.class).body.line("return {};", methodName);
-    stubResources.addImports(StubDataResource.class);
-  }
-
-  public void addImageSprite(final File imageFile) throws Exception {
-    final String methodName = GenUtils.toMethodName(StringUtils.substringBeforeLast(imageFile.getName(), "."));
-
-    final GMethod m = appResources.getMethod(methodName).returnType(ImageResource.class);
-    m.addAnnotation("@Source(\"{}\")", getRelativePath(imageFile));
-
-    // stub
-    final GField sf = stubResources.getField(methodName).type(ImageResource.class).setFinal();
-    sf.initialValue("new StubImageResource(\"{}\", \"{}\")", methodName, imageFile.getName());
-    stubResources.getMethod(methodName).returnType(ImageResource.class).body.line("return {};", methodName);
-    stubResources.addImports(StubImageResource.class);
+    {
+      // ImageResource
+      appResources.getMethod(methodName) //
+        .returnType(ImageResource.class)
+        .addAnnotation("@Source(\"{}\")", getRelativePath(imageFile));
+      // stub
+      stubResources.getField(methodName) //
+        .type(ImageResource.class)
+        .setFinal()
+        .initialValue("new StubImageResource(\"{}\", \"{}\")", methodName, imageFile.getName());
+      stubResources.getMethod(methodName).returnType(ImageResource.class).body.line("return {};", methodName);
+    }
+    {
+      // DataResource
+      appResources.getMethod(methodName + "Data") //
+        .returnType(DataResource.class)
+        .addAnnotation("@Source(\"{}\")", getRelativePath(imageFile));
+      // stub
+      stubResources.getField(methodName + "Data") //
+        .type(DataResource.class)
+        .setFinal()
+        .initialValue("new StubDataResource(\"{}\", \"{}\")", methodName, imageFile.getName());
+      stubResources.getMethod(methodName + "Data").returnType(DataResource.class).body.line("return {};", methodName + "Data");
+    }
+    stubResources.addImports(StubImageResource.class, StubDataResource.class);
   }
 
   public void addText(final File textFile) throws Exception {
