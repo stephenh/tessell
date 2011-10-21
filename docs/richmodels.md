@@ -82,14 +82,3 @@ Each declaration means:
 
 This should enable your model and view to stay in sync without the, in my experience, usual spaghetti code involved in rich UI applications.
 
-Hamcrest Approach
------------------
-
-The `binder.xxx` methods are eventually going to be phased out in favor of Hamcrest-style static methods. This will allow much easier user extensibility for providing custom conditions and actions. For example:
-
-    import static org.gwtmpv.model.dsl2.Bind.*;
-
-    bind(model.name, to(view.nameBox()));
-    when(model.name, is("Bob"), show(view.bobsSpecialNote()));
-{: class=brush:java}
-
