@@ -120,7 +120,7 @@ public class FormPresenter extends BasicPresenter<IsFlowPanel> {
 
   private final class OnViewAttached implements AttachEvent.Handler {
     public void onAttachOrDetach(AttachEvent event) {
-      if (needsRender) {
+      if (event.isAttached() && needsRender) {
         render();
       }
     }
