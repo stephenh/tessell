@@ -23,11 +23,7 @@ import org.gwtmpv.model.validation.Valid;
 import org.gwtmpv.model.values.SetValue;
 import org.gwtmpv.util.cookies.StringCookie;
 import org.gwtmpv.util.cookies.facade.StubCookies;
-import org.gwtmpv.widgets.StubFocusWidget;
-import org.gwtmpv.widgets.StubListBox;
-import org.gwtmpv.widgets.StubTextBox;
-import org.gwtmpv.widgets.StubTextList;
-import org.gwtmpv.widgets.StubWidget;
+import org.gwtmpv.widgets.*;
 import org.junit.Test;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -35,7 +31,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
 public class BinderTest {
 
-  final Binder binder = new Binder(new StubCanRegisterHandlers());
+  final Binder binder = new Binder();
   final StringProperty s = stringProperty("s");
   final StubTextBox box = new StubTextBox();
   final StubTextList errors = new StubTextList();

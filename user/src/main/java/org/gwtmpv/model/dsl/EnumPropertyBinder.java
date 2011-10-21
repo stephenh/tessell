@@ -7,15 +7,14 @@ import org.gwtmpv.widgets.IsListBox;
 
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
-import com.google.gwt.event.shared.HandlerRegistration;
 
 /** Binds {@link EnumProperty}s to widgets. */
 public class EnumPropertyBinder<E extends Enum<E>> extends PropertyBinder<E> {
 
   private final EnumProperty<E> ep;
 
-  EnumPropertyBinder(Binder binder, EnumProperty<E> ep) {
-    super(binder, ep);
+  EnumPropertyBinder(EnumProperty<E> ep) {
+    super(ep);
     this.ep = ep;
   }
 
@@ -29,7 +28,7 @@ public class EnumPropertyBinder<E extends Enum<E>> extends PropertyBinder<E> {
       ep.set(values[0]);
     }
     source.setSelectedIndex(Arrays.asList(values).indexOf(ep.get()));
-    HandlerRegistration a = source.addChangeHandler(new ChangeHandler() {
+    return new HandlerRegistrations(source.addChangeHandler(new ChangeHandler() {
       public void onChange(ChangeEvent event) {
         int i = source.getSelectedIndex();
         if (i == -1) {
@@ -38,8 +37,7 @@ public class EnumPropertyBinder<E extends Enum<E>> extends PropertyBinder<E> {
           ep.set(values[i]);
         }
       }
-    });
-    return new HandlerRegistrations(a);
+    }));
   }
 
 }

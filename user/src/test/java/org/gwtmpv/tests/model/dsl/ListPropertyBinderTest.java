@@ -19,7 +19,7 @@ import org.junit.Test;
 
 public class ListPropertyBinderTest {
 
-  final Binder binder = new Binder(new StubCanRegisterHandlers());
+  final Binder binder = new Binder();
   final StubFlowPanel panel = new StubFlowPanel();
   final ListProperty<String> names = listProperty("names");
   final ListViewFactory<String> viewFactory = new ListViewFactory<String>() {

@@ -15,72 +15,80 @@ import com.google.gwt.user.client.ui.HasEnabled;
 
 public class WhenIsBinder<P> {
 
-  private final Binder binder;
   private final Property<P> property;
   private final P value;
   private boolean trigged = false;
 
-  public WhenIsBinder(Binder binder, Property<P> property, P value) {
-    this.binder = binder;
+  public WhenIsBinder(Property<P> property, P value) {
     this.property = property;
     this.value = value;
   }
 
   public WhenIsSetBinder<P> set(String style) {
-    return new WhenIsSetBinder<P>(binder, property, value, style);
+    return new WhenIsSetBinder<P>(property, value, style);
   }
 
   public <V> WhenIsRemoveBinder<P, V> remove(V newValue) {
-    return new WhenIsRemoveBinder<P, V>(binder, property, value, newValue);
+    return new WhenIsRemoveBinder<P, V>(property, value, newValue);
   }
 
   public <V> WhenIsAddBinder<P, V> add(V newValue) {
-    return new WhenIsAddBinder<P, V>(binder, property, value, newValue);
+    return new WhenIsAddBinder<P, V>(property, value, newValue);
   }
 
-  public void show(final HasCss... csses) {
-    binder.registerHandler(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
+  public HandlerRegistrations show(final HasCss... csses) {
+    HandlerRegistrations hr = new HandlerRegistrations();
+    hr.add(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
       public void onPropertyChanged(PropertyChangedEvent<P> event) {
         showIfEq(csses);
       }
     }));
     showIfEq(csses); // set initial
+    return hr;
   }
 
-  public void hide(final HasCss... csses) {
-    binder.registerHandler(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
+  public HandlerRegistrations hide(final HasCss... csses) {
+    HandlerRegistrations hr = new HandlerRegistrations();
+    hr.add(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
       public void onPropertyChanged(PropertyChangedEvent<P> event) {
         hideIfEq(csses);
       }
     }));
     hideIfEq(csses); // set initial
+    return hr;
   }
 
-  public void visible(final HasCss css) {
-    binder.registerHandler(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
+  public HandlerRegistrations visible(final HasCss css) {
+    HandlerRegistrations hr = new HandlerRegistrations();
+    hr.add(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
       public void onPropertyChanged(PropertyChangedEvent<P> event) {
         visibleIfEq(css);
       }
     }));
     visibleIfEq(css); // set initial
+    return hr;
   }
 
-  public void error(final String message) {
-    binder.registerHandler(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
+  public HandlerRegistrations error(final String message) {
+    HandlerRegistrations hr = new HandlerRegistrations();
+    hr.add(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
       public void onPropertyChanged(PropertyChangedEvent<P> event) {
         errorIfEq(message);
       }
     }));
     errorIfEq(message);
+    return hr;
   }
 
-  public void enable(final HasEnabled enabled) {
-    binder.registerHandler(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
+  public HandlerRegistrations enable(final HasEnabled enabled) {
+    HandlerRegistrations hr = new HandlerRegistrations();
+    hr.add(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
       public void onPropertyChanged(PropertyChangedEvent<P> event) {
         update(enabled);
       }
     }));
     update(enabled); // set initial value
+    return hr;
   }
 
   private void update(HasEnabled enabled) {

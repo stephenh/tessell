@@ -10,17 +10,16 @@ public class StringPropertyBinder extends PropertyBinder<String> {
 
   private final StringProperty sp;
 
-  public StringPropertyBinder(Binder binder, StringProperty sp) {
-    super(binder, sp);
+  public StringPropertyBinder(StringProperty sp) {
+    super(sp);
     this.sp = sp;
   }
 
   @Override
-  public StringPropertyBinder to(final HasValue<String> source) {
+  public HandlerRegistrations to(final HasValue<String> source) {
     if (sp.getMaxLength() != null && source instanceof IsTextBox) {
       ((IsTextBox) source).setMaxLength(sp.getMaxLength());
     }
-    super.to(source);
-    return this;
+    return super.to(source);
   }
 }

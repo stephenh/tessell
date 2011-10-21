@@ -13,31 +13,33 @@ import com.google.gwt.event.dom.client.HasClickHandlers;
 /** Binds various things to a command. */
 public class UiCommandBinder {
 
-  private final Binder binder;
   private final UiCommand command;
 
-  public UiCommandBinder(final Binder binder, final UiCommand command) {
-    this.binder = binder;
+  public UiCommandBinder(final UiCommand command) {
     this.command = command;
   }
 
   /** Binds clicks from {@code clickable} to our command, and our errors to {@code errors}. */
-  public UiCommandBinder to(final HasClickHandlers clickable, final IsTextList errors) {
-    return to(clickable).errorsTo(errors);
+  public HandlerRegistrations to(final HasClickHandlers clickable, final IsTextList errors) {
+    HandlerRegistrations hr = new HandlerRegistrations();
+    hr.add(to(clickable));
+    hr.add(errorsTo(errors));
+    return hr;
   }
 
   /** Binds "enter" from key down handlers to our command. */
-  public UiCommandBinder toEnterKey(final HasAllKeyHandlers... allKeys) {
+  public HandlerRegistrations toEnterKey(final HasAllKeyHandlers... allKeys) {
+    HandlerRegistrations hr = new HandlerRegistrations();
     for (HasAllKeyHandlers allKey : allKeys) {
       OnEnterKeyHandler h = new OnEnterKeyHandler(new Runnable() {
         public void run() {
           command.execute();
         }
       });
-      binder.registerHandler(allKey.addKeyDownHandler(h));
-      binder.registerHandler(allKey.addKeyDownHandler(h));
+      hr.add(allKey.addKeyDownHandler(h));
+      hr.add(allKey.addKeyDownHandler(h));
     }
-    return this;
+    return hr;
   }
 
   /** Has our command execute only if {@code onlyIf} is true. */
@@ -47,20 +49,20 @@ public class UiCommandBinder {
   }
 
   /** Binds clicks from {@code clickable} to our command. */
-  public UiCommandBinder to(final HasClickHandlers clickable) {
-    binder.registerHandler(clickable.addClickHandler(new ClickHandler() {
+  public HandlerRegistrations to(final HasClickHandlers clickable) {
+    return new HandlerRegistrations(clickable.addClickHandler(new ClickHandler() {
       public void onClick(ClickEvent event) {
         command.execute();
       }
     }));
-    return this;
   }
 
   /** Binds errors for our command to {@code errors}. */
-  public UiCommandBinder errorsTo(IsTextList errors) {
+  public HandlerRegistrations errorsTo(IsTextList errors) {
     final TextListOnError i = new TextListOnError(errors);
-    binder.registerHandler(command.addRuleTriggeredHandler(i));
-    binder.registerHandler(command.addRuleUntriggeredHandler(i));
-    return this;
+    HandlerRegistrations hr = new HandlerRegistrations();
+    hr.add(command.addRuleTriggeredHandler(i));
+    hr.add(command.addRuleUntriggeredHandler(i));
+    return hr;
   }
 }

@@ -12,36 +12,38 @@ import org.gwtmpv.model.properties.Property;
 /** Sets the style based on the property value. */
 public class WhenIsRemoveBinder<P, V> {
 
-  private final Binder binder;
   private final Property<P> property;
   private final P value;
   private final V newValue;
 
-  public WhenIsRemoveBinder(final Binder binder, Property<P> property, P value, final V newValue) {
-    this.binder = binder;
+  public WhenIsRemoveBinder(Property<P> property, P value, final V newValue) {
     this.property = property;
     this.value = value;
     this.newValue = newValue;
   }
 
   /** Adds/removes our {@code value} when our property is {@code true}. */
-  public void from(final ArrayList<V> values) {
-    binder.registerHandler(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
+  public HandlerRegistrations from(final ArrayList<V> values) {
+    HandlerRegistrations hr = new HandlerRegistrations();
+    hr.add(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
       public void onPropertyChanged(PropertyChangedEvent<P> event) {
         update(values);
       }
     }));
     update(values); // set initial value
+    return hr;
   }
 
   /** Adds/removes our {@code value} when our property is {@code true}. */
-  public void from(final ListProperty<V> values) {
-    binder.registerHandler(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
+  public HandlerRegistrations from(final ListProperty<V> values) {
+    HandlerRegistrations hr = new HandlerRegistrations();
+    hr.add(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
       public void onPropertyChanged(PropertyChangedEvent<P> event) {
         update(values);
       }
     }));
     update(values); // set initial value
+    return hr;
   }
 
   private void update(ArrayList<V> values) {

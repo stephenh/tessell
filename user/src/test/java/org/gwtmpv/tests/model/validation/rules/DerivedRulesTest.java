@@ -52,7 +52,7 @@ public class DerivedRulesTest extends AbstractRuleTest {
   public void binderDoesFireChangedIfPropertyAlreadySet() {
     f.name.set("foo");
     final StubHasValue<Integer> value = new StubHasValue<Integer>();
-    Binder b = new Binder(null);
+    Binder b = new Binder();
     b.bind(f.name.remaining()).to(value);
     assertThat(value.getValue(), is(7));
   }

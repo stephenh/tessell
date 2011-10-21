@@ -29,13 +29,13 @@ public class ListPropertyBinder<P> extends PropertyBinder<ArrayList<P>> {
 
   private final ListProperty<P> p;
 
-  public ListPropertyBinder(Binder binder, ListProperty<P> p) {
-    super(binder, p);
+  public ListPropertyBinder(ListProperty<P> p) {
+    super(p);
     this.p = p;
   }
 
   /** Binds each value in {@code p} to a view created by {@code factory}. */
-  public void to(final IsPanel panel, final ListViewFactory<P> factory) {
+  public HandlerRegistrations to(final IsPanel panel, final ListViewFactory<P> factory) {
     // map to remember the model->view mapping so we know which view to remove later
     final Map<P, IsWidget> views = new HashMap<P, IsWidget>();
     for (P value : p.get()) {
@@ -43,14 +43,15 @@ public class ListPropertyBinder<P> extends PropertyBinder<ArrayList<P>> {
       views.put(value, view);
       panel.add(view);
     }
-    binder.registerHandler(p.addValueAddedHandler(new ValueAddedHandler<P>() {
+    HandlerRegistrations hr = new HandlerRegistrations();
+    hr.add(p.addValueAddedHandler(new ValueAddedHandler<P>() {
       public void onValueAdded(ValueAddedEvent<P> event) {
         IsWidget view = factory.create(event.getValue());
         views.put(event.getValue(), view);
         panel.add(view);
       }
     }));
-    binder.registerHandler(p.addValueRemovedHandler(new ValueRemovedHandler<P>() {
+    hr.add(p.addValueRemovedHandler(new ValueRemovedHandler<P>() {
       public void onValueRemoved(ValueRemovedEvent<P> event) {
         IsWidget view = views.remove(event.getValue());
         if (view != null) {
@@ -58,13 +59,14 @@ public class ListPropertyBinder<P> extends PropertyBinder<ArrayList<P>> {
         }
       }
     }));
+    return hr;
   }
 
   /** Binds each value in {@code p} to a presenter created by {@code factory}.
    *
    * Also adds/removes the child presenters to the {@code parent} presenter for proper binding/unbinding.
    */
-  public void to(final BasicPresenter<?> parent, final IsPanel panel, final ListPresenterFactory<P> factory) {
+  public HandlerRegistrations to(final BasicPresenter<?> parent, final IsPanel panel, final ListPresenterFactory<P> factory) {
     // map to remember the model->presenter mapping so we know which view to remove later
     final Map<P, Presenter> views = new HashMap<P, Presenter>();
     for (P value : p.get()) {
@@ -73,7 +75,8 @@ public class ListPropertyBinder<P> extends PropertyBinder<ArrayList<P>> {
       views.put(value, child);
       panel.add(child.getView());
     }
-    binder.registerHandler(p.addValueAddedHandler(new ValueAddedHandler<P>() {
+    HandlerRegistrations hr = new HandlerRegistrations();
+    hr.add(p.addValueAddedHandler(new ValueAddedHandler<P>() {
       public void onValueAdded(ValueAddedEvent<P> event) {
         Presenter child = factory.create(event.getValue());
         parent.addPresenter(child);
@@ -81,7 +84,7 @@ public class ListPropertyBinder<P> extends PropertyBinder<ArrayList<P>> {
         panel.add(child.getView());
       }
     }));
-    binder.registerHandler(p.addValueRemovedHandler(new ValueRemovedHandler<P>() {
+    hr.add(p.addValueRemovedHandler(new ValueRemovedHandler<P>() {
       public void onValueRemoved(ValueRemovedEvent<P> event) {
         Presenter child = views.remove(event.getValue());
         if (child != null) {
@@ -90,6 +93,7 @@ public class ListPropertyBinder<P> extends PropertyBinder<ArrayList<P>> {
         }
       }
     }));
+    return hr;
   }
 
 }

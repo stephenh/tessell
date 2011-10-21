@@ -6,18 +6,17 @@ import org.gwtmpv.widgets.IsTextList;
 /** Binds specific rule outcomes to widgets, really only text lists. */
 public class RuleBinder {
 
-  private final Binder binder;
   private final Rule rule;
 
-  public RuleBinder(final Binder binder, final Rule rule) {
-    this.binder = binder;
+  public RuleBinder(final Rule rule) {
     this.rule = rule;
   }
 
-  public RuleBinder errorsTo(final IsTextList list) {
+  public HandlerRegistrations errorsTo(final IsTextList list) {
     final TextListOnError i = new TextListOnError(list);
-    binder.registerHandler(rule.addRuleTriggeredHandler(i));
-    binder.registerHandler(rule.addRuleUntriggeredHandler(i));
-    return this;
+    HandlerRegistrations hr = new HandlerRegistrations();
+    hr.add(rule.addRuleTriggeredHandler(i));
+    hr.add(rule.addRuleUntriggeredHandler(i));
+    return hr;
   }
 }

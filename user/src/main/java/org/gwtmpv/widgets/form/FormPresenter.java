@@ -28,7 +28,7 @@ public class FormPresenter extends BasicPresenter<IsFlowPanel> {
   private final ArrayList<FormAction> formActions = new ArrayList<FormAction>();
   private final PropertyGroup all = new PropertyGroup("all", null);
   private final String id;
-  private final Binder binder = new Binder(this);
+  private final Binder binder = new Binder();
   private final FormLayout layout;
   private boolean needsRender = true;
   private FormAction defaultAction;

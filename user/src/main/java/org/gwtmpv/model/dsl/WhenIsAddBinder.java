@@ -12,36 +12,38 @@ import org.gwtmpv.model.properties.Property;
 /** Adds {@code newValue} to a list based on the {@code value} of a {@code property}. */
 public class WhenIsAddBinder<P, V> {
 
-  private final Binder binder;
   private final Property<P> property;
   private final P value;
   private final V newValue;
 
-  public WhenIsAddBinder(final Binder binder, Property<P> property, P value, final V newValue) {
-    this.binder = binder;
+  public WhenIsAddBinder(Property<P> property, P value, final V newValue) {
     this.property = property;
     this.value = value;
     this.newValue = newValue;
   }
 
   /** Adds/removes our {@code value} when our {@code property} is {@code value}. */
-  public void to(final ArrayList<V> values) {
-    binder.registerHandler(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
+  public HandlerRegistrations to(final ArrayList<V> values) {
+    HandlerRegistrations hr = new HandlerRegistrations();
+    hr.add(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
       public void onPropertyChanged(PropertyChangedEvent<P> event) {
         update(values);
       }
     }));
     update(values); // set initial value
+    return hr;
   }
 
   /** Adds/removes our {@code value} when our {@code property} is {@code value}. */
-  public void to(final ListProperty<V> values) {
-    binder.registerHandler(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
+  public HandlerRegistrations to(final ListProperty<V> values) {
+    HandlerRegistrations hr = new HandlerRegistrations();
+    hr.add(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
       public void onPropertyChanged(PropertyChangedEvent<P> event) {
         update(values);
       }
     }));
     update(values); // set initial value
+    return hr;
   }
 
   private void update(ArrayList<V> values) {

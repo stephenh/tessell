@@ -10,26 +10,26 @@ import org.gwtmpv.widgets.HasCss;
 /** Sets the style based on the property value. */
 public class WhenIsSetBinder<P> {
 
-  private final Binder binder;
   private final Property<P> property;
   private final P value;
   private final String style;
 
-  public WhenIsSetBinder(final Binder binder, Property<P> property, P value, final String style) {
-    this.binder = binder;
+  public WhenIsSetBinder(Property<P> property, P value, final String style) {
     this.property = property;
     this.value = value;
     this.style = style;
   }
 
   /** Sets/removes our {@code style} when our property is {@code true}. */
-  public void on(final HasCss css) {
-    binder.registerHandler(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
+  public HandlerRegistrations on(final HasCss css) {
+    HandlerRegistrations hr = new HandlerRegistrations();
+    hr.add(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
       public void onPropertyChanged(PropertyChangedEvent<P> event) {
         update(css);
       }
     }));
     update(css); // set initial value
+    return hr;
   }
 
   private void update(HasCss css) {
