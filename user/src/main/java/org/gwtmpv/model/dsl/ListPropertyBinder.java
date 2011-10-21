@@ -17,20 +17,20 @@ import org.gwtmpv.widgets.IsWidget;
 /** Fluent binding methods for {@link ListProperty}s. */
 public class ListPropertyBinder<P> extends PropertyBinder<ArrayList<P>> {
 
+  /** Factory for creating {@link IsWidget}s for each item in a list. */
   public interface ListViewFactory<P> {
     IsWidget create(P value);
   }
 
+  /** Factory for creating {@link Presenter}s for each item in a list. */
   public interface ListPresenterFactory<P> {
     Presenter create(P value);
   }
 
-  private final Binder binder;
   private final ListProperty<P> p;
 
   public ListPropertyBinder(Binder binder, ListProperty<P> p) {
     super(binder, p);
-    this.binder = binder;
     this.p = p;
   }
 

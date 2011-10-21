@@ -7,9 +7,10 @@ import com.google.gwt.user.client.ui.HasValue;
 
 /** Binds StringProperties to widgets (special max length, etc. handling). */
 public class StringPropertyBinder extends PropertyBinder<String> {
+
   private final StringProperty sp;
 
-  StringPropertyBinder(Binder binder, StringProperty sp) {
+  public StringPropertyBinder(Binder binder, StringProperty sp) {
     super(binder, sp);
     this.sp = sp;
   }
