@@ -46,6 +46,7 @@ public class Binder {
     return new ListPropertyBinder<P>(this, property);
   }
 
+  /** @return a fluent {@link RuleBinder} against {@code rule}. */
   public RuleBinder bind(Rule rule) {
     return new RuleBinder(this, rule);
   }
@@ -65,6 +66,7 @@ public class Binder {
     return new UiCommandBinder(this, command);
   }
 
+  /** @return a fluent {@link WhenBinder} against {@code property}. */
   public <P> WhenBinder<P> when(Property<P> property) {
     return new WhenBinder<P>(this, property);
   }
@@ -148,7 +150,7 @@ public class Binder {
     return this;
   }
 
-  void registerHandler(HandlerRegistration r) {
+  public void registerHandler(HandlerRegistration r) {
     if (handlersOwner != null) {
       handlersOwner.registerHandler(r);
     }
