@@ -7,7 +7,9 @@ import joist.util.Join;
 
 import org.gwtmpv.model.properties.StringProperty;
 import org.gwtmpv.model.validation.Valid;
+import org.gwtmpv.util.HTMLPanelBuilder;
 import org.gwtmpv.widgets.StubTextBox;
+import org.gwtmpv.widgets.form.lines.StaticFormLine;
 import org.gwtmpv.widgets.form.lines.TextBoxFormLine;
 import org.junit.Test;
 
@@ -50,4 +52,25 @@ public class FormPresenterTest extends AbstractFormPresenterTest {
     assertThat(((StubTextBox) l.getTextBox()).isFocused(), is(true));
   }
 
+  @Test
+  public void customLine() {
+    p.add(new TextBoxFormLine(employee.firstName));
+    p.add(new StaticFormLine() {
+      @Override
+      public void render(FormPresenter p, FormLayout l, HTMLPanelBuilder hb) {
+        hb.add("some custom html");
+      }
+    });
+
+    assertThat(html().getHtml(), is(Join.join(new String[] {//
+      "<div class=\"form\">",//
+        "<div class=\"lines\"><ol>",
+        "<li>",
+        "<div class=\"label\"><label for=\"p-firstName\">First Name</label></div>",//
+        "<div class=\"value\"><div id=\"mpv-hb-1\"></div><div class=\"errors\"><div id=\"mpv-hb-2\"></div></div></div>",//
+        "</li>some custom html",
+        "</ol></div>",
+        "</div>" },
+      "")));
+  }
 }

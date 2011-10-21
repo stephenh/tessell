@@ -84,20 +84,7 @@ public class DefaultFormLayout implements FormLayout {
 
     linesBegin(p, hb);
     for (FormLine line : p.getFormLines()) {
-      lineBegin(p, hb);
-
-      labelBegin(p, hb);
-      line.renderLabel(hb);
-      labelEnd(p, hb);
-
-      valueBegin(p, hb);
-      line.renderValue(hb);
-      errorsBegin(p, hb);
-      line.renderErrors(hb);
-      errorsEnd(p, hb);
-      valueEnd(p, hb);
-
-      lineEnd(p, hb);
+      line.render(p, this, hb);
     }
     linesEnd(p, hb);
 
@@ -127,6 +114,24 @@ public class DefaultFormLayout implements FormLayout {
   @Override
   public void lineBegin(FormPresenter p, HTMLPanelBuilder hb) {
     hb.add("<li>");
+  }
+
+  @Override
+  public void lineDefault(FormPresenter p, FormLine line, HTMLPanelBuilder hb) {
+    lineBegin(p, hb);
+
+    labelBegin(p, hb);
+    line.renderLabel(hb);
+    labelEnd(p, hb);
+
+    valueBegin(p, hb);
+    line.renderValue(hb);
+    errorsBegin(p, hb);
+    line.renderErrors(hb);
+    errorsEnd(p, hb);
+    valueEnd(p, hb);
+
+    lineEnd(p, hb);
   }
 
   @Override

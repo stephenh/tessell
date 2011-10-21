@@ -6,8 +6,13 @@ import static org.gwtmpv.util.StringUtils.uncapitalize;
 import org.gwtmpv.model.dsl.Binder;
 import org.gwtmpv.model.properties.Property;
 import org.gwtmpv.model.properties.PropertyGroup;
+import org.gwtmpv.util.HTMLPanelBuilder;
+import org.gwtmpv.widgets.form.FormLayout;
 import org.gwtmpv.widgets.form.FormPresenter;
 
+/**
+ * A base form line implementation that assumes it's editing a {@link Property}.
+ */
 public abstract class AbstractFormLine<T> implements FormLine {
 
   protected final Property<T> property;
@@ -24,6 +29,11 @@ public abstract class AbstractFormLine<T> implements FormLine {
   public void bind(final FormPresenter p, PropertyGroup all, Binder binder) {
     id = p.getId() + "-" + idSuffix;
     all.add(property);
+  }
+
+  @Override
+  public void render(FormPresenter p, FormLayout layout, HTMLPanelBuilder hb) {
+    layout.lineDefault(p, this, hb);
   }
 
   public String getLabel() {

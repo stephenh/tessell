@@ -1,6 +1,8 @@
 package org.gwtmpv.widgets.form;
 
 import org.gwtmpv.util.HTMLPanelBuilder;
+import org.gwtmpv.widgets.form.lines.AbstractFormLine;
+import org.gwtmpv.widgets.form.lines.FormLine;
 
 public interface FormLayout {
 
@@ -11,6 +13,9 @@ public interface FormLayout {
   void formEnd(FormPresenter p, HTMLPanelBuilder hb);
 
   void lineBegin(FormPresenter p, HTMLPanelBuilder hb);
+
+  /** Called by form lines that don't override the {@link AbstractFormLine#render} method to get the default label, value, errors behavior. */
+  void lineDefault(FormPresenter p, FormLine line, HTMLPanelBuilder hb);
 
   void lineEnd(FormPresenter p, HTMLPanelBuilder hb);
 
