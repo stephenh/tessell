@@ -17,7 +17,11 @@ import org.gwtmpv.widgets.form.lines.FormLine;
 import com.google.gwt.event.dom.client.HasAllKeyHandlers;
 import com.google.gwt.event.logical.shared.AttachEvent;
 
-/** Given a list of bindings, handles the boilerplate HTML layout/logic of forms. */
+/**
+ * Given a list of bindings, handles the boilerplate HTML layout/logic of forms.
+ *
+ * A form is broken down into: lines and actions.
+ */
 public class FormPresenter extends BasicPresenter<IsFlowPanel> {
 
   private final ArrayList<FormLine> formLines = new ArrayList<FormLine>();
@@ -30,9 +34,13 @@ public class FormPresenter extends BasicPresenter<IsFlowPanel> {
   private FormAction defaultAction;
 
   public FormPresenter(String id) {
+    this(id, new DefaultFormLayout());
+  }
+
+  public FormPresenter(String id, FormLayout layout) {
     super(newFlowPanel());
     this.id = id;
-    layout = new DefaultFormLayout();
+    this.layout = layout;
   }
 
   @Override
