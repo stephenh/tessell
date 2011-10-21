@@ -9,6 +9,7 @@ import org.gwtmpv.widgets.IsFocusWidget;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.event.logical.shared.AttachEvent;
+import com.google.gwt.event.shared.HandlerRegistration;
 
 public class WidgetUtils {
 
@@ -68,10 +69,14 @@ public class WidgetUtils {
     if (w.isAttached() || !GWT.isClient()) {
       w.setFocus(true);
     } else {
-      w.addAttachHandler(new AttachEvent.Handler() {
+      final HandlerRegistration[] h = new HandlerRegistration[] { null };
+      h[0] = w.addAttachHandler(new AttachEvent.Handler() {
         public void onAttachOrDetach(AttachEvent event) {
           if (event.isAttached()) {
             w.setFocus(true);
+            if (h[0] != null) {
+              h[0].removeHandler();
+            }
           }
         }
       });
