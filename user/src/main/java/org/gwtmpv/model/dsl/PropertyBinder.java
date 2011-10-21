@@ -56,6 +56,7 @@ public class PropertyBinder<P> {
     return this;
   }
 
+  /** Sets up one-way binding from this property to {@code other}. */
   public PropertyBinder<P> to(final Property<P> other) {
     PropertyChangedHandler<P> h = new PropertyChangedHandler<P>() {
       public void onPropertyChanged(final PropertyChangedEvent<P> event) {
@@ -181,13 +182,12 @@ public class PropertyBinder<P> {
       this.value = value;
     }
 
-    public ValueBinder<P1> to(final HasClickHandlers clickable) {
+    public void to(final HasClickHandlers clickable) {
       binder.registerHandler(clickable.addClickHandler(new ClickHandler() {
         public void onClick(ClickEvent e) {
           p.set(value);
         }
       }));
-      return this;
     }
   }
 
