@@ -11,9 +11,7 @@ import org.gwtmpv.util.cookies.Cookie;
 import org.gwtmpv.widgets.IsListBox;
 import org.gwtmpv.widgets.IsTextList;
 
-import com.google.gwt.event.dom.client.ChangeEvent;
-import com.google.gwt.event.dom.client.ChangeHandler;
-import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.dom.client.*;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -184,7 +182,11 @@ public class PropertyBinder<P> {
     }
 
     public ValueBinder<P1> to(final HasClickHandlers clickable) {
-      binder.registerHandler(clickable.addClickHandler(new BoundOnClick<P1>(p, value)));
+      binder.registerHandler(clickable.addClickHandler(new ClickHandler() {
+        public void onClick(ClickEvent e) {
+          p.set(value);
+        }
+      }));
       return this;
     }
   }
