@@ -22,8 +22,8 @@ import com.google.gwt.user.client.ui.HasValue;
 /** Binds properties to widgets. */
 public class PropertyBinder<P> {
 
-  private final Binder binder;
-  private final Property<P> p;
+  protected final Binder binder;
+  protected final Property<P> p;
 
   public PropertyBinder(Binder binder, Property<P> p) {
     this.binder = binder;

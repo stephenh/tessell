@@ -9,14 +9,8 @@ import org.gwtmpv.model.properties.ListProperty;
 import org.gwtmpv.model.properties.Property;
 import org.gwtmpv.model.properties.StringProperty;
 import org.gwtmpv.model.validation.rules.Rule;
-import org.gwtmpv.widgets.IsTextBox;
 
-import com.google.gwt.event.dom.client.BlurEvent;
-import com.google.gwt.event.dom.client.BlurHandler;
-import com.google.gwt.event.dom.client.HasBlurHandlers;
-import com.google.gwt.event.dom.client.HasKeyUpHandlers;
-import com.google.gwt.event.dom.client.KeyUpEvent;
-import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.event.dom.client.*;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.HasValue;
@@ -51,7 +45,7 @@ public class Binder {
 
   /** @return a fluent {@link StringPropertyBinder} against {@code property}. */
   public <P> StringPropertyBinder bind(StringProperty property) {
-    return new StringPropertyBinder(property);
+    return new StringPropertyBinder(this, property);
   }
 
   /** @return a fluent {@link EnumPropertyBinder} against {@code property}. */
@@ -142,25 +136,6 @@ public class Binder {
   public void registerHandler(HandlerRegistration r) {
     if (handlersOwner != null) {
       handlersOwner.registerHandler(r);
-    }
-  }
-
-  /** Binds StringProperties to widgets (special max length, etc. handling). */
-  public class StringPropertyBinder extends PropertyBinder<String> {
-    private final StringProperty sp;
-
-    private StringPropertyBinder(StringProperty sp) {
-      super(Binder.this, sp);
-      this.sp = sp;
-    }
-
-    @Override
-    public StringPropertyBinder to(final HasValue<String> source) {
-      if (sp.getMaxLength() != null && source instanceof IsTextBox) {
-        ((IsTextBox) source).setMaxLength(sp.getMaxLength());
-      }
-      super.to(source);
-      return this;
     }
   }
 
