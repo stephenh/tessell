@@ -54,14 +54,6 @@ public class FormPresenter extends BasicPresenter<IsFlowPanel> {
     return all;
   }
 
-  /** Renders all of our lines into our view. */
-  private void render() {
-    HTMLPanelBuilder hb = new HTMLPanelBuilder();
-    layout.render(this, hb);
-    insertHtml(hb.toHTMLPanel());
-    needsRender = false;
-  }
-
   /** Adds {@code line}. */
   public void add(FormLine line) {
     formLines.add(line);
@@ -81,6 +73,14 @@ public class FormPresenter extends BasicPresenter<IsFlowPanel> {
     if (formLines.size() > 0) {
       formLines.get(0).focus();
     }
+  }
+
+  /** Renders all of our lines into our view. */
+  private void render() {
+    HTMLPanelBuilder hb = new HTMLPanelBuilder();
+    layout.render(this, hb);
+    insertHtml(hb.toHTMLPanel());
+    needsRender = false;
   }
 
   private void insertHtml(IsHTMLPanel panel) {
