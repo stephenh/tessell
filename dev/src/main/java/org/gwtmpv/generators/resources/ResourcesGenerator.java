@@ -1,5 +1,6 @@
 package org.gwtmpv.generators.resources;
 
+import static joist.sourcegen.Argument.arg;
 import static org.apache.commons.lang.StringUtils.substringBeforeLast;
 
 import java.io.File;
@@ -42,6 +43,8 @@ public class ResourcesGenerator {
   private final File outputDirectory;
   private final GClass appResources;
   private final GClass stubResources;
+  private final GClass appResourcesUtil;
+  private final GMethod injectAll;
 
   public ResourcesGenerator(final File inputDirectory, Cleanup cleanup, final String packageName, final File outputDirectory) {
     this.inputDirectory = inputDirectory;
@@ -50,6 +53,8 @@ public class ResourcesGenerator {
     this.outputDirectory = outputDirectory;
     appResources = new GClass(packageName + ".AppResources");
     stubResources = new GClass(packageName + ".StubAppResources");
+    appResourcesUtil = new GClass(packageName + ".AppResourcesUtil");
+    injectAll = appResourcesUtil.getMethod("injectAll", arg("AppResources", "r")).setStatic();
   }
 
   public void run() throws Exception {
@@ -72,8 +77,10 @@ public class ResourcesGenerator {
 
     cleanup.markOkay(appResources);
     cleanup.markOkay(stubResources);
+    cleanup.markOkay(appResourcesUtil);
     GenUtils.saveIfChanged(outputDirectory, appResources);
     GenUtils.saveIfChanged(outputDirectory, stubResources);
+    GenUtils.saveIfChanged(outputDirectory, appResourcesUtil);
   }
 
   private void addCss(final File cssFile) throws Exception {
@@ -105,6 +112,9 @@ public class ResourcesGenerator {
 
     new CssGenerator(cssFile, cleanup, newInterfaceName, outputDirectory).run();
     new CssStubGenerator(cssFile, cleanup, newInterfaceName, outputDirectory).run();
+
+    // inject all
+    injectAll.body.line("r.{}().ensureInjected();", methodName);
   }
 
   private String suffixIfNeeded(String name, String suffix) {
