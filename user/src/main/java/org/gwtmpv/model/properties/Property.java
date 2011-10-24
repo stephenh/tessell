@@ -41,4 +41,6 @@ public interface Property<P> extends HasHandlers, HasRuleTriggers, Value<P> {
 
   Map<Object, String> getErrors();
 
+  <T1> Property<T1> formatted(final PropertyFormatter<P, T1> formatter);
+
 }

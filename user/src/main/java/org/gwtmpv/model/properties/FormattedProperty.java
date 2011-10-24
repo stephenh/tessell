@@ -158,4 +158,9 @@ public class FormattedProperty<DP, SP> implements Property<DP> {
     return false;
   }
 
+  @Override
+  public <T1> Property<T1> formatted(PropertyFormatter<DP, T1> formatter) {
+    throw new UnsupportedOperationException("Not implemented");
+  }
+
 }
