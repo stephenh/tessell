@@ -5,6 +5,11 @@ import com.google.gwt.user.client.ui.TextBoxBase.TextAlignConstant;
 @SuppressWarnings("deprecation")
 public class StubTextBoxBase extends StubValueBoxBase<String> implements IsTextBoxBase {
 
+  public StubTextBoxBase() {
+    // don't default to null
+    setValue("");
+  }
+
   public void type(final String value) {
     setValue(value, true);
     blur();
