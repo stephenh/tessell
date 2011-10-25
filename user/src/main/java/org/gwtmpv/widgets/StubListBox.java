@@ -173,7 +173,4 @@ public class StubListBox extends StubFocusWidget implements IsListBox {
     public boolean selected;
   }
 
-  private static class DummyChange extends ChangeEvent {
-  }
-
 }
