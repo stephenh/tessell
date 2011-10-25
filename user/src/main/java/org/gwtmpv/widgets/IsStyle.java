@@ -40,6 +40,12 @@ public interface IsStyle {
 
   void setBackgroundColor(String value);
 
+  String getBackgroundImage();
+
+  void setBackgroundImage(String value);
+
+  void clearBackgroundImage();
+
   void setLeft(double value, Unit unit);
 
   void clearLeft();

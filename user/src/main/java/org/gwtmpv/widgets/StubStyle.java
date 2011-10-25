@@ -287,4 +287,19 @@ public class StubStyle implements IsStyle {
     style.remove("width");
   }
 
+  @Override
+  public String getBackgroundImage() {
+    return style.get("background-image");
+  }
+
+  @Override
+  public void setBackgroundImage(String value) {
+    style.put("background-image", value);
+  }
+
+  @Override
+  public void clearBackgroundImage() {
+    style.remove("background-image");
+  }
+
 }

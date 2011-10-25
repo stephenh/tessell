@@ -1,6 +1,6 @@
 package org.gwtmpv.widgets;
 
-import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.*;
 import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Display;
@@ -282,6 +282,21 @@ public class ElementHasStyle implements IsStyle {
   @Override
   public void clearWidth() {
     element.getStyle().clearWidth();
+  }
+
+  @Override
+  public String getBackgroundImage() {
+    return element.getStyle().getBackgroundImage();
+  }
+
+  @Override
+  public void setBackgroundImage(String value) {
+    element.getStyle().setBackgroundImage(value);
+  }
+
+  @Override
+  public void clearBackgroundImage() {
+    element.getStyle().clearBackgroundImage();
   }
 
 }
