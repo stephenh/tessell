@@ -1,7 +1,5 @@
 package org.gwtmpv.model.dsl;
 
-import static org.gwtmpv.util.ObjectUtils.eq;
-
 import org.gwtmpv.model.events.PropertyChangedEvent;
 import org.gwtmpv.model.events.PropertyChangedHandler;
 import org.gwtmpv.model.properties.Property;
@@ -16,34 +14,34 @@ import com.google.gwt.user.client.ui.HasEnabled;
 public class WhenIsBinder<P> {
 
   private final Property<P> property;
-  private final P value;
+  private final WhenCondition<P> condition;
   private boolean trigged = false;
 
-  public WhenIsBinder(Property<P> property, P value) {
+  public WhenIsBinder(Property<P> property, WhenCondition<P> condition) {
     this.property = property;
-    this.value = value;
+    this.condition = condition;
   }
 
   public WhenIsSetBinder<P> set(String style) {
-    return new WhenIsSetBinder<P>(property, value, style);
+    return new WhenIsSetBinder<P>(property, condition, style);
   }
 
   public <V> WhenIsRemoveBinder<P, V> remove(V newValue) {
-    return new WhenIsRemoveBinder<P, V>(property, value, newValue);
+    return new WhenIsRemoveBinder<P, V>(property, condition, newValue);
   }
 
   public <V> WhenIsAddBinder<P, V> add(V newValue) {
-    return new WhenIsAddBinder<P, V>(property, value, newValue);
+    return new WhenIsAddBinder<P, V>(property, condition, newValue);
   }
 
   public HandlerRegistrations show(final HasCss... csses) {
     HandlerRegistrations hr = new HandlerRegistrations();
     hr.add(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
       public void onPropertyChanged(PropertyChangedEvent<P> event) {
-        showIfEq(csses);
+        showIfCondition(csses);
       }
     }));
-    showIfEq(csses); // set initial
+    showIfCondition(csses); // set initial
     return hr;
   }
 
@@ -51,10 +49,10 @@ public class WhenIsBinder<P> {
     HandlerRegistrations hr = new HandlerRegistrations();
     hr.add(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
       public void onPropertyChanged(PropertyChangedEvent<P> event) {
-        hideIfEq(csses);
+        hideIfCondition(csses);
       }
     }));
-    hideIfEq(csses); // set initial
+    hideIfCondition(csses); // set initial
     return hr;
   }
 
@@ -62,10 +60,10 @@ public class WhenIsBinder<P> {
     HandlerRegistrations hr = new HandlerRegistrations();
     hr.add(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
       public void onPropertyChanged(PropertyChangedEvent<P> event) {
-        visibleIfEq(css);
+        visibleIfCondition(css);
       }
     }));
-    visibleIfEq(css); // set initial
+    visibleIfCondition(css); // set initial
     return hr;
   }
 
@@ -73,10 +71,10 @@ public class WhenIsBinder<P> {
     HandlerRegistrations hr = new HandlerRegistrations();
     hr.add(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
       public void onPropertyChanged(PropertyChangedEvent<P> event) {
-        errorIfEq(message);
+        errorIfCondition(message);
       }
     }));
-    errorIfEq(message);
+    errorIfCondition(message);
     return hr;
   }
 
@@ -92,15 +90,15 @@ public class WhenIsBinder<P> {
   }
 
   private void update(HasEnabled enabled) {
-    if (eq(value, property.get())) {
+    if (condition.evaluate(property)) {
       enabled.setEnabled(true);
     } else {
       enabled.setEnabled(false);
     }
   }
 
-  private void errorIfEq(String message) {
-    if (eq(value, property.get())) {
+  private void errorIfCondition(String message) {
+    if (condition.evaluate(property)) {
       property.fireEvent(new RuleTriggeredEvent(this, message, new Boolean[] { false }));
       trigged = true;
     } else if (trigged) {
@@ -109,8 +107,8 @@ public class WhenIsBinder<P> {
     }
   }
 
-  private void showIfEq(HasCss... csses) {
-    if (eq(value, property.get())) {
+  private void showIfCondition(HasCss... csses) {
+    if (condition.evaluate(property)) {
       for (HasCss css : csses) {
         css.getStyle().clearDisplay();
       }
@@ -121,8 +119,8 @@ public class WhenIsBinder<P> {
     }
   }
 
-  private void hideIfEq(HasCss... csses) {
-    if (eq(value, property.get())) {
+  private void hideIfCondition(HasCss... csses) {
+    if (condition.evaluate(property)) {
       for (HasCss css : csses) {
         css.getStyle().setDisplay(Display.NONE);
       }
@@ -133,8 +131,8 @@ public class WhenIsBinder<P> {
     }
   }
 
-  private void visibleIfEq(HasCss css) {
-    if (eq(value, property.get())) {
+  private void visibleIfCondition(HasCss css) {
+    if (condition.evaluate(property)) {
       css.getStyle().clearVisibility();
     } else {
       css.getStyle().setVisibility(Visibility.HIDDEN);

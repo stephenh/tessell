@@ -1,6 +1,7 @@
 package org.gwtmpv.tests.model.dsl;
 
 import static com.google.gwt.event.dom.client.KeyCodes.KEY_TAB;
+import static org.gwtmpv.model.dsl.WhenConditions.notNull;
 import static org.gwtmpv.model.properties.NewProperty.booleanProperty;
 import static org.gwtmpv.model.properties.NewProperty.enumProperty;
 import static org.gwtmpv.model.properties.NewProperty.stringProperty;
@@ -313,4 +314,13 @@ public class BinderTest {
     Blue, Green
   };
 
+  @Test
+  public void whenIsNull() {
+    BooleanProperty b = booleanProperty("b", false);
+    StubWidget w = new StubWidget();
+    binder.when(b).is(notNull()).set("c").on(w);
+    assertThat(w, hasStyle("c"));
+    b.set(null);
+    assertThat(w, not(hasStyle("c")));
+  }
 }

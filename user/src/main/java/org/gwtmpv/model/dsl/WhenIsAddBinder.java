@@ -1,7 +1,5 @@
 package org.gwtmpv.model.dsl;
 
-import static org.gwtmpv.util.ObjectUtils.eq;
-
 import java.util.ArrayList;
 
 import org.gwtmpv.model.events.PropertyChangedEvent;
@@ -13,13 +11,13 @@ import org.gwtmpv.model.properties.Property;
 public class WhenIsAddBinder<P, V> {
 
   private final Property<P> property;
-  private final P value;
+  private final WhenCondition<P> condition;
   private final V newValue;
 
-  public WhenIsAddBinder(Property<P> property, P value, final V newValue) {
+  public WhenIsAddBinder(Property<P> property, WhenCondition<P> condition, V newValue) {
     this.property = property;
-    this.value = value;
     this.newValue = newValue;
+    this.condition = condition;
   }
 
   /** Adds/removes our {@code value} when our {@code property} is {@code value}. */
@@ -47,7 +45,7 @@ public class WhenIsAddBinder<P, V> {
   }
 
   private void update(ArrayList<V> values) {
-    if (eq(value, property.get())) {
+    if (condition.evaluate(property)) {
       values.add(newValue);
     } else if (values.contains(newValue)) {
       values.remove(newValue);
@@ -55,11 +53,10 @@ public class WhenIsAddBinder<P, V> {
   }
 
   private void update(ListProperty<V> values) {
-    if (eq(value, property.get())) {
+    if (condition.evaluate(property)) {
       values.add(newValue);
     } else if (values.get().contains(newValue)) {
       values.remove(newValue);
     }
   }
-
 }

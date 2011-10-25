@@ -1,7 +1,5 @@
 package org.gwtmpv.model.dsl;
 
-import static org.gwtmpv.util.ObjectUtils.eq;
-
 import org.gwtmpv.model.events.PropertyChangedEvent;
 import org.gwtmpv.model.events.PropertyChangedHandler;
 import org.gwtmpv.model.properties.Property;
@@ -11,13 +9,13 @@ import org.gwtmpv.widgets.HasCss;
 public class WhenIsSetBinder<P> {
 
   private final Property<P> property;
-  private final P value;
+  private final WhenCondition<P> condition;
   private final String style;
 
-  public WhenIsSetBinder(Property<P> property, P value, final String style) {
+  public WhenIsSetBinder(Property<P> property, WhenCondition<P> condition, final String style) {
     this.property = property;
-    this.value = value;
     this.style = style;
+    this.condition = condition;
   }
 
   /** Sets/removes our {@code style} when our property is {@code true}. */
@@ -33,7 +31,7 @@ public class WhenIsSetBinder<P> {
   }
 
   private void update(HasCss css) {
-    if (eq(value, property.get())) {
+    if (condition.evaluate(property)) {
       css.addStyleName(style);
     } else {
       css.removeStyleName(style);
