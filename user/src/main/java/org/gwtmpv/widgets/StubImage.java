@@ -3,6 +3,7 @@ package org.gwtmpv.widgets;
 import com.google.gwt.event.dom.client.*;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.safehtml.shared.SafeUri;
 
 public class StubImage extends StubWidget implements IsImage {
 
@@ -60,6 +61,11 @@ public class StubImage extends StubWidget implements IsImage {
   @Override
   public void setUrl(final String url) {
     this.url = url;
+  }
+
+  @Override
+  public void setUrl(SafeUri url) {
+    setUrl(url.asString());
   }
 
   @Override
