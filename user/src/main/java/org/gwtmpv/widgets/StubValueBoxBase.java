@@ -12,6 +12,10 @@ public class StubValueBoxBase<T> extends StubFocusWidget implements IsValueBoxBa
   private T value;
   private boolean readOnly;
 
+  protected StubValueBoxBase(T defaultValue) {
+    value = defaultValue;
+  }
+
   @Override
   public void setValue(final T value, final boolean fireEvents) {
     final T oldValue = this.value;

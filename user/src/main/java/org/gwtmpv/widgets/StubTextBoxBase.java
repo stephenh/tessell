@@ -6,8 +6,7 @@ import com.google.gwt.user.client.ui.TextBoxBase.TextAlignConstant;
 public class StubTextBoxBase extends StubValueBoxBase<String> implements IsTextBoxBase {
 
   public StubTextBoxBase() {
-    // don't default to null
-    setValue("");
+    super("");
   }
 
   public void type(final String value) {
