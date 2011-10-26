@@ -29,7 +29,7 @@ class UiXmlHandler extends DefaultHandler {
     if (uri.equals("urn:ui:com.google.gwt.uibinder") && localName.equals("with")) {
       final String type = attributes.getValue(attributes.getIndex("type"));
       final String name = attributes.getValue(attributes.getIndex("field"));
-      withFields.add(new UiFieldDeclaration(type, name));
+      withFields.add(new UiFieldDeclaration(type, name, attributes));
     }
 
     // ui:style
@@ -54,7 +54,7 @@ class UiXmlHandler extends DefaultHandler {
         type = StringUtils.substringAfterLast(uri, ":") + "." + localName;
       }
       final String name = attributes.getValue(indexOfUiField);
-      uiFields.add(new UiFieldDeclaration(type, name));
+      uiFields.add(new UiFieldDeclaration(type, name, attributes));
     }
   }
 

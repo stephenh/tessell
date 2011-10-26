@@ -30,6 +30,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
@@ -161,7 +162,15 @@ class UiXmlFile {
         // _xxx gets added later
         m.body.line("return _{};", field.name);
       } else {
-        f.type(subType).setFinal().setAccess(Access.PACKAGE).addAnnotation("@UiField(provided = true)").initialValue("new {}()", subType);
+        f.type(subType).setFinal().setAccess(Access.PACKAGE).addAnnotation("@UiField(provided = true)");
+        if (field.type.equals(Image.class.getName()) && field.attributes.containsKey("resource")) {
+          // UiBinder's ImageParser ignores resource= because it assumes it goes to the cstr 
+          String resource = field.attributes.get("resource").replaceAll("[{}]", "") + "()";
+          // We can't use initialValue as the resource won't be set yet
+          cstr.body.line("{} = new {}({});", field.name, subType, resource);
+        } else {
+          f.initialValue("new {}()", subType);
+        }
         m.body.line("return {};", field.name);
       }
 
