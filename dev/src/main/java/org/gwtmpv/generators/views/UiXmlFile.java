@@ -206,7 +206,7 @@ class UiXmlFile {
     // for each ui:field, add a field assigned to the stub type, and a getter method
     for (final UiFieldDeclaration field : handler.uiFields) {
       final String stubType = viewGenerator.config.getStub(field.type);
-      stubView.getField(field.name).type(stubType).setPublic().setFinal().initialValue("new {}()", stubType);
+      stubView.getField(field.name).type(stubType).setFinal().initialValue("new {}()", stubType);
       stubView.getMethod(field.name).returnType(stubType).body.line("return {};", field.name);
       debugId.body.line("{}.ensureDebugId(baseDebugId + \"-{}\");", field.name, field.name);
     }
