@@ -1,7 +1,5 @@
 package org.gwtmpv.model.dsl;
 
-import static org.gwtmpv.util.ObjectUtils.toStr;
-
 import java.util.ArrayList;
 
 import org.gwtmpv.model.events.PropertyChangedEvent;
@@ -15,8 +13,7 @@ import com.google.gwt.event.dom.client.*;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.ui.HasHTML;
-import com.google.gwt.user.client.ui.HasText;
+import com.google.gwt.user.client.TakesValue;
 import com.google.gwt.user.client.ui.HasValue;
 
 /** Binds properties to widgets. */
@@ -28,23 +25,11 @@ public class PropertyBinder<P> {
     this.p = p;
   }
 
-  /** Binds our property to {@code element} (one-way). */
-  public HandlerRegistrations toTextOf(final HasText element) {
+  /** Binds our property to {@code value} (one-way). */
+  public HandlerRegistrations to(final TakesValue<P> value) {
     PropertyChangedHandler<P> h = new PropertyChangedHandler<P>() {
       public void onPropertyChanged(final PropertyChangedEvent<P> event) {
-        element.setText(toStr(p.get(), ""));
-      }
-    };
-    // set initial value
-    h.onPropertyChanged(new PropertyChangedEvent<P>(p));
-    return new HandlerRegistrations(p.addPropertyChangedHandler(h));
-  }
-
-  /** Binds our property to {@code element} (one-way). */
-  public HandlerRegistrations toHtmlOf(final HasHTML element) {
-    PropertyChangedHandler<P> h = new PropertyChangedHandler<P>() {
-      public void onPropertyChanged(final PropertyChangedEvent<P> event) {
-        element.setHTML(toStr(p.get(), ""));
+        value.setValue(p.get());
       }
     };
     // set initial value

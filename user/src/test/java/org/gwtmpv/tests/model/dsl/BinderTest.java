@@ -1,6 +1,7 @@
 package org.gwtmpv.tests.model.dsl;
 
 import static com.google.gwt.event.dom.client.KeyCodes.KEY_TAB;
+import static org.gwtmpv.model.dsl.TakesValues.textOf;
 import static org.gwtmpv.model.dsl.WhenConditions.notNull;
 import static org.gwtmpv.model.properties.NewProperty.booleanProperty;
 import static org.gwtmpv.model.properties.NewProperty.enumProperty;
@@ -322,5 +323,17 @@ public class BinderTest {
     assertThat(w, hasStyle("c"));
     b.set(null);
     assertThat(w, not(hasStyle("c")));
+  }
+
+  @Test
+  public void propertyToHasText() {
+    StubLabel label = new StubLabel();
+    StringProperty b = stringProperty("b", "foo");
+    binder.bind(b).to(textOf(label));
+    // text is initially set
+    assertThat(label.getText(), is("foo"));
+    // and updated on change
+    b.set("bar");
+    assertThat(label.getText(), is("bar"));
   }
 }
