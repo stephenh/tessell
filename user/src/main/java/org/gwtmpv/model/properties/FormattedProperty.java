@@ -74,6 +74,15 @@ public class FormattedProperty<DP, SP> implements Property<DP> {
     source.set(parsed);
   }
 
+  /**
+   * Changes the message shown when the formatter cannot parse input.
+   *
+   * Note: ensure to change this only initially, and not after any potentially error messages have been fired.
+   */
+  public void setInvalidMessage(String message) {
+    isValid.setMessage(message);
+  }
+
   public String valueName() {
     return "formatted " + source.getName();
   }
