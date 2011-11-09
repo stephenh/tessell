@@ -17,7 +17,7 @@ public abstract class AbstractModel<T> implements Model<T> {
   }
 
   /** Adds {@code p} to the property group. */
-  protected <P> Property<P> add(Property<P> p) {
+  protected <P extends Property<?>> P add(P p) {
     all.add(p);
     return p;
   }
