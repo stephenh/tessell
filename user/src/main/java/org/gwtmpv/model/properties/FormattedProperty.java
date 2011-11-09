@@ -154,7 +154,9 @@ public class FormattedProperty<DP, SP> implements Property<DP> {
 
   @Override
   public String getName() {
-    return "formatted " + source.getName();
+    // keep the same name for when formatted properties are put into
+    // a FormPresenter, they keep the same name
+    return source.getName();
   }
 
   @Override
