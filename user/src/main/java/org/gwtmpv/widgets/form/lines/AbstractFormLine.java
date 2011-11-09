@@ -41,8 +41,14 @@ public abstract class AbstractFormLine<T> implements FormLine {
   }
 
   public void setLabel(String label) {
+    setLabel(label, true);
+  }
+
+  public void setLabel(String label, boolean useAsId) {
     this.label = label;
-    idSuffix = uncapitalize(camelize(label));
+    if (useAsId) {
+      idSuffix = uncapitalize(camelize(label));
+    }
   }
 
 }
