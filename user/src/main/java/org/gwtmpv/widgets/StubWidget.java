@@ -82,6 +82,7 @@ public class StubWidget implements IsWidget {
   @Override
   public void ensureDebugId(final String debugId) {
     this.debugId = debugId;
+    onEnsureDebugId(debugId);
   }
 
   @Override
@@ -112,6 +113,10 @@ public class StubWidget implements IsWidget {
   @Override
   public boolean isAttached() {
     return attached;
+  }
+
+  // for subclasses to override
+  protected void onEnsureDebugId(String baseDebugId) {
   }
 
 }
