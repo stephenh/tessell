@@ -33,7 +33,7 @@ public class ButtonFormAction implements FormAction {
   @Override
   public void bind(FormPresenter p, Binder binder) {
     String id = p.getId() + "-" + Inflector.camelize(text);
-    button.getIsElement().setId(id);
+    button.ensureDebugId(id);
     binder.when(command.enabled()).is(true).show(button);
     if (command instanceof DispatchUiCommand) {
       binder.when(((DispatchUiCommand<?, ?>) command).active()).is(false).enable(button);

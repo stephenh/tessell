@@ -37,8 +37,8 @@ public class ListBoxFormLine<T, O> extends AbstractFormLine<T> {
   @Override
   public void bind(FormPresenter p, PropertyGroup all, Binder binder) {
     super.bind(p, all, binder);
-    listBox.getIsElement().setId(id);
-    errorList.getIsElement().setId(id + "-errors");
+    listBox.ensureDebugId(id);
+    errorList.ensureDebugId(id + "-errors");
     binder.bind(property).to(listBox, possibleValues, adaptor);
   }
 

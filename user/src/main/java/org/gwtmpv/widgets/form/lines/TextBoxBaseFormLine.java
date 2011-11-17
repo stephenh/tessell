@@ -25,8 +25,8 @@ public abstract class TextBoxBaseFormLine extends AbstractFormLine<String> {
   @Override
   public void bind(final FormPresenter p, PropertyGroup all, Binder binder) {
     super.bind(p, all, binder);
-    textBox.getIsElement().setId(id);
-    errorList.getIsElement().setId(id + "-errors");
+    textBox.ensureDebugId(id);
+    errorList.ensureDebugId(id + "-errors");
     p.watchForEnterKey(textBox);
     binder.bind(property).to(textBox, errorList);
     binder.fireChangeOnBlur(textBox);
