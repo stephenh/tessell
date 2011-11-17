@@ -82,6 +82,7 @@ public class StubWidget implements IsWidget {
   @Override
   public void ensureDebugId(final String debugId) {
     this.debugId = debugId;
+    element.setId(debugId);
     onEnsureDebugId(debugId);
   }
 
