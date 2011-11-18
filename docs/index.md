@@ -9,14 +9,14 @@ gwt-mpv
 gwt-mpv is an application framework for writing GWT applications. It enables you to:
 
 * Write GWT applications with lots of really fast unit tests
-* Follow a Model View Presenter (MVP`*`) architecture without boilerplate
+* Follow a Model View Presenter (MVP`*`) architecture without boilerplate (**10x** less programmer-written LOC than hand-coded MVP)
 
 Features
 --------
 
 gwt-mpv has three main features:
 
-* [View generation](./viewgeneration.html) leverages `ui.xml` files to generate all of the interface and implementation boilerplate needed for fast, DOM-decoupled unit tests
+* [View generation](./viewgeneration.html) uses `ui.xml` files to generate all of the view/display interface and view/UiBinder implementation boilerplate needed for fast, DOM-decoupled unit tests
 * [Rich models](./richmodels.html) to make your application more declarative and less inner-class heavy
 * [Dispatch](./dispatch.html)-style server/client AJAX communication
 
@@ -37,7 +37,7 @@ Following the [gwt-mpv](https://github.com/stephenh/gwt-mpv) github project is t
 Community
 ---------
 
-* [gwt-mpv mailing list](https://groups.google.com/forum/?hl=en#!forum/gwtmpv)
+* [gwt-mpv mailing list](https://groups.google.com/forum/#!forum/gwtmpv)
 
 Credits
 -------

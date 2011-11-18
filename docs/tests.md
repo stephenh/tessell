@@ -6,35 +6,48 @@ title: Tests
 Tests
 =====
 
-Given what `gwt-mpv` has given us, let's look at a `ClientPresenterTest`:
+As testing is one of the main goals of an MVP architecture, gwt-mpv strives to make testing as easy as possible.
 
-    public class ClientPresenterTest {
-      // these 3 lines are app-specific
-      private final GClientDto dto = new GClientDto();
-      private final GClientModel client = new GClientModel(registry.getRepository(), dto);
-      private final ClientPresenter p = new ClientPresenter(registry, client);
-      private final StubClientView v = (StubClientView) p.getView();
+It does this by providing out-of-the-box fake (stub) view objects, for both common GWT widgets (e.g. [StubTextBox][StubTextBox]), and your own UiBinder-based views.
 
-      @Test
-      public void fillsInFieldsOnBind() {
-        dto.name = "foo";
-        p.bind();
-        assertThat(v.name.getText(), is("foo"));
-        assertThat(v.description.getText(), is("47 left"));
-      }
+This means you can write tests that:
+
+* Test the presenter/model business logic by poking/observing the (fake) view
+* Run quickly in memory
+* Avoid mock object setup/verification code
+
+As a short example, [ClientPresenterTest][ClientPresenterTest] from the [gwt-hack](https://github.com/stephenh/gwt-hack) sample project includes a test of what happens on key up:
 
       @Test
       public void keyUpChangesNameLeft() {
         dto.name = "foo";
-        p.bind();
-        assertThat(v.name.getText(), is("foo"));
-        assertThat(v.description.getText(), is("47 left"));
+        presenter.bind();
+        assertThat(view.name().getText(), is("foo"));
+        assertThat(view.nameLeft().getText(), is("47 left"));
 
-        v.name.press('b');
-        assertThat(v.description.getText(), is("46 left"));
+        view.name().press('b');
+        assertThat(view.nameLeft().getText(), is("46 left"));
       }
 
     }
 {: class=brush:java}
 
+Note how the `view.name().press('b')` call results in:
+
+* `StubTextBox` firing (fake) key down/key press/key up events
+* The presenter's bound key up handler being called
+* The model's "name" property being updated
+* The model's derived "name chars left" property being updated
+* The view's bound `nameLeft` element's inner text being updated
+
+This flow of events is typical for rich, event-driven UIs, and the above test shows how gwt-mpv enables testing all of an application's presenter logic, model logic, and view binding end-to-end succinctly, even while using fake, in-memory widgets.
+
+For more information, see either [stubs](stubs.html) for information about the stubs themselves, or the [tutorial](tutorial.html) for how `ClientPresenterTest` fits into the bigger picture.
+
+
+
+
+[ClientPresenterTest]: https://github.com/stephenh/gwt-hack/blob/master/src/test/java/com/bizo/gwthack/client/presenters/ClientPresenterTest.java
+
+[StubTextBox]: https://github.com/stephenh/gwt-mpv/blob/master/user/src/main/java/org/gwtmpv/widgets/StubTextBox.java
 

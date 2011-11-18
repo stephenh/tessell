@@ -13,7 +13,7 @@ This frees the developer from making tedious modifications to multiple files for
 Traditional MVP
 ---------------
 
-Let's look at a simple `client.ui.xml` file for clients:
+Let's look at a simple [ClientView.ui.xml][ClientViewUiXml] file for editing clients:
 
     <ui:UiBinder ...>
       <gwt:HTMLPanel>
@@ -46,9 +46,9 @@ Which looks innocent enough. Let's make it a little more real world by adding:
 
 * Besides getting/setting the name and description, we want to listen to their key up events, so we'll add `HasAllKeyHandlers` for both name and description.
 * When name or description becomes invalid, we want to add/remove CSS class names. GWT has no `HasStyle` interface, but let's make one with a `WidgetHasStyle` wrapper class, and add `HasStyle` methods for both name and description
-* Let's assume our page is showing several client rows (presenters) at the same time, and to integration test the page with Selenium we'll need unique debug ids for each name and description element. So we'll add a `setDebugId` method.
+* Let's assume our page is showing several client rows (presenters) at the same time, and to integration test the page with Selenium we'll need unique debug ids for each name and description element. So we'll add a `ensureDebugId` method.
 
-Now it might look like:
+For the presenter to handle these changes, our `Display` interface grows to look more like:
 
     public class ClientPresenter {
       public interface Display {
@@ -68,7 +68,7 @@ Now it might look like:
 
         HasClickHandlers submit();
 
-        void setDebugId(String debugId);
+        void ensureDebugId(String debugId);
       }
 
       // the rest of your presenter implementation
@@ -101,7 +101,7 @@ Okay, that looks good. Now let's implement it:
         panel = binder.createAndBindUi(this);
       }
 
-      public void setDebugId(String debugId) {
+      public void ensureDebugId(String debugId) {
         UIObject.ensureDebugId(heading, debugId + "-heading");
         name.ensureDebugId(debugId + "-name");
         description.ensureDebugId(debugId + "-description");
@@ -146,25 +146,25 @@ This is pretty standard usage of UiBinder and nothing too complex.
 
 But suddenly we went from **8** lines of UiBinder code to **86** lines of derivative Java code to tailor our view for MVP.
 
-`HasXxx` vs. `IsXxx`
-====================
+Characteristic vs. Widget Interfaces
+------------------------------------
 
-One source of cruft are GWT's `HasXxx` interfaces (typically called "characteristic interfaces" as each defines a very small, specific characteristic that may apply to several different widgets).
+One source of cruft is GWT's `HasXxx` interfaces (typically called "characteristic interfaces" as each defines a very small, specific characteristic that may apply to several different widgets).
 
-It is tedious to add a brand new `Display` interface method plus `ClientView` implementation method for each `HasXxx` interface (`HasValue`, `HasAllKeyHandlers`, `HasStyle`, etc.) the presenter requires when they all come from the same widget.
+It is tedious to add a new `Display` method and new `ClientView` method for each `HasXxx` interface (`HasValue`, `HasAllKeyHandlers`, `HasStyle`, etc.) the presenter requires when they all come from the same source widget (see `description`, `descriptionKeys`, and `descriptionStyle` in the above example).
 
-The `HasXxx` interfaces are just a band-aid around the GWT widgets not having their own mockable interfaces--a better solution is to just add widget-specific interfaces and be done with it.
+In gwt-mpv's opinion, the `HasXxx` interfaces are just a band-aid around the GWT widgets not having their own, specific interfaces--a better solution is to just add these missing, widget-specific interfaces and be done with it.
 
 This is what `gwt-mpv` does. For example, `Anchor` has `IsAnchor`, `TextBox` has `IsTextBox`, etc.
 
 This also solves the very annoying problem that many GWT widget methods aren't in `HasXxx` interfaces at all. So you end up having to make them up, e.g. `HasStyle`.
 
-`IsXxx` interfaces are the key to automation because the programmer no longer has to decide which `HasXxx` interfaces for each widget will be exposed--each widget in the `ui.xml` file is just exposed in the `Display` interface as its `IsXxx` equivalent.
+`IsXxx` widget interfaces are also the key to gwt-mpv's automation because the programmer no longer has to decide which `HasXxx` interfaces for each widget will be exposed--each widget in the `ui.xml` file is just exposed in the `Display` interface as its `IsXxx` equivalent.
 
 The presenter can now access as few or as many widget methods as it needs without changing the `Display` or `ClientView` classes.
 
-`gwt-mpv` Generated Views
--------------------------
+Generated Views
+---------------
 
 Let's go back to the `ui.xml` file:
 
@@ -180,21 +180,17 @@ Let's go back to the `ui.xml` file:
 
 Really, all of the key information about the view is right here.
 
-We can see what the `ui:field` bindable fields are (`heading`, `name`, `description`, and`submit`), and what their types are (`Element`, `gwt:TextBox`, `gwt:SubmitButton`).
+We can see what the `ui:field` bindable fields are (`heading`, `name`, `description`, and `submit`), and what their types are (`Element`, `gwt:TextBox`, `gwt:SubmitButton`).
 
 There is no reason a developer should have to manually copy this information over into 2 separate files (`ClientPresenter.Display` and `ClientView`). [DRY](http://c2.com/cgi/wiki?DontRepeatYourself).
 
-So `gwt-mpv` solves this with code generation. Not GWT compile-time/deferred-binding code generation, but programmer-time, click-the-button, the-IDE-sees-the-output code generation.
+So gwt-mpv solves this with code generation. Not GWT compile-time/deferred-binding code generation, but programmer-time, click-the-button, the-IDE-sees-the-output code generation.
 
-By running `ant` or an Eclipse launch target, `gwt-mpv` will parse the `client.ui.xml` file and generate the interface, an implementation, and a stub for testing.
+By running `ant` or an Eclipse launch target (which Eclipse can run automatically on save), gwt-mpv will parse the `client.ui.xml` file and generate the interface, an implementation, and a stub for testing.
 
 Here is the interface (generated):
 
     public interface IsClientView extends IsWidget {
-        public Widget asWidget();
-
-        public void setDebugId(String baseDebugId);
-
         public IsElement heading();
 
         public IsTextBox name();
@@ -227,10 +223,10 @@ And the implementation (generated):
 
         public ClientView() {
             setWidget(binder.createAndBindUi(this));
-            setDebugId("Client");
+            ensureDebugId("Client");
         }
 
-        public void setDebugId(String baseDebugId) {
+        public void ensureDebugId(String baseDebugId) {
             UIObject.ensureDebugId(heading, baseDebugId + "-heading");
             name.ensureDebugId(baseDebugId + "-name");
             description.ensureDebugId(baseDebugId + "-description");
@@ -261,16 +257,17 @@ And the implementation (generated):
 And the stub (generated):
 
     public class StubClientView extends StubWidget implements IsClientView {
-        public final StubIsElement heading = new org.gwtmpv.widgets.StubIsElement();
-        public final StubTextBox name = new org.gwtmpv.widgets.StubTextBox();
-        public final StubTextBox description = new org.gwtmpv.widgets.StubTextBox();
-        public final StubSubmitButton submit = new org.gwtmpv.widgets.StubSubmitButton();
+
+        private final StubIsElement heading = new org.gwtmpv.widgets.StubIsElement();
+        private final StubTextBox name = new org.gwtmpv.widgets.StubTextBox();
+        private final StubTextBox description = new org.gwtmpv.widgets.StubTextBox();
+        private final StubSubmitButton submit = new org.gwtmpv.widgets.StubSubmitButton();
 
         public StubClientView() {
-            setDebugId("Client");
+            ensureDebugId("Client");
         }
 
-        public void setDebugId(String baseDebugId) {
+        public void ensureDebugId(String baseDebugId) {
             heading.ensureDebugId(baseDebugId + "-heading");
             name.ensureDebugId(baseDebugId + "-name");
             description.ensureDebugId(baseDebugId + "-description");
@@ -338,10 +335,12 @@ After `gwt-mpv` generates the view, it becomes easy for the presenter to use the
 Here is a `ClientPresenter`:
 
     public class ClientPresenter extends AbstractPresenter<IsClientView> {
+
       private Client c = // get client from somewhere
 
-      public ClientPresenter(final IsClientView view) {
-        super(view);
+      public ClientPresenter() {
+        // will be either the stub or UiBinder as needed
+        super(newClientView());
       }
 
       @Override
@@ -349,7 +348,7 @@ Here is a `ClientPresenter`:
         super.onBind();
 
         // set the debug ids appropriately
-        view.setDebugId("Client-" + c.getId());
+        view.ensureDebugId("Client-" + c.getId());
 
         // change the heading
         view.heading().setInnerText("Client " + c.getName());
@@ -373,12 +372,29 @@ Here is a `ClientPresenter`:
 
 Notice how:
 
-* The `Display` inner-interface is gone (now generated as `IsClientView`)
+* The programmer-maintained `Display` inner-interface is gone (now generated as `IsClientView`)
+* The UiBinder-based  view is now generated
 * The `view.heading()`, `view.name()`, and `view.description()` return `IsXxx` interfaces that can be used for a variety of interactions--and yet are still fully decoupled from the concrete GWT classes
 
 The Result
 ----------
 
-With `gwt-mpv` you only maintain two files: your `ui.xml` file and your presenter. The task of percolating `ui.xml` changes throughout various files just to get MVP-testable goodness is now automated.
+With gwt-mpv you only maintain two files:
 
+1. Your `ui.xml` file, and
+2. Your presenter.
+3. Your presenter's test (okay, so there are 3 files)
+
+The tedious work of percolating `ui.xml` changes throughout various files just to get MVP-testable goodness is automated.
+
+Part I vs. Part II MVP
+----------------------
+
+There are some difference between the [Part I](http://code.google.com/webtoolkit/articles/mvp-architecture.html) and [Part II](http://code.google.com/webtoolkit/articles/mvp-architecture-2.html) MVP architectures, specifically moving from a view interface (Part I) to a presenter callback interface (Part II).
+
+gwt-mpv currently automates a Part I-style architecture. It is not immediately clear how to automate a Part II-style architecture, which does have some nice properties, but so far as not been necessary for the applications gwt-mpv as been used on.
+
+If anyone is interested in using a gwt-mpv-style approach for Part II architectures, feel free to bring it up on the [forums](https://groups.google.com/forum/#!forum/gwtmpv).
+
+[ClientViewUiXml]: https://github.com/stephenh/gwt-hack/blob/master/src/main/java/com/bizo/gwthack/client/views/ClientView.ui.xml
 

@@ -6,23 +6,139 @@ title: Forms
 Forms
 =====
 
-gwtmpv has support for flushing out forms with as-minimum-as-possible amount of pain.
+gwt-mpv has support for building flexible forms with as little boilerplate as possible.
 
-The focus is currently on reducing boilerplate HTML/UiBinder.
+Goals
+-----
 
-    EmployeeModel model = ...;
+* Most form fields should require just 1 line of setup code--simple is easy
+* Custom form fields are still doable--complex is possible
+* Ensure consistent look & feel of all forms in an app
+* Reusable implementation of standard AJAX form UX:
+  * Validation of properties as the user touches each field
+  * Validation of all properties when the user hits "Save"
+  * Disabling of "Save"/etc. commands after the initial click
+  * Showing of in-progress spinner while the command is executing (**not done yet**)
+* Enable low-level customization of the form's HTML code to match a mockup's HTML (whether using divs with floats or tables)
 
-    UiCommand command = new UiCommand() {
-      // ...
-    };
+The focus is on getting all of the aspects of an AJAX form's UX right and consistent, without having to repeat all of this logic in every presenter in your app.
 
-    FormPresenter form = new FormPresenter(widgets);
-    form.addTextBox(model.firstName());
-    form.addTextBox(model.lastName());
-    form.addAction("Submit", command);
+Similarly, each form and each form field in an application shouldn't require copy/pasting 4-5 lines of code in the `ui.xml` file per form element.
+
+Approach
+--------
+
+gwt-mpv's [FormPresenter][FormPresenter] decouples several aspects of forms to ensure a clean separation of concerns. Specifically, decoupling *layout* from *declaration*.
+
+For example, a FormPresenter-enabled form might look like:
+
+    EmployeeModel ee = new EmployeeModel();
+    FormPresenter form = new FormPresenter("formId");
+
+    form.add(new TextBoxFormLine(ee.name));
+    form.add(new TextBoxFormLine(ee.title));
+    form.add(new ListBoxFormLine(ee.status, allPossibleStatuses));
+    form.add(new ButtonFormAction(saveCommand, "Save"));
 
     view.flowPanel().add(form.getView());
 {: class=brush:java}
 
+Notice how the presenter can focus on only declaring the form's structure. No layout details are needed (either here in the presenter or the presenter's `ui.xml` file).
+
+When the form is rendered to the DOM, the `ee.name` property will be wrapped in the boilerplate `div`, `input`, etc. tags to lay out it's row. Same thing with the other properties.
+
+By default, the provided `FormLine` implementations will also render errors, so if `ee.name` is required, and the user leaves it blank, the error "Name is required" will be shown.
+
+Form Structure
+--------------
+
+FormPresenter is based on the notion of forms compromising of two basic things:
+
+* Lines--typically each form element gets a form line, e.g. the "first name" line or the "last name" line.
+* Actions--actions like save/cancel at the end of the form
+
+Then lines themselves are typically composed of:
+
+* Labels--each line has a label, e.g. "First Name".
+* Values--each line has a value, e.g. a text box for first name
+* Errors--each line has a list of errors, e.g. "Required"
+
+(Note that [FormLine][FormLine] is a generic interface, so is not required to have labels/values/errors, which is convenient for custom form lines, say if you needed a `DashedFormLine` to draw a solid `hr` between two sections of your form.)
+
+With these set of assumptions about form structure, FormPresenter then provides interfaces and some default implementations to generic tie them together in a coherent way.
+
+Layout Customization
+--------------------
+
+While FormPresenter provides sensible HTML out-of-the-box, it was designed with the realization that it is often desirable to conform to a project's/mockup's existing HTML/form structure.
+
+To achieve that, FormPresenter defers all HTML logic to the [FormLayout][FormLayout] interface. It has generic "begin/end" methods that allow a layout implementation to drop in the necessary HTML.
+
+For example, [DefaultFormLayout][DefaultFormLayout] look something like:
+
+    public class DefaultFormLayout implements FormLayout {
+      @Override
+      public void formBegin(FormPresenter p, HTMLPanelBuilder hb) {
+        hb.add("<div class=\"" + style.form() + "\">");
+      }
+
+      @Override
+      public void formEnd(FormPresenter p, HTMLPanelBuilder hb) {
+        hb.add("</div>");
+      }
+
+      @Override
+      public void lineBegin(FormPresenter p, HTMLPanelBuilder hb) {
+        hb.add("<li>");
+      }
+
+      @Override
+      public void lineEnd(FormPresenter p, HTMLPanelBuilder hb) {
+        hb.add("</li>");
+      }
+
+      // ... more methods ...
+{: class=brush:java}
+
+Where it uses `div`, `ol`, and `li` tags to layout the form elements (based on the markup from [fancy form design](http://articles.sitepoint.com/print/fancy-form-design-css)).
+
+Staying Consistent
+------------------
+
+While FormPresenter is easy to use directly, it also works well to create a subclass specifically for your application with helper methods that can be reused across your pages.
+
+For example, you might have something like:
+
+    public class AppFormPresenter extends FormPresenter {
+      public AppFormPresenter(String id) {
+        // if using custom layout
+        super(id, new AppFormLayout(id));
+      }
+
+      public void addTextLine(Property<String> p) {
+        // if using tweaked text box form lines
+        add(new CustomTextBoxFormLine(p));
+      }
+
+      // if your app has a custom `Day` user type
+      public void addDateLine(Property<Day> p) {
+        // implementation might use DatePicker/whatever
+        add(new CustomDayFormLine(p));
+      }
+    }
+{: class=brush:java}
+
+Note again that this subclass is not required to use FormPresenter, but is a helpful way of centralizing the form layout decisions and making consuming page presenters that much more simple.
 
 
+
+
+
+
+[FormPresenter]: https://github.com/stephenh/gwt-mpv/blob/master/user/src/main/java/org/gwtmpv/widgets/form/FormPresenter.java
+
+[FormLayout]: https://github.com/stephenh/gwt-mpv/blob/master/user/src/main/java/org/gwtmpv/widgets/form/FormLayout.java
+
+[DefaultFormLayout]: https://github.com/stephenh/gwt-mpv/blob/master/user/src/main/java/org/gwtmpv/widgets/form/DefaultFormLayout.java
+
+[FormLine]: https://github.com/stephenh/gwt-mpv/blob/master/user/src/main/java/org/gwtmpv/widgets/form/lines/FormLine.java

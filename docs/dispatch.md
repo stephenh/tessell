@@ -11,6 +11,12 @@ The dispatch pattern is alternative to the usual GWT-RPC implementation where ev
 * From Ray Ryan's [Best Practices](http://www.google.com/events/io/2009/sessions/GoogleWebToolkitBestPractices.html) I/O talk
 * From [gwt-dispatch](http://code.google.com/p/gwt-dispatch/), the original open source implementation of the pattern
 
+gwt-mpv's implementation of the dispatch pattern is not terribly unique, other than providing:
+
+* `GenDispatch` annotation for no action/result DTO boilerplate,
+* `SuccessCallback` for centralization of error handling, and
+* Stub dispatch implementations for unit testing
+
 Overview
 --------
 
@@ -52,11 +58,72 @@ And gwt-mpv-apt will generate `FooAction` and `FooResult` DTOs with all of the n
 Success Callback
 ----------------
 
-...
+Every AJAX call may fail, but it's not a good idea to reimplement failure logic at each AJAX call site in your application. To help facilitate this, gwt-mpv adds a [SuccessCallback][SuccessCallback] interface:
+
+    public interface SuccessCallback<T> {
+      void onSuccess(T result);
+    }
+{: class=brush:java}
+
+Which is just like `AsyncCallback` without the `onFailure` method. So, instead of reimplementing `AsyncCallback.onFailure` each time you make an AJAX call, gwt-mpv's [OutstandingDispatchAysnc][OutstandingDispatchAysnc] accepts `SuccessCallbacks` and will provide a single `onFailure` implementation.
+
+The default `onFailure` implementation fires a `DispatchUnhandledFailureEvent` on the applications `EventBus`, so anyone that is interested (e.g. an error popup listener) can listener for the failure and respond appropriately.
+
+(Note that another common way of achieving this is to have an application-specific subclass of `AsyncCallback` that implements `onFailure`.)
 
 Testing
 -------
 
-...
+gwt-mpv provides a [StubDispatchAsync][StubDispatchAsync] that facilitates testing dispatch actions/results in a fairly succinct manner.
+
+Again using [ClientPresenterTest][ClientPresenterTest], testing save looks like:
+
+    @Test
+    public void saving() {
+      bind();
+      view.name().type("bar");
+      view.submit().click();
+
+      // ensure we sent the right data
+      SaveClientAction sentAction =
+        async.getAction(SaveClientAction.class);
+      assertThat(sentAction.getClient().name, is("bar"));
+
+      // save on the server is successful
+      doSaveClientResult(true);
+
+      // assert that we've moved to #clients
+      assertThat(bus, hasPlaceRequests("clients"));
+    }
+
+    private void doSaveClientResult(boolean success) {
+      async.getCallback(SaveClientAction.class).onSuccess(
+        new SaveClientResult(success));
+    }
+{: class=brush:java}
+
+Where:
+
+* `view.submit().click()` fires a `SaveClientAction` command (done by the ClientPresenter we're testing)
+* We can, if necessary, use `async.getAction(SaveClientAction.class)` to get the last-sent action of that type and make assertions against it, to ensure it has the correct data
+* We use `async.getCallback(SaveClientAction.class)` to get the last-sent action's callback and can call either:
+  * `onSuccess` with a `SaveClientResult` that came from the server
+  * `onFailure` with a `Throwable` to test the failure condition
+
+This allows fairly quick, easy testing of dispatch-style actions and results without a lot of fuss.
+
+Request Factory
+---------------
+
+[RequestFactory](http://code.google.com/webtoolkit/doc/latest/DevGuideRequestFactory.html) is another alternative to traditional GWT-RPC. Nothing in gwt-mpv prevents users from using RequestFactory, in fact it might work quite well, it just has not been actively explored yet.
 
 
+
+
+[SuccessCallback]: https://github.com/stephenh/gwt-mpv/blob/master/user/src/main/java/org/gwtmpv/dispatch/client/SuccessCallback.java
+
+[OutstandingDispatchAysnc]: https://github.com/stephenh/gwt-mpv/blob/master/user/src/main/java/org/gwtmpv/dispatch/client/util/OutstandingDispatchAsync.java
+
+[StubDispatchAsync]: https://github.com/stephenh/gwt-mpv/blob/master/user/src/main/java/org/gwtmpv/dispatch/client/StubDispatchAsync.java
+
+[ClientPresenterTest]: https://github.com/stephenh/gwt-hack/blob/master/src/test/java/com/bizo/gwthack/client/presenters/ClientPresenterTest.java

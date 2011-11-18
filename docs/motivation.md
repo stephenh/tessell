@@ -6,10 +6,11 @@ title: Motivation
 Motivation
 ==========
 
-gwtmpv has two primary motivations:
+gwt-mpv has two primary motivations:
 
 1. Provide an MVP architecture with as little view boilerplate as possible
 2. Provide rich models/data binding to have as little inner-class boilerplate as possible
+3. Provide a structured "way to do things" that results in well-built applications
 
 MVP
 ---
@@ -20,16 +21,16 @@ MVP (model, view, presenter) is a way of building a UI that decouples the UI log
 * Fowler's [GUI Architectures](http://martinfowler.com/eaaDev/uiArchs.html) (unfortunately, unlike most of Fowler's work, I find this one hard to follow)
 * Official [writeup](http://code.google.com/webtoolkit/articles/mvp-architecture.html) in the GWT docs
 
-But the short of it is: running tests against real on-screen widgets is usually horribly slow, we should abstract them some how.
+But the short of it is: running tests against real on-screen/browser-based widgets is usually horribly slow, we should abstract them some how.
 
-Contrary to traditional approach from the Ray Ryan talk/GWT docs, gwtmpv simply makes interfaces for each widget. If you have `TextBox`, you code against `IsTextBox`. At test time, a `StubTextBox` pretends to be your textbox.
+Contrary to traditional approach from the Ray Ryan talk/GWT docs, gwt-mpv simply makes interfaces for each widget. If you have `TextBox`, you code against `IsTextBox`. At test time, a `StubTextBox` pretends to be your textbox.
 
 Your real UI code goes in a presenter class which, since it only talks to `IsXxx` widget interfaces, you can use the stub widgets to unit test your presenter very quickly.
 
 Rich Models
 -----------
 
-gwtmpv places much more emphasis on the *M* in MVP by having rich, client-side models.
+gwt-mpv places much more emphasis on the *M* in MVP by having rich, client-side models.
 
 The whole point of AJAX/desktop-style apps is to apply non-trivial business/validation logic on the client-side, so it only makes sense to have a rich way of expressing the business model vs. just DTOs.
 
@@ -59,6 +60,6 @@ Other frameworks using rich models/data binding include:
 * [SproutCore](http://www.sproutcore.com/), a Cocoa-like Javascript framework
 * [gwt-pectin](http://code.google.com/p/gwt-pectin/)
 
-gwtmpv uses a lot of these same ideas, and basically reimplements them in an MVP-/unit-test-able fashion.
+gwt-mpv uses a lot of these same ideas, and basically reimplements them in an MVP-/unit-test-able fashion.
 
 
