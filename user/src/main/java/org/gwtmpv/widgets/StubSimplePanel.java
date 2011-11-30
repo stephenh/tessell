@@ -38,7 +38,9 @@ public class StubSimplePanel extends StubPanel implements IsSimplePanel {
   @Override
   public Iterator<IsWidget> iteratorIsWidgets() {
     ArrayList<IsWidget> list = new ArrayList<IsWidget>();
-    list.add(isWidget);
+    if (isWidget != null) {
+      list.add(isWidget);
+    }
     return list.iterator();
   }
 
