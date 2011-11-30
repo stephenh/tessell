@@ -20,6 +20,7 @@ Goals
   * Disabling of "Save"/etc. commands after the initial click
   * Showing of in-progress spinner while the command is executing (**not done yet**)
 * Enable low-level customization of the form's HTML code to match a mockup's HTML (whether using divs with floats or tables)
+* Remain unit testable/MVP-compliant
 
 The focus is on getting all of the aspects of an AJAX form's UX right and consistent, without having to repeat all of this logic in every presenter in your app.
 
@@ -105,7 +106,7 @@ Where it uses `div`, `ol`, and `li` tags to layout the form elements (based on t
 Staying Consistent
 ------------------
 
-While FormPresenter is easy to use directly, it also works well to create a subclass specifically for your application with helper methods that can be reused across your pages.
+While FormPresenter is easy to use directly, it also works well to create a subclass specifically for your application with standardized/application-specific helper methods that can be reused across your pages.
 
 For example, you might have something like:
 
@@ -130,7 +131,54 @@ For example, you might have something like:
 
 Note again that this subclass is not required to use FormPresenter, but is a helpful way of centralizing the form layout decisions and making consuming page presenters that much more simple.
 
+Testing
+-------
 
+In keeping with gwt-mpv's goal for easy DOM-less unit testing, presenters that use `FormPresenter` can still be unit tested.
+
+Note that because form elements are specified only in the presenter (which is more succinct, and doesn't involve boilerplate elements in the `ui.xml` file), it does mean the presenter's view (which is generated from the `ui.xml` file) won't have methods to access each individual form element for the test to manipulate/assert against (see [tests](tests.html) for the typical way of testing in gwt-mpv).
+
+Instead, we have to grab the form elements by their `id` from FormPresenter's backing HTMLPanel. Although if your form ids match your model property names, you can use some helper methods to do the lookup, e.g.:
+
+    public class FooPresenterTest {
+
+      FooPresenter p;
+      StubFooView v;
+
+      @Test
+      public void testRequiredFields() {
+        FooModel model = setupPresenterFor(new FooDto(...));
+        // click without filling anything in
+        save().click();
+
+        // ensure no request was sent
+        assertThat(async.getOutstanding().size(), is(0));
+
+        // ensure error message was shown
+        assertThat(
+          errors(model.name).getList(),
+          contains("Required"));
+      }
+
+      // creates/binds the presenter to a model for the dto
+      private FooModel setupPresenterFor(FooDto dto) {
+        FooModel model = new FooModel(dto);
+        p = bind(new FooPresenter(model));
+        v = (StubFooView) p.getView();
+      }
+
+      // uses p to find the form element by id
+      private StubTextList errors(final Property<?> p) {
+        String propertyId = Inflector.camelize(p.getName());
+        String fullId = "formId-" + propertyId  + "-errors";
+        return (StubTextList) v.findById(fullId);
+      }
+
+      // returns the stub button rendered in the form
+      private StubButton save() {
+        return (StubButton) v.findById("formId-save");
+      }
+{: class=brush:java}
 
 
 
