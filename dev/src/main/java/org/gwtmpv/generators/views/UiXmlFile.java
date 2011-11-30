@@ -22,7 +22,7 @@ import org.gwtmpv.widgets.GwtElement;
 import org.gwtmpv.widgets.GwtHTMLPanelWrapper;
 import org.gwtmpv.widgets.GwtRadioButton;
 import org.gwtmpv.widgets.IsWidget;
-import org.gwtmpv.widgets.StubWidget;
+import org.gwtmpv.widgets.StubView;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -200,7 +200,9 @@ class UiXmlFile {
   }
 
   private void generateStubView() throws Exception {
-    stubView.baseClass(StubWidget.class).implementsInterface(isView.getSimpleClassName());
+    stubView.baseClass(StubView.class).implementsInterface(isView.getSimpleClassName());
+
+    final GMethod cstr = stubView.getConstructor();
 
     final GMethod debugId = stubView.getMethod("onEnsureDebugId").argument("String", "baseDebugId");
     debugId.addAnnotation("@Override").setProtected();
@@ -212,6 +214,9 @@ class UiXmlFile {
       stubView.getField(field.name).type(stubType).setFinal().initialValue("new {}()", stubType);
       stubView.getMethod(field.name).returnType(stubType).body.line("return {};", field.name);
       debugId.body.line("{}.ensureDebugId(baseDebugId + \"-{}\");", field.name, field.name);
+      if (!field.isElement) {
+        cstr.body.line("widgets.add({});", field.name);
+      }
     }
 
     // for each ui:style, make @UiField fields, getter method, plus StubCss class
@@ -222,9 +227,7 @@ class UiXmlFile {
       stubView.getMethod(style.name).returnType(style.type).body.line("return {};", style.name);
     }
 
-    stubView.getConstructor().body.line(
-      "ensureDebugId(\"{}\");",
-      stubView.getSimpleClassNameWithoutGeneric().replaceAll("View$", "").replaceAll("^Stub", ""));
+    cstr.body.line("ensureDebugId(\"{}\");", stubView.getSimpleClassNameWithoutGeneric().replaceAll("View$", "").replaceAll("^Stub", ""));
 
     viewGenerator.markAndSave(stubView);
   }

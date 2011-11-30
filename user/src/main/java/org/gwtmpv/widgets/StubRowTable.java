@@ -52,4 +52,13 @@ public class StubRowTable extends StubWidget implements IsRowTable {
     rows.add(i, isWidget);
   }
 
+  @Override
+  protected IsWidget findInChildren(String id) {
+    IsWidget a = findInChildren(headers.iterator(), id);
+    if (a != null) {
+      return a;
+    }
+    return findInChildren(rows.iterator(), id);
+  }
+
 }

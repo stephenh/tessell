@@ -52,7 +52,7 @@ public class ListBoxFormLineTest extends AbstractFormPresenterTest {
   }
 
   private StubListBox listBox(String id) {
-    return (StubListBox) html().getElementById(id);
+    return (StubListBox) html().findById(id);
   }
 
   private static final class EmployerDtoAdaptor implements ListBoxAdaptor<Integer, EmployerDto> {

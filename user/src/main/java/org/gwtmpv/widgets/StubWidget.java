@@ -1,5 +1,7 @@
 package org.gwtmpv.widgets;
 
+import java.util.Iterator;
+
 import com.google.gwt.event.logical.shared.AttachEvent;
 import com.google.gwt.event.logical.shared.AttachEvent.Handler;
 import com.google.gwt.event.shared.EventBus;
@@ -21,6 +23,14 @@ public class StubWidget implements IsWidget {
 
   public StubWidget() {
     element.setWidget(this);
+  }
+
+  /** @return the widget for {@code id} or {@code null} */
+  public IsWidget findById(String id) {
+    if (element.getId() != null && element.getId().equals(id)) {
+      return this;
+    }
+    return findInChildren(id);
   }
 
   public void fireAttached() {
@@ -116,6 +126,22 @@ public class StubWidget implements IsWidget {
 
   // for subclasses to override
   protected void onEnsureDebugId(String baseDebugId) {
+  }
+
+  // for subclasses that contain children to override
+  protected IsWidget findInChildren(String id) {
+    return null;
+  }
+
+  /** Looks recursively into {@code widgets} for one with {@code id}. */
+  protected static IsWidget findInChildren(Iterator<IsWidget> widgets, String id) {
+    while (widgets.hasNext()) {
+      IsWidget found = ((StubWidget) widgets.next()).findById(id);
+      if (found != null) {
+        return found;
+      }
+    }
+    return null;
   }
 
 }
