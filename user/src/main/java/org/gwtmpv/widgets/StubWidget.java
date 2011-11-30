@@ -18,7 +18,6 @@ public class StubWidget implements IsWidget {
   public int absoluteLeft;
   public int offsetWidth;
   public int offsetHeight;
-  private String debugId;
 
   public StubWidget() {
     element.setWidget(this);
@@ -81,14 +80,13 @@ public class StubWidget implements IsWidget {
 
   @Override
   public void ensureDebugId(final String debugId) {
-    this.debugId = debugId;
     element.setId(debugId);
     onEnsureDebugId(debugId);
   }
 
   @Override
   public String toString() {
-    return getClass().getSimpleName() + "[" + debugId + "]";
+    return getClass().getSimpleName() + "[" + element.getId() + "]";
   }
 
   @Override
