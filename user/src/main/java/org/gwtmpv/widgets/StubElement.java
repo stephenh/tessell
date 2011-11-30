@@ -12,7 +12,6 @@ import com.google.gwt.dom.client.Element;
 public class StubElement implements IsElement {
 
   private String id;
-  private String debugId;
   private String innerText;
   private String innerHTML;
   private StubWidget widget;
@@ -74,12 +73,13 @@ public class StubElement implements IsElement {
 
   @Override
   public void ensureDebugId(final String id) {
-    debugId = id;
+    // don't bother with a gwt-debug prefix for stubs
+    setId(id);
   }
 
   @Override
   public String toString() {
-    return debugId;
+    return id;
   }
 
   @Override
