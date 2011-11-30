@@ -14,6 +14,7 @@ import org.gwtmpv.widgets.IsHTMLPanel;
 import org.gwtmpv.widgets.form.actions.FormAction;
 import org.gwtmpv.widgets.form.lines.FormLine;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.HasAllKeyHandlers;
 import com.google.gwt.event.logical.shared.AttachEvent;
 
@@ -58,14 +59,14 @@ public class FormPresenter extends BasicPresenter<IsFlowPanel> {
   public void add(FormLine line) {
     formLines.add(line);
     line.bind(this, all, binder);
-    needsRender = true;
+    renderNeeded();
   }
 
   /** Adds {@code action}. */
   public void add(FormAction action) {
     formActions.add(action);
     action.bind(this, binder);
-    needsRender = true;
+    renderNeeded();
     defaultAction = action;
   }
 
@@ -81,6 +82,16 @@ public class FormPresenter extends BasicPresenter<IsFlowPanel> {
     layout.render(this, hb);
     insertHtml(hb.toHTMLPanel());
     needsRender = false;
+  }
+
+  private void renderNeeded() {
+    if (!GWT.isClient() || view.isAttached()) {
+      // in unit tests, render should be cheap
+      render();
+    } else {
+      // Wait until we're attached
+      needsRender = true;
+    }
   }
 
   private void insertHtml(IsHTMLPanel panel) {
