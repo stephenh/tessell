@@ -38,6 +38,7 @@ Community
 ---------
 
 * [gwt-mpv mailing list](https://groups.google.com/forum/#!forum/gwtmpv)
+* [todomvc ported to gwt-mpv blog post](http://www.draconianoverlord.com/2011/12/10/todomvc-in-gwt-mpv.html)
 
 Credits
 -------
@@ -45,7 +46,6 @@ Credits
 * [Bizo](http://www.bizo.com) for their initial and continued support of `gwt-mpv`
 * [gwt-pectin](http://code.google.com/p/gwt-pectin/) inspired gwt-mpv's binding DSL, which was previously very ugly
 * [gwt-dispatch](http://code.google.com/p/gwt-dispatch/) for the initial implementation of the dispatch pattern from Ray Ryan's I/O talk
-
 
 Foot Notes
 ----------
