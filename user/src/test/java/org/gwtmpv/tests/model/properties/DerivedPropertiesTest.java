@@ -1,4 +1,4 @@
-package org.gwtmpv.tests.model.validation.rules;
+package org.gwtmpv.tests.model.properties;
 
 import static org.gwtmpv.model.properties.NewProperty.booleanProperty;
 import static org.gwtmpv.model.properties.NewProperty.integerProperty;
@@ -14,11 +14,12 @@ import org.gwtmpv.model.properties.Property;
 import org.gwtmpv.model.properties.StringProperty;
 import org.gwtmpv.model.validation.rules.Range;
 import org.gwtmpv.model.values.DerivedValue;
+import org.gwtmpv.tests.model.validation.rules.AbstractRuleTest;
 import org.gwtmpv.widgets.StubHasValue;
 import org.junit.Before;
 import org.junit.Test;
 
-public class DerivedRulesTest extends AbstractRuleTest {
+public class DerivedPropertiesTest extends AbstractRuleTest {
 
   public static class Foo {
     public StringProperty name = stringProperty("name").max(10);
