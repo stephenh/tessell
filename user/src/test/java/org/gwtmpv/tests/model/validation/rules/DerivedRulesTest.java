@@ -1,6 +1,7 @@
 package org.gwtmpv.tests.model.validation.rules;
 
 import static org.gwtmpv.model.properties.NewProperty.booleanProperty;
+import static org.gwtmpv.model.properties.NewProperty.integerProperty;
 import static org.gwtmpv.model.properties.NewProperty.stringProperty;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -99,6 +100,22 @@ public class DerivedRulesTest extends AbstractRuleTest {
     logic.addPropertyChangedHandler(c);
 
     parent.set("asdf");
+    assertThat(c.count, is(1));
+  }
+
+  @Test
+  public void implicitDepends() {
+    final IntegerProperty a = integerProperty("a", 1);
+    final IntegerProperty b = integerProperty(new DerivedValue<Integer>("b") {
+      public Integer get() {
+        return a.get() == null ? null : a.get() + 3;
+      }
+    });
+
+    final CountChanged<Integer> c = new CountChanged<Integer>();
+    b.addPropertyChangedHandler(c);
+
+    a.set(2);
     assertThat(c.count, is(1));
   }
 

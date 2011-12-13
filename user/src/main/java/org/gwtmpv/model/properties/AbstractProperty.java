@@ -4,6 +4,7 @@ import static org.gwtmpv.util.ObjectUtils.eq;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -16,16 +17,22 @@ import org.gwtmpv.model.validation.events.RuleUntriggeredEvent;
 import org.gwtmpv.model.validation.events.RuleUntriggeredHandler;
 import org.gwtmpv.model.validation.rules.Required;
 import org.gwtmpv.model.validation.rules.Rule;
+import org.gwtmpv.model.values.DerivedValue;
 import org.gwtmpv.model.values.Value;
 import org.gwtmpv.util.Inflector;
 
-import com.google.gwt.event.shared.*;
+import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.event.shared.EventHandler;
+import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.GwtEvent.Type;
+import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.event.shared.SimplerEventBus;
 
 /** Provides most of the validation/derived/etc. implementation guts of {@link Property}. */
 public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> implements Property<P> {
 
   private static final Logger log = Logger.getLogger("org.gwtmpv.model");
+  private static List<Property<?>> implicitUpstream = null;
   // handlers
   private final EventBus handlers = new SimplerEventBus();
   // other properties that are validated off of our value
@@ -45,7 +52,22 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
 
   public AbstractProperty(final Value<P> value) {
     this.value = value;
-    lastValue = copyLastValue(value.get());
+    if (value instanceof DerivedValue) {
+      // If a DerivedValue, turn on implicitUpstream, which will watch for any properties
+      // we evaluate while calling value.get for lastValue purposes.
+      List<Property<?>> oldUpstream = implicitUpstream;
+      implicitUpstream = new ArrayList<Property<?>>();
+      P tempValue = value.get();
+      List<Property<?>> ourUpstream = new ArrayList<Property<?>>(implicitUpstream);
+      implicitUpstream = oldUpstream;
+      // Now continue with copyLastValue and then act upon ourUpstream
+      lastValue = copyLastValue(tempValue);
+      for (Property<?> upstream : ourUpstream) {
+        upstream.addDerived(this);
+      }
+    } else {
+      lastValue = copyLastValue(value.get());
+    }
     RuleHandler ruleHandler = new RuleHandler();
     addRuleTriggeredHandler(ruleHandler);
     addRuleUntriggeredHandler(ruleHandler);
@@ -53,6 +75,9 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
 
   @Override
   public P get() {
+    if (implicitUpstream != null && !implicitUpstream.contains(this)) {
+      implicitUpstream.add(this);
+    }
     return value.get();
   }
 
