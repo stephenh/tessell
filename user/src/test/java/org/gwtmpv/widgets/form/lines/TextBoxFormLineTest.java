@@ -41,11 +41,11 @@ public class TextBoxFormLineTest extends AbstractFormPresenterTest {
       "<div class=\"lines\"><ol>",
       "<li>",
       "<div class=\"label\"><label for=\"p-firstName\">First Name</label></div>",
-      "<div class=\"value\"><div id=\"mpv-hb-1\"></div><div class=\"errors\"><div id=\"mpv-hb-2\"></div></div></div>",
+      "<div class=\"value\"><div id=\"mpv-hb-3\"></div><div class=\"errors\"><div id=\"mpv-hb-4\"></div></div></div>",
       "</li>",
       "<li>",
       "<div class=\"label\"><label for=\"p-lastName\">Last Name</label></div>",
-      "<div class=\"value\"><div id=\"mpv-hb-3\"></div><div class=\"errors\"><div id=\"mpv-hb-4\"></div></div></div>",
+      "<div class=\"value\"><div id=\"mpv-hb-5\"></div><div class=\"errors\"><div id=\"mpv-hb-6\"></div></div></div>",
       "</li>",
       "</ol></div>",
       "</div>");
