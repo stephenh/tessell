@@ -18,6 +18,8 @@ To follow along using Eclipse, you can:
 * Import the project into Eclipse
 * Run the `gwt-hack` launch and it should start up
 
+For setting up gwt-mpv within an existing project and other discussion about IDE/build issues, see [getting started](./gettingstarted.html).
+
 A View
 ------
 
