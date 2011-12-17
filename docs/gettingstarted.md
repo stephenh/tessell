@@ -1,19 +1,19 @@
 ---
 layout: default
-title: Tutorial
+title: Getting Started
 ---
 
 Getting Started
 ===============
 
-This covers how to setup gwt-mpv within an existing GWT application. It covers the IDE/build setup. For more information about all functionality, see the [tutorial](./tutorial.html) and other docs.
+This covers how to setup gwt-mpv within an existing GWT application, specifically the IDE/build setup. For more information about actual functionality, see the [tutorial](./tutorial.html) and other docs.
 
 Assumptions
 -----------
 
 This assumes you have an existing GWT application and build environment of your choice setup (Ant/Maven/etc.).
 
-For an existing GWT application to base this Getting Started doc on, I used the "New Web Application Project" in Eclipse and choose:
+For an existing GWT application to base this Getting Started doc on, I used the "New Web Application Project" in Eclipse and chose:
 
 * Project name: "sample"
 * Package: "com.business.sample"
@@ -102,13 +102,17 @@ To setup view generation, you'll need:
        gen/com/business/sample/client/resources/AppResourcesUtil.java
    {: class=brush:plain}
 
-6. Now if you create a file, e.g. `com/business/sample/client/views/Foo.ui.xml`, you should see `IsFooView` created.
+6. Check `.externalToolBuilders/gwtmpv.launch` into your repository.
+
+   This means anyone else checking the project out of your repository should get the "run gwt-mpv on save" setup out-of-the-box and not have to go through this setup again.
+
+7. Now if you create a file, e.g. `com/business/sample/client/views/Foo.ui.xml`, you should see `IsFooView` created.
 
        src/com/business/sample/client/views/Foo.ui.xml
        gen/com/business/sample/client/views/Foo-gen.ui.xml
    {: class=brush:plain}
 
-7. You can create a presenter, e.g. `com/business/sample/client/app/FooPresenter.java`:
+8. You can create a presenter, e.g. `com/business/sample/client/app/FooPresenter.java`:
 
        public class FooPresenter extends BasicPresenter<IsFooView> {
          public FooPresenter() {
@@ -117,7 +121,7 @@ To setup view generation, you'll need:
        }
    {: class=brush:java}
 
-8. In your `onModuleLoad`, initiate the `AppViews` provider and then use your presenter:
+9. In your `onModuleLoad`, initiate the `AppViews` provider and then use your presenter:
 
        AppViews.setProvider(new GwtViewsProvider());
 
@@ -133,7 +137,33 @@ For your build environment (Maven/Ant), you'll have to call the same `Generator`
 Setting up Annotation Processors
 --------------------------------
 
-For `@GenPlace` and `@GenDispatch`. Todo.
+gwt-mpv usages annotation processors for generating some non-view boilerplate, specifically places (`@GenPlace`) and dispatch DTOs (`@GenDispatch`).
+
+To configure the annotation processors:
+
+1. Add a dependency on `gwt-mpv-apt`:
+
+       <dependency org="org.gwtmpv" name="gwt-mpv-apt" rev="1.12" conf="provided,sources"/>
+   {: class=brush:xml}
+
+2. In Eclipse, right click on the project, select properties
+
+3. Go to Java Compiler, Annotation Processing and:
+   * Select "Enable project specific settings"
+   * Select "Enable annotation processing"
+   * Set the "Generated source directory" to `gen`
+
+4. Go to Java Compiler, Annotation Processing, Factory Path and:
+   * Select "Enable project specific settings"
+   * Select "Add JARs"
+   * Find `gwt-mpv-apt.jar` in your workspace
+   * Click OK
+
+5. Click OK 
+
+6. Check `.factorypath` and `.settings/org.eclipse.jdt.apt.core.prefs` into your repository, then other users will get this configuration automatically.
+
+7. For Ant/`javac`, just ensure the `gwt-mpv-apt.jar` is on the compilation classpath, it will find it automatically.
 
 Setting up Unit Testing
 -----------------------
