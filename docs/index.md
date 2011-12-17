@@ -20,25 +20,31 @@ gwt-mpv has three main features:
 * [Rich models](./richmodels.html) to make your application more declarative and less inner-class heavy
 * [Dispatch](./dispatch.html)-style server/client AJAX communication
 
-Download
---------
+gwt-mpv does *not*:
 
-The latest release of gwt-mpv can be found in the joist maven repo:
+* Provide extensive out-of-the-box widgets or look & feel (e.g. ExtGWT).
 
-* [http://repo.joist.ws](http://repo.joist.ws/)
-
-E.g. see the [gwt-mpv-user](http://repo.joist.ws/org/gwtmpv/gwt-mpv-user/) directory.
-
-Changes
--------
-
-Following the [gwt-mpv](https://github.com/stephenh/gwt-mpv) github project is the best way to stay in the loop on changes.
+  The assumption is that your app will have it's own design, likely driven from a designer's mock up where you convert the initial static CSS/HTML into GWT's CSS/UiBinder structure.
 
 Community
 ---------
 
 * [gwt-mpv mailing list](https://groups.google.com/forum/#!forum/gwtmpv)
 * [todomvc ported to gwt-mpv blog post](http://www.draconianoverlord.com/2011/12/10/todomvc-in-gwt-mpv.html)
+
+Download
+--------
+
+The latest release of gwt-mpv can be found in the joist maven repo:
+
+* [http://repo.joist.ws](http://repo.joist.ws/) (specifically [here](http://repo.joist.ws/org/gwtmpv/gwt-mpv-user/))
+
+For integrating gwt-mpv into your project, see [getting started](gettingstarted.html).
+
+Changes
+-------
+
+Following the [gwt-mpv](https://github.com/stephenh/gwt-mpv) github project is the best way to stay in the loop on changes.
 
 Credits
 -------
@@ -53,6 +59,5 @@ Foot Notes
 `*` Yes, the project name gwt-mpv purposefully reorders the "MVP" acronym because: `gwt-mvp` is too generic, and the view should be the dumbest part of your app, so the "V" should come last.
 
 Also note that Dolphin Smalltalk called it's framework "model presenter view".
-
 
 
