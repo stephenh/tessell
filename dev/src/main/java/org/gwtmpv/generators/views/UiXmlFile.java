@@ -260,7 +260,7 @@ class UiXmlFile {
       .getAbsolutePath()
       .replace(viewGenerator.input.getPath() + File.separator, "")
       .replace(".ui.xml", "")
-      .replace("/", "."));
+      .replace(File.separatorChar, '.'));
   }
 
   private String appendViewIfNeeded(String input) {

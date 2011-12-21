@@ -38,8 +38,13 @@ public class MessagesStubGenerator {
     final String packageName = fullName.substring(0, lastDot);
     final String simpleName = fullName.substring(lastDot + 1);
 
-    final File sourcePath = new File(new File(sourceDir).getCanonicalFile() + File.separator
-        + packageName.replace('.', File.separatorChar) + File.separator + "Stub" + simpleName + ".java");
+    final File sourcePath = new File(new File(sourceDir).getCanonicalFile()
+      + File.separator
+      + packageName.replace('.', File.separatorChar)
+      + File.separator
+      + "Stub"
+      + simpleName
+      + ".java");
 
     new MessagesStubGenerator(simpleName, "Stub" + simpleName, packageName, resourceBundle, sourcePath).generate();
   }
@@ -47,8 +52,12 @@ public class MessagesStubGenerator {
   private final File resourceBundle;
   private final SourceWriter composer;
 
-  public MessagesStubGenerator(final String className, final String stubName, final String packageName,
-                               final File resourceBundle, final File targetLocation) throws IOException {
+  public MessagesStubGenerator(
+    final String className,
+    final String stubName,
+    final String packageName,
+    final File resourceBundle,
+    final File targetLocation) throws IOException {
     this.resourceBundle = resourceBundle;
 
     final ClassSourceFileComposerFactory factory = new ClassSourceFileComposerFactory(packageName, stubName);
@@ -90,12 +99,10 @@ public class MessagesStubGenerator {
 
   // copy/paste from GWT
   private static File urlToResourceFile(final String className) throws IOException {
-    if (className.endsWith(".java") || className.endsWith(".properties") || className.endsWith(".class")
-        || className.indexOf(File.separator) > 0) {
-      throw new IllegalArgumentException(
-          "class '"
-              + className
-              + "'should not contain an extension. \"com.google.gwt.SomeClass\" is an example of a correctly formed class string");
+    if (className.endsWith(".java") || className.endsWith(".properties") || className.endsWith(".class") || className.indexOf(File.separator) > 0) {
+      throw new IllegalArgumentException("class '"
+        + className
+        + "'should not contain an extension. \"com.google.gwt.SomeClass\" is an example of a correctly formed class string");
     }
     final String resourcePath = className.replace('.', '/') + ".properties";
     ClassLoader cl = Thread.currentThread().getContextClassLoader();
@@ -104,8 +111,11 @@ public class MessagesStubGenerator {
     }
     final URL r = cl.getResource(resourcePath);
     if (r == null) {
-      throw new FileNotFoundException("Could not find the resource '" + resourcePath + " matching '" + className
-          + "' did you remember to add it to your classpath?");
+      throw new FileNotFoundException("Could not find the resource '"
+        + resourcePath
+        + " matching '"
+        + className
+        + "' did you remember to add it to your classpath?");
     }
     final File resourceFile = new File(URLDecoder.decode(r.getPath(), "utf-8"));
     return resourceFile;

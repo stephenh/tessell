@@ -212,17 +212,18 @@ public class ResourcesGenerator {
 
   private String getRelativePath(File file) {
     String path = file.getAbsolutePath();
+    String s = File.separator;
     if (path.contains(inputDirectory.getAbsolutePath())) {
-      return path.replace(inputDirectory.getAbsolutePath() + "/" + packageName.replace(".", "/") + "/", "");
+      return path.replace(inputDirectory.getAbsolutePath() + s + packageName.replace(".", s) + s, "");
     } else {
-      return path.replace(outputDirectory.getAbsolutePath() + "/" + packageName.replace(".", "/") + "/", "");
+      return path.replace(outputDirectory.getAbsolutePath() + s + packageName.replace(".", s) + s, "");
     }
   }
 
   @SuppressWarnings("unchecked")
   private Collection<File> getFilesInInputDirectory() {
     String[] exts = new String[] { "css", "png", "gif", "jpg", "html", "js", "htc" };
-    File packageDirectory = new File(inputDirectory, packageName.replace(".", "/"));
+    File packageDirectory = new File(inputDirectory, packageName.replace(".", File.separator));
     return FileUtils.listFiles(packageDirectory, exts, true);
   }
 

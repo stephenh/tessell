@@ -20,7 +20,7 @@ public class Cleanup {
 
   @SuppressWarnings("unchecked")
   public void watchPackage(String packageName) {
-    File packageDirectory = new File(outputDirectory, packageName.replace(".", "/"));
+    File packageDirectory = new File(outputDirectory, packageName.replace(".", File.separator));
     if (packageDirectory.exists()) {
       for (File file : (List<File>) FileUtils.listFiles(packageDirectory, null, true)) {
         filesAssumedBad.add(file.getAbsolutePath());
@@ -29,7 +29,7 @@ public class Cleanup {
   }
 
   public void markTypeOkay(String className) {
-    filesAssumedBad.remove(new File(outputDirectory, className.replace(".", "/") + ".java").getAbsolutePath());
+    filesAssumedBad.remove(new File(outputDirectory, className.replace(".", File.separator) + ".java").getAbsolutePath());
   }
 
   public void markOkay(File file) {
