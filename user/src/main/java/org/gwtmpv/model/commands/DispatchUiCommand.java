@@ -11,7 +11,15 @@ import org.gwtmpv.model.properties.BooleanProperty;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-/** Maintains the state of a {@code gwt-dispatch}-style UiCommand. */
+/**
+ * Maintains the state of a {@code gwt-dispatch}-style UiCommand.
+ *
+ * Along with {@link UiCommand}'s {@code enabled} property, this adds an {@code active}
+ * property that denotes whether a dispatch command has already fired an action and is
+ * waiting for a result.
+ *
+ * This allows conditional action on the command's activeness, e.g. disabling buttons.
+ */
 public abstract class DispatchUiCommand<A extends Action<R>, R extends Result> extends UiCommand {
 
   private final OutstandingDispatchAsync async;
@@ -25,11 +33,23 @@ public abstract class DispatchUiCommand<A extends Action<R>, R extends Result> e
     this(async);
   }
 
+  /**
+   * Executes the UI command, first triggering any "only if" validation,
+   * and then calling {@code doExecute} if they all pass.
+   *
+   * @throws IllegalStateException if the command is disabled
+   * @throws IllegalStateException if the command is already active
+   */
   @Override
-  protected final void doExecute() {
+  public void execute() {
     if (active.isTrue()) {
       throw new IllegalStateException("Command is already executing");
     }
+    super.execute();
+  }
+
+  @Override
+  protected final void doExecute() {
     A action = createAction();
     if (action != null) {
       active.set(true);
@@ -49,6 +69,11 @@ public abstract class DispatchUiCommand<A extends Action<R>, R extends Result> e
     }
   }
 
+  /** @return whether the command is currently active */
+  public BooleanProperty active() {
+    return active;
+  }
+
   /** Implemented by subclasses to create the action object. */
   protected abstract A createAction();
 
@@ -58,11 +83,6 @@ public abstract class DispatchUiCommand<A extends Action<R>, R extends Result> e
   /** Fires a {@link DispatchUnhandledFailureEvent} on failures, can be overridden by subclasses if needed. */
   protected void onFailure(Throwable caught) {
     async.unhandledFailure(caught);
-  }
-
-  /** @return whether the call is currently active */
-  public BooleanProperty active() {
-    return active;
   }
 
 }
