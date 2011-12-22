@@ -30,11 +30,12 @@ public abstract class UiCommand implements HasRuleTriggers {
   private final ArrayList<Property<Boolean>> onlyIf = new ArrayList<Property<Boolean>>();
 
   public void execute() {
-    if (enabled.isTrue()) {
-      clearErrors();
-      if (canExecute()) {
-        doExecute();
-      }
+    if (!enabled.isTrue()) {
+      throw new IllegalStateException("Command is disabled");
+    }
+    clearErrors();
+    if (canExecute()) {
+      doExecute();
     }
   }
 

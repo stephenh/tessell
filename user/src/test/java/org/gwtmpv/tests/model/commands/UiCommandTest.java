@@ -3,6 +3,7 @@ package org.gwtmpv.tests.model.commands;
 import static org.gwtmpv.model.properties.NewProperty.booleanProperty;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,6 +81,18 @@ public class UiCommandTest extends AbstractRuleTest {
     p2.set(true);
     c.execute();
     assertThat(c.getExecutions(), is(1));
+  }
+
+  @Test
+  public void executeFailsIfDisabled() {
+    DummyUiCommand c = new DummyUiCommand();
+    c.enabled().set(false);
+    try {
+      c.execute();
+      fail();
+    } catch (IllegalStateException ise) {
+      assertThat(ise.getMessage(), is("Command is disabled"));
+    }
   }
 
   private final class DummyHandlers implements HasHandlers {
