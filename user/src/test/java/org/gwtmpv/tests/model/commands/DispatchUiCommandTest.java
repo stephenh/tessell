@@ -4,6 +4,7 @@ import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.fail;
 
 import org.gwtmpv.dispatch.client.util.OutstandingDispatchAsync;
 import org.gwtmpv.dispatch.client.util.StubOutstandingDispatchAsync;
@@ -42,19 +43,25 @@ public class DispatchUiCommandTest extends AbstractRuleTest {
   }
 
   @Test
-  public void doesNotReExecuteWhenActive() {
+  public void executeFailsWhenAlreadyActive() {
     DummyUiCommand command = new DummyUiCommand(async);
+    // initial execute is find
     command.execute();
     assertThat(command.createActionCalls, is(1));
 
-    command.execute();
-    assertThat(command.createActionCalls, is(1));
+    try {
+      command.execute();
+      fail();
+    } catch (IllegalStateException ise) {
+      assertThat(ise.getMessage(), is("Command is already executing"));
+      assertThat(command.createActionCalls, is(1));
+    }
 
-    // after the call comes back, we can execute again
+    // when the call finally comes back
     async.getCalls().get(0).callback.onFailure(null);
+    // now we can execute again
     command.execute();
     assertThat(command.createActionCalls, is(2));
-
   }
 
   /** Fails depending on the instance variable {@code fail}. */

@@ -28,7 +28,7 @@ public abstract class DispatchUiCommand<A extends Action<R>, R extends Result> e
   @Override
   protected final void doExecute() {
     if (active.isTrue()) {
-      return;
+      throw new IllegalStateException("Command is already executing");
     }
     A action = createAction();
     if (action != null) {
