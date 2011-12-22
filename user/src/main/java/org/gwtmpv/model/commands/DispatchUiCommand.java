@@ -8,7 +8,6 @@ import org.gwtmpv.dispatch.shared.Action;
 import org.gwtmpv.dispatch.shared.Result;
 import org.gwtmpv.model.properties.BooleanProperty;
 
-import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 /**
@@ -27,10 +26,6 @@ public abstract class DispatchUiCommand<A extends Action<R>, R extends Result> e
 
   public DispatchUiCommand(OutstandingDispatchAsync async) {
     this.async = async;
-  }
-
-  public DispatchUiCommand(EventBus eventBus, OutstandingDispatchAsync async) {
-    this(async);
   }
 
   /**
