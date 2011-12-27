@@ -115,8 +115,9 @@ This allows fairly quick, easy testing of dispatch-style actions and results wit
 Request Factory
 ---------------
 
-[RequestFactory](http://code.google.com/webtoolkit/doc/latest/DevGuideRequestFactory.html) is another alternative to traditional GWT-RPC. Nothing in gwt-mpv prevents users from using RequestFactory, in fact it might work quite well, it just has not been actively explored yet.
+[RequestFactory](http://code.google.com/webtoolkit/doc/latest/DevGuideRequestFactory.html) is another alternative to traditional GWT-RPC.
 
+Nothing in gwt-mpv prevents users from using RequestFactory, in fact it might work quite well, it just has not been actively explored yet.
 
 
 

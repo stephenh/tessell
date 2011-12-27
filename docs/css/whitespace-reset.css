@@ -1,0 +1,24 @@
+/*
+----------------------------------------
+Tantek Celik's Whitepsace Reset
+     Author:  	Tantek Celik
+    Version:  	(CC) 2004 Some Rights Reserved - http://creativecommons.org/licenses/by/2.0
+Description:	Resets default styling of common browsers to a common base
+----------------------------------------
+*/
+
+* { min-height: 1px; }
+
+:link,:visited {
+	text-decoration:none; }
+ul, ol {
+	list-style:none; }
+h1,h2,h3,h4,h5,h6,pre,code {
+	font-size:1em; }
+ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,body,html,p,blockquote,fieldset,input {
+	margin:0;
+	padding:0; }
+a img,:link img,:visited img {
+	border:none; }
+address {
+	font-style:normal; }

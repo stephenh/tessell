@@ -18,17 +18,15 @@ This means you can write tests that:
 
 As a short example, [ClientPresenterTest][ClientPresenterTest] from the [gwt-hack](https://github.com/stephenh/gwt-hack) sample project includes a test of what happens on key up:
 
-      @Test
-      public void keyUpChangesNameLeft() {
-        dto.name = "foo";
-        presenter.bind();
-        assertThat(view.name().getText(), is("foo"));
-        assertThat(view.nameLeft().getText(), is("47 left"));
+    @Test
+    public void keyUpChangesNameLeft() {
+      dto.name = "foo";
+      presenter.bind();
+      assertThat(view.name().getText(), is("foo"));
+      assertThat(view.nameLeft().getText(), is("47 left"));
 
-        view.name().press('b');
-        assertThat(view.nameLeft().getText(), is("46 left"));
-      }
-
+      view.name().press('b');
+      assertThat(view.nameLeft().getText(), is("46 left"));
     }
 {: class=brush:java}
 

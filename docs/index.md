@@ -1,30 +1,47 @@
 ---
-layout: default
+layout: root
 title: gwt-mpv
 ---
 
-gwt-mpv
-=======
+<div id="featurecontainer">
+  <div id="maincontainer">
+    <h2>Tessell is a GWT application framework</h2>
 
-gwt-mpv is an application framework for writing GWT applications. It enables you to:
+    <ul>
+			<li>Follows a Model View Presenter architecture</li>
+      <li>Less boilerplate <small>(10x less LOC than hand-coded MVP)</small></li>
+    </ul>
 
-* Write GWT applications with lots of really fast unit tests
-* Follow a Model View Presenter (MVP`*`) architecture without boilerplate (**10x** less programmer-written LOC than hand-coded MVP)
+    <div class="leftcol">
+      <h2>Features</h2>
+      <ul>
+        <li><a href="./viewgeneration.html">View generation</a> of the MVP/UiBinder interfaces/implementations that allow for fast, DOM-decoupled unit tests but that suck to code by hand</li>
+        <li><a href="./richmodels.html">Rich models</a> to make your application's presenter/business logic more declarative and have less spaghetti/inner class code</li>
+        <li><a href="./dispatch.html">Dispatch</a>-style server/client AJAX communication</li>
+        <li><a href="./stubs.html">Stubs</a> for awesome, out-of-the-box <a href="./tests.html">tests</a></li>
+        <li>Conventions for <a href="forms.html">forms</a>, <a href="rowtable.html">row tables</a>, and <a href="celltable.html">cell tables</a></li>
+      </ul>
+    </div>
 
-Features
---------
+    <div class="rightcol">
+      <h2>Download</h2>
 
-gwt-mpv has three main features:
+      <p>gwt-mpv is available via Ivy/Maven:</p>
 
-* [View generation](./viewgeneration.html) uses `ui.xml` files to generate all of the view/display interface and view/UiBinder implementation boilerplate needed for fast, DOM-decoupled unit tests
-* [Rich models](./richmodels.html) to make your application more declarative and less inner-class heavy
-* [Dispatch](./dispatch.html)-style server/client AJAX communication
+      <ul>
+        <li>Url: <a href="http://repo.joist.ws"><code>http://repo.joist.ws</code></a></li>
+        <li>Org: <code>org.gwtmpv</code></li>
+        <li>Modules: <code>gwt-mpv-user</code> and <code>gwt-mpv-dev</code></li>
+      </ul>
 
-gwt-mpv does *not*:
+      <p>For integrating gwt-mpv into your project, see <a href="./gettingstarted.html">getting started</a>.</p>
+    </div>
 
-* Provide extensive out-of-the-box widgets or look & feel (e.g. ExtGWT).
+  </div>
+</div>
 
-  The assumption is that your app will have it's own design, likely driven from a designer's mock up where you convert the initial static CSS/HTML into GWT's CSS/UiBinder structure.
+<div id="contentcontainer">
+  <div id="maincontainer" markdown="1">
 
 Community
 ---------
@@ -32,19 +49,12 @@ Community
 * [gwt-mpv mailing list](https://groups.google.com/forum/#!forum/gwtmpv)
 * [todomvc ported to gwt-mpv blog post](http://www.draconianoverlord.com/2011/12/10/todomvc-in-gwt-mpv.html)
 
-Download
---------
+Open Source
+-----------
 
-The latest release of gwt-mpv can be found in the joist maven repo:
+Tessell is licensed under the Apache Software License and available on github: [gwt-mpv](https://github.com/stephenh/gwt-mpv).
 
-* [http://repo.joist.ws](http://repo.joist.ws/) (specifically [here](http://repo.joist.ws/org/gwtmpv/gwt-mpv-user/))
-
-For integrating gwt-mpv into your project, see [getting started](gettingstarted.html).
-
-Changes
--------
-
-Following the [gwt-mpv](https://github.com/stephenh/gwt-mpv) github project is the best way to stay in the loop on changes.
+Following the github project is also the best way to stay in the loop on changes.
 
 Credits
 -------
@@ -53,11 +63,6 @@ Credits
 * [gwt-pectin](http://code.google.com/p/gwt-pectin/) inspired gwt-mpv's binding DSL, which was previously very ugly
 * [gwt-dispatch](http://code.google.com/p/gwt-dispatch/) for the initial implementation of the dispatch pattern from Ray Ryan's I/O talk
 
-Foot Notes
-----------
-
-`*` Yes, the project name gwt-mpv purposefully reorders the "MVP" acronym because: `gwt-mvp` is too generic, and the view should be the dumbest part of your app, so the "V" should come last.
-
-Also note that Dolphin Smalltalk called it's framework "model presenter view".
-
+  </div>
+</div>
 
