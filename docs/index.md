@@ -1,6 +1,6 @@
 ---
 layout: root
-title: gwt-mpv
+title: Tessell
 ---
 
 <div id="featurecontainer">
@@ -26,15 +26,15 @@ title: gwt-mpv
     <div class="rightcol">
       <h2>Download</h2>
 
-      <p>gwt-mpv is available via Ivy/Maven:</p>
+      <p>Tessell is available via Ivy/Maven:</p>
 
       <ul>
         <li>Url: <a href="http://repo.joist.ws"><code>http://repo.joist.ws</code></a></li>
-        <li>Org: <code>org.gwtmpv</code></li>
-        <li>Modules: <code>gwt-mpv-user</code> and <code>gwt-mpv-dev</code></li>
+        <li>Org: <code>org.tessell</code></li>
+        <li>Modules: <code>tessell-user</code> and <code>tessell-dev</code></li>
       </ul>
 
-      <p>For integrating gwt-mpv into your project, see <a href="./gettingstarted.html">getting started</a>.</p>
+      <p>For integrating Tessell into your project, see <a href="./gettingstarted.html">getting started</a>.</p>
     </div>
 
   </div>
@@ -46,21 +46,21 @@ title: gwt-mpv
 Community
 ---------
 
-* [gwt-mpv mailing list](https://groups.google.com/forum/#!forum/gwtmpv)
-* [todomvc ported to gwt-mpv blog post](http://www.draconianoverlord.com/2011/12/10/todomvc-in-gwt-mpv.html)
+* [Tessell mailing list](https://groups.google.com/forum/?#!forum/tessell)
+* [todomvc ported to Tessell blog post](http://www.draconianoverlord.com/2011/12/10/todomvc-in-gwt-mpv.html)
 
 Open Source
 -----------
 
-Tessell is licensed under the Apache Software License and available on github: [gwt-mpv](https://github.com/stephenh/gwt-mpv).
+Tessell is licensed under the Apache Software License and available on github: [tessell](https://github.com/stephenh/tessell).
 
 Following the github project is also the best way to stay in the loop on changes.
 
 Credits
 -------
 
-* [Bizo](http://www.bizo.com) for their initial and continued support of `gwt-mpv`
-* [gwt-pectin](http://code.google.com/p/gwt-pectin/) inspired gwt-mpv's binding DSL, which was previously very ugly
+* [Bizo](http://www.bizo.com) for their initial and continued support
+* [gwt-pectin](http://code.google.com/p/gwt-pectin/) inspired the binding DSL, which was previously very ugly
 * [gwt-dispatch](http://code.google.com/p/gwt-dispatch/) for the initial implementation of the dispatch pattern from Ray Ryan's I/O talk
 
   </div>

@@ -1,4 +1,4 @@
----
+-GWT/--
 layout: default
 title: Stubs
 ---
@@ -6,7 +6,7 @@ title: Stubs
 Stubs
 =====
 
-Stubs are not a part of traditional MVP, but they are used extensively in `gwt-mpv`.
+Stubs are not a part of traditional MVP, but they are used extensively in Tessell.
 
 Their purpose is to provide "dummy browser" behavior in just one place (each stub widget) and not repeated for every view in your application (or in every test in your application as mock specifications).
 
@@ -16,22 +16,22 @@ To do this, each `IsXxx` widget interface (see [View Generation](./viewgeneratio
 
 2. A `StubXxx` implementation. This is pure Java so can run in fast unit tests.
 
-gwt-mpv provides `GwtXxx` and `StubXxx` implementations out-of-the-box for most GWT widgets. For an example trio see: [IsTextBox][IsTextBox], [GwtTextBox][GwtTextBox] and [StubTextBox][StubTextBox].
+Tessell provides `GwtXxx` and `StubXxx` implementations out-of-the-box for most GWT widgets. For an example trio see: [IsTextBox][IsTextBox], [GwtTextBox][GwtTextBox] and [StubTextBox][StubTextBox].
 
 Test Infrastructure For Free
 ----------------------------
 
-Since gwt-mpv is already generating the `XxxView` implementations for each `ui.xml` file in your project, it also generates a `StubXxxView` for testing.
+Since Tessell is already generating the `XxxView` implementations for each `ui.xml` file in your project, it also generates a `StubXxxView` for testing.
 
 The real `XxxView` will have `@UiField`-annotated fields of the real GWT widgets used at production time, just like you would code by hand, e.g.:
 
     @UiField(provided = true)
-    final TextBox name = new org.gwtmpv.widgets.GwtTextBox();
+    final TextBox name = new org.tessell.widgets.GwtTextBox();
 {: class=brush:java}
 
 While the `StubXxxView` will simply instantiate the `StubXxx` version of each widget in the `ui.xml` file to use at test time, e.g.:
 
-    final StubTextBox name = new org.gwtmpv.widgets.StubTextBox();
+    final StubTextBox name = new org.tessell.widgets.StubTextBox();
 {: class=brush:java}
 
 These "for free" `StubXxxView` classes make testing very easy to do--seeing the [Tests](./tests.html) page for examples.
@@ -63,7 +63,7 @@ For more on stubs, see:
 * Martin Fowler's article [Mocks aren't Stubs](http://martinfowler.com/articles/mocksArentStubs.html), and
 * My own post [Why I Don't Like Mocks](http://www.draconianoverlord.com/2010/07/09/why-i-dont-like-mocks.html)
 
-[IsTextBox]: http://github.com/stephenh/gwt-mpv/blob/master/user/src/main/java/org/gwtmpv/widgets/IsTextBox.java
-[GwtTextBox]: http://github.com/stephenh/gwt-mpv/blob/master/user/src/main/java/org/gwtmpv/widgets/GwtTextBox.java
-[StubTextBox]: http://github.com/stephenh/gwt-mpv/blob/master/user/src/main/java/org/gwtmpv/widgets/StubTextBox.java
+[IsTextBox]: http://github.com/stephenh/tessell/blob/master/user/src/main/java/org/tessell/widgets/IsTextBox.java
+[GwtTextBox]: http://github.com/stephenh/tessell/blob/master/user/src/main/java/org/tessell/widgets/GwtTextBox.java
+[StubTextBox]: http://github.com/stephenh/tessell/blob/master/user/src/main/java/org/tessell/widgets/StubTextBox.java
 

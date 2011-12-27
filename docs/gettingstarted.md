@@ -6,7 +6,7 @@ title: Getting Started
 Getting Started
 ===============
 
-This covers how to setup gwt-mpv within an existing GWT application, specifically the IDE/build setup. For more information about actual functionality, see the [tutorial](./tutorial.html) and other docs.
+This covers how to setup Tessell within an existing GWT application, specifically the IDE/build setup. For more information about actual functionality, see the [tutorial](./tutorial.html) and other docs.
 
 Assumptions
 -----------
@@ -30,12 +30,12 @@ Setting up View Generation
 
 To setup view generation, you'll need:
 
-1. A dependency on `gwt-mpv-user.jar` and `gwt-mpv-dev.jar`.
+1. A dependency on `tessell-user.jar` and `tessell-dev.jar`.
 
    These can be downloaded from the [http://repo.joist.ws](http://repo.joist.ws) Maven repository. Personally, I use an `ivy.xml` file with:
 
-       <dependency org="org.gwtmpv" name="gwt-mpv-user" rev="1.2.7" conf="compile,sources"/>
-       <dependency org="org.gwtmpv" name="gwt-mpv-dev" rev="1.2.7" conf="provided,sources"/>
+       <dependency org="org.tessell" name="tessell-user" rev="1.2.7" conf="compile,sources"/>
+       <dependency org="org.tessell" name="tessell-dev" rev="1.2.7" conf="provided,sources"/>
    {: class=brush:xml}
 
    But you can use Maven or the jars directly if you want.
@@ -61,19 +61,19 @@ To setup view generation, you'll need:
 
 5. Setup a custom builder in Eclipse.
 
-   The custom builder will run the gwt-mpv code generator whenever your `ui.xml` files change. It does this by using a feature of Eclipse that will run a command line program anytime one of the files in a watched directory changes.
+   The custom builder will run the Tessell code generator whenever your `ui.xml` files change. It does this by using a feature of Eclipse that will run a command line program anytime one of the files in a watched directory changes.
 
    * In Eclipse, select the project, go to Properties
    * Select Builders, click New
    * Select Program
-   * For the name, gwtmpv
+   * For the name, `tessell`
    * On the Main tab, type:
      * Location: `${system_path:java}`
      * Working directory: `${workspace_loc:/sample}` (where "sample" is the name of your project)
      * Arguments:
 
            -cp "lib/*"
-           org.gwtmpv.generators.Generator
+           org.tessell.generators.Generator
            --inputDirectory src/
            --viewsPackageName com.business.sample.client.views
            --resourcesPackageName com.business.sample.client.resources
@@ -102,9 +102,9 @@ To setup view generation, you'll need:
        gen/com/business/sample/client/resources/AppResourcesUtil.java
    {: class=brush:plain}
 
-6. Check `.externalToolBuilders/gwtmpv.launch` into your repository.
+6. Check `.externalToolBuilders/tessell.launch` into your repository.
 
-   This means anyone else checking the project out of your repository should get the "run gwt-mpv on save" setup out-of-the-box and not have to go through this setup again.
+   This means anyone else checking the project out of your repository should get the "run Tessell on save" setup out-of-the-box and not have to go through this setup again.
 
 7. Now if you create a file, e.g. `com/business/sample/client/views/Foo.ui.xml`, you should see `IsFooView` created.
 
@@ -132,12 +132,12 @@ To setup view generation, you'll need:
 
 Eclipse should now be setup to generate views for you. For more information on writing presenters, see the [tutorial](./tutorial.html) and other docs.
 
-For your build environment (Maven/Ant), you'll have to call the same `Generator` class with the same classpath and arguments as we setup in the Eclipse custom builder. For Ant, you can see the [todomvc](https://github.com/stephenh/todomvc-gwtmpv) sample application.
+For your build environment (Maven/Ant), you'll have to call the same `Generator` class with the same classpath and arguments as we setup in the Eclipse custom builder. For Ant, you can see the [todomvc](https://github.com/stephenh/todomvc-tessell) sample application.
 
 Setting up Annotation Processors
 --------------------------------
 
-gwt-mpv usages annotation processors for generating some non-view boilerplate, specifically places (`@GenPlace`) and dispatch DTOs (`@GenDispatch`).
+Tessell usages annotation processors for generating some non-view boilerplate, specifically places (`@GenPlace`) and dispatch DTOs (`@GenDispatch`).
 
 To configure the annotation processors:
 
@@ -172,7 +172,7 @@ For unit tests, you can:
 
 1. Create a `FooPresenterTest.java`
 
-2. In a static initializer, setup gwt-mpv's stub views (so nothing tries to touch a DOM):
+2. In a static initializer, setup Tessell's stub views (so nothing tries to touch a DOM):
 
        static {
          StubWidgetsProvider.install();

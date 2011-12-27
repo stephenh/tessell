@@ -6,7 +6,7 @@ title: Rich Models
 Rich Models
 ===========
 
-gwt-mpv encourages rich, event-driven models.
+Tessell encourages rich, event-driven models.
 
 Rather than trying to keep view/model in sync via imperative programming (lots of inner classes), rich models enable declarative programming that can lead to more reliable UI behavior and succinct code.
 

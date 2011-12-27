@@ -6,7 +6,7 @@ title: View Generation
 View Generation
 ===============
 
-One of the main ways `gwt-mpv` reduces GWT/MVP-related boilerplate is by using UiBinder `ui.xml` files as the single source of the view and then generating the derivative boilerplate Java code.
+One of the main ways Tessell reduces MVP-related boilerplate is by using UiBinder `ui.xml` files as the single source of the view and then generating the derivative boilerplate Java code.
 
 This frees the developer from making tedious modifications to multiple files for each UI element.
 
@@ -153,13 +153,13 @@ One source of cruft is GWT's `HasXxx` interfaces (typically called "characterist
 
 It is tedious to add a new `Display` method and new `ClientView` method for each `HasXxx` interface (`HasValue`, `HasAllKeyHandlers`, `HasStyle`, etc.) the presenter requires when they all come from the same source widget (see `description`, `descriptionKeys`, and `descriptionStyle` in the above example).
 
-In gwt-mpv's opinion, the `HasXxx` interfaces are just a band-aid around the GWT widgets not having their own, specific interfaces--a better solution is to just add these missing, widget-specific interfaces and be done with it.
+In Tessell's opinion, the `HasXxx` interfaces are just a band-aid around the GWT widgets not having their own, specific interfaces--a better solution is to just add these missing, widget-specific interfaces and be done with it.
 
-This is what `gwt-mpv` does. For example, `Anchor` has `IsAnchor`, `TextBox` has `IsTextBox`, etc.
+This is what Tessell does. For example, `Anchor` has `IsAnchor`, `TextBox` has `IsTextBox`, etc.
 
 This also solves the very annoying problem that many GWT widget methods aren't in `HasXxx` interfaces at all. So you end up having to make them up, e.g. `HasStyle`.
 
-`IsXxx` widget interfaces are also the key to gwt-mpv's automation because the programmer no longer has to decide which `HasXxx` interfaces for each widget will be exposed--each widget in the `ui.xml` file is just exposed in the `Display` interface as its `IsXxx` equivalent.
+`IsXxx` widget interfaces are also the key to Tessell's automation because the programmer no longer has to decide which `HasXxx` interfaces for each widget will be exposed--each widget in the `ui.xml` file is just exposed in the `Display` interface as its `IsXxx` equivalent.
 
 The presenter can now access as few or as many widget methods as it needs without changing the `Display` or `ClientView` classes.
 
@@ -184,9 +184,9 @@ We can see what the `ui:field` bindable fields are (`heading`, `name`, `descript
 
 There is no reason a developer should have to manually copy this information over into 2 separate files (`ClientPresenter.Display` and `ClientView`). [DRY](http://c2.com/cgi/wiki?DontRepeatYourself).
 
-So gwt-mpv solves this with code generation. Not GWT compile-time/deferred-binding code generation, but programmer-time, click-the-button, the-IDE-sees-the-output code generation.
+So Tessell solves this with code generation. Not GWT compile-time/deferred-binding code generation, but programmer-time, click-the-button, the-IDE-sees-the-output code generation.
 
-By running `ant` or an Eclipse launch target (which Eclipse can run automatically on save), gwt-mpv will parse the `client.ui.xml` file and generate the interface, an implementation, and a stub for testing.
+By running `ant` or an Eclipse launch target (which Eclipse can run automatically on save), Tessell will parse the `client.ui.xml` file and generate the interface, an implementation, and a stub for testing.
 
 Here is the interface (generated):
 
@@ -213,13 +213,13 @@ And the implementation (generated):
         Element heading;
 
         @UiField(provided = true)
-        final TextBox name = new org.gwtmpv.widgets.GwtTextBox();
+        final TextBox name = new org.tessell.widgets.GwtTextBox();
 
         @UiField(provided = true)
-        final TextBox description = new org.gwtmpv.widgets.GwtTextBox();
+        final TextBox description = new org.tessell.widgets.GwtTextBox();
 
         @UiField(provided = true)
-        final SubmitButton submit = new org.gwtmpv.widgets.GwtSubmitButton();
+        final SubmitButton submit = new org.tessell.widgets.GwtSubmitButton();
 
         public ClientView() {
             setWidget(binder.createAndBindUi(this));
@@ -234,19 +234,19 @@ And the implementation (generated):
         }
 
         public IsElement heading() {
-            return new org.gwtmpv.widgets.GwtElement(heading);
+            return new org.tessell.widgets.GwtElement(heading);
         }
 
         public IsTextBox name() {
-            return (org.gwtmpv.widgets.IsTextBox) name;
+            return (org.tessell.widgets.IsTextBox) name;
         }
 
         public IsTextBox description() {
-            return (org.gwtmpv.widgets.IsTextBox) description;
+            return (org.tessell.widgets.IsTextBox) description;
         }
 
         public IsSubmitButton submit() {
-            return (org.gwtmpv.widgets.IsSubmitButton) submit;
+            return (org.tessell.widgets.IsSubmitButton) submit;
         }
 
         public static interface MyUiBinder extends UiBinder<HTMLPanel, ClientView> {
@@ -258,10 +258,10 @@ And the stub (generated):
 
     public class StubClientView extends StubWidget implements IsClientView {
 
-        private final StubIsElement heading = new org.gwtmpv.widgets.StubIsElement();
-        private final StubTextBox name = new org.gwtmpv.widgets.StubTextBox();
-        private final StubTextBox description = new org.gwtmpv.widgets.StubTextBox();
-        private final StubSubmitButton submit = new org.gwtmpv.widgets.StubSubmitButton();
+        private final StubIsElement heading = new org.tessell.widgets.StubIsElement();
+        private final StubTextBox name = new org.tessell.widgets.StubTextBox();
+        private final StubTextBox description = new org.tessell.widgets.StubTextBox();
+        private final StubSubmitButton submit = new org.tessell.widgets.StubSubmitButton();
 
         public StubClientView() {
             ensureDebugId("Client");
@@ -299,7 +299,7 @@ So, with the stub, it's ~90 lines of code generated from 8 lines of the `client.
 AppViews Interface
 ------------------
 
-To manage which view (`XxxView` or `StubXxxView`) should be used when your presenter needs it, gwt-mpv also generates an `AppViews` class with factory methods to create each of your views.
+To manage which view (`XxxView` or `StubXxxView`) should be used when your presenter needs it, Tessell also generates an `AppViews` class with factory methods to create each of your views.
 
 For example, gwt-hack's `AppViews` class looks something like:
 
@@ -330,7 +330,7 @@ When your presenter wants to instantiate its view, it can use the appropriate `A
 Presenters
 ----------
 
-After `gwt-mpv` generates the view, it becomes easy for the presenter to use the `IsClientView` interface and the assorted `IsXxx` widget interfaces it exposes.
+After Tessell generates the view, it becomes easy for the presenter to use the `IsClientView` interface and the assorted `IsXxx` widget interfaces it exposes.
 
 Here is a `ClientPresenter`:
 
@@ -379,7 +379,7 @@ Notice how:
 The Result
 ----------
 
-With gwt-mpv you only maintain two files:
+With Tessell you only maintain two files:
 
 1. Your `ui.xml` file, and
 2. Your presenter.
@@ -392,9 +392,9 @@ Part I vs. Part II MVP
 
 There are some difference between the [Part I](http://code.google.com/webtoolkit/articles/mvp-architecture.html) and [Part II](http://code.google.com/webtoolkit/articles/mvp-architecture-2.html) MVP architectures, specifically moving from a view interface (Part I) to a presenter callback interface (Part II).
 
-gwt-mpv currently automates a Part I-style architecture. It is not immediately clear how to automate a Part II-style architecture, which does have some nice properties, but so far as not been necessary for the applications gwt-mpv as been used on.
+Tessell currently automates a Part I-style architecture. It is not immediately clear how to automate a Part II-style architecture, which does have some nice properties, but so far as not been necessary for the applications Tessell as been used on.
 
-If anyone is interested in using a gwt-mpv-style approach for Part II architectures, feel free to bring it up on the [forums](https://groups.google.com/forum/#!forum/gwtmpv).
+If anyone is interested in using a Tessell-style approach for Part II architectures, feel free to bring it up on the [forums](https://groups.google.com/forum/#!forum/tessell).
 
 [ClientViewUiXml]: https://github.com/stephenh/gwt-hack/blob/master/src/main/java/com/bizo/gwthack/client/views/ClientView.ui.xml
 

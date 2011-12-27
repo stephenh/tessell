@@ -6,7 +6,7 @@ title: Tutorial
 Tutorial
 ========
 
-This is a basic tutorial of gwtmpv that walks through the gwt-hack example application.
+This is a basic tutorial of Tessell that walks through the gwt-hack example application.
 
 Setup
 -----
@@ -18,7 +18,7 @@ To follow along using Eclipse, you can:
 * Import the project into Eclipse
 * Run the `gwt-hack` launch and it should start up
 
-For setting up gwt-mpv within an existing project and other discussion about IDE/build issues, see [getting started](./gettingstarted.html).
+For setting up Tessell within an existing project and other discussion about IDE/build issues, see [getting started](./gettingstarted.html).
 
 A View
 ------
@@ -50,14 +50,14 @@ Our goal for this tutorial/page is simple:
 Changing the View
 -----------------
 
-gwt-mpv's forte is using the `ClientView.ui.xml` file as the source for generating other artifacts that in traditional GWT MVP are hand-maintained.
+Tessell's forte is using the `ClientView.ui.xml` file as the source for generating other artifacts that in traditional GWT MVP are hand-maintained.
 
 If you edit `ClientView.ui.xml`, make a change, and hit save, you should see the console output:
 
     gwt-hack/src/main/java/com/bizo/gwthack/client/views/ClientView.ui.xml
 {: class=brush:plain}
 
-The gwt-hack Eclipse project has a "views" External Tool Builder configured to automatically run anytime a file is changed in the `views` directory. The builder runs gwt-mpv's `ViewGenerator` and creates:
+The gwt-hack Eclipse project has a "views" External Tool Builder configured to automatically run anytime a file is changed in the `views` directory. The builder runs Tessell's `ViewGenerator` and creates:
 
 * `IsClientView`: a pure-Java interface for the `ClientView.ui.xml`
 * `GwtClientView`: the GWT/UiBinder version of `ClientView.ui.xml`

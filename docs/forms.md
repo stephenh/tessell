@@ -6,7 +6,7 @@ title: Forms
 Forms
 =====
 
-gwt-mpv has support for building flexible forms with as little boilerplate as possible.
+Tessell has support for building flexible forms with as little boilerplate as possible.
 
 Goals
 -----
@@ -29,7 +29,7 @@ Similarly, each form and each form field in an application shouldn't require cop
 Approach
 --------
 
-gwt-mpv's [FormPresenter][FormPresenter] decouples several aspects of forms to ensure a clean separation of concerns. Specifically, decoupling *layout* from *declaration*.
+Tessell's [FormPresenter][FormPresenter] decouples several aspects of forms to ensure a clean separation of concerns. Specifically, decoupling *layout* from *declaration*.
 
 For example, a FormPresenter-enabled form might look like:
 
@@ -134,9 +134,9 @@ Note again that this subclass is not required to use FormPresenter, but is a hel
 Testing
 -------
 
-In keeping with gwt-mpv's goal for easy DOM-less unit testing, presenters that use `FormPresenter` can still be unit tested.
+In keeping with Tessell's goal for easy DOM-less unit testing, presenters that use `FormPresenter` can still be unit tested.
 
-Note that because form elements are specified only in the presenter (which is more succinct, and doesn't involve boilerplate elements in the `ui.xml` file), it does mean the presenter's view (which is generated from the `ui.xml` file) won't have methods to access each individual form element for the test to manipulate/assert against (see [tests](tests.html) for the typical way of testing in gwt-mpv).
+Note that because form elements are specified only in the presenter (which is more succinct, and doesn't involve boilerplate elements in the `ui.xml` file), it does mean the presenter's view (which is generated from the `ui.xml` file) won't have methods to access each individual form element for the test to manipulate/assert against (see [tests](tests.html) for the typical way of testing in Tessell).
 
 Instead, we have to grab the form elements by their `id` from FormPresenter's backing HTMLPanel. Although if your form ids match your model property names, you can use some helper methods to do the lookup, e.g.:
 
@@ -183,10 +183,10 @@ Instead, we have to grab the form elements by their `id` from FormPresenter's ba
 
 
 
-[FormPresenter]: https://github.com/stephenh/gwt-mpv/blob/master/user/src/main/java/org/gwtmpv/widgets/form/FormPresenter.java
+[FormPresenter]: https://github.com/stephenh/tessell/blob/master/user/src/main/java/org/tessell/widgets/form/FormPresenter.java
 
-[FormLayout]: https://github.com/stephenh/gwt-mpv/blob/master/user/src/main/java/org/gwtmpv/widgets/form/FormLayout.java
+[FormLayout]: https://github.com/stephenh/tessell/blob/master/user/src/main/java/org/tessell/widgets/form/FormLayout.java
 
-[DefaultFormLayout]: https://github.com/stephenh/gwt-mpv/blob/master/user/src/main/java/org/gwtmpv/widgets/form/DefaultFormLayout.java
+[DefaultFormLayout]: https://github.com/stephenh/tessell/blob/master/user/src/main/java/org/tessell/widgets/form/DefaultFormLayout.java
 
-[FormLine]: https://github.com/stephenh/gwt-mpv/blob/master/user/src/main/java/org/gwtmpv/widgets/form/lines/FormLine.java
+[FormLine]: https://github.com/stephenh/tessell/blob/master/user/src/main/java/org/tessell/widgets/form/lines/FormLine.java

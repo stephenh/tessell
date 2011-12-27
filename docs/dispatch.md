@@ -11,7 +11,7 @@ The dispatch pattern is alternative to the usual GWT-RPC implementation where ev
 * From Ray Ryan's [Best Practices](http://www.google.com/events/io/2009/sessions/GoogleWebToolkitBestPractices.html) I/O talk
 * From [gwt-dispatch](http://code.google.com/p/gwt-dispatch/), the original open source implementation of the pattern
 
-gwt-mpv's implementation of the dispatch pattern is not terribly unique, other than providing:
+Tessell's implementation of the dispatch pattern is not terribly unique, other than providing:
 
 * `GenDispatch` annotation for no action/result DTO boilerplate,
 * `SuccessCallback` for centralization of error handling, and
@@ -35,9 +35,9 @@ Also, since the command pattern is used, your client-side application can pass t
 Less Boilerplate
 ----------------
 
-What gwt-mpv adds to the dispatch pattern is a large reduction in the boilerplate for making new actions.
+What Tessell adds to the dispatch pattern is a large reduction in the boilerplate for making new actions.
 
-Where as traditionally every new action (distinct AJAX call) requires you need to hand-code a `FooAction` (with fields, getters, setters, equals, hashCode) and `FooResult` (also with fields, getters, setters, equals, and hashCode), with gwt-mpv (via it's sister project gwt-mpv-apt), you just specify a "spec" (specification):
+Where as traditionally every new action (distinct AJAX call) requires you need to hand-code a `FooAction` (with fields, getters, setters, equals, hashCode) and `FooResult` (also with fields, getters, setters, equals, and hashCode), with Tessell (via it's sister project gwt-mpv-apt), you just specify a "spec" (specification):
 
     @GenDispatch
     public class FooSpec {
@@ -58,14 +58,14 @@ And gwt-mpv-apt will generate `FooAction` and `FooResult` DTOs with all of the n
 Success Callback
 ----------------
 
-Every AJAX call may fail, but it's not a good idea to reimplement failure logic at each AJAX call site in your application. To help facilitate this, gwt-mpv adds a [SuccessCallback][SuccessCallback] interface:
+Every AJAX call may fail, but it's not a good idea to reimplement failure logic at each AJAX call site in your application. To help facilitate this, Tessell adds a [SuccessCallback][SuccessCallback] interface:
 
     public interface SuccessCallback<T> {
       void onSuccess(T result);
     }
 {: class=brush:java}
 
-Which is just like `AsyncCallback` without the `onFailure` method. So, instead of reimplementing `AsyncCallback.onFailure` each time you make an AJAX call, gwt-mpv's [OutstandingDispatchAysnc][OutstandingDispatchAysnc] accepts `SuccessCallbacks` and will provide a single `onFailure` implementation.
+Which is just like `AsyncCallback` without the `onFailure` method. So, instead of reimplementing `AsyncCallback.onFailure` each time you make an AJAX call, Tessell's [OutstandingDispatchAysnc][OutstandingDispatchAysnc] accepts `SuccessCallbacks` and will provide a single `onFailure` implementation.
 
 The default `onFailure` implementation fires a `DispatchUnhandledFailureEvent` on the applications `EventBus`, so anyone that is interested (e.g. an error popup listener) can listener for the failure and respond appropriately.
 
@@ -74,7 +74,7 @@ The default `onFailure` implementation fires a `DispatchUnhandledFailureEvent` o
 Testing
 -------
 
-gwt-mpv provides a [StubDispatchAsync][StubDispatchAsync] that facilitates testing dispatch actions/results in a fairly succinct manner.
+Tessell provides a [StubDispatchAsync][StubDispatchAsync] that facilitates testing dispatch actions/results in a fairly succinct manner.
 
 Again using [ClientPresenterTest][ClientPresenterTest], testing save looks like:
 
@@ -117,14 +117,14 @@ Request Factory
 
 [RequestFactory](http://code.google.com/webtoolkit/doc/latest/DevGuideRequestFactory.html) is another alternative to traditional GWT-RPC.
 
-Nothing in gwt-mpv prevents users from using RequestFactory, in fact it might work quite well, it just has not been actively explored yet.
+Nothing in Tessell prevents users from using RequestFactory, in fact it might work quite well, it just has not been actively explored yet.
 
 
 
-[SuccessCallback]: https://github.com/stephenh/gwt-mpv/blob/master/user/src/main/java/org/gwtmpv/dispatch/client/SuccessCallback.java
+[SuccessCallback]: https://github.com/stephenh/tessell/blob/master/user/src/main/java/org/tessell/dispatch/client/SuccessCallback.java
 
-[OutstandingDispatchAysnc]: https://github.com/stephenh/gwt-mpv/blob/master/user/src/main/java/org/gwtmpv/dispatch/client/util/OutstandingDispatchAsync.java
+[OutstandingDispatchAysnc]: https://github.com/stephenh/tessell/blob/master/user/src/main/java/org/tessell/dispatch/client/util/OutstandingDispatchAsync.java
 
-[StubDispatchAsync]: https://github.com/stephenh/gwt-mpv/blob/master/user/src/main/java/org/gwtmpv/dispatch/client/StubDispatchAsync.java
+[StubDispatchAsync]: https://github.com/stephenh/tessell/blob/master/user/src/main/java/org/tessell/dispatch/client/StubDispatchAsync.java
 
 [ClientPresenterTest]: https://github.com/stephenh/gwt-hack/blob/master/src/test/java/com/bizo/gwthack/client/presenters/ClientPresenterTest.java

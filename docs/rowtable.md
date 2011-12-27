@@ -6,7 +6,7 @@ title: Row Table
 Row Table
 =========
 
-The RowTable widget is one of two primary ways to do tables in gwt-mpv. The other is [CellTables](celltable.html).
+The RowTable widget is one of two primary ways to do tables in Tessell. The other is [CellTables](celltable.html).
 
 Benefits
 --------
@@ -84,7 +84,7 @@ For example, given a page with an employees table, we'd have `Page.ui.xml`:
     </ui:UiBinder>
 {: class=brush:xml}
 
-gwt-mpv's [view generation](viewgeneration.html) will turn these into 3 views, `IsPageView`, `IsEmployeeHeaderView`, and `IsEmployeeRowView`.
+Tessell's [view generation](viewgeneration.html) will turn these into 3 views, `IsPageView`, `IsEmployeeHeaderView`, and `IsEmployeeRowView`.
 
 The `PagePresenter` fetches the table data, instantiates an inner-class presenter around each row's data object, and adds the row's view to the table, e.g.:
 
@@ -134,7 +134,7 @@ While this example doesn't do anything fancy, the idea is that the per-row, stat
 Testing
 -------
 
-Testing RowTable works much like regular gwt-mpv stub-based testing.
+Testing RowTable works much like regular Tessell stub-based testing.
 
     public class PagePresenterTest {
       final PagePresenter p = bind(new PagePresenter(registry));
