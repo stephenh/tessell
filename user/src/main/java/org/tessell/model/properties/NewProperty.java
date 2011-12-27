@@ -1,0 +1,137 @@
+package org.tessell.model.properties;
+
+import java.util.ArrayList;
+
+import org.bindgen.Binding;
+import org.tessell.model.Dto;
+import org.tessell.model.Model;
+import org.tessell.model.values.BoundValue;
+import org.tessell.model.values.DerivedValue;
+import org.tessell.model.values.SetValue;
+import org.tessell.model.values.Value;
+
+/** Lots of helper methods to constructor {@link Property}s out of bindings/{@link DerivedValue}s/etc. */
+public class NewProperty {
+
+  public static <P> BasicProperty<P> property(String name, P value) {
+    return new BasicProperty<P>(new SetValue<P>(name, value));
+  }
+
+  public static <P> BasicProperty<P> derivedProperty(final DerivedValue<P> value) {
+    return new BasicProperty<P>(value);
+  }
+
+  public static <P> BasicProperty<P> basicProperty(final Binding<P> binding) {
+    return new BasicProperty<P>(new BoundValue<P>(binding));
+  }
+
+  public static <P> BasicProperty<P> basicProperty(final String name, P initialValue) {
+    return new BasicProperty<P>(new SetValue<P>(name, initialValue));
+  }
+
+  public static BooleanProperty booleanProperty(final String name) {
+    return new BooleanProperty(new SetValue<Boolean>(name));
+  }
+
+  public static BooleanProperty booleanProperty(final String name, final boolean initialValue) {
+    return new BooleanProperty(new SetValue<Boolean>(name, initialValue));
+  }
+
+  public static BooleanProperty booleanProperty(final Value<Boolean> value) {
+    return new BooleanProperty(value);
+  }
+
+  public static BooleanProperty booleanProperty(final Binding<Boolean> binding) {
+    return new BooleanProperty(new BoundValue<Boolean>(binding));
+  }
+
+  public static IntegerProperty integerProperty(final String name) {
+    return new IntegerProperty(new SetValue<Integer>(name));
+  }
+
+  public static IntegerProperty integerProperty(final String name, Integer i) {
+    return new IntegerProperty(new SetValue<Integer>(name, i));
+  }
+
+  public static IntegerProperty integerProperty(final Value<Integer> derived) {
+    return new IntegerProperty(derived);
+  }
+
+  public static IntegerProperty integerProperty(final Binding<Integer> binding) {
+    return new IntegerProperty(new BoundValue<Integer>(binding));
+  }
+
+  public static LongProperty longProperty(final String name) {
+    return new LongProperty(new SetValue<Long>(name));
+  }
+
+  public static LongProperty longProperty(final String name, Long i) {
+    return new LongProperty(new SetValue<Long>(name, i));
+  }
+
+  public static LongProperty longProperty(final Value<Long> derived) {
+    return new LongProperty(derived);
+  }
+
+  public static LongProperty longProperty(final Binding<Long> binding) {
+    return new LongProperty(new BoundValue<Long>(binding));
+  }
+
+  public static StringProperty stringProperty(final String name) {
+    return new StringProperty(new SetValue<String>(name));
+  }
+
+  public static StringProperty stringProperty(final String name, final String initialValue) {
+    return new StringProperty(new SetValue<String>(name, initialValue));
+  }
+
+  public static StringProperty stringProperty(final Binding<String> binding) {
+    return new StringProperty(new BoundValue<String>(binding));
+  }
+
+  public static StringProperty stringProperty(final Value<String> value) {
+    return new StringProperty(value);
+  }
+
+  public static <E> ListProperty<E> listProperty(final Binding<ArrayList<E>> binding) {
+    return new ListProperty<E>(new BoundValue<ArrayList<E>>(binding));
+  }
+
+  public static <E> ListProperty<E> listProperty(final String name, final ArrayList<E> list) {
+    return new ListProperty<E>(new SetValue<ArrayList<E>>(name, list));
+  }
+
+  public static <E extends Model<F>, F extends Dto<E>> DtoListProperty<E, F> dtoListProperty(final Binding<ArrayList<F>> binding) {
+    final SetValue<ArrayList<E>> modelListValue = new SetValue<ArrayList<E>>("modelList", new ArrayList<E>());
+    return new DtoListProperty<E, F>(modelListValue, new BoundValue<ArrayList<F>>(binding));
+  }
+
+  public static <E> ListProperty<E> listProperty(final String name) {
+    return new ListProperty<E>(new SetValue<ArrayList<E>>(name, new ArrayList<E>()));
+  }
+
+  public static <P> SetValue<P> setValue(String name) {
+    return new SetValue<P>(name);
+  }
+
+  public static <P> SetValue<P> setValue(String name, P initialValue) {
+    return new SetValue<P>(name, initialValue);
+  }
+
+  public static <E extends Enum<E>> EnumProperty<E> enumProperty(final Value<E> value) {
+    return new EnumProperty<E>(value);
+  }
+
+  public static <E extends Enum<E>> EnumProperty<E> enumProperty(final String name) {
+    return new EnumProperty<E>(new SetValue<E>(name));
+  }
+
+  public static <E extends Enum<E>> EnumProperty<E> enumProperty(final String name, E initialValue) {
+    return new EnumProperty<E>(new SetValue<E>(name, initialValue));
+  }
+
+  public static <E extends Enum<E>> EnumProperty<E> enumProperty(Binding<E> binding) {
+    return new EnumProperty<E>(new BoundValue<E>(binding));
+  }
+
+}

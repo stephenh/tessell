@@ -1,5 +1,5 @@
 
-See [gwtmpv.org](http://www.gwtmpv.org).
+See [tessell.org](http://www.tessell.org).
 
 * form disable on ServerCall
 * indicator on ServerCall
@@ -16,12 +16,12 @@ Todo
 * Figure out cross-presenter transitions
   * Event bus doesn't make sense--these aren't global things
   * Have Slot listen to presenter events?
-* Support 2nd generation Presenter interfaces via event hook hints in ui.xml file
+* Support 2nd generation Presenter interfaces via event hook hints in `ui.xml` file
 
 Limitations
 -----------
 
-* ResourcesGenerator assumes a global namespace of images/css files, even if you use subdirectories. It also assumes all images/css files are below the packageName you pass to it.
+* ResourcesGenerator assumes a global namespace of image/CSS files, even if you use subdirectories. It also assumes all image/CSS files are below the packageName you pass to it.
 
 Notes
 -----

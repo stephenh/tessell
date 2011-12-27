@@ -1,5 +1,5 @@
 <ivy-module version="2.0" xmlns:m="http://ant.apache.org/ivy/maven">
-	<info organisation="org.gwtmpv" module="gwt-mpv-user" revision="${revision}"/>
+	<info organisation="org.tessell" module="tessell-user" revision="${revision}"/>
   <configurations>
     <conf name="default"/>
     <conf name="sources"/>
