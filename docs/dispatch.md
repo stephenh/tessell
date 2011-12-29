@@ -37,7 +37,7 @@ Less Boilerplate
 
 What Tessell adds to the dispatch pattern is a large reduction in the boilerplate for making new actions.
 
-Where as traditionally every new action (distinct AJAX call) requires you need to hand-code a `FooAction` (with fields, getters, setters, equals, hashCode) and `FooResult` (also with fields, getters, setters, equals, and hashCode), with Tessell (via it's sister project gwt-mpv-apt), you just specify a "spec" (specification):
+Where as traditionally every new action (distinct AJAX call) requires you need to hand-code a `FooAction` (with fields, getters, setters, equals, hashCode) and `FooResult` (also with fields, getters, setters, equals, and hashCode), with Tessell, you just specify a "spec" (specification):
 
     @GenDispatch
     public class FooSpec {
@@ -53,7 +53,7 @@ Where as traditionally every new action (distinct AJAX call) requires you need t
     }
 {: class=brush:java}
 
-And gwt-mpv-apt will generate `FooAction` and `FooResult` DTOs with all of the necessary boilerplate for you.
+And `tessell-apt` will generate `FooAction` and `FooResult` DTOs with all of the necessary boilerplate for you.
      
 Success Callback
 ----------------

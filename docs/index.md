@@ -30,8 +30,9 @@ title: Tessell
 
       <ul>
         <li>Url: <a href="http://repo.joist.ws"><code>http://repo.joist.ws</code></a></li>
-        <li>Org: <code>org.tessell</code></li>
-        <li>Modules: <code>tessell-user</code> and <code>tessell-dev</code></li>
+        <li><code>org.tessell</code> <code>tessell-user</code> 2.0.0</li>
+        <li><code>org.tessell</code> <code>tessell-dev</code> 2.0.0</li>
+        <li><code>org.tessell</code> <code>tessell-apt</code> 2.0.0</li>
       </ul>
 
       <p>For integrating Tessell into your project, see <a href="./gettingstarted.html">getting started</a>.</p>

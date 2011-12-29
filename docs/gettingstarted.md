@@ -34,8 +34,9 @@ To setup view generation, you'll need:
 
    These can be downloaded from the [http://repo.joist.ws](http://repo.joist.ws) Maven repository. Personally, I use an `ivy.xml` file with:
 
-       <dependency org="org.tessell" name="tessell-user" rev="1.2.7" conf="compile,sources"/>
-       <dependency org="org.tessell" name="tessell-dev" rev="1.2.7" conf="provided,sources"/>
+       <dependency org="org.tessell" name="tessell-user" rev="2.0.0" conf="compile,sources"/>
+       <dependency org="org.tessell" name="tessell-dev" rev="2.0.0" conf="provided,sources"/>
+       <dependency org="org.tessell" name="tessell-apt" rev="2.0.0" conf="provided,sources"/>
    {: class=brush:xml}
 
    But you can use Maven or the jars directly if you want.
@@ -141,29 +142,24 @@ Tessell usages annotation processors for generating some non-view boilerplate, s
 
 To configure the annotation processors:
 
-1. Add a dependency on `gwt-mpv-apt`:
+1. In Eclipse, right click on the project, select properties
 
-       <dependency org="org.gwtmpv" name="gwt-mpv-apt" rev="1.12" conf="provided,sources"/>
-   {: class=brush:xml}
-
-2. In Eclipse, right click on the project, select properties
-
-3. Go to Java Compiler, Annotation Processing and:
+1. Go to Java Compiler, Annotation Processing and:
    * Select "Enable project specific settings"
    * Select "Enable annotation processing"
    * Set the "Generated source directory" to `gen`
 
-4. Go to Java Compiler, Annotation Processing, Factory Path and:
+1. Go to Java Compiler, Annotation Processing, Factory Path and:
    * Select "Enable project specific settings"
    * Select "Add JARs"
-   * Find `gwt-mpv-apt.jar` in your workspace
+   * Find `tessell-apt.jar` in your workspace
    * Click OK
 
-5. Click OK 
+1. Click OK 
 
-6. Check `.factorypath` and `.settings/org.eclipse.jdt.apt.core.prefs` into your repository, then other users will get this configuration automatically.
+1. Check `.factorypath` and `.settings/org.eclipse.jdt.apt.core.prefs` into your repository, then other users will get this configuration automatically.
 
-7. For Ant/`javac`, just ensure the `gwt-mpv-apt.jar` is on the compilation classpath, it will find it automatically.
+1. For Ant/`javac`, just ensure the `tessell-apt.jar` is on the compilation classpath, it will find it automatically.
 
 Setting up Unit Testing
 -----------------------

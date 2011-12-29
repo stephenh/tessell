@@ -160,7 +160,7 @@ Places are part of traditional GWT MPV and denote different bookmarks in an appl
 
 Each token has a class it is mapped to, e.g. `#clients -> ClientsPlace`, that knows how to kick-start the UI for that page (e.g. create a `ClientPresenter`).
 
-The `@GenPlace` annotation comes from the gwt-mpv-apt annotation processor, and generates most of the `XxxPlace` class boilerplate. This include [GWT.runAsync](http://code.google.com/webtoolkit/doc/latest/DevGuideCodeSplitting.html)-based code splitting.
+The `@GenPlace` annotation comes from the tessell-apt annotation processor, and generates most of the `XxxPlace` class boilerplate. This include [GWT.runAsync](http://code.google.com/webtoolkit/doc/latest/DevGuideCodeSplitting.html)-based code splitting.
 
 A Test
 ------
