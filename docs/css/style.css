@@ -99,7 +99,6 @@ p { font-family: 'Museo300-Regular-webfont', Arial, Helvetica, sans-serif; }
     background: -moz-linear-gradient(top,  #AE1B06,  #7F1605);
     filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#AE1B06', endColorstr='#7F1605'); }
 
-
 /*------ main navigation */
   #headercontainer #links a {
     color: #EAEBD2;
@@ -217,6 +216,13 @@ p { font-family: 'Museo300-Regular-webfont', Arial, Helvetica, sans-serif; }
         text-shadow: none;
         list-style: disc;
       }
+
+      #featurecontainer .rightcol a {
+        color: #CB1E05;
+      }
+        #featurecontainer .rightcol a:hover {
+          color: #7F1605;
+        }
 
       #featurecontainer .rightcol  a img { vertical-align: middle; margin: 0 0 10px 0; }
 
