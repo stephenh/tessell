@@ -13,7 +13,7 @@ This frees the developer from making tedious modifications to multiple files for
 Traditional MVP
 ---------------
 
-Let's look at a simple [ClientView.ui.xml][ClientViewUiXml] file for editing clients:
+With GWT's [traditional MVP](http://code.google.com/webtoolkit/articles/mvp-architecture.html) approach, let's look at a simple [ClientView.ui.xml][ClientViewUiXml] file for editing "client" objects 
 
     <ui:UiBinder ...>
       <gwt:HTMLPanel>
@@ -25,148 +25,51 @@ Let's look at a simple [ClientView.ui.xml][ClientViewUiXml] file for editing cli
     </ui:UiBinder>
 {: class=brush:xml}
 
-If developing [traditional MVP](http://code.google.com/webtoolkit/articles/mvp-architecture.html), you'll have a `ClientPresenter` with a `Display` inner-interface that defines `HasXxx` methods:
+After creating the `ui.xml` file, the programmer is now responsible for creating:
+
+* A `ClientPresenter.Display` interface that exposes the specific `HasText`/etc. characteristic interface that the presenter needs for each UI element
+* A `ClientView` class that implements `ClientPresenter.Display` via UiBinder, with one field per `ui:field`.
+
+Very briefly, these two files will look something like:
 
     public class ClientPresenter {
       public interface Display {
-        HasText heading();
-
+        // repeat for each ui:field
         HasValue<String> name();
-
-        HasValue<String> description();
-
-        HasClickHandlers submit();
       }
-
       // the rest of your presenter implementation
     }
-{: class=brush:java}
-
-Which looks innocent enough. Let's make it a little more real world by adding:
-
-* Besides getting/setting the name and description, we want to listen to their key up events, so we'll add `HasAllKeyHandlers` for both name and description.
-* When name or description becomes invalid, we want to add/remove CSS class names. GWT has no `HasStyle` interface, but let's make one with a `WidgetHasStyle` wrapper class, and add `HasStyle` methods for both name and description
-* Let's assume our page is showing several client rows (presenters) at the same time, and to integration test the page with Selenium we'll need unique debug ids for each name and description element. So we'll add a `ensureDebugId` method.
-
-For the presenter to handle these changes, our `Display` interface grows to look more like:
-
-    public class ClientPresenter {
-      public interface Display {
-        HasText heading();
-
-        HasValue<String> name();
-
-        HasAllKeyHandlers nameKeys();
-
-        HasStyle nameStyle();
-
-        HasValue<String> description();
-
-        HasAllKeyHandlers descriptionKeys();
-
-        HasStyle descriptionStyle();
-
-        HasClickHandlers submit();
-
-        void ensureDebugId(String debugId);
-      }
-
-      // the rest of your presenter implementation
-    }
-{: class=brush:java}
-
-Okay, that looks good. Now let's implement it:
 
     public class ClientView implements ClientPresenter.Display {
       public static interface MyUiBinder extends UiBinder<HTMLPanel, ClientView> {
       }
 
       private static final MyUiBinder binder = GWT.create(MyUiBinder.class);
-
       private final HTMLPanel panel;
 
-      @UiField
-      protected Element heading;
-
+      // repeat for each ui:field
       @UiField
       protected TextBox name;
-
-      @UiField
-      protected TextBox description;
-
-      @UiField
-      protected SubmitButton submit;
 
       public ClientView() {
         panel = binder.createAndBindUi(this);
       }
 
-      public void ensureDebugId(String debugId) {
-        UIObject.ensureDebugId(heading, debugId + "-heading");
-        name.ensureDebugId(debugId + "-name");
-        description.ensureDebugId(debugId + "-description");
-        submit.ensureDebugId(debugId + "-submit");
-      }
-
-      public HasText heading() {
-        return heading;
-      }
-
+      // repeat for each ui:field
       public HasValue<String> name() {
         return name;
-      }
-
-      public HasAllKeyHandlers nameKeys() {
-        return name;
-      }
-
-      public HasStyle nameStyle() {
-        return new WidgetHasStyle(name);
-      }
-
-      public HasValue<String> description() {
-        return description;
-      }
-
-      public HasAllKeyHandlers descriptionKeys() {
-        return description;
-      }
-
-      public HasStyle descriptionStyle() {
-        return new WidgetHasStyle(description);
-      }
-
-      public HasClickHandlers submit() {
-        return submit;
       }
     }
 {: class=brush:java}
 
-This is pretty standard usage of UiBinder and nothing too complex.
+With fields, getters, etc., these two classes can easily add up to **80** lines of boilerplate Java code that the programmer has to maintain for an **8** line `ui.xml` file. This is an **10x** increase in manually-maintained lines of code.
 
-But suddenly we went from **8** lines of UiBinder code to **86** lines of derivative Java code to tailor our view for MVP.
+Tessell Views
+-------------
 
-Characteristic vs. Widget Interfaces
-------------------------------------
+Tessell takes the stance that the `ui.xml` file has all of the necessary view information right in the file.
 
-One source of cruft is GWT's `HasXxx` interfaces (typically called "characteristic interfaces" as each defines a very small, specific characteristic that may apply to several different widgets).
-
-It is tedious to add a new `Display` method and new `ClientView` method for each `HasXxx` interface (`HasValue`, `HasAllKeyHandlers`, `HasStyle`, etc.) the presenter requires when they all come from the same source widget (see `description`, `descriptionKeys`, and `descriptionStyle` in the above example).
-
-In Tessell's opinion, the `HasXxx` interfaces are just a band-aid around the GWT widgets not having their own, specific interfaces--a better solution is to just add these missing, widget-specific interfaces and be done with it.
-
-This is what Tessell does. For example, `Anchor` has `IsAnchor`, `TextBox` has `IsTextBox`, etc.
-
-This also solves the very annoying problem that many GWT widget methods aren't in `HasXxx` interfaces at all. So you end up having to make them up, e.g. `HasStyle`.
-
-`IsXxx` widget interfaces are also the key to Tessell's automation because the programmer no longer has to decide which `HasXxx` interfaces for each widget will be exposed--each widget in the `ui.xml` file is just exposed in the `Display` interface as its `IsXxx` equivalent.
-
-The presenter can now access as few or as many widget methods as it needs without changing the `Display` or `ClientView` classes.
-
-Generated Views
----------------
-
-Let's go back to the `ui.xml` file:
+Looking again at the `ui.xml` file:
 
     <ui:UiBinder ...>
       <gwt:HTMLPanel>
@@ -178,117 +81,75 @@ Let's go back to the `ui.xml` file:
     </ui:UiBinder>
 {: class=brush:xml}
 
-Really, all of the key information about the view is right here.
+We can say that any element with a `ui:field` attribute (`heading`, `name`, etc.) should automatically be:
 
-We can see what the `ui:field` bindable fields are (`heading`, `name`, `description`, and `submit`), and what their types are (`Element`, `gwt:TextBox`, `gwt:SubmitButton`).
+* Available to the presenter in the view interface
+* Bound with UiBinder in the view implementation
 
-There is no reason a developer should have to manually copy this information over into 2 separate files (`ClientPresenter.Display` and `ClientView`). [DRY](http://c2.com/cgi/wiki?DontRepeatYourself).
+A developer should not have to manually copy this information over into 2 separate files (`ClientPresenter.Display` and `ClientView`). [DRY](http://c2.com/cgi/wiki?DontRepeatYourself).
 
-So Tessell solves this with code generation. Not GWT compile-time/deferred-binding code generation, but programmer-time, click-the-button, the-IDE-sees-the-output code generation.
+Tessell solves this by generating both the view interface and implementation. Not with GWT compile-time/deferred-binding code generation, but build-time code generation so that presenters and tests can code against the generated artifacts.
 
-By running `ant` or an Eclipse launch target (which Eclipse can run automatically on save), Tessell will parse the `client.ui.xml` file and generate the interface, an implementation, and a stub for testing.
+By running `ant` or an Eclipse custom builder (which Eclipse can run automatically on save), Tessell will parse the `ClientView.ui.xml` file and generate the interface, an implementation, and a stub for testing.
 
-Here is the interface (generated):
+So, given the same `ClientView.ui.xml` file, Tessell will generate the view interface:
 
     public interface IsClientView extends IsWidget {
-        public IsElement heading();
-
-        public IsTextBox name();
-
-        public IsTextBox description();
-
-        public IsSubmitButton submit();
+      // repeat for each ui:field
+      public IsTextBox name();
     }
 {: class=brush:java}
 
-Note that all of `IsXxx` types are interfaces and so are fully mockable/stubable.
+Note that all of `IsXxx` types (`IsElement`, `IsTextBox`) are interfaces provided by Tessell and so are fully mockable/stub-able.
 
-And the implementation (generated):
+Tessell will also generate the UiBinder implementation:
 
     public class ClientView extends DelegateIsWidget implements IsClientView {
+      private static final MyUiBinder binder = GWT.create(MyUiBinder.class);
 
-        private static final MyUiBinder binder = GWT.create(MyUiBinder.class);
+      // repeat for each ui:field
+      @UiField(provided = true)
+      final TextBox name = new org.tessell.widgets.GwtTextBox();
 
-        @UiField
-        Element heading;
+      public ClientView() {
+        setWidget(binder.createAndBindUi(this));
+        ensureDebugId("Client");
+      }
 
-        @UiField(provided = true)
-        final TextBox name = new org.tessell.widgets.GwtTextBox();
+      public void ensureDebugId(String baseDebugId) {
+        // repeat for each ui:field
+        name.ensureDebugId(baseDebugId + "-name");
+      }
 
-        @UiField(provided = true)
-        final TextBox description = new org.tessell.widgets.GwtTextBox();
+      // repeated for each ui:field
+      public IsTextBox name() {
+        return (org.tessell.widgets.IsTextBox) name;
+      }
 
-        @UiField(provided = true)
-        final SubmitButton submit = new org.tessell.widgets.GwtSubmitButton();
-
-        public ClientView() {
-            setWidget(binder.createAndBindUi(this));
-            ensureDebugId("Client");
-        }
-
-        public void ensureDebugId(String baseDebugId) {
-            UIObject.ensureDebugId(heading, baseDebugId + "-heading");
-            name.ensureDebugId(baseDebugId + "-name");
-            description.ensureDebugId(baseDebugId + "-description");
-            submit.ensureDebugId(baseDebugId + "-submit");
-        }
-
-        public IsElement heading() {
-            return new org.tessell.widgets.GwtElement(heading);
-        }
-
-        public IsTextBox name() {
-            return (org.tessell.widgets.IsTextBox) name;
-        }
-
-        public IsTextBox description() {
-            return (org.tessell.widgets.IsTextBox) description;
-        }
-
-        public IsSubmitButton submit() {
-            return (org.tessell.widgets.IsSubmitButton) submit;
-        }
-
-        public static interface MyUiBinder extends UiBinder<HTMLPanel, ClientView> {
-        }
+      public static interface MyUiBinder extends UiBinder<HTMLPanel, ClientView> {
+      }
     }
 {: class=brush:java}
 
-And the stub (generated):
+And, finally, Tessell will generate a view stub for testing:
 
     public class StubClientView extends StubWidget implements IsClientView {
+      // repeat for each ui:field
+      private final StubTextBox name = new org.tessell.widgets.StubTextBox();
 
-        private final StubIsElement heading = new org.tessell.widgets.StubIsElement();
-        private final StubTextBox name = new org.tessell.widgets.StubTextBox();
-        private final StubTextBox description = new org.tessell.widgets.StubTextBox();
-        private final StubSubmitButton submit = new org.tessell.widgets.StubSubmitButton();
+      public StubClientView() {
+        ensureDebugId("Client");
+      }
 
-        public StubClientView() {
-            ensureDebugId("Client");
-        }
+      public void ensureDebugId(String baseDebugId) {
+        // repeat for each ui:field
+        name.ensureDebugId(baseDebugId + "-name");
+      }
 
-        public void ensureDebugId(String baseDebugId) {
-            heading.ensureDebugId(baseDebugId + "-heading");
-            name.ensureDebugId(baseDebugId + "-name");
-            description.ensureDebugId(baseDebugId + "-description");
-            submit.ensureDebugId(baseDebugId + "-submit");
-        }
-
-        public StubIsElement heading() {
-            return heading;
-        }
-
-        public StubTextBox name() {
-            return name;
-        }
-
-        public StubTextBox description() {
-            return description;
-        }
-
-        public StubSubmitButton submit() {
-            return submit;
-        }
+      // repeat for each ui:field
+      public StubTextBox name() {
+        return name;
+      }
     }
 {: class=brush:java}
 
@@ -296,23 +157,28 @@ So, with the stub, it's ~90 lines of code generated from 8 lines of the `client.
 
 (For more on stubs and why they are generated, see [stubs](/stubs.html) and [tests](/tests.html).)
 
+Widget Interfaces
+-----------------
+
+The primary way Tessell is able to generate views is by eschewing GWT's `HasXxx` characteristic interfaces in favor of `IsXxx` widget interfaces.
+
+With characteristic interfaces, for each widget in the `ui.xml` file, a programmer has to manually decide which of the several `HasXxx` interfaces a widget implements needs to be exposed in the `ClientPresenter.Display` interface. This thwarts any potential automation.
+
+If, instead, each widget has a single corresponding interface, e.g. `TextBox` has an interface `IsTextBox`, that exposes **all** of a widgets characteristics, whether the presenter wants them or not, then the programmer doesn't have to make a decision picking one and we can automate the view generation.
+
+The one wrinkle is that because GWT's `TextBox` class knows nothing about Tessell's `IsTextBox` interface, Tessell includes subclasses for all of the GWT widgets that extend the GWT core widget and merely implement the widget interface. E.g. Tessell has a `class GwtTextBox extends TextBox implements IsTextBox`. This reuses the GWT widget's implementation but satisfies the type system so that a `TextBox` (or really its `GwtTextBox` subclass) can be returned as an `IsTextBox`.
+
+
 AppViews Interface
 ------------------
 
-To manage which view (`XxxView` or `StubXxxView`) should be used when your presenter needs it, Tessell also generates an `AppViews` class with factory methods to create each of your views.
+To manage which view implementation (the real UiBinder `ClientView` or testable `StubClientView`) should be used when your presenter needs it, Tessell also generates an `AppViews` class with factory methods to create each of your views.
 
 For example, gwt-hack's `AppViews` class looks something like:
 
     public class AppViews {
+      // repeat for each ui.xml file
       public static IsAppView newAppView() {
-        ...
-      }
-
-      public static IsClientView netClientView() {
-        ...
-      }
-
-      public static IsClientListView newClientListView() {
         ...
       }
     }
@@ -387,14 +253,16 @@ With Tessell you only maintain two files:
 
 The tedious work of percolating `ui.xml` changes throughout various files just to get MVP-testable goodness is automated.
 
-Part I vs. Part II MVP
-----------------------
+---
 
-There are some difference between the [Part I](http://code.google.com/webtoolkit/articles/mvp-architecture.html) and [Part II](http://code.google.com/webtoolkit/articles/mvp-architecture-2.html) MVP architectures, specifically moving from a view interface (Part I) to a presenter callback interface (Part II).
+### Part I vs. Part II MVP
+
+There are some difference between GWT's [Part I](http://code.google.com/webtoolkit/articles/mvp-architecture.html) and [Part II](http://code.google.com/webtoolkit/articles/mvp-architecture-2.html) MVP architectures, specifically moving from a view interface (Part I) to a presenter callback interface (Part II).
 
 Tessell currently automates a Part I-style architecture. It is not immediately clear how to automate a Part II-style architecture, which does have some nice properties, but so far as not been necessary for the applications Tessell as been used on.
 
 If anyone is interested in using a Tessell-style approach for Part II architectures, feel free to bring it up on the [forums](https://groups.google.com/forum/#!forum/tessell).
 
-[ClientViewUiXml]: https://github.com/stephenh/gwt-hack/blob/master/src/main/java/com/bizo/gwthack/client/views/ClientView.ui.xml
 
+
+[ClientViewUiXml]: https://github.com/stephenh/gwt-hack/blob/master/src/main/java/com/bizo/gwthack/client/views/ClientView.ui.xml
