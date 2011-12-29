@@ -1,0 +1,113 @@
+<?xml version="1.0"?>
+
+<project name="tessell-apt" default="jar" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant" xmlns:artifact="antlib:org.apache.maven.artifact.ant">
+
+	<property name="maven-repository-url" value="https://oss.sonatype.org/service/local/staging/deploy/maven2/" />
+	<property name="maven-repository-id" value="sonatype-nexus-staging" />
+
+	<path id="compile.classpath">
+		<fileset dir="bin/lib/build/jars" includes="*.jar"/>
+	</path>
+
+	<macrodef name="deploy-maven-artifact" description="Deploys an artifact with a specified classifier on a maven repository">
+		<attribute name="file"/>
+		<attribute name="classifier"/>
+		<sequential>
+			<artifact:mvn>
+				<arg value="org.apache.maven.plugins:maven-gpg-plugin:1.1:sign-and-deploy-file" />
+				<arg value="-Durl=${maven-repository-url}" />
+				<arg value="-DrepositoryId=${maven-repository-id}" />
+				<arg value="-DpomFile=bin/poms/${ant.project.name}.pom" />
+				<arg value="-Dfile=@{file}" />
+				<arg value="-Dclassifier=@{classifier}"/>
+				<arg value="-Pgpg" />
+			</artifact:mvn>
+		</sequential>
+	</macrodef>
+
+	<target name="clean" description="delete bin/*">
+		<delete dir="bin"/>
+	</target>
+
+	<target name="annotations" depends="compile" description="jar only the annotations into the examples project">
+		<jar destfile="bin/annotations.jar">
+			<fileset dir="bin/main" includes="org/tessell/*.class"/>
+		</jar>
+		<copy file="bin/annotations.jar" todir="../apt-examples/lib"/>
+	</target>
+
+	<target name="compile" depends="ivy-retrieve">
+		<mkdir dir="bin/main"/>
+		<javac srcdir="src" destdir="bin/main" debug="true" nowarn="yes" source="1.6" target="1.6" encoding="utf8"
+			classpathref="compile.classpath"/>
+	</target>
+
+	<target name="jar" depends="compile" description="jarjars the processor and its dependencies">
+		<mkdir dir="bin/jars"/>
+		<taskdef name="jarjar" classname="com.tonicsystems.jarjar.JarJarTask" classpath="bin/lib/build/jars/jarjar.jar"/>
+		<jarjar destfile="bin/jars/tessell-apt.jar">
+			<fileset dir="bin/main" includes="**/*.class"/>
+			<fileset dir="src" includes="**/*" excludes="**/*.class"/>
+			<zipfileset dir="META-INF" includes="**/*" prefix="META-INF"/>
+			<zipfileset src="bin/lib/build/jars/joist-util.jar"/>
+			<zipfileset src="bin/lib/build/jars/apt-util.jar"/>
+			<rule pattern="joist.**" result="org.tessell.processor.deps.joist.@1"/>
+			<rule pattern="org.exigencecorp.aptutil.**" result="org.tessell.processor.deps.aptutil.@1"/>
+			<!-- include the super source for @Generated -->
+			<fileset dir="super" includes="**/*.java"/>
+		</jarjar>
+		<mkdir dir="bin/sources"/>
+		<zip destfile="bin/sources/tessell-apt.jar">
+			<fileset dir="src" includes="**/*.java"/>
+		</zip>
+	</target>
+
+	<target name="javadoc">
+		<javadoc sourcepath="src" destdir="bin/javadoc" classpathref="compile.classpath"/>
+		<mkdir dir="bin/javadocs"/>
+		<jar basedir="bin/javadoc" destfile="bin/javadocs/${ant.project.name}.jar"/>
+	</target>
+
+	<!-- start ivy targets -->
+	<property name="ivy.jar.version" value="2.1.0"/>
+	<property name="ivy.jar.name" value="ivy-${ivy.jar.version}.jar"/>
+	<property name="ivy.home" value="${user.home}/.ivy2"/>
+	<available property="ivy.installed" file="${ivy.home}/${ivy.jar.name}"/>
+
+	<target name="ivy-install" unless="ivy.installed">
+		<mkdir dir="${ivy.home}"/>
+		<get src="http://repo1.maven.org/maven2/org/apache/ivy/ivy/${ivy.jar.version}/${ivy.jar.name}" dest="${ivy.home}/${ivy.jar.name}"/>
+	</target>
+
+	<target name="ivy-init" depends="ivy-install">
+		<taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant" classpath="${ivy.home}/${ivy.jar.name}"/>
+	</target>
+
+	<target name="ivy-retrieve" depends="ivy-init" description="downloads jars for the project">
+		<ivy:retrieve pattern="bin/lib/[conf]/[type]s/[artifact].[ext]" conf="*" type="*"/>
+	</target>
+
+	<target name="gen-pom" description="generates the maven pom.xml from the template">
+		<filter token="revision" value="${revision}"/>
+		<copy file="pom.xml" tofile="bin/poms/${ant.project.name}.pom" filtering="true" overwrite="true"/>
+	</target>
+
+	<target name="ivy-publish" depends="jar,ivy-init,gen-pom" description="publish jar/source to maven repo mounted at ~/repo">
+		<ivy:publish status="release" resolver="maven-share" update="true" overwrite="true" forcedeliver="true" publishivy="false">
+			<artifacts pattern="bin/[type]s/[artifact].[ext]" />
+		</ivy:publish>
+	</target>
+	<!-- end ivy targets -->
+
+	<target name="maven-stage" depends="jar,javadoc,gen-pom,ivy-retrieve" description="stage the jars to the sonatype maven repo">
+		<!-- Include the maven ant tasks -->
+		<path id="maven-ant-tasks.classpath" path="bin/lib/build/jars/maven-ant-tasks.jar" />
+		<typedef resource="org/apache/maven/artifact/ant/antlib.xml"
+			uri="antlib:org.apache.maven.artifact.ant" classpathref="maven-ant-tasks.classpath" />
+		<deploy-maven-artifact file="bin/jars/${ant.project.name}.jar" classifier=""/>
+		<deploy-maven-artifact file="bin/sources/${ant.project.name}.jar" classifier="sources"/>
+		<deploy-maven-artifact file="bin/javadocs/${ant.project.name}.jar" classifier="javadoc"/>
+	</target>
+
+</project>
+

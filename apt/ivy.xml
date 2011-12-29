@@ -1,0 +1,22 @@
+<ivy-module version="2.0" xmlns:m="http://ant.apache.org/ivy/maven">
+	<info organisation="org.tessell" module="tessell-apt" revision="${revision}">
+		<license name="The Apache Software License, Version 2.0" url="http://www.apache.org/licenses/LICENSE-2.0.txt"/>
+	</info>
+	<configurations>
+		<conf name="build" visibility="private"/>
+		<conf name="default"/>
+		<conf name="sources"/>
+	</configurations>
+	<publications>
+		<artifact type="jar" ext="jar" conf="default"/>
+		<artifact type="source" ext="jar" conf="sources" m:classifier="sources"/>
+		<artifact type="pom" ext="pom" conf="build"/>
+	</publications>
+	<dependencies>
+		<!-- joist-util is jarjar'd so we count it as a build dependency. -->
+		<dependency org="org.exigencecorp" name="apt-util" rev="0.2" conf="build->default,sources"/>
+		<dependency org="joist" name="joist-util" rev="0.7.3" conf="build->default,sources"/>
+		<dependency org="com.tonicsystems" name="jarjar" rev="1.0" conf="build->default"/>
+		<dependency org="org.apache.maven" name="maven-ant-tasks" rev="2.1.3" conf="build->default"/>
+	</dependencies>
+</ivy-module>

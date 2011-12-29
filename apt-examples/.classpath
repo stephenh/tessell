@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="tests"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="war/WEB-INF/classes">
+		<attributes>
+			<attribute name="optional" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
+	<classpathentry kind="var" path="TESSELL_ROOT/apt/bin/annotations.jar"/>
+	<classpathentry kind="var" path="TESSELL_ROOT/user/bin/jars/tessell-user.jar"/>
+	<classpathentry kind="output" path="war/WEB-INF/classes"/>
+</classpath>

@@ -1,0 +1,45 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.tessell</groupId>
+	<artifactId>tessell-apt</artifactId>
+	<version>@revision@</version>
+	<name>tessell-apt</name>
+	<packaging>jar</packaging>
+	<description>tessell-apt is a Java 6 annotation processor to help generate some of the boilerplate code involved in GWT projects.</description>
+	<url>http://github.com/stephenh/tessell</url>
+	<licenses>
+		<license>
+			<name>Apache License 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	<scm>
+		<connection>scm:git:git@github.com:stephenh/tessell.git</connection>
+		<developerConnection>scm:git:git@github.com:stephenh/tessel.git</developerConnection>
+		<url>git@github.com:stephenh/tessell.git</url>
+	</scm>
+	<developers>
+		<developer>
+			<id>stephenh</id>
+			<name>Stephen Haberman</name>
+		</developer>
+		<developer>
+			<id>rombert</id>
+			<name>Robert Munteanu</name>
+		</developer>
+	</developers>
+	<issueManagement>
+		<system>GitHub</system>
+		<url>http://github.com/stephenh/tessell/issues</url>
+	</issueManagement>
+	<inceptionYear>2010</inceptionYear>
+	<mailingLists>
+		<mailingList>
+			<name>tessell</name>
+			<archive>http://groups.google.com/group/tessell</archive>
+			<post>http://groups.google.com/group/tessell/post</post>
+			<subscribe>http://groups.google.com/group/tessell/subscribe</subscribe>
+		</mailingList>
+	</mailingLists>
+</project>

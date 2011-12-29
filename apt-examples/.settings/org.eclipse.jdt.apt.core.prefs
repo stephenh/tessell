@@ -1,0 +1,5 @@
+#Wed Jun 17 15:02:29 CDT 2009
+eclipse.preferences.version=1
+org.eclipse.jdt.apt.aptEnabled=true
+org.eclipse.jdt.apt.genSrcDir=war/WEB-INF/classes
+org.eclipse.jdt.apt.reconcileEnabled=true
