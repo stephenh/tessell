@@ -1,7 +1,7 @@
 package org.tessell.model.events;
 
-import org.gwtmpv.GenEvent;
-import org.gwtmpv.Param;
+import org.tessell.GenEvent;
+import org.tessell.Param;
 import org.tessell.model.properties.Property;
 
 @GenEvent(gwtEvent = true)

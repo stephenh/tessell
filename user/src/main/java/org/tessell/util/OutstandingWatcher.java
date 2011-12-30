@@ -1,6 +1,11 @@
 package org.tessell.util;
 
-import org.tessell.dispatch.client.events.*;
+import org.tessell.dispatch.client.events.DispatchActionEvent;
+import org.tessell.dispatch.client.events.DispatchActionHandler;
+import org.tessell.dispatch.client.events.DispatchFailureEvent;
+import org.tessell.dispatch.client.events.DispatchFailureHandler;
+import org.tessell.dispatch.client.events.DispatchResultEvent;
+import org.tessell.dispatch.client.events.DispatchResultHandler;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;

@@ -1,7 +1,7 @@
 package org.tessell.model.validation.events;
 
-import org.gwtmpv.GenEvent;
-import org.gwtmpv.Param;
+import org.tessell.GenEvent;
+import org.tessell.Param;
 
 @GenEvent(methodName = "onUntrigger", gwtEvent = true)
 public class RuleUntriggeredEventSpec {

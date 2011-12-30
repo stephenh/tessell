@@ -1,7 +1,7 @@
 package org.tessell.dispatch.client.events;
 
-import org.gwtmpv.GenEvent;
-import org.gwtmpv.Param;
+import org.tessell.GenEvent;
+import org.tessell.Param;
 import org.tessell.dispatch.shared.Action;
 
 @GenEvent

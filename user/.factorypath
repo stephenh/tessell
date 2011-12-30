@@ -1,4 +1,4 @@
 <factorypath>
-    <factorypathentry kind="WKSPJAR" id="/tessell-user/bin/lib/build/jars/gwt-mpv-apt.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="WKSPJAR" id="/tessell-user/bin/lib/default/jars/bindgen-gwt.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="WKSPJAR" id="/tessell-user/bin/lib/build/jars/tessell-apt.jar" enabled="true" runInBatchMode="false"/>
 </factorypath>
