@@ -11,20 +11,14 @@ Tessell has support for building flexible forms with as little boilerplate as po
 Goals
 -----
 
-* Most form fields should require just 1 line of setup code--simple is easy
+* Most form fields require 1 line of code--simple is easy
 * Custom form fields are still doable--complex is possible
-* Ensure consistent look & feel of all forms in an app
-* Reusable implementation of standard AJAX form UX:
-  * Validation of properties as the user touches each field
-  * Validation of all properties when the user hits "Save"
-  * Disabling of "Save"/etc. commands after the initial click
-  * Showing of in-progress spinner while the command is executing (**not done yet**)
-* Enable low-level customization of the form's HTML code to match a mockup's HTML (whether using divs with floats or tables)
+* Consistent look & feel of all forms in an application
+* Reusable implementation of standard AJAX form UX
+* Low-level customization of the HTML to match a designer's HTML
 * Remain unit testable/MVP-compliant
 
-The focus is on getting all of the aspects of an AJAX form's UX right and consistent, without having to repeat all of this logic in every presenter in your app.
-
-Similarly, each form and each form field in an application shouldn't require copy/pasting 4-5 lines of code in the `ui.xml` file per form element.
+The focus is on getting all of the aspects of an AJAX form's UX right and consistent, without having to repeat all of this logic for every page in your app. Each form field in an application shouldn't require copy/pasting 4-5 lines of code in the `ui.xml` file per form element.
 
 Approach
 --------
@@ -44,9 +38,24 @@ For example, a FormPresenter-enabled form might look like:
     view.flowPanel().add(form.getView());
 {: class=brush:java}
 
-Notice how the presenter can focus on only declaring the form's structure. No layout details are needed (either here in the presenter or the presenter's `ui.xml` file).
+The page's `ui.xml` file is then as simple as:
 
-When the form is rendered to the DOM, the `ee.name` property will be wrapped in the boilerplate `div`, `input`, etc. tags to lay out it's row. Same thing with the other properties.
+    <ui:UiBinder ...>
+      <gwt:HTMLPanel>
+        <gwt:FlowPanel ui:field="formPanel"/>
+      </gwt:HTMLPanel>
+    </ui:UiBinder>
+{: class=brush:xml}
+
+Notice how the presenter can focus on only declaring the form's structure. And notice that no layout details are needed (either here in the presenter or the presenter's `ui.xml` file).
+
+With this setup, the form will automatically get:
+
+* Validation of properties as the user touches each field
+* Validation of all properties when the user hits "Save"
+* Disabling of "Save"/etc. commands after the initial click
+
+When the form is rendered to the DOM, the `ee.name` property will be wrapped in the boilerplate `div`, `input`, etc. tags to lay out its row. Same thing with the other properties.
 
 By default, the provided `FormLine` implementations will also render errors, so if `ee.name` is required, and the user leaves it blank, the error "Name is required" will be shown.
 
@@ -64,7 +73,7 @@ Then lines themselves are typically composed of:
 * Values--each line has a value, e.g. a text box for first name
 * Errors--each line has a list of errors, e.g. "Required"
 
-(Note that [FormLine][FormLine] is a generic interface, so is not required to have labels/values/errors, which is convenient for custom form lines, say if you needed a `DashedFormLine` to draw a solid `hr` between two sections of your form.)
+(Note that [FormLine][FormLine] is a generic interface, so is not required to have labels/values/errors. This is convenient for extremely customized form lines, say if you needed a `DashedFormLine` to draw a solid `hr` between two sections of your form.)
 
 With these set of assumptions about form structure, FormPresenter then provides interfaces and some default implementations to generic tie them together in a coherent way.
 
@@ -112,7 +121,7 @@ For example, you might have something like:
 
     public class AppFormPresenter extends FormPresenter {
       public AppFormPresenter(String id) {
-        // if using custom layout
+        // AppFormLayout is your app's optional custom layout
         super(id, new AppFormLayout(id));
       }
 

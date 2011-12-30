@@ -59,9 +59,10 @@ Following the github project is also the best way to stay in the loop on changes
 Credits
 -------
 
-* [Bizo](http://www.bizo.com) for their initial and continued support
+* [Bizo](http://www.bizo.com) for their initial and continued support of Tessell
 * [gwt-pectin](http://code.google.com/p/gwt-pectin/) inspired the binding DSL, which was previously very ugly
 * [gwt-dispatch](http://code.google.com/p/gwt-dispatch/) for the initial implementation of the dispatch pattern from Ray Ryan's I/O talk
+* [Paul Ruxton](http://paulruxton.com/) for the awesome logo and website design
 
   </div>
 </div>
