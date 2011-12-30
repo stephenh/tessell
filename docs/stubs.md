@@ -1,4 +1,4 @@
--GWT/--
+---
 layout: default
 title: Stubs
 ---
