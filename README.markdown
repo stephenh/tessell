@@ -1,12 +1,6 @@
 
 See [tessell.org](http://www.tessell.org).
 
-* form disable on ServerCall
-* indicator on ServerCall
-* Pre-fill the handler (optional);
-* doLogin.call(user, pass);
-* HasDispatchAsync to ServerCall cstr
-
 Todo
 ----
 
@@ -17,6 +11,12 @@ Todo
   * Event bus doesn't make sense--these aren't global things
   * Have Slot listen to presenter events?
 * Support 2nd generation Presenter interfaces via event hook hints in `ui.xml` file
+* form disable on ServerCall
+* indicator on ServerCall
+* Pre-fill the handler (optional);
+* doLogin.call(user, pass);
+* HasDispatchAsync to ServerCall cstr
+* ListProperty with filters/updates on child property change
 
 Limitations
 -----------
