@@ -29,8 +29,8 @@ title: Tessell
       <p>Tessell is available in the <a href="http://repo.tessell.org"><code>repo.tessell.org</code></a> repository:</p>
 
       <ul>
-        <li><code>org.tessell</code> <code>tessell-user</code> 2.0.0</li>
-        <li><code>org.tessell</code> <code>tessell-dev</code> 2.0.0</li>
+        <li><code>org.tessell</code> <code>tessell-user</code> 2.0.1</li>
+        <li><code>org.tessell</code> <code>tessell-dev</code> 2.0.1</li>
         <li><code>org.tessell</code> <code>tessell-apt</code> 2.0.0</li>
       </ul>
 
