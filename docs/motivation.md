@@ -6,11 +6,11 @@ title: Motivation
 Motivation
 ==========
 
-Tessell has two primary motivations:
+Tessell has three primary motivations:
 
 1. Provide an MVP architecture with as little view boilerplate as possible
 2. Provide rich models/data binding to have as little inner-class boilerplate as possible
-3. Provide a structured "way to do things" that results in well-built applications
+3. Provide a structured "way to do things" that results in well-built GWT/MVP applications
 
 MVP
 ---
@@ -26,6 +26,8 @@ But the short of it is: running tests against real on-screen/browser-based widge
 Contrary to traditional approach from the Ray Ryan talk/GWT docs, Tessell simply makes interfaces for each widget. If you have `TextBox`, you code against `IsTextBox`. At test time, a `StubTextBox` pretends to be your textbox.
 
 Your real UI code goes in a presenter class which, since it only talks to `IsXxx` widget interfaces, you can use the stub widgets to unit test your presenter very quickly.
+
+See [view generation](./viewgeneration.html) for more.
 
 Rich Models
 -----------
@@ -62,4 +64,5 @@ Other frameworks using rich models/data binding include:
 
 Tessell uses a lot of these same ideas, and basically reimplements them in an MVP-/unit-test-able fashion.
 
+See [rich models](./richmodels.html) for more.
 
