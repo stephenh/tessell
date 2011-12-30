@@ -26,7 +26,7 @@ title: Tessell
     <div class="rightcol">
       <h2>Download</h2>
 
-      <p>Tessell is available in the <a href="http://repo.joist.ws"><code>repo.joist.ws</code></a> Maven repo:</p>
+      <p>Tessell is available in the <a href="http://repo.tessell.org"><code>repo.tessell.org</code></a> repository:</p>
 
       <ul>
         <li><code>org.tessell</code> <code>tessell-user</code> 2.0.0</li>
