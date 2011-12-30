@@ -8,7 +8,9 @@ Stubs
 
 Stubs are not a part of traditional MVP, but they are used extensively in Tessell.
 
-Their purpose is to provide "dummy browser" behavior in just one place (each stub widget) and not repeated for every view in your application (or in every test in your application as mock specifications).
+Stubs are "dummy" implementations of GWT widgets (e.g. `TextBox` has a `StubTextBox`) that provide close-enough-to-browser behavior for MVP/DOM-less unit tests.
+
+By using a concrete implementation (the `StubTextBox` class), Tessell can provide this behavior in just one place (each stub) instead of an application's unit tests each repeatedly setting up/verifying mock specifications for each widget behavior it uses in the test.
 
 To do this, each `IsXxx` widget interface (see [View Generation](./viewgeneration.html)) has two implementations:
 
