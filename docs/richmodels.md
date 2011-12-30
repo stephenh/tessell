@@ -10,8 +10,61 @@ Tessell encourages rich, event-driven models.
 
 Rather than trying to keep view/model in sync via imperative programming (lots of inner classes), rich models enable declarative programming that can lead to more reliable UI behavior and succinct code.
 
-Examples
---------
+Properties
+----------
+
+Properties are the core of Tessell's rich models. Instead of having a (client-side) entity object with a `String` name and getters/setters, the entity has a `StringProperty`, returned by a `name()` getter, and modified by `name().get()` and `name().set(newValue)` methods.
+
+Properties fire change events (kind of like widgets) when they change, which allows other parts of your application (business logic or bound view widgets) to update themselves implicitly.
+
+This generally means you can program declaratively, rather than imperatively. For example, instead of keeping track of entity updates imperatively:
+
+    void onInit() {
+      employee.setName(name);
+      view.employeeName().setText(name);
+    }
+
+    void someBusinessLogic() {
+      employee.setName(newName);
+      // must remember to update the view
+      view.employeeName().setText(newName);
+    }
+{: class=brush:java}
+
+Tessell allows you to do this declaratively:
+
+    void onInit() {
+      employee.name.set(name);
+      binder.bind(employee.name).to(textOf(view.employeeName()));
+    }
+
+    void someBusinessLogic() {
+      // only have to set the name
+      employee.name.set(newName);
+    }
+{: class=brush:java}
+
+This is a trivial example, but as your application grows more complicated, having the model implicitly update downstream dependencies leads to less code and less bugs.
+
+Collections
+-----------
+
+Tessell also has so-called "live collections", which are property-like versions of `java.util.List`. This allows the same declarative style of programming with collections. For example:
+
+    binder.bind(listOfEmployees).to(
+      this,
+      view.employeesDiv(),
+      new ListPresenterFactory<Employee>() {
+        public Presenter create(Employee ee) {
+          return new EmployeePresenter(ee);
+        }
+      });
+{: class=brush:java}
+
+Means that any time `listOfEmployees` is changed (elements added or removed), then corresponding views will be added/removed to the `employeeDiv` in the UI.
+
+More Examples
+-------------
 
 For example, a model might look like:
 
