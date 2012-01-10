@@ -82,18 +82,29 @@ public class WhenIsBinder<P> {
     HandlerRegistrations hr = new HandlerRegistrations();
     hr.add(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
       public void onPropertyChanged(PropertyChangedEvent<P> event) {
-        update(enabled);
+        updateEnabled(enabled, true);
       }
     }));
-    update(enabled); // set initial value
+    updateEnabled(enabled, true); // set initial value
     return hr;
   }
 
-  private void update(HasEnabled enabled) {
+  public HandlerRegistrations disable(final HasEnabled enabled) {
+    HandlerRegistrations hr = new HandlerRegistrations();
+    hr.add(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
+      public void onPropertyChanged(PropertyChangedEvent<P> event) {
+        updateEnabled(enabled, false);
+      }
+    }));
+    updateEnabled(enabled, false); // set initial value
+    return hr;
+  }
+
+  private void updateEnabled(HasEnabled enabled, boolean valueIfTrue) {
     if (condition.evaluate(property)) {
-      enabled.setEnabled(true);
+      enabled.setEnabled(valueIfTrue);
     } else {
-      enabled.setEnabled(false);
+      enabled.setEnabled(!valueIfTrue);
     }
   }
 

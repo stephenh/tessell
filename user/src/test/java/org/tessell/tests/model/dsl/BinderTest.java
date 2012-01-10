@@ -26,7 +26,12 @@ import org.tessell.model.validation.Valid;
 import org.tessell.model.values.SetValue;
 import org.tessell.util.cookies.StringCookie;
 import org.tessell.util.cookies.facade.StubCookies;
-import org.tessell.widgets.*;
+import org.tessell.widgets.StubFocusWidget;
+import org.tessell.widgets.StubLabel;
+import org.tessell.widgets.StubListBox;
+import org.tessell.widgets.StubTextBox;
+import org.tessell.widgets.StubTextList;
+import org.tessell.widgets.StubWidget;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -224,6 +229,14 @@ public class BinderTest {
     StubFocusWidget w = new StubFocusWidget();
     binder.when(b).is(true).enable(w);
     b.set(false);
+    assertThat(w.isEnabled(), is(false));
+  }
+
+  @Test
+  public void whenTrueDisabledChangesToDisabled() {
+    BooleanProperty b = booleanProperty("b", true);
+    StubFocusWidget w = new StubFocusWidget();
+    binder.when(b).is(true).disable(w);
     assertThat(w.isEnabled(), is(false));
   }
 
