@@ -1,5 +1,7 @@
 package org.tessell.widgets;
 
+import com.google.gwt.safehtml.shared.SafeHtml;
+
 public class StubButtonBase extends StubFocusWidget implements IsButtonBase {
 
   private String html;
@@ -8,6 +10,11 @@ public class StubButtonBase extends StubFocusWidget implements IsButtonBase {
   @Override
   public String getHTML() {
     return html;
+  }
+
+  @Override
+  public void setHTML(final SafeHtml html) {
+    this.html = html.asString();
   }
 
   @Override

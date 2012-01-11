@@ -16,6 +16,7 @@ import com.google.gwt.event.logical.shared.AttachEvent.Handler;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.Widget;
@@ -151,6 +152,11 @@ public class GwtRadioButton implements IsRadioButton {
   @Override
   public String getHTML() {
     return button.getHTML();
+  }
+
+  @Override
+  public void setHTML(final SafeHtml html) {
+    button.setHTML(html);
   }
 
   @Override
