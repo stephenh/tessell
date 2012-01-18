@@ -1,6 +1,7 @@
 package com.foo.client;
 
 import com.foo.client.dispatch.BarAction;
+import com.foo.client.dispatch.FooAction;
 import com.foo.client.dispatch.FooCommand;
 import com.foo.client.dispatch.NoArgCommand;
 import com.google.gwt.core.client.EntryPoint;
@@ -134,8 +135,8 @@ public class Foo implements EntryPoint {
 	}
 
 	private FooCommand foo = new FooCommand(null) {
-		protected void setupAction() {
-			setupAction(1);
+		protected FooAction createAction() {
+			return createAction(1);
 		}
 
 		protected void onResult() {

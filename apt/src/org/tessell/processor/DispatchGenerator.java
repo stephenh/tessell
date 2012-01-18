@@ -84,31 +84,20 @@ public class DispatchGenerator {
 
     String actionWithoutBounds = simpleName + "Action" + generics.vars;
 
-		// add action field to keep track of the setup action
-		command.getField("action").type(actionWithoutBounds);
-
-		// implement createAction to call setupAction
-		GMethod createAction = command.getMethod("createAction").returnType(actionWithoutBounds);
-		createAction.body.line("this.action = null;");
-		createAction.body.line("this.setupAction();");
-		createAction.body.line("return this.action;");
-
-		// if no arguments to the action, just implement setupAction for the user
+		// if no arguments to the action, just implement createAction for the user
 		if (inParams.size() == 0) {
-			GMethod setupAction = command.getMethod("setupAction").setProtected();
-			setupAction.body.line("this.action = new {}();", actionWithoutBounds);
+			GMethod createAction = command.getMethod("createAction").setProtected().returnType(actionWithoutBounds);
+			createAction.body.line("return new {}();", actionWithoutBounds);
+      createAction.addAnnotation("@Override");
 		} else {
-			// add a setupAction the user is supposed to fill in
-			command.getMethod("setupAction").setAbstract().setProtected();
-
 			// add a helper method with all the incoming params
-			GMethod setupActionHelper = command.getMethod("setupAction", Copy.list(inParams.values()).map(new Function1<Argument, VariableElement>() {
+			GMethod createActionHelper = command.getMethod("createAction", Copy.list(inParams.values()).map(new Function1<Argument, VariableElement>() {
 				public Argument apply(VariableElement p1) {
 					return new Argument(p1.asType().toString(), p1.getSimpleName().toString());
 				}
-			})).setProtected();
-			setupActionHelper.body.line(
-				"this.action = new {}({});",
+			})).setProtected().returnType(actionWithoutBounds);
+			createActionHelper.body.line(
+				"return new {}({});",
 				actionWithoutBounds,
 				Join.commaSpace(Copy.list(inParams.values()).map(new Function1<String, VariableElement>() {
 					public String apply(VariableElement p1) {
