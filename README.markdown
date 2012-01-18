@@ -17,6 +17,10 @@ Todo
 * doLogin.call(user, pass);
 * HasDispatchAsync to ServerCall cstr
 * ListProperty with filters/updates on child property change
+* DispatchUiCommand
+  * Pre-implement createAction for 0-arg actions
+  * Remove result param from onResult, use getResult() getter
+  * Change createAction to setupAction, void, user calls setup(arg1, arg2, arg3);
 
 Limitations
 -----------
