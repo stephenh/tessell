@@ -4,7 +4,6 @@ import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.fail;
 
 import org.junit.Test;
 import org.tessell.dispatch.client.util.OutstandingDispatchAsync;
@@ -43,30 +42,38 @@ public class DispatchUiCommandTest extends AbstractRuleTest {
   }
 
   @Test
-  public void executeFailsWhenAlreadyActive() {
+  public void allowsReExecution() {
     DummyUiCommand command = new DummyUiCommand(async);
     // initial execute is find
     command.execute();
     assertThat(command.createActionCalls, is(1));
 
-    try {
-      command.execute();
-      fail();
-    } catch (IllegalStateException ise) {
-      assertThat(ise.getMessage(), is("Command is already executing"));
-      assertThat(command.createActionCalls, is(1));
-    }
-
-    // when the call finally comes back
-    async.getCalls().get(0).callback.onFailure(null);
-    // now we can execute again
     command.execute();
     assertThat(command.createActionCalls, is(2));
+
+    // when the first response finally comes back
+    async.getCalls().get(0).callback.onSuccess(null);
+    // it calls onResult
+    assertThat(command.onResultCalls, is(1));
+    // but it could tell it was a stale result
+    assertThat(command.wasStale, is(true));
+
+    // note that the command is still active
+    assertThat(command.active().get(), is(true));
+
+    // and when the second response comes back
+    async.getCalls().get(1).callback.onSuccess(null);
+    // it also calls onResult
+    assertThat(command.onResultCalls, is(2));
+    // and this result was not stale
+    assertThat(command.wasStale, is(false));
   }
 
   /** Fails depending on the instance variable {@code fail}. */
   private final class DummyUiCommand extends DispatchUiCommand<Action<Result>, Result> {
     private int createActionCalls = 0;
+    private int onResultCalls = 0;
+    private boolean wasStale = false;
 
     public DummyUiCommand(OutstandingDispatchAsync async) {
       super(async);
@@ -81,6 +88,8 @@ public class DispatchUiCommandTest extends AbstractRuleTest {
 
     @Override
     protected void onResult(Result result) {
+      wasStale = isStale();
+      onResultCalls++;
     }
   }
 

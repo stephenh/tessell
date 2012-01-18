@@ -23,42 +23,36 @@ public abstract class DispatchUiCommand<A extends Action<R>, R extends Result> e
 
   private final OutstandingDispatchAsync async;
   private final BooleanProperty active = booleanProperty("active", false);
+  private A lastAction;
+  private A currentAction;
 
   public DispatchUiCommand(OutstandingDispatchAsync async) {
     this.async = async;
   }
 
-  /**
-   * Executes the UI command, first triggering any "only if" validation,
-   * and then calling {@code doExecute} if they all pass.
-   *
-   * @throws IllegalStateException if the command is disabled
-   * @throws IllegalStateException if the command is already active
-   */
-  @Override
-  public void execute() {
-    if (active.isTrue()) {
-      throw new IllegalStateException("Command is already executing");
-    }
-    super.execute();
-  }
-
   @Override
   protected final void doExecute() {
-    A action = createAction();
+    final A action = createAction();
+    lastAction = action;
     if (action != null) {
       active.set(true);
       // It would be nice to use a SuccessCallback, but we need to know
       // when the failure happened to toggle active back to false
       async.execute(action, new AsyncCallback<R>() {
         public void onSuccess(R result) {
+          currentAction = action;
           onResult(result);
-          active.set(false);
+          if (currentAction == lastAction) {
+            active.set(false);
+          }
         }
 
         public void onFailure(Throwable caught) {
+          currentAction = action;
           DispatchUiCommand.this.onFailure(caught);
-          active.set(false);
+          if (currentAction == lastAction) {
+            active.set(false);
+          }
         }
       });
     }
@@ -80,4 +74,8 @@ public abstract class DispatchUiCommand<A extends Action<R>, R extends Result> e
     async.unhandledFailure(caught);
   }
 
+  /** Allows subclasses to tell if the current onResult is stale. */
+  protected boolean isStale() {
+    return lastAction != currentAction;
+  }
 }
