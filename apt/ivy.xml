@@ -16,7 +16,7 @@
 		<!-- joist-util is jarjar'd so we count it as a build dependency. -->
 		<dependency org="org.exigencecorp" name="apt-util" rev="0.2" conf="build->default,sources"/>
 		<dependency org="joist" name="joist-util" rev="1.2.7" conf="build->default,sources"/>
-		<dependency org="com.tonicsystems" name="jarjar" rev="1.0" conf="build->default"/>
+		<dependency org="com.googlecode.jarjar" name="jarjar" rev="1.1" conf="build->default"/>
 		<dependency org="org.apache.maven" name="maven-ant-tasks" rev="2.1.3" conf="build->default"/>
 	</dependencies>
 </ivy-module>
