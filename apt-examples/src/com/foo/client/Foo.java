@@ -1,6 +1,8 @@
 package com.foo.client;
 
 import com.foo.client.dispatch.BarAction;
+import com.foo.client.dispatch.FooCommand;
+import com.foo.client.dispatch.NoArgCommand;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -126,5 +128,24 @@ public class Foo implements EntryPoint {
 		MyHandler handler = new MyHandler();
 		sendButton.addClickHandler(handler);
 		nameField.addKeyUpHandler(handler);
+
+		foo.execute();
+    noarg.execute();
 	}
+
+	private FooCommand foo = new FooCommand(null) {
+		protected void setupAction() {
+			setupAction(1);
+		}
+
+		protected void onResult() {
+      result.getBar();
+      result.getFoo();
+		}
+	};
+
+  private NoArgCommand noarg = new NoArgCommand(null) {
+		protected void onResult() {
+		}
+	};
 }

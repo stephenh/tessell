@@ -87,7 +87,7 @@ public class DispatchUiCommandTest extends AbstractRuleTest {
     }
 
     @Override
-    protected void onResult(Result result) {
+    protected void onResult() {
       wasStale = isStale();
       onResultCalls++;
     }

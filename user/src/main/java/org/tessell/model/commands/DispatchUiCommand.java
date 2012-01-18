@@ -25,6 +25,7 @@ public abstract class DispatchUiCommand<A extends Action<R>, R extends Result> e
   private final BooleanProperty active = booleanProperty("active", false);
   private A lastAction;
   private A currentAction;
+  protected R result;
 
   public DispatchUiCommand(OutstandingDispatchAsync async) {
     this.async = async;
@@ -39,9 +40,10 @@ public abstract class DispatchUiCommand<A extends Action<R>, R extends Result> e
       // It would be nice to use a SuccessCallback, but we need to know
       // when the failure happened to toggle active back to false
       async.execute(action, new AsyncCallback<R>() {
-        public void onSuccess(R result) {
+        public void onSuccess(R r) {
           currentAction = action;
-          onResult(result);
+          result = r;
+          onResult();
           if (currentAction == lastAction) {
             active.set(false);
           }
@@ -49,6 +51,7 @@ public abstract class DispatchUiCommand<A extends Action<R>, R extends Result> e
 
         public void onFailure(Throwable caught) {
           currentAction = action;
+          result = null;
           DispatchUiCommand.this.onFailure(caught);
           if (currentAction == lastAction) {
             active.set(false);
@@ -67,7 +70,7 @@ public abstract class DispatchUiCommand<A extends Action<R>, R extends Result> e
   protected abstract A createAction();
 
   /** Implemented by subclasses to handle a successful result. */
-  protected abstract void onResult(R result);
+  protected abstract void onResult();
 
   /** Fires a {@link DispatchUnhandledFailureEvent} on failures, can be overridden by subclasses if needed. */
   protected void onFailure(Throwable caught) {
@@ -78,4 +81,5 @@ public abstract class DispatchUiCommand<A extends Action<R>, R extends Result> e
   protected boolean isStale() {
     return lastAction != currentAction;
   }
+
 }

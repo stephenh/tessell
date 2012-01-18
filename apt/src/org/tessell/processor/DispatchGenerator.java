@@ -13,8 +13,12 @@ import javax.lang.model.element.VariableElement;
 import javax.lang.model.util.ElementFilter;
 import javax.tools.Diagnostic.Kind;
 
+import joist.sourcegen.Argument;
 import joist.sourcegen.GClass;
 import joist.sourcegen.GMethod;
+import joist.util.Copy;
+import joist.util.Function1;
+import joist.util.Join;
 
 import org.exigencecorp.aptutil.GenericSuffix;
 import org.exigencecorp.aptutil.Prop;
@@ -77,6 +81,41 @@ public class DispatchGenerator {
 			generics.vars);
 
 		command.getConstructor(arg("org.tessell.dispatch.client.util.OutstandingDispatchAsync", "async")).body.line("super(async);");
+
+    String actionWithoutBounds = simpleName + "Action" + generics.vars;
+
+		// add action field to keep track of the setup action
+		command.getField("action").type(actionWithoutBounds);
+
+		// implement createAction to call setupAction
+		GMethod createAction = command.getMethod("createAction").returnType(actionWithoutBounds);
+		createAction.body.line("this.action = null;");
+		createAction.body.line("this.setupAction();");
+		createAction.body.line("return this.action;");
+
+		// if no arguments to the action, just implement setupAction for the user
+		if (inParams.size() == 0) {
+			GMethod setupAction = command.getMethod("setupAction").setProtected();
+			setupAction.body.line("this.action = new {}();", actionWithoutBounds);
+		} else {
+			// add a setupAction the user is supposed to fill in
+			command.getMethod("setupAction").setAbstract().setProtected();
+
+			// add a helper method with all the incoming params
+			GMethod setupActionHelper = command.getMethod("setupAction", Copy.list(inParams.values()).map(new Function1<Argument, VariableElement>() {
+				public Argument apply(VariableElement p1) {
+					return new Argument(p1.asType().toString(), p1.getSimpleName().toString());
+				}
+			})).setProtected();
+			setupActionHelper.body.line(
+				"this.action = new {}({});",
+				actionWithoutBounds,
+				Join.commaSpace(Copy.list(inParams.values()).map(new Function1<String, VariableElement>() {
+					public String apply(VariableElement p1) {
+						return p1.getSimpleName().toString();
+					}
+				})));
+		}
 
 		PropUtil.addGenerated(command, DispatchGenerator.class);
 		Util.saveCode(env, command, element);
