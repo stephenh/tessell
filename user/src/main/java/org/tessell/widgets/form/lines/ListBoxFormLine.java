@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import org.tessell.model.dsl.Binder;
 import org.tessell.model.dsl.ListBoxAdaptor;
+import org.tessell.model.dsl.ListBoxIdentityAdaptor;
 import org.tessell.model.properties.Property;
 import org.tessell.model.properties.PropertyGroup;
 import org.tessell.util.HTMLPanelBuilder;
@@ -22,6 +23,14 @@ import org.tessell.widgets.form.FormPresenter;
  * @param O the type of the options shown in the list
  */
 public class ListBoxFormLine<T, O> extends AbstractFormLine<T> {
+
+  public static <T, O> ListBoxFormLine<T, O> of(Property<T> p, ArrayList<O> values, ListBoxAdaptor<T, O> adaptor) {
+    return new ListBoxFormLine<T, O>(p, values, adaptor);
+  }
+
+  public static <T> ListBoxFormLine<T, T> of(Property<T> p, ArrayList<T> values) {
+    return new ListBoxFormLine<T, T>(p, values, new ListBoxIdentityAdaptor<T>());
+  }
 
   protected final ArrayList<O> possibleValues;
   protected final ListBoxAdaptor<T, O> adaptor;
