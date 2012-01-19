@@ -40,6 +40,7 @@ public class ListBoxFormLine<T, O> extends AbstractFormLine<T> {
     listBox.ensureDebugId(id);
     errorList.ensureDebugId(id + "-errors");
     binder.bind(property).to(listBox, possibleValues, adaptor);
+    binder.bind(property).errorsTo(errorList);
   }
 
   @Override

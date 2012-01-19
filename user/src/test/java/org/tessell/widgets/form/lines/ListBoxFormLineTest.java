@@ -10,7 +10,9 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 import org.tessell.model.dsl.ListBoxAdaptor;
+import org.tessell.model.validation.rules.Required;
 import org.tessell.widgets.StubListBox;
+import org.tessell.widgets.StubTextList;
 import org.tessell.widgets.form.AbstractFormPresenterTest;
 import org.tessell.widgets.form.EmployeeModel;
 import org.tessell.widgets.form.EmployerDto;
@@ -45,23 +47,51 @@ public class ListBoxFormLineTest extends AbstractFormPresenterTest {
   }
 
   @Test
+  public void listBoxErrorsAreBound() {
+    // give the user a null option
+    new Required(employee.employerId);
+    employers.add(0, null);
+    p.add(newListBoxFormLine(employee.employerId, employers, new EmployerDtoAdaptor()));
+    assertThat(employee.employerId.isTouched(), is(false));
+    // now select it (which will touch the property)
+    listBox("p-employerId").select("");
+    assertThat(employee.employerId.isTouched(), is(true));
+    assertThat(errorList("p-employerId-errors").getList(), contains("Employer Id is required"));
+  }
+
+  @Test
+  public void listBoxDoesNotTouchIfNullIsAvailable() {
+    new Required(employee.employerId);
+    employers.add(0, null);
+    p.add(newListBoxFormLine(employee.employerId, employers, new EmployerDtoAdaptor()));
+    assertThat(employee.employerId.get(), is(nullValue()));
+    assertThat(employee.employerId.isTouched(), is(false));
+    assertThat(errorList("p-employerId-errors").getList().size(), is(0));
+  }
+
+  @Test
   public void listBoxIsBoundCurrentlyAssignsFirstvalue() {
     assertThat(employee.employerId.get(), is(nullValue()));
     p.add(newListBoxFormLine(employee.employerId, employers, new EmployerDtoAdaptor()));
     assertThat(employee.employerId.get(), is(1));
+    assertThat(employee.employerId.isTouched(), is(true));
   }
 
   private StubListBox listBox(String id) {
     return (StubListBox) html().findById(id);
   }
 
+  private StubTextList errorList(String id) {
+    return (StubTextList) html().findById(id);
+  }
+
   private static final class EmployerDtoAdaptor implements ListBoxAdaptor<Integer, EmployerDto> {
     public String toDisplay(EmployerDto option) {
-      return option.name;
+      return option == null ? "" : option.name;
     }
 
     public Integer toValue(EmployerDto option) {
-      return option.id;
+      return option == null ? null : option.id;
     }
   }
 

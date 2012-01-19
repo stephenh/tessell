@@ -88,8 +88,9 @@ public class PropertyBinder<P> {
       source.addItem(adaptor.toDisplay(option), Integer.toString(i++));
     }
     if (p.get() == null) {
-      // TODO don't currently support an empty option
-      p.set(adaptor.toValue(options.get(0)));
+      if (!options.contains(null)) {
+        p.set(adaptor.toValue(options.get(0)));
+      }
     }
     source.setSelectedIndex(options.indexOf(p.get()));
     HandlerRegistration a = source.addChangeHandler(new ChangeHandler() {
