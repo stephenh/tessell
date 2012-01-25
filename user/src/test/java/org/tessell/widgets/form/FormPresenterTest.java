@@ -8,10 +8,11 @@ import joist.util.Join;
 import org.junit.Test;
 import org.tessell.model.properties.StringProperty;
 import org.tessell.model.validation.Valid;
+import org.tessell.tests.model.commands.DummyUiCommand;
 import org.tessell.util.HTMLPanelBuilder;
+import org.tessell.widgets.StubButton;
 import org.tessell.widgets.StubTextBox;
-import org.tessell.widgets.form.FormLayout;
-import org.tessell.widgets.form.FormPresenter;
+import org.tessell.widgets.form.actions.ButtonFormAction;
 import org.tessell.widgets.form.lines.StaticFormLine;
 import org.tessell.widgets.form.lines.TextBoxFormLine;
 
@@ -74,5 +75,22 @@ public class FormPresenterTest extends AbstractFormPresenterTest {
         "</ol></div>",
         "</div>" },
       "")));
+  }
+
+  @Test
+  public void buttonTouchesProperties() {
+    final DummyUiCommand command = new DummyUiCommand();
+    final StringProperty name = stringProperty("name").max(10);
+    p.add(new TextBoxFormLine(name));
+    ButtonFormAction action = new ButtonFormAction(command, "foo");
+    p.add(action);
+    // given the name is not touched
+    assertThat(name.isTouched(), is(false));
+    // when submit is clicked
+    ((StubButton) action.getButton()).click();
+    // then the property is now touched
+    assertThat(name.isTouched(), is(true));
+    // and the command did not execute
+    assertThat(command.getExecutions(), is(0));
   }
 }
