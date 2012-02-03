@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.tessell.model.events.PropertyChangedEvent;
 import org.tessell.model.events.PropertyChangedHandler;
 import org.tessell.model.properties.Property;
+import org.tessell.util.ObjectUtils;
 import org.tessell.util.cookies.Cookie;
 import org.tessell.widgets.IsListBox;
 import org.tessell.widgets.IsTextList;
@@ -112,7 +113,7 @@ public class PropertyBinder<P> {
       private int indexInOptions() {
         int i = 0;
         for (O option : options) {
-          if (adaptor.toValue(option).equals(p.get())) {
+          if (ObjectUtils.eq(adaptor.toValue(option), p.get())) {
             return i;
           }
           i++;

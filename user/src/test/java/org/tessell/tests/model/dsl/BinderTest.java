@@ -80,12 +80,16 @@ public class BinderTest {
   public void propertyToListBoxUpdatesListBoxWhenPropertyChanges() {
     StubListBox listBox = new StubListBox();
     ArrayList<String> values = new ArrayList<String>();
+    values.add(null);
     values.add("a");
     values.add("b");
 
     binder.bind(s).to(listBox, values);
     s.set("b");
-    assertThat(listBox.getSelectedIndex(), is(1));
+    assertThat(listBox.getSelectedIndex(), is(2));
+
+    s.set(null);
+    assertThat(listBox.getSelectedIndex(), is(0));
   }
 
   @Test
