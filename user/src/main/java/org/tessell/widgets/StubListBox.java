@@ -13,27 +13,27 @@ public class StubListBox extends StubFocusWidget implements IsListBox {
   private int visibleItems = 1;
   private String name;
 
-  public void select(final String item) {
-    setSelectedIndex(getItemIndex(item));
+  public void select(final String text) {
+    setSelectedIndex(getItemIndex(text));
   }
 
   public String getSelectedText() {
     return getItemText(getSelectedIndex());
   }
 
-  public int getItemIndex(final String item) {
+  public int getItemIndex(final String text) {
     for (int i = 0; i < items.size(); i++) {
-      if (items.get(i).item.equals(item)) {
+      if (items.get(i).text.equals(text)) {
         return i;
       }
     }
-    throw new IllegalArgumentException("No item " + item);
+    throw new IllegalArgumentException("No item " + text);
   }
 
   public List<String> getItems() {
     final List<String> i = new ArrayList<String>();
     for (final Item item : items) {
-      i.add(item.item);
+      i.add(item.text);
     }
     return i;
   }
@@ -60,7 +60,7 @@ public class StubListBox extends StubFocusWidget implements IsListBox {
 
   @Override
   public String getItemText(final int index) {
-    return items.get(index).item;
+    return items.get(index).text;
   }
 
   @Override
@@ -84,14 +84,14 @@ public class StubListBox extends StubFocusWidget implements IsListBox {
   }
 
   @Override
-  public void insertItem(final String item, final int index) {
-    insertItem(item, item, index);
+  public void insertItem(final String text, final int index) {
+    insertItem(text, text, index);
   }
 
   @Override
-  public void insertItem(final String item, final String value, final int index) {
+  public void insertItem(final String text, final String value, final int index) {
     final Item i = new Item();
-    i.item = item;
+    i.text = text;
     i.value = value;
     if (index == -1) {
       items.add(i);
@@ -124,7 +124,7 @@ public class StubListBox extends StubFocusWidget implements IsListBox {
 
   @Override
   public void setItemText(final int index, final String text) {
-    items.get(index).item = text;
+    items.get(index).text = text;
   }
 
   @Override
@@ -168,7 +168,7 @@ public class StubListBox extends StubFocusWidget implements IsListBox {
   }
 
   public static class Item {
-    public String item;
+    public String text;
     public String value;
     public boolean selected;
   }
