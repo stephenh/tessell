@@ -1,5 +1,7 @@
 package org.tessell.widgets;
 
+import static org.tessell.util.ObjectUtils.eq;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +25,7 @@ public class StubListBox extends StubFocusWidget implements IsListBox {
 
   public int getItemIndex(final String text) {
     for (int i = 0; i < items.size(); i++) {
-      if (items.get(i).text.equals(text)) {
+      if (eq(items.get(i).text, text)) {
         return i;
       }
     }
