@@ -25,7 +25,7 @@ public class DispatchUiCommandTest extends AbstractRuleTest {
     command.execute();
     assertThat(command.active().get(), is(TRUE));
 
-    async.getCalls().get(0).callback.onSuccess(null);
+    async.getCalls().get(0).onSuccess(null);
     assertThat(command.active().get(), is(FALSE));
   }
 
@@ -37,7 +37,7 @@ public class DispatchUiCommandTest extends AbstractRuleTest {
     command.execute();
     assertThat(command.active().get(), is(TRUE));
 
-    async.getCalls().get(0).callback.onFailure(null);
+    async.getCalls().get(0).onFailure(null);
     assertThat(command.active().get(), is(FALSE));
   }
 
@@ -52,7 +52,7 @@ public class DispatchUiCommandTest extends AbstractRuleTest {
     assertThat(command.createActionCalls, is(2));
 
     // when the first response finally comes back
-    async.getCalls().get(0).callback.onSuccess(null);
+    async.getCalls().get(0).onSuccess(null);
     // it calls onResult
     assertThat(command.onResultCalls, is(1));
     // but it could tell it was a stale result
@@ -62,7 +62,7 @@ public class DispatchUiCommandTest extends AbstractRuleTest {
     assertThat(command.active().get(), is(true));
 
     // and when the second response comes back
-    async.getCalls().get(1).callback.onSuccess(null);
+    async.getCalls().get(1).onSuccess(null);
     // it also calls onResult
     assertThat(command.onResultCalls, is(2));
     // and this result was not stale

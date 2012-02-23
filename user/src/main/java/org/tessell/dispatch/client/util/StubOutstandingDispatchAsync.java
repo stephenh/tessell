@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.tessell.bus.StubEventBus;
 import org.tessell.dispatch.client.StubDispatchAsync;
-import org.tessell.dispatch.client.StubDispatchAsync.ExecuteCall;
+import org.tessell.dispatch.client.StubDispatchAsync.StubAsyncCallback;
 import org.tessell.dispatch.shared.Action;
 import org.tessell.dispatch.shared.Result;
 
@@ -34,7 +34,7 @@ public class StubOutstandingDispatchAsync extends OutstandingDispatchAsync {
   }
 
   /** @return all calls for assertions */
-  public List<ExecuteCall<?, ?>> getCalls() {
+  public List<StubAsyncCallback<?, ?>> getCalls() {
     return realStub.getCalls();
   }
 
@@ -44,17 +44,17 @@ public class StubOutstandingDispatchAsync extends OutstandingDispatchAsync {
   }
 
   /** @return all calls for {@link actionType} for assertions */
-  public <A extends Action<R>, R extends Result> List<ExecuteCall<A, R>> getCalls(final Class<A> actionType) {
+  public <A extends Action<R>, R extends Result> List<StubAsyncCallback<A, R>> getCalls(final Class<A> actionType) {
     return realStub.getCalls(actionType);
   }
 
   /** @return the {@link AsyncCallback} for {@code actionType} {@code index} */
-  public <A extends Action<R>, R extends Result> AsyncCallback<R> getCallback(final Class<A> actionType, final int index) {
+  public <A extends Action<R>, R extends Result> StubAsyncCallback<A, R> getCallback(final Class<A> actionType, final int index) {
     return realStub.getCallback(actionType, index);
   }
 
   /** @return the {@link AsyncCallback} for the last {@code actionType} */
-  public <A extends Action<R>, R extends Result> AsyncCallback<R> getCallback(final Class<A> actionType) {
+  public <A extends Action<R>, R extends Result> StubAsyncCallback<A, R> getCallback(final Class<A> actionType) {
     return realStub.getCallback(actionType);
   }
 
