@@ -38,13 +38,13 @@ public abstract class AbstractDispatchServiceServlet extends RemoteServiceServle
       // assume the user has already logged the ActionException appropriately
       throw ae;
     } catch (final Exception e) {
-      log(e);
+      logActionFailure(e);
       throw wrapInActionException(e);
     }
   }
 
   /** Allows subclasses to override exception logging. By default uses {@link GenericServlet#log}. */
-  protected void log(Exception e) {
+  protected void logActionFailure(Exception e) {
     log(e.getMessage(), e);
   }
 
