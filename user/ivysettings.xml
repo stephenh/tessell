@@ -17,11 +17,15 @@
 		<filesystem name="maven-share" m2compatible="true">
 			<artifact pattern="${user.home}/repo/[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]"/>
 		</filesystem>
+		<!-- public Maven repo -->
+		<ibiblio name="maven2" m2compatible="true"/>
+
 		<chain name="default">
 			<resolver ref="public"/>
 			<resolver ref="spock-ext"/>
 			<resolver ref="maven-local"/>
 			<resolver ref="joist"/>
+			<resolver ref="maven2"/>
 		</chain>
 	</resolvers>
 </ivysettings>
