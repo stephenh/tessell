@@ -18,10 +18,16 @@ public class ButtonFormAction implements FormAction {
   private final IsButton button = newButton();
   private final UiCommand command;
   private final String text;
+  private boolean addOnlyIf;
 
   public ButtonFormAction(final UiCommand command, String text) {
+    this(command, text, true);
+  }
+
+  public ButtonFormAction(final UiCommand command, String text, boolean addOnlyIf) {
     this.command = command;
     this.text = text;
+    this.addOnlyIf = addOnlyIf;
     button.setText(text);
     button.addClickHandler(new ClickHandler() {
       public void onClick(ClickEvent event) {
@@ -34,7 +40,9 @@ public class ButtonFormAction implements FormAction {
   public void bind(FormPresenter p, Binder binder) {
     String id = p.getId() + "-" + Inflector.camelize(text);
     button.ensureDebugId(id);
-    command.addOnlyIf(p.allValid());
+    if (addOnlyIf) {
+      command.addOnlyIf(p.allValid());
+    }
     binder.when(command.enabled()).is(true).show(button);
     if (command instanceof DispatchUiCommand) {
       binder.when(((DispatchUiCommand<?, ?>) command).active()).is(false).enable(button);
@@ -53,6 +61,10 @@ public class ButtonFormAction implements FormAction {
 
   public IsButton getButton() {
     return button;
+  }
+
+  public void setAddOnlyIf(boolean addOnlyIf) {
+    this.addOnlyIf = addOnlyIf;
   }
 
 }

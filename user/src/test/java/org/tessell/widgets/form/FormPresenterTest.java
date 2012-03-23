@@ -93,4 +93,21 @@ public class FormPresenterTest extends AbstractFormPresenterTest {
     // and the command did not execute
     assertThat(command.getExecutions(), is(0));
   }
+
+  @Test
+  public void cancelButtonDoesNotTouchProperties() {
+    final DummyUiCommand command = new DummyUiCommand();
+    final StringProperty name = stringProperty("name").max(10);
+    p.add(new TextBoxFormLine(name));
+    ButtonFormAction action = new ButtonFormAction(command, "cancel", false);
+    p.add(action);
+    // given the name is not touched
+    assertThat(name.isTouched(), is(false));
+    // when cancel is clicked
+    ((StubButton) action.getButton()).click();
+    // then the property is still not touched
+    assertThat(name.isTouched(), is(false));
+    // and the command executed
+    assertThat(command.getExecutions(), is(1));
+  }
 }
