@@ -26,12 +26,7 @@ import org.tessell.model.validation.Valid;
 import org.tessell.model.values.SetValue;
 import org.tessell.util.cookies.StringCookie;
 import org.tessell.util.cookies.facade.StubCookies;
-import org.tessell.widgets.StubFocusWidget;
-import org.tessell.widgets.StubLabel;
-import org.tessell.widgets.StubListBox;
-import org.tessell.widgets.StubTextBox;
-import org.tessell.widgets.StubTextList;
-import org.tessell.widgets.StubWidget;
+import org.tessell.widgets.*;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -102,6 +97,39 @@ public class BinderTest {
     binder.bind(s).to(listBox, values);
     listBox.select("b");
     assertThat(s.get(), is("b"));
+  }
+
+  @Test
+  public void propertyToListBoxHandlesNullValue() {
+    StubListBox listBox = new StubListBox();
+    ArrayList<String> values = new ArrayList<String>();
+    values.add(null);
+    values.add("a");
+    values.add("b");
+
+    binder.bind(s).to(listBox, values);
+    listBox.select("b");
+    assertThat(s.get(), is("b"));
+
+    // null gets converted to "" (otherwise it shows up as "null"), so select that
+    listBox.select("");
+    assertThat(s.get(), is(nullValue()));
+  }
+
+  @Test
+  public void propertyToListBoxHandlesEmptyString() {
+    StubListBox listBox = new StubListBox();
+    ArrayList<String> values = new ArrayList<String>();
+    values.add("");
+    values.add("a");
+    values.add("b");
+
+    binder.bind(s).to(listBox, values);
+    listBox.select("b");
+    assertThat(s.get(), is("b"));
+
+    listBox.select("");
+    assertThat(s.get(), is(""));
   }
 
   @Test

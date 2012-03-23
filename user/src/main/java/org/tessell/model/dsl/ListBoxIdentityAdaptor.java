@@ -4,7 +4,7 @@ public class ListBoxIdentityAdaptor<P> implements ListBoxAdaptor<P, P> {
 
   @Override
   public String toDisplay(P option) {
-    return option == null ? null : option.toString();
+    return option == null ? "" : option.toString();
   }
 
   @Override
