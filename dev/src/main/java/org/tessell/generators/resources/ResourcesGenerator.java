@@ -59,7 +59,7 @@ public class ResourcesGenerator {
 
   public void run() throws Exception {
     appResources.setInterface().baseClass(ClientBundle.class);
-    stubResources.implementsInterface(appResources.getFullClassName());
+    stubResources.implementsInterface(appResources.getFullName());
 
     for (final File file : getFilesInInputDirectory()) {
       if (file.getName().endsWith(".css")) {

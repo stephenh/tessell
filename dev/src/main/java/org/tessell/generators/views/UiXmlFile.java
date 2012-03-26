@@ -106,7 +106,7 @@ class UiXmlFile {
   }
 
   private void generateGwtView() throws Exception {
-    gwtView.baseClass(DelegateIsWidget.class).implementsInterface(isView.getSimpleClassName());
+    gwtView.baseClass(DelegateIsWidget.class).implementsInterface(isView.getSimpleName());
     final GMethod cstr = gwtView.getConstructor();
     gwtView.addImports(GWT.class);
     if (handler.withFields.size() > 0 || handler.uiFields.size() > 0) {
@@ -120,7 +120,7 @@ class UiXmlFile {
     {
       // uibinder
       final GClass uibinder = gwtView.getInnerClass("MyUiBinder").setInterface();
-      uibinder.baseClassName("{}<{}, {}>", UiBinder.class.getName(), handler.firstTagType, gwtView.getSimpleClassName());
+      uibinder.baseClassName("{}<{}, {}>", UiBinder.class.getName(), handler.firstTagType, gwtView.getSimpleName());
       uibinder.addAnnotation("@UiTemplate(\"{}\")", uiXml.getName().replace(".ui.xml", "-gen.ui.xml"));
       gwtView.addImports(UiTemplate.class);
 
@@ -184,7 +184,7 @@ class UiXmlFile {
     }
 
     cstr.body.line("setWidget(binder.createAndBindUi(this));");
-    cstr.body.line("ensureDebugId(\"{}\");", gwtView.getSimpleClassNameWithoutGeneric().replaceAll("View$", "").replaceAll("^Gwt", ""));
+    cstr.body.line("ensureDebugId(\"{}\");", gwtView.getSimpleName().replaceAll("View$", "").replaceAll("^Gwt", ""));
 
     // go back and assign field values for things created by uibinder
     for (final UiFieldDeclaration field : handler.uiFields) {
@@ -200,7 +200,7 @@ class UiXmlFile {
   }
 
   private void generateStubView() throws Exception {
-    stubView.baseClass(StubView.class).implementsInterface(isView.getSimpleClassName());
+    stubView.baseClass(StubView.class).implementsInterface(isView.getSimpleName());
 
     final GMethod cstr = stubView.getConstructor();
 
@@ -227,7 +227,7 @@ class UiXmlFile {
       stubView.getMethod(style.name).returnType(style.type).body.line("return {};", style.name);
     }
 
-    cstr.body.line("ensureDebugId(\"{}\");", stubView.getSimpleClassNameWithoutGeneric().replaceAll("View$", "").replaceAll("^Stub", ""));
+    cstr.body.line("ensureDebugId(\"{}\");", stubView.getSimpleName().replaceAll("View$", "").replaceAll("^Stub", ""));
 
     viewGenerator.markAndSave(stubView);
   }

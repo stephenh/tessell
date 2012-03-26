@@ -81,7 +81,7 @@ public class ViewGenerator {
     final GClass appViews = new GClass(packageName + ".AppViews");
 
     for (final UiXmlFile uiXml : uiXmlFiles) {
-      GMethod m = appViews.getMethod("new" + uiXml.baseName).returnType(uiXml.isView.getFullClassName()).setStatic();
+      GMethod m = appViews.getMethod("new" + uiXml.baseName).returnType(uiXml.isView.getFullName()).setStatic();
       m.body.line("return provider.new{}();", uiXml.baseName);
     }
 
@@ -95,7 +95,7 @@ public class ViewGenerator {
   private void generateAppViewsProvider() {
     final GClass appViewsProvider = new GClass(packageName + ".AppViewsProvider").setInterface();
     for (final UiXmlFile uiXml : uiXmlFiles) {
-      appViewsProvider.getMethod("new" + uiXml.baseName).returnType(uiXml.isView.getFullClassName());
+      appViewsProvider.getMethod("new" + uiXml.baseName).returnType(uiXml.isView.getFullName());
     }
     markAndSaveIfChanged(appViewsProvider);
   }
@@ -114,13 +114,13 @@ public class ViewGenerator {
     }
 
     for (final UiXmlFile uiXml : uiXmlFiles) {
-      final GMethod m = gwtViews.getMethod("new" + uiXml.baseName).returnType(uiXml.isView.getFullClassName());
+      final GMethod m = gwtViews.getMethod("new" + uiXml.baseName).returnType(uiXml.isView.getFullName());
       final List<String> withFieldNames = new ArrayList<String>();
       for (final UiFieldDeclaration with : uiXml.getWithsPossiblyCached()) {
         withFieldNames.add("this." + simpleName(with.type));
       }
       m.addAnnotation("@Override");
-      m.body.line("return new {}({});", uiXml.gwtView.getFullClassName(), Join.commaSpace(withFieldNames));
+      m.body.line("return new {}({});", uiXml.gwtView.getFullName(), Join.commaSpace(withFieldNames));
     }
     markAndSaveIfChanged(gwtViews);
   }
@@ -129,9 +129,9 @@ public class ViewGenerator {
     final GClass stubViews = new GClass(packageName + ".StubViewsProvider").implementsInterface("AppViewsProvider");
 
     for (final UiXmlFile uiXml : uiXmlFiles) {
-      final GMethod m = stubViews.getMethod("new" + uiXml.baseName).returnType(uiXml.stubView.getFullClassName());
+      final GMethod m = stubViews.getMethod("new" + uiXml.baseName).returnType(uiXml.stubView.getFullName());
       m.addAnnotation("@Override");
-      m.body.line("return new {}();", uiXml.stubView.getFullClassName());
+      m.body.line("return new {}();", uiXml.stubView.getFullName());
     }
 
     final GMethod i = stubViews.getMethod("install").setStatic();

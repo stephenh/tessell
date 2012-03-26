@@ -33,7 +33,7 @@ public class CssStubGenerator extends AbstractCssGenerator {
   }
 
   public String getCssStubClassName() {
-    return cssStub.getFullClassName();
+    return cssStub.getFullName();
   }
 
   private void generateStub() {
