@@ -1,6 +1,6 @@
 package org.tessell.model.dsl;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.tessell.model.events.PropertyChangedEvent;
 import org.tessell.model.events.PropertyChangedHandler;
@@ -78,12 +78,12 @@ public class PropertyBinder<P> {
   }
 
   /** Binds our {@code p} to the selection in {@code source}, given the {@code options}. */
-  public HandlerRegistrations to(final IsListBox source, final ArrayList<P> options) {
+  public HandlerRegistrations to(final IsListBox source, final List<P> options) {
     return to(source, options, new ListBoxIdentityAdaptor<P>());
   }
 
   /** Binds our {@code p} to the selection in {@code source}, given the {@code options}. */
-  public <O> HandlerRegistrations to(final IsListBox source, final ArrayList<O> options, final ListBoxAdaptor<P, O> adaptor) {
+  public <O> HandlerRegistrations to(final IsListBox source, final List<O> options, final ListBoxAdaptor<P, O> adaptor) {
     int i = 0;
     for (O option : options) {
       source.addItem(adaptor.toDisplay(option), Integer.toString(i++));
