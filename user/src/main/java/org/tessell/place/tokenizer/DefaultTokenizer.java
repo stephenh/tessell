@@ -59,10 +59,10 @@ public class DefaultTokenizer implements Tokenizer {
   }
 
   protected String escape(final String value) {
-    return Codec.encodeURIComponent(value);
+    return Codec.encodeQueryString(value);
   }
 
   protected String unescape(final String value) {
-    return Codec.decodeURIComponent(value);
+    return Codec.decodeQueryString(value);
   }
 }
