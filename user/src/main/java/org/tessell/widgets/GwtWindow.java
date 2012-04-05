@@ -1,5 +1,8 @@
 package org.tessell.widgets;
 
+import java.util.List;
+import java.util.Map;
+
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -60,6 +63,71 @@ public class GwtWindow implements IsWindow {
   @Override
   public void reload() {
     Window.Location.reload();
+  }
+
+  @Override
+  public IsUrlBuilder createUrlBuilder() {
+    return new GwtUrlBuilder(Window.Location.createUrlBuilder());
+  }
+
+  @Override
+  public void assign(String newUrl) {
+    Window.Location.assign(newUrl);
+  }
+
+  @Override
+  public void replace(String newUrl) {
+    Window.Location.replace(newUrl);
+  }
+
+  @Override
+  public String getHash() {
+    return Window.Location.getHash();
+  }
+
+  @Override
+  public String getHost() {
+    return Window.Location.getHost();
+  }
+
+  @Override
+  public String getHostName() {
+    return Window.Location.getHostName();
+  }
+
+  @Override
+  public String getHref() {
+    return Window.Location.getHref();
+  }
+
+  @Override
+  public String getPath() {
+    return Window.Location.getPath();
+  }
+
+  @Override
+  public String getPort() {
+    return Window.Location.getPort();
+  }
+
+  @Override
+  public String getProtocol() {
+    return Window.Location.getProtocol();
+  }
+
+  @Override
+  public String getQueryString() {
+    return Window.Location.getQueryString();
+  }
+
+  @Override
+  public String getParameter(String name) {
+    return Window.Location.getParameter(name);
+  }
+
+  @Override
+  public Map<String, List<String>> getParameterMap() {
+    return Window.Location.getParameterMap();
   }
 
 }

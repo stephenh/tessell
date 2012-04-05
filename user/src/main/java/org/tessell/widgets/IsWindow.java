@@ -1,11 +1,12 @@
 package org.tessell.widgets;
 
+import java.util.List;
+import java.util.Map;
+
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 
 public interface IsWindow {
-
-  void reload();
 
   void alert(String message);
 
@@ -26,5 +27,35 @@ public interface IsWindow {
   int getClientWidth();
 
   HandlerRegistration addResizeHandler(ResizeHandler handler);
+
+  // location methods
+
+  void assign(String newUrl);
+
+  void reload();
+
+  void replace(String newUrl);
+
+  IsUrlBuilder createUrlBuilder();
+
+  String getHash();
+
+  String getHost();
+
+  String getHostName();
+
+  String getHref();
+
+  String getPath();
+
+  String getPort();
+
+  String getProtocol();
+
+  String getQueryString();
+
+  String getParameter(String name);
+
+  Map<String, List<String>> getParameterMap();
 
 }
