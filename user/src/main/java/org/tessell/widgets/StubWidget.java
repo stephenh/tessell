@@ -136,12 +136,23 @@ public class StubWidget implements IsWidget {
   /** Looks recursively into {@code widgets} for one with {@code id}. */
   protected static IsWidget findInChildren(Iterator<IsWidget> widgets, String id) {
     while (widgets.hasNext()) {
-      IsWidget found = ((StubWidget) widgets.next()).findById(id);
+      IsWidget next = widgets.next();
+      final StubWidget stub;
+      if (next instanceof CompositeIsWidget) {
+        // this is kind of odd, but given tests the change to grab
+        // the CompositeIsWidget and not just it's wrapped element
+        stub = (StubWidget) ((CompositeIsWidget) next).widget;
+        if (id.equals(stub.getIsElement().getId())) {
+          return next;
+        }
+      } else {
+        stub = (StubWidget) next;
+      }
+      IsWidget found = stub.findById(id);
       if (found != null) {
         return found;
       }
     }
     return null;
   }
-
 }
