@@ -34,7 +34,7 @@ public class PropertyBinder<P> {
       }
     };
     // set initial value
-    h.onPropertyChanged(new PropertyChangedEvent<P>(p));
+    h.onPropertyChanged(new PropertyChangedEvent<P>(p, null, value.getValue()));
     return new HandlerRegistrations(p.addPropertyChangedHandler(h));
   }
 
@@ -46,7 +46,7 @@ public class PropertyBinder<P> {
       }
     };
     // set initial value
-    h.onPropertyChanged(new PropertyChangedEvent<P>(p));
+    h.onPropertyChanged(new PropertyChangedEvent<P>(p, null, other.get()));
     return new HandlerRegistrations(p.addPropertyChangedHandler(h));
   }
 
@@ -59,7 +59,7 @@ public class PropertyBinder<P> {
       }
     };
     // set initial value
-    h.onPropertyChanged(new PropertyChangedEvent<P>(p));
+    h.onPropertyChanged(new PropertyChangedEvent<P>(p, null, source.getValue()));
     // after we've set the initial value (which fired ValueChangeEvent and
     // would have messed up our 'touched' state), listen for others changes
     if (!p.isReadOnly()) {

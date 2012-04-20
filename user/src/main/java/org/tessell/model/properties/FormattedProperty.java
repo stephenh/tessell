@@ -147,7 +147,9 @@ public class FormattedProperty<DP, SP> implements Property<DP> {
   public HandlerRegistration addPropertyChangedHandler(final PropertyChangedHandler<DP> handler) {
     return source.addPropertyChangedHandler(new PropertyChangedHandler<SP>() {
       public void onPropertyChanged(PropertyChangedEvent<SP> event) {
-        handler.onPropertyChanged(new PropertyChangedEvent<DP>(FormattedProperty.this));
+        DP oldValue = event.getOldValue() == null ? null : formatter.format(event.getOldValue());
+        DP newValue = event.getNewValue() == null ? null : formatter.format(event.getNewValue());
+        handler.onPropertyChanged(new PropertyChangedEvent<DP>(FormattedProperty.this, oldValue, newValue));
       }
     });
   }

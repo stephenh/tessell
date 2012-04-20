@@ -8,4 +8,8 @@ import org.tessell.model.properties.Property;
 public class PropertyChangedEventSpec<P> {
   @Param(1)
   Property<P> property;
+  @Param(2)
+  P oldValue;
+  @Param(3)
+  P newValue;
 }
