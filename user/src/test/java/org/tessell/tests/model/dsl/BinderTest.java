@@ -26,7 +26,12 @@ import org.tessell.model.validation.Valid;
 import org.tessell.model.values.SetValue;
 import org.tessell.util.cookies.StringCookie;
 import org.tessell.util.cookies.facade.StubCookies;
-import org.tessell.widgets.*;
+import org.tessell.widgets.StubFocusWidget;
+import org.tessell.widgets.StubLabel;
+import org.tessell.widgets.StubListBox;
+import org.tessell.widgets.StubTextBox;
+import org.tessell.widgets.StubTextList;
+import org.tessell.widgets.StubWidget;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -387,6 +392,8 @@ public class BinderTest {
     binder.bind(s).to(box);
     box.type(" foo bar ");
     assertThat(s.get(), is("foo bar"));
+    // to the property the value changed from null to "foo bar", so it updates the text box
+    assertThat(box.getValue(), is("foo bar"));
   }
 
   @Test
@@ -394,5 +401,7 @@ public class BinderTest {
     binder.bind(s).to(box);
     box.type("  ");
     assertThat(s.get(), is(nullValue()));
+    // to the property the value is still null, so it doesn't update the text box
+    assertThat(box.getValue(), is("  "));
   }
 }
