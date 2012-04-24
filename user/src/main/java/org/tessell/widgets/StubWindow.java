@@ -2,7 +2,11 @@ package org.tessell.widgets;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.tessell.place.tokenizer.Codec;
 
@@ -34,6 +38,7 @@ public class StubWindow implements IsWindow {
       URL u = new URL(url);
       protocol = u.getProtocol();
       hostName = u.getHost();
+      path = u.getPath();
       port = u.getPort() == -1 ? "80" : Integer.toString(u.getPort());
       queryString = u.getQuery() == null ? "" : "?" + u.getQuery();
       hash = u.getRef() == null ? "" : "#" + u.getRef();

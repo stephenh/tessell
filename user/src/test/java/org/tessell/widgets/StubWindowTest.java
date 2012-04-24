@@ -13,7 +13,7 @@ public class StubWindowTest {
   public void testSettingLocation() {
     w.setLocation("http://server/path?a=b#place");
     IsUrlBuilder u = w.createUrlBuilder();
-    assertThat(u.buildString(), is("http://server:80?a=b#place"));
+    assertThat(u.buildString(), is("http://server:80/path?a=b#place"));
   }
 
 }
