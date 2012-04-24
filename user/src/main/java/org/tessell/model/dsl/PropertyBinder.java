@@ -64,12 +64,16 @@ public class PropertyBinder<P> {
     // would have messed up our 'touched' state), listen for others changes
     if (!p.isReadOnly()) {
       hr.add(source.addValueChangeHandler(new ValueChangeHandler<P>() {
+        @SuppressWarnings("unchecked")
         public void onValueChange(ValueChangeEvent<P> event) {
-          if ("".equals(source.getValue())) {
-            p.set(null);
-          } else {
-            p.set(source.getValue());
+          P value = source.getValue();
+          if (value instanceof String) {
+            value = (P) ((String) value).trim();
+            if (value.equals("")) {
+              value = null;
+            }
           }
+          p.set(value);
         }
       }));
     }

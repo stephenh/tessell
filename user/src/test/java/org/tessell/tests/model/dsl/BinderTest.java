@@ -381,4 +381,18 @@ public class BinderTest {
     b.set("bar");
     assertThat(label.getText(), is("bar"));
   }
+
+  @Test
+  public void propertyToStringTrims() {
+    binder.bind(s).to(box);
+    box.type(" foo bar ");
+    assertThat(s.get(), is("foo bar"));
+  }
+
+  @Test
+  public void propertyToStringTrimsToNull() {
+    binder.bind(s).to(box);
+    box.type("  ");
+    assertThat(s.get(), is(nullValue()));
+  }
 }
