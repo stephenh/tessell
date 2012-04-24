@@ -18,19 +18,17 @@ public class TokenizerTest {
     assertRoundTrip(new PlaceRequest("foo").with("a&a", "b&b"), "foo;a%26a=b%26b");
     assertRoundTrip(new PlaceRequest("foo").with("a;;a", "b;;b"), "foo;a%3B%3Ba=b%3B%3Bb");
     assertRoundTrip(new PlaceRequest("foo").with("a=a", "b=b"), "foo;a%3Da=b%3Db");
-    assertRoundTrip(new PlaceRequest("foo").with("a a", "b b"), "foo;a%20a=b%20b");
+    assertRoundTrip(new PlaceRequest("foo").with("a a", "b b"), "foo;a+a=b+b");
     assertRoundTrip(new PlaceRequest("foo").with("a", "").with("b", ""), "foo;a=;b=");
-    assertRoundTrip(new PlaceRequest("foo").with("city and state", "omaha, ne"), "foo;city%20and%20state=omaha%2C%20ne");
-    assertRoundTrip(new PlaceRequest("city and state").with("city", "omaha").with("state", "ne"),
-        "city%20and%20state;city=omaha;state=ne");
+    assertRoundTrip(new PlaceRequest("foo").with("city and state", "omaha, ne"), "foo;city+and+state=omaha%2C+ne");
+    assertRoundTrip(new PlaceRequest("city and state").with("city", "omaha").with("state", "ne"), "city+and+state;city=omaha;state=ne");
   }
 
   @Test
   public void escapingWithAmp() throws Exception {
     assertRoundTripWithAmp(new PlaceRequest("foo").with("a", "b"), "foo&a=b");
     assertRoundTripWithAmp(new PlaceRequest("foo").with("a&a", "b&b").with("c", "d"), "foo&a%26a=b%26b&c=d");
-    assertRoundTripWithAmp(new PlaceRequest("city and state").with("city", "omaha").with("state", "ne"),
-        "city%20and%20state&city=omaha&state=ne");
+    assertRoundTripWithAmp(new PlaceRequest("city and state").with("city", "omaha").with("state", "ne"), "city+and+state&city=omaha&state=ne");
   }
 
   private void assertRoundTrip(final PlaceRequest placeRequest, final String token) throws Exception {

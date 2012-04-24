@@ -73,7 +73,7 @@ public class Codec {
    * Note: '+' is interpreted as space.
    */
   public static String decodeQueryString(final String s) {
-    return encodePathSegment(s.replace("+", "%20"));
+    return decodePathSegment(s.replace("+", "%20"));
   }
 
   /**
