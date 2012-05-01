@@ -18,7 +18,7 @@ public class Inflector {
   public static String humanize(final String camelCased) {
     String name = "";
     for (final Iterator<String> i = split(camelCased).iterator(); i.hasNext();) {
-      name += capitalize(i.next());
+      name += capitalize(i.next().toLowerCase());
       if (i.hasNext()) {
         name += " ";
       }
@@ -29,7 +29,7 @@ public class Inflector {
   public static String camelize(final String humanCased) {
     String name = "";
     for (final Iterator<String> i = split(humanCased).iterator(); i.hasNext();) {
-      name += i.next();
+      name += capitalize(i.next().toLowerCase());
     }
     return uncapitalize(name);
   }
