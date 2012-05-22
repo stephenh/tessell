@@ -30,4 +30,13 @@ public class RegexTest extends AbstractRuleTest {
     assertMessages();
   }
 
+  @Test
+  public void nullIsValid() {
+    final StringProperty url = stringProperty("url");
+    listenTo(new Regex(url, "invalid", Regex.URL_NO_PROTOCOL));
+
+    url.set(null);
+    assertNoMessages();
+  }
+
 }

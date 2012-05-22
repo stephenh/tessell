@@ -27,7 +27,7 @@ public class Regex extends AbstractRule<String, Regex> {
   protected Valid isValid() {
     final String value = property.get();
     if (value == null) {
-      return Valid.NO;
+      return Valid.YES; // defer to a Required rule
     }
     return value.matches(regex) ? Valid.YES : Valid.NO;
   }

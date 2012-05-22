@@ -37,4 +37,8 @@ public abstract class AbstractRuleTest {
     assertEquals(Join.lines(messages), Join.lines(this.messages.values()));
   }
 
+  protected void assertNoMessages() {
+    assertMessages();
+  }
+
 }
