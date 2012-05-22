@@ -13,21 +13,61 @@ public class RegexTest extends AbstractRuleTest {
     final StringProperty url = stringProperty("url");
     listenTo(new Regex(url, "invalid", Regex.URL));
     url.set("http://foo.com/n/5TBGvq1BAALzjEMAAAgYQgAAabxmMQA-A/");
-    assertMessages();
+    assertNoMessages();
 
     url.set("http://foo.com/n/5TBGvq1BAALzjEMAAAgYQgAAabxmMQA-A/?a-b=c-d");
-    assertMessages();
+    assertNoMessages();
 
     url.set("http://foo.com/n/a?campaign=foo'bar");
-    assertMessages();
+    assertNoMessages();
+
+    url.set("http://foo.com/n");
+    assertNoMessages();
+
+    url.set("http://foo.com/n?a=b#c/");
+    assertNoMessages();
+
+    url.set("http://foo.com");
+    assertNoMessages();
+
+    url.set("http://foo-bar.com");
+    assertNoMessages();
+
+    url.set("http://foo");
+    assertMessages("invalid");
+
+    url.set("foo.com/");
+    assertMessages("invalid");
+
+    url.set("/n?a=b#c/");
+    assertMessages("invalid");
   }
 
   @Test
   public void urlsNoProtocol() {
     final StringProperty url = stringProperty("url");
     listenTo(new Regex(url, "invalid", Regex.URL_NO_PROTOCOL));
+
     url.set("foo.com/n/5TBGvq1BAALzjEMAAAgYQgAAabxmMQA-A/");
-    assertMessages();
+    assertNoMessages();
+
+    url.set("foo.com/n");
+    assertNoMessages();
+
+    url.set("foo.com/n?a=b#c");
+    assertNoMessages();
+
+    url.set("foo.com");
+    assertNoMessages();
+
+    url.set("foo-bar.com");
+    assertNoMessages();
+
+    url.set("foo");
+    assertMessages("invalid");
+
+    url.set("/n?a=b#c/");
+    assertMessages("invalid");
   }
 
   @Test

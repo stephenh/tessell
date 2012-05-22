@@ -6,10 +6,13 @@ import org.tessell.model.validation.Valid;
 /** Validates that a property matches a regex. */
 public class Regex extends AbstractRule<String, Regex> {
 
-  // http://stackoverflow.com/questions/27745/getting-parts-of-a-url-regex#27755
-  public static final String URL = "^((http[s]?):\\/)\\/([^:\\/\\s]+)((\\/\\w+)*\\/)([\\w\\-\\.]+[^#?\\s]+)(.*)?(#[\\w\\-]+)?$";
-  // Copy/paste from above without http(s)
-  public static final String URL_NO_PROTOCOL = "^([^:\\/\\s]+)((\\/\\w+)*\\/)([\\w\\-\\.]+[^#?\\s]+)(.*)?(#[\\w\\-]+)?$";
+  private static final String urlScheme = "(http[s]?):\\/\\/";
+  private static final String urlHost = "(([^:\\/\\s]+\\.)+([^:\\/\\s]+))"; // foo.com, foo.bar.com
+  private static final String urlPath = "(/[^#?\\s]*)?";
+  private static final String urlQuery = "(\\?[^#\\s]*)?";
+  private static final String urlHash = "(#[^\\s]*)?";
+  public static final String URL = "^" + urlScheme + urlHost + urlPath + urlQuery + urlHash + "$";
+  public static final String URL_NO_PROTOCOL = "^" + urlHost + urlPath + urlQuery + urlHash + "$";
   // http://groups.google.com/group/Google-Web-Toolkit/browse_thread/thread/df9ebce869e9c39d
   public static final String EMAIL = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
   // numeric
