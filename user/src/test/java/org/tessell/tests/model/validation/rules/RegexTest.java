@@ -30,6 +30,9 @@ public class RegexTest extends AbstractRuleTest {
     url.set("http://foo.com");
     assertNoMessages();
 
+    url.set("http://foo1.com");
+    assertNoMessages();
+
     url.set("http://foo-bar.com");
     assertNoMessages();
 
