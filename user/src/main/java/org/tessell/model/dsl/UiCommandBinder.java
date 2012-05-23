@@ -53,6 +53,7 @@ public class UiCommandBinder {
     return new HandlerRegistrations(clickable.addClickHandler(new ClickHandler() {
       public void onClick(ClickEvent event) {
         command.execute();
+        event.preventDefault();
       }
     }));
   }
