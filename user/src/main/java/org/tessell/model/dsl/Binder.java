@@ -55,6 +55,11 @@ public class Binder {
     return new WhenBinder<P>(property);
   }
 
+  /** @return a fluent {@link ClickBinder} against {@code clickable}. */
+  public ClickBinder onClick(HasClickHandlers clickable) {
+    return new ClickBinder(clickable);
+  }
+
   /** Enhances each {@code source} to fire change events on key up and blur. */
   public <P, S extends HasKeyUpHandlers & HasBlurHandlers & HasValue<P>> Binder enhance(S... sources) {
     fireChangeOnBlur(sources);

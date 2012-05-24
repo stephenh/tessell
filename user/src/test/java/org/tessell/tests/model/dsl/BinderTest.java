@@ -410,4 +410,12 @@ public class BinderTest {
     button.fireEvent(click);
     assertThat(click.prevented, is(true));
   }
+
+  @Test
+  public void onClick() {
+    StubButton button = new StubButton();
+    binder.onClick(button).set(s).to("clicked");
+    button.click();
+    assertThat(s.get(), is("clicked"));
+  }
 }
