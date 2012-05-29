@@ -32,6 +32,9 @@ public class CssGenerator extends AbstractCssGenerator {
     for (final Map.Entry<String, String> e : getClassNameToMethodName().entrySet()) {
       final String className = e.getKey();
       final String methodName = e.getValue();
+      if (className.equals("*")) {
+        continue; // skip @external *; declarations
+      }
       final GMethod m = cssInterface.getMethod(methodName).returnType(String.class);
       if (!methodName.equals(className)) {
         m.addAnnotation("@ClassName(\"{}\")", Generator.escape(className));
