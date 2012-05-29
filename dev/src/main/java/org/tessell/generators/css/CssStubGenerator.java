@@ -37,7 +37,12 @@ public class CssStubGenerator extends AbstractCssGenerator {
   }
 
   private void generateStub() {
-    for (final String methodName : getClassNameToMethodName().values()) {
+    for (final Map.Entry<String, String> e : getClassNameToMethodName().entrySet()) {
+      final String className = e.getKey();
+      final String methodName = e.getValue();
+      if (className.equals("*")) {
+        continue; // skip @external *; declarations
+      }
       cssStub.getMethod(methodName).returnType(String.class).body.line("return \"{}\";", methodName);
     }
     for (final Map.Entry<String, Value> def : getDefs().entrySet()) {
