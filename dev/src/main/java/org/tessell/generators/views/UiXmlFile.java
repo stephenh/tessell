@@ -16,11 +16,12 @@ import org.tessell.generators.GenUtils;
 import org.tessell.generators.css.CssGenerator;
 import org.tessell.generators.css.CssStubGenerator;
 import org.tessell.generators.resources.ResourcesGenerator;
-import org.tessell.widgets.DelegateIsWidget;
 import org.tessell.widgets.GwtDockLayoutPanelWrapper;
 import org.tessell.widgets.GwtElement;
 import org.tessell.widgets.GwtHTMLPanelWrapper;
 import org.tessell.widgets.GwtRadioButton;
+import org.tessell.widgets.IsElement;
+import org.tessell.widgets.IsStyle;
 import org.tessell.widgets.IsWidget;
 import org.tessell.widgets.StubView;
 
@@ -28,6 +29,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiTemplate;
+import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Image;
@@ -106,7 +108,7 @@ class UiXmlFile {
   }
 
   private void generateGwtView() throws Exception {
-    gwtView.baseClass(DelegateIsWidget.class).implementsInterface(isView.getSimpleName());
+    gwtView.baseClass(Composite.class).implementsInterface(isView.getSimpleName());
     final GMethod cstr = gwtView.getConstructor();
     gwtView.addImports(GWT.class);
     if (handler.withFields.size() > 0 || handler.uiFields.size() > 0) {
@@ -183,7 +185,7 @@ class UiXmlFile {
       }
     }
 
-    cstr.body.line("setWidget(binder.createAndBindUi(this));");
+    cstr.body.line("initWidget(binder.createAndBindUi(this));");
     cstr.body.line("ensureDebugId(\"{}\");", gwtView.getSimpleName().replaceAll("View$", "").replaceAll("^Gwt", ""));
 
     // go back and assign field values for things created by uibinder
@@ -195,6 +197,14 @@ class UiXmlFile {
         cstr.body.line("_{} = new {}({});", field.name, wrapperType, field.name);
       }
     }
+
+    // add implements of getStyle and getIsElement
+    GMethod getStyle = gwtView.getMethod("getStyle").returnType(IsStyle.class).addAnnotation("@Override");
+    getStyle.body.line("return getIsElement().getStyle();");
+
+    GMethod getIsElement = gwtView.getMethod("getIsElement").returnType(IsElement.class).addAnnotation("@Override");
+    getIsElement.body.line("return new GwtElement(getElement());");
+    gwtView.addImports(GwtElement.class);
 
     viewGenerator.markAndSave(gwtView);
   }
