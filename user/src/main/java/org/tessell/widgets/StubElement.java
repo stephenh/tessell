@@ -12,8 +12,8 @@ import com.google.gwt.dom.client.Element;
 public class StubElement implements IsElement {
 
   private String id;
-  private String innerText;
-  private String innerHTML;
+  private String innerText = "";
+  private String innerHTML = "";
   private StubWidget widget;
 
   private int scrollTop;
@@ -38,6 +38,7 @@ public class StubElement implements IsElement {
   @Override
   public void setInnerText(final String innerText) {
     this.innerText = innerText == null ? "" : innerText;
+    innerHTML = "";
   }
 
   @Override
@@ -68,7 +69,8 @@ public class StubElement implements IsElement {
 
   @Override
   public void setInnerHTML(final String html) {
-    innerHTML = html;
+    innerHTML = html == null ? "" : html;
+    innerText = "";
   }
 
   @Override
