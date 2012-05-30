@@ -24,4 +24,19 @@ public class WhenConditions {
     return nullValue;
   }
 
+  public static WhenCondition<Integer> greaterThan(final Integer number) {
+    return new WhenCondition<Integer>() {
+      public boolean evaluate(Property<Integer> property) {
+        return number != null && property.get() != null && property.get().intValue() > number.intValue();
+      }
+    };
+  }
+
+  public static WhenCondition<Integer> lessThan(final Integer number) {
+    return new WhenCondition<Integer>() {
+      public boolean evaluate(Property<Integer> property) {
+        return number != null && property.get() != null && property.get().intValue() < number.intValue();
+      }
+    };
+  }
 }
