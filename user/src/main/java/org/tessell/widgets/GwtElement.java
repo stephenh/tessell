@@ -1,6 +1,7 @@
 package org.tessell.widgets;
 
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.user.client.ui.UIObject;
 
 public class GwtElement implements IsElement {
@@ -154,6 +155,11 @@ public class GwtElement implements IsElement {
   @Override
   public void removeFromParent() {
     element.removeFromParent();
+  }
+
+  @Override
+  public void setInnerSafeHtml(SafeHtml html) {
+    element.setInnerHTML(html.asString());
   }
 
 }

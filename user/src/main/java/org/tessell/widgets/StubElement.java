@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.safehtml.shared.SafeHtml;
 
 public class StubElement implements IsElement {
 
@@ -199,6 +200,11 @@ public class StubElement implements IsElement {
   @Override
   public void removeFromParent() {
     wasRemovedFromParent = true;
+  }
+
+  @Override
+  public void setInnerSafeHtml(SafeHtml html) {
+    setInnerHTML(html.asString());
   }
 
 }

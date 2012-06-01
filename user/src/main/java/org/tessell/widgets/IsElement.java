@@ -1,6 +1,7 @@
 package org.tessell.widgets;
 
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.user.client.ui.HasText;
 
 public interface IsElement extends HasCss, HasText {
@@ -40,6 +41,8 @@ public interface IsElement extends HasCss, HasText {
   String getInnerHTML();
 
   void setInnerHTML(String html);
+
+  void setInnerSafeHtml(SafeHtml html);
 
   void ensureDebugId(String id);
 
