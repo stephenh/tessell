@@ -1,5 +1,6 @@
 package org.tessell.tests.model.properties;
 
+import static joist.util.Copy.list;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.contains;
 import static org.junit.Assert.assertThat;
@@ -8,12 +9,7 @@ import java.util.ArrayList;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.tessell.model.events.PropertyChangedEvent;
-import org.tessell.model.events.PropertyChangedHandler;
-import org.tessell.model.events.ValueAddedEvent;
-import org.tessell.model.events.ValueAddedHandler;
-import org.tessell.model.events.ValueRemovedEvent;
-import org.tessell.model.events.ValueRemovedHandler;
+import org.tessell.model.events.*;
 import org.tessell.model.properties.IntegerProperty;
 import org.tessell.model.properties.ListProperty;
 import org.tessell.model.values.SetValue;
@@ -54,6 +50,13 @@ public class ListPropertyTest {
 
     b.add("blah");
     assertThat(adds.count, is(1));
+    assertThat(changes.count, is(1));
+  }
+
+  @Test
+  public void addAllFiresValueAddedAndChanged() {
+    p.addAll(list("foo", "bar"));
+    assertThat(adds.count, is(2));
     assertThat(changes.count, is(1));
   }
 

@@ -3,6 +3,7 @@ package org.tessell.model.properties;
 import static org.tessell.model.properties.NewProperty.integerProperty;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 import org.tessell.model.events.ValueAddedEvent;
 import org.tessell.model.events.ValueAddedHandler;
@@ -39,6 +40,21 @@ public class ListProperty<E> extends AbstractProperty<ArrayList<E>, ListProperty
     get().add(item);
     setTouched(true);
     fireEvent(new ValueAddedEvent<E>(this, item));
+    // will fire change if needed
+    reassess();
+  }
+
+  /** Adds each item in {@code items}, firing a {@link ValueAddedEvent} for each. */
+  public void addAll(Collection<? extends E> items) {
+    if (items.size() == 0) {
+      return; // this makes sense, right?
+    }
+    setTouched(true);
+    for (E item : items) {
+      get().add(item);
+      fireEvent(new ValueAddedEvent<E>(this, item));
+    }
+    // will fire change if needed
     reassess();
   }
 
