@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.contains;
 import static org.junit.Assert.assertThat;
 import static org.tessell.model.properties.NewProperty.booleanProperty;
 import static org.tessell.model.properties.NewProperty.stringProperty;
+import static org.tessell.util.ObjectUtils.eq;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,7 @@ import org.tessell.model.validation.rules.Custom;
 import org.tessell.model.validation.rules.Length;
 import org.tessell.model.validation.rules.Required;
 import org.tessell.model.values.SetValue;
+import org.tessell.util.Supplier;
 
 public class RulesTest extends AbstractRuleTest {
 
@@ -84,6 +86,21 @@ public class RulesTest extends AbstractRuleTest {
     // but reassessing should
     f.name.reassess();
     assertMessages("custom");
+  }
+
+  @Test
+  public void customWithSupplier() {
+    new Custom(f.name, "name cannot be bob", new Supplier<Boolean>() {
+      public Boolean get() {
+        return !eq(f.name.get(), "bob");
+      }
+    });
+
+    f.name.set("bob");
+    assertMessages("name cannot be bob");
+
+    f.name.set("fred");
+    assertNoMessages();
   }
 
   @Test
