@@ -35,10 +35,10 @@ public class SimplerEventBusTest extends HandlerTestBase {
     eventBus.addHandler(MouseDownEvent.getType(), mouse2);
     HandlerRegistration reg1 = eventBus.addHandler(MouseDownEvent.getType(), adaptor1);
     fireMouseDown(eventBus);
-    assertEquals(3, eventBus.getCount(MouseDownEvent.getType()));
+    assertEquals(3, eventBus.getHandlerCount(MouseDownEvent.getType()));
     assertFired(mouse1, mouse2, adaptor1);
     eventBus.addHandler(MouseDownEvent.getType(), mouse3);
-    assertEquals(4, eventBus.getCount(MouseDownEvent.getType()));
+    assertEquals(4, eventBus.getHandlerCount(MouseDownEvent.getType()));
 
     eventBus.addHandler(MouseDownEvent.getType(), mouse1);
     eventBus.addHandler(MouseDownEvent.getType(), mouse2);
@@ -48,13 +48,13 @@ public class SimplerEventBusTest extends HandlerTestBase {
      * You can indeed add handlers twice, they will only be removed one at a
      * time though.
      */
-    assertEquals(7, eventBus.getCount(MouseDownEvent.getType()));
+    assertEquals(7, eventBus.getHandlerCount(MouseDownEvent.getType()));
     eventBus.addHandler(ClickEvent.getType(), adaptor1);
     eventBus.addHandler(ClickEvent.getType(), click1);
     eventBus.addHandler(ClickEvent.getType(), click2);
 
-    assertEquals(7, eventBus.getCount(MouseDownEvent.getType()));
-    assertEquals(3, eventBus.getCount(ClickEvent.getType()));
+    assertEquals(7, eventBus.getHandlerCount(MouseDownEvent.getType()));
+    assertEquals(3, eventBus.getHandlerCount(ClickEvent.getType()));
 
     reset();
     fireMouseDown(eventBus);
