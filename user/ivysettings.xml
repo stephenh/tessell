@@ -1,5 +1,6 @@
 <ivysettings>
 	<property name="revision" value="SNAPSHOT" override="false"/>
+	<property name="gwt.version" value="0.0.10996" />
 	<settings defaultResolver="default"/>
 	<include url="${ivy.default.settings.dir}/ivysettings-public.xml"/>
 	<resolvers>
