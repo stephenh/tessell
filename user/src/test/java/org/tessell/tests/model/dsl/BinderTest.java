@@ -10,6 +10,7 @@ import static org.tessell.model.dsl.TakesValues.textOf;
 import static org.tessell.model.dsl.WhenConditions.notNull;
 import static org.tessell.model.properties.NewProperty.booleanProperty;
 import static org.tessell.model.properties.NewProperty.enumProperty;
+import static org.tessell.model.properties.NewProperty.integerProperty;
 import static org.tessell.model.properties.NewProperty.stringProperty;
 import static org.tessell.testing.TessellMatchers.hasStyle;
 import static org.tessell.testing.TessellMatchers.hidden;
@@ -21,6 +22,7 @@ import org.junit.Test;
 import org.tessell.model.dsl.Binder;
 import org.tessell.model.properties.BooleanProperty;
 import org.tessell.model.properties.EnumProperty;
+import org.tessell.model.properties.IntegerProperty;
 import org.tessell.model.properties.StringProperty;
 import org.tessell.model.validation.Valid;
 import org.tessell.model.values.SetValue;
@@ -271,6 +273,23 @@ public class BinderTest {
     StubFocusWidget w = new StubFocusWidget();
     binder.when(b).is(true).disable(w);
     assertThat(w.isEnabled(), is(false));
+  }
+
+  @Test
+  public void whenTrueSetAnotherProperty() {
+    BooleanProperty b = booleanProperty("b", false);
+    IntegerProperty i = integerProperty("i", 1);
+    binder.when(b).is(true).set(i).to(10);
+    b.set(true);
+    assertThat(i.get(), is(10));
+  }
+
+  @Test
+  public void whenAlreadyTrueSetAnotherProperty() {
+    BooleanProperty b = booleanProperty("b", true);
+    IntegerProperty i = integerProperty("i", 1);
+    binder.when(b).is(true).set(i).to(10);
+    assertThat(i.get(), is(10));
   }
 
   @Test
