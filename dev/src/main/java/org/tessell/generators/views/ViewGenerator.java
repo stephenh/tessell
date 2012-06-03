@@ -151,10 +151,6 @@ public class ViewGenerator {
     return all;
   }
 
-  private String simpleName(String fullName) {
-    return StringUtils.uncapitalize(StringUtils.substringAfterLast(fullName, "."));
-  }
-
   void markAndSaveIfChanged(final GClass gclass) {
     GenUtils.saveIfChanged(output, gclass);
     cleanup.markOkay(gclass);
@@ -175,7 +171,7 @@ public class ViewGenerator {
     return FileUtils.listFiles(input, new String[] { "ui.xml" }, true);
   }
 
-  private SAXParser makeNewParser() {
+  private static SAXParser makeNewParser() {
     final SAXParserFactory factory = SAXParserFactory.newInstance();
     factory.setValidating(false);
     factory.setNamespaceAware(true);
@@ -190,6 +186,10 @@ public class ViewGenerator {
     } catch (SAXException e) {
       throw new RuntimeException(e);
     }
+  }
+
+  private static String simpleName(String fullName) {
+    return StringUtils.uncapitalize(StringUtils.substringAfterLast(fullName, "."));
   }
 
 }
