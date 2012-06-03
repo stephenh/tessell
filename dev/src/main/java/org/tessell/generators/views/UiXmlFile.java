@@ -1,9 +1,7 @@
 package org.tessell.generators.views;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import joist.sourcegen.Access;
 import joist.sourcegen.GClass;
@@ -16,12 +14,9 @@ import org.tessell.generators.GenUtils;
 import org.tessell.generators.css.CssGenerator;
 import org.tessell.generators.css.CssStubGenerator;
 import org.tessell.generators.resources.ResourcesGenerator;
-import org.tessell.widgets.GwtDockLayoutPanelWrapper;
-import org.tessell.widgets.GwtElement;
-import org.tessell.widgets.GwtHTMLPanelWrapper;
-import org.tessell.widgets.GwtRadioButton;
-import org.tessell.widgets.IsElement;
-import org.tessell.widgets.IsStyle;
+import org.tessell.gwt.dom.client.GwtElement;
+import org.tessell.gwt.dom.client.IsElement;
+import org.tessell.gwt.dom.client.IsStyle;
 import org.tessell.widgets.IsWidget;
 import org.tessell.widgets.StubView;
 
@@ -30,22 +25,11 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.DockLayoutPanel;
-import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
 
 /** A {@code ui.xml} file. */
 class UiXmlFile {
-
-  private static final Map<String, String> widgetsWithoutNoParamCstrs = new HashMap<String, String>();
-  static {
-    widgetsWithoutNoParamCstrs.put(HTMLPanel.class.getName(), GwtHTMLPanelWrapper.class.getName());
-    widgetsWithoutNoParamCstrs.put(RadioButton.class.getName(), GwtRadioButton.class.getName());
-    widgetsWithoutNoParamCstrs.put(DockLayoutPanel.class.getName(), GwtDockLayoutPanelWrapper.class.getName());
-  }
 
   private final ViewGenerator viewGenerator;
   private final File uiXml;
@@ -132,6 +116,8 @@ class UiXmlFile {
     {
       String uiXmlContent = FileUtils.readFileToString(uiXml);
       uiXmlContent = ResourcesGenerator.doMozWebkitSubstitution(uiXmlContent);
+      // use the tessell subclasses that implement the IsXxx interfaces
+      uiXmlContent = uiXmlContent.replace("urn:import:com.google.gwt.user.client.ui", "urn:import:org.tessell.gwt.user.client.ui");
       GenUtils.saveIfChanged(uiXmlCopy, uiXmlContent);
       viewGenerator.cleanup.markOkay(uiXmlCopy);
     }
@@ -153,27 +139,15 @@ class UiXmlFile {
     // for each ui:field, make @UiField (usually provided=true) and getter methods
     for (final UiFieldDeclaration field : handler.uiFields) {
       final String interfaceType = viewGenerator.config.getInterface(field.type);
-      final String subType = viewGenerator.config.getSubclass(field.type);
       final GField f = gwtView.getField(field.name);
       final GMethod m = gwtView.getMethod(field.name).returnType(interfaceType);
 
       if (field.isElement) {
         f.type(field.type).setAccess(Access.PACKAGE).addAnnotation("@UiField");
         m.body.line("return new {}({});", GwtElement.class.getName(), field.name);
-      } else if (widgetsWithoutNoParamCstrs.keySet().contains(field.type)) {
-        f.type(field.type).setAccess(Access.PACKAGE).addAnnotation("@UiField");
-        // _xxx gets added later
-        m.body.line("return _{};", field.name);
       } else {
-        f.type(subType).setFinal().setAccess(Access.PACKAGE).addAnnotation("@UiField(provided = true)");
-        if (field.type.equals(Image.class.getName()) && field.attributes.containsKey("resource")) {
-          // UiBinder's ImageParser ignores resource= because it assumes it goes to the cstr 
-          String resource = field.attributes.get("resource").replaceAll("[{}]", "") + "()";
-          // We can't use initialValue as the resource won't be set yet
-          cstr.body.line("{} = new {}({});", field.name, subType, resource);
-        } else {
-          f.initialValue("new {}()", subType);
-        }
+        // let UiBinder instantiate the type, which as a bonus means it will handle UiConstructor logic
+        f.type(field.type).setAccess(Access.PACKAGE).addAnnotation("@UiField");
         m.body.line("return {};", field.name);
       }
 
@@ -187,16 +161,6 @@ class UiXmlFile {
 
     cstr.body.line("initWidget(binder.createAndBindUi(this));");
     cstr.body.line("ensureDebugId(\"{}\");", gwtView.getSimpleName().replaceAll("View$", "").replaceAll("^Gwt", ""));
-
-    // go back and assign field values for things created by uibinder
-    for (final UiFieldDeclaration field : handler.uiFields) {
-      if (widgetsWithoutNoParamCstrs.keySet().contains(field.type)) {
-        final String wrapperType = widgetsWithoutNoParamCstrs.get(field.type);
-        final GField wrapped = gwtView.getField("_" + field.name);
-        wrapped.type(wrapperType).setFinal().setAccess(Access.PACKAGE);
-        cstr.body.line("_{} = new {}({});", field.name, wrapperType, field.name);
-      }
-    }
 
     // add implements of getStyle and getIsElement
     GMethod getStyle = gwtView.getMethod("getStyle").returnType(IsStyle.class).addAnnotation("@Override");

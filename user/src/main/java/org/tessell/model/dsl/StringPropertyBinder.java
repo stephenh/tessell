@@ -1,7 +1,7 @@
 package org.tessell.model.dsl;
 
+import org.tessell.gwt.user.client.ui.IsTextBox;
 import org.tessell.model.properties.StringProperty;
-import org.tessell.widgets.IsTextBox;
 
 import com.google.gwt.user.client.ui.HasValue;
 

@@ -6,6 +6,8 @@ import java.util.Map;
 import org.tessell.generators.resources.ResourcesGenerator;
 import org.tessell.generators.views.ViewGenerator;
 
+import com.google.gwt.junit.GWTMockUtilities;
+
 /**
  * Front-end for resources and views generators.
  *
@@ -15,6 +17,11 @@ public class Generator {
 
   /** Args: {@code --inputDirectory src/main/java --viewsPackage com.app.views --resourcesPackage com.app.resources --outputDirectory target/gen}. */
   public static void main(final String[] args) throws Exception {
+    // We use reflection to get at annotations of our widget subclasses,
+    // but that wanders into UIObject, which has a static clinit call
+    // to UIObject. This makes it return null instead of blowing up.
+    GWTMockUtilities.disarm();
+
     long start = System.currentTimeMillis();
 
     final Map<String, String> settings = GenUtils.parseArgs(args);

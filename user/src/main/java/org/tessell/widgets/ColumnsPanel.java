@@ -3,10 +3,18 @@ package org.tessell.widgets;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import org.tessell.gwt.dom.client.GwtElement;
+import org.tessell.gwt.dom.client.IsElement;
+import org.tessell.gwt.dom.client.IsStyle;
+import org.tessell.gwt.user.client.ui.IsColumnsPanel;
+import org.tessell.gwt.user.client.ui.IsWidgetIteratorAdaptor;
+import org.tessell.gwt.user.client.ui.StubColumnsPanel;
+
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 /** Adds displays to consecutive {@link FlowPanel}s as needed. */
+@OtherTypes(intf = IsColumnsPanel.class, stub = StubColumnsPanel.class)
 public class ColumnsPanel extends FlowPanel implements IsColumnsPanel {
 
   private final ArrayList<FlowPanel> columns = new ArrayList<FlowPanel>();
@@ -60,7 +68,7 @@ public class ColumnsPanel extends FlowPanel implements IsColumnsPanel {
 
   @Override
   public Iterator<IsWidget> iteratorIsWidgets() {
-    return new GwtIsWidgetIteratorAdaptor(iterator());
+    return new IsWidgetIteratorAdaptor(iterator());
   }
 
   @Override

@@ -2,12 +2,12 @@ package org.tessell.model.dsl;
 
 import java.util.List;
 
+import org.tessell.gwt.user.client.ui.IsListBox;
 import org.tessell.model.events.PropertyChangedEvent;
 import org.tessell.model.events.PropertyChangedHandler;
 import org.tessell.model.properties.Property;
 import org.tessell.util.ObjectUtils;
 import org.tessell.util.cookies.Cookie;
-import org.tessell.widgets.IsListBox;
 import org.tessell.widgets.IsTextList;
 
 import com.google.gwt.event.dom.client.*;

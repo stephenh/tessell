@@ -1,5 +1,8 @@
 package org.tessell.widgets;
 
+import org.tessell.gwt.dom.client.IsElement;
+import org.tessell.gwt.dom.client.IsStyle;
+
 import com.google.gwt.event.logical.shared.AttachEvent.Handler;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerRegistration;

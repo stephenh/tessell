@@ -1,12 +1,12 @@
 package org.tessell.model.dsl;
 
+import org.tessell.gwt.user.client.ui.HasCss;
 import org.tessell.model.dsl.SetPropertyBinder.Setup;
 import org.tessell.model.events.PropertyChangedEvent;
 import org.tessell.model.events.PropertyChangedHandler;
 import org.tessell.model.properties.Property;
 import org.tessell.model.validation.events.RuleTriggeredEvent;
 import org.tessell.model.validation.events.RuleUntriggeredEvent;
-import org.tessell.widgets.HasCss;
 
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Visibility;

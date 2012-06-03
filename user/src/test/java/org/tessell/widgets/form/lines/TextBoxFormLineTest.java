@@ -7,9 +7,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.tessell.testing.TessellMatchers.hasErrors;
 
 import org.junit.Test;
+import org.tessell.gwt.user.client.ui.StubTextBox;
 import org.tessell.model.dsl.Binder;
 import org.tessell.util.HTMLPanelBuilder;
-import org.tessell.widgets.StubTextBox;
 import org.tessell.widgets.StubTextList;
 import org.tessell.widgets.form.AbstractFormPresenterTest;
 import org.tessell.widgets.form.EmployeeModel;

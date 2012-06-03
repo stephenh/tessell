@@ -51,7 +51,8 @@ class UiXmlHandler extends DefaultHandler {
       if (uri.equals("")) {
         type = Element.class.getName();
       } else {
-        type = StringUtils.substringAfterLast(uri, ":") + "." + localName;
+        type = (StringUtils.substringAfterLast(uri, ":") + "." + localName)
+          .replace("com.google.gwt.user.client.ui", "org.tessell.gwt.user.client.ui"); // use the subclasses
       }
       final String name = attributes.getValue(indexOfUiField);
       uiFields.add(new UiFieldDeclaration(type, name, attributes));

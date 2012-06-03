@@ -1,6 +1,6 @@
 package org.tessell.model.dsl;
 
-import org.tessell.widgets.IsImage;
+import org.tessell.gwt.user.client.ui.IsImage;
 
 import com.google.gwt.user.client.TakesValue;
 import com.google.gwt.user.client.ui.HasHTML;

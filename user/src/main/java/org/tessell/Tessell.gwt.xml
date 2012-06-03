@@ -27,6 +27,12 @@
     <exclude name="**/Dummy*"/>
     <exclude name="**/Stub*"/>
   </source>
+  <source path="gwt/dom/client">
+    <exclude name="**/Stub*"/>
+  </source>
+  <source path="gwt/user/client/ui">
+    <exclude name="**/Stub*"/>
+  </source>
   <super-source path="supersrc" />
 
   <inherits name="org.bindgen.Bindgen" />                  <!-- For bindgen -->

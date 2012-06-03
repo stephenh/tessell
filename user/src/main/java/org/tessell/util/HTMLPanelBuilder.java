@@ -4,7 +4,7 @@ import static org.tessell.widgets.Widgets.newHTMLPanel;
 
 import java.util.ArrayList;
 
-import org.tessell.widgets.IsHTMLPanel;
+import org.tessell.gwt.user.client.ui.IsHTMLPanel;
 import org.tessell.widgets.IsWidget;
 
 import com.google.gwt.user.client.ui.HTMLPanel;

@@ -3,6 +3,10 @@ package org.tessell.widgets;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import org.tessell.gwt.dom.client.GwtElement;
+import org.tessell.gwt.dom.client.IsElement;
+import org.tessell.gwt.dom.client.IsStyle;
+
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Panel;
@@ -17,6 +21,7 @@ import com.google.gwt.user.client.ui.WidgetCollection;
  * We want a table where we can add an entire row at a time, and it was easiest to just roll our own extending from
  * {@link Panel}.
  */
+@OtherTypes(intf = IsRowTable.class, stub = StubRowTable.class)
 public class RowTable extends Panel implements IsRowTable {
 
   private final Element table;

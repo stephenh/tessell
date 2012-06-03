@@ -11,10 +11,10 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.tessell.bus.StubEventBus;
+import org.tessell.gwt.dom.client.StubStyle;
+import org.tessell.gwt.user.client.ui.HasCss;
 import org.tessell.place.events.PlaceRequestEvent;
-import org.tessell.widgets.HasCss;
 import org.tessell.widgets.IsTextList;
-import org.tessell.widgets.StubStyle;
 import org.tessell.widgets.StubTextList;
 
 public class TessellMatchers {

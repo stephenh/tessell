@@ -9,9 +9,9 @@ import static org.tessell.widgets.form.lines.NewFormLine.newListBoxFormLine;
 import java.util.ArrayList;
 
 import org.junit.Test;
+import org.tessell.gwt.user.client.ui.StubListBox;
 import org.tessell.model.dsl.ListBoxAdaptor;
 import org.tessell.model.validation.rules.Required;
-import org.tessell.widgets.StubListBox;
 import org.tessell.widgets.StubTextList;
 import org.tessell.widgets.form.AbstractFormPresenterTest;
 import org.tessell.widgets.form.EmployeeModel;

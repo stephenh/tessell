@@ -1,6 +1,5 @@
 package org.tessell.widgets.cellview;
 
-import org.tessell.widgets.StubAbstractCellTable;
 
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.FieldUpdater;

@@ -1,5 +1,7 @@
 package org.tessell.widgets;
 
+import org.tessell.gwt.user.client.ui.StubDialogBox;
+
 public class StubFadingDialogBox extends StubDialogBox implements IsFadingDialogBox {
 
   private boolean autoFadeInGlass;

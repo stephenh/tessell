@@ -4,13 +4,13 @@ import static org.tessell.widgets.Widgets.newFlowPanel;
 
 import java.util.ArrayList;
 
+import org.tessell.gwt.user.client.ui.IsFlowPanel;
+import org.tessell.gwt.user.client.ui.IsHTMLPanel;
 import org.tessell.model.dsl.Binder;
 import org.tessell.model.properties.PropertyGroup;
 import org.tessell.presenter.BasicPresenter;
 import org.tessell.util.HTMLPanelBuilder;
 import org.tessell.util.OnEnterKeyHandler;
-import org.tessell.widgets.IsFlowPanel;
-import org.tessell.widgets.IsHTMLPanel;
 import org.tessell.widgets.form.actions.FormAction;
 import org.tessell.widgets.form.lines.FormLine;
 

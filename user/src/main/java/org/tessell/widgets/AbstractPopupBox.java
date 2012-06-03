@@ -4,6 +4,10 @@ import static org.tessell.widgets.Widgets.newFocusPanel;
 import static org.tessell.widgets.Widgets.newPopupPanel;
 import static org.tessell.widgets.Widgets.newTimer;
 
+import org.tessell.gwt.user.client.IsTimer;
+import org.tessell.gwt.user.client.ui.IsFocusPanel;
+import org.tessell.gwt.user.client.ui.IsPopupPanel;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasAllMouseHandlers;

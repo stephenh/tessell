@@ -19,6 +19,12 @@ import static org.tessell.testing.TessellMatchers.shown;
 import java.util.ArrayList;
 
 import org.junit.Test;
+import org.tessell.gwt.dom.client.StubClickEvent;
+import org.tessell.gwt.user.client.ui.StubButton;
+import org.tessell.gwt.user.client.ui.StubFocusWidget;
+import org.tessell.gwt.user.client.ui.StubLabel;
+import org.tessell.gwt.user.client.ui.StubListBox;
+import org.tessell.gwt.user.client.ui.StubTextBox;
 import org.tessell.model.dsl.Binder;
 import org.tessell.model.properties.BooleanProperty;
 import org.tessell.model.properties.EnumProperty;
@@ -425,7 +431,7 @@ public class BinderTest {
     DummyUiCommand command = new DummyUiCommand();
     StubButton button = new StubButton();
     binder.bind(command).to(button);
-    DummyClickEvent click = new DummyClickEvent();
+    StubClickEvent click = new StubClickEvent();
     button.fireEvent(click);
     assertThat(click.prevented, is(true));
   }

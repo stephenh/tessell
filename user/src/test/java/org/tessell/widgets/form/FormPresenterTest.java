@@ -6,12 +6,12 @@ import static org.tessell.model.properties.NewProperty.stringProperty;
 import joist.util.Join;
 
 import org.junit.Test;
+import org.tessell.gwt.user.client.ui.StubButton;
+import org.tessell.gwt.user.client.ui.StubTextBox;
 import org.tessell.model.properties.StringProperty;
 import org.tessell.model.validation.Valid;
 import org.tessell.tests.model.commands.DummyUiCommand;
 import org.tessell.util.HTMLPanelBuilder;
-import org.tessell.widgets.StubButton;
-import org.tessell.widgets.StubTextBox;
 import org.tessell.widgets.form.actions.ButtonFormAction;
 import org.tessell.widgets.form.lines.StaticFormLine;
 import org.tessell.widgets.form.lines.TextBoxFormLine;

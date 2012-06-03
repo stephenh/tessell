@@ -4,8 +4,8 @@ import static org.tessell.widgets.Widgets.newFlowPanel;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.tessell.gwt.user.client.ui.IsFlowPanel;
 import org.tessell.presenter.BasicPresenter;
-import org.tessell.widgets.IsFlowPanel;
 import org.tessell.widgets.StubWidgetsProvider;
 
 public class BasicPresenterTest {

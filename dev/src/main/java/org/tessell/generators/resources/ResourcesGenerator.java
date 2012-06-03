@@ -21,9 +21,9 @@ import org.tessell.generators.Cleanup;
 import org.tessell.generators.GenUtils;
 import org.tessell.generators.css.CssGenerator;
 import org.tessell.generators.css.CssStubGenerator;
-import org.tessell.widgets.StubDataResource;
-import org.tessell.widgets.StubImageResource;
-import org.tessell.widgets.StubTextResource;
+import org.tessell.gwt.resources.client.StubDataResource;
+import org.tessell.gwt.resources.client.StubImageResource;
+import org.tessell.gwt.resources.client.StubTextResource;
 
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource.NotStrict;

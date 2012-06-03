@@ -2,12 +2,12 @@ package org.tessell.widgets.form.actions;
 
 import static org.tessell.widgets.Widgets.newButton;
 
+import org.tessell.gwt.user.client.ui.IsButton;
 import org.tessell.model.commands.DispatchUiCommand;
 import org.tessell.model.commands.UiCommand;
 import org.tessell.model.dsl.Binder;
 import org.tessell.util.HTMLPanelBuilder;
 import org.tessell.util.Inflector;
-import org.tessell.widgets.IsButton;
 import org.tessell.widgets.form.FormPresenter;
 
 import com.google.gwt.event.dom.client.ClickEvent;

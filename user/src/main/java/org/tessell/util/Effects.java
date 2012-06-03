@@ -4,9 +4,9 @@ import static org.tessell.widgets.Widgets.newAnimation;
 
 import java.util.ArrayList;
 
-import org.tessell.widgets.AnimationLogic;
-import org.tessell.widgets.IsAnimation;
-import org.tessell.widgets.IsElement;
+import org.tessell.gwt.animation.client.AnimationLogic;
+import org.tessell.gwt.animation.client.IsAnimation;
+import org.tessell.gwt.dom.client.IsElement;
 import org.tessell.widgets.IsWidget;
 
 import com.google.gwt.dom.client.Style.Display;

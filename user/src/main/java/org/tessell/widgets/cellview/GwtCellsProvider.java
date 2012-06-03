@@ -2,7 +2,6 @@ package org.tessell.widgets.cellview;
 
 import java.util.List;
 
-import org.tessell.widgets.ClickableSafeHtmlCell;
 
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.HasCell;

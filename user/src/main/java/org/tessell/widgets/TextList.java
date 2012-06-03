@@ -1,11 +1,16 @@
 package org.tessell.widgets;
 
+import org.tessell.gwt.dom.client.GwtElement;
+import org.tessell.gwt.dom.client.IsElement;
+import org.tessell.gwt.dom.client.IsStyle;
+
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
 import com.google.gwt.dom.client.NodeList;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Widget;
 
+@OtherTypes(intf = IsTextList.class, stub = StubTextList.class)
 public class TextList extends Widget implements IsTextList {
 
   private String childTag = "dd";

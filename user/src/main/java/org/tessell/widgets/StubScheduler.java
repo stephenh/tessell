@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.tessell.widgets.cellview.StubCellTable;
+
 import com.google.gwt.core.client.impl.SchedulerImpl;
 import com.google.gwt.user.cellview.client.PublicHasDataPresenter;
 

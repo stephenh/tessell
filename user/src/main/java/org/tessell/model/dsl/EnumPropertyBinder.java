@@ -2,8 +2,8 @@ package org.tessell.model.dsl;
 
 import java.util.Arrays;
 
+import org.tessell.gwt.user.client.ui.IsListBox;
 import org.tessell.model.properties.EnumProperty;
-import org.tessell.widgets.IsListBox;
 
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;

@@ -1,9 +1,9 @@
 package org.tessell.model.dsl;
 
+import org.tessell.gwt.user.client.ui.HasCss;
 import org.tessell.model.events.PropertyChangedEvent;
 import org.tessell.model.events.PropertyChangedHandler;
 import org.tessell.model.properties.Property;
-import org.tessell.widgets.HasCss;
 
 /** Sets the style based on the property value. */
 public class WhenIsSetBinder<P> {

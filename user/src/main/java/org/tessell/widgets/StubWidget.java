@@ -2,6 +2,9 @@ package org.tessell.widgets;
 
 import java.util.Iterator;
 
+import org.tessell.gwt.dom.client.StubElement;
+import org.tessell.gwt.dom.client.StubStyle;
+
 import com.google.gwt.event.logical.shared.AttachEvent;
 import com.google.gwt.event.logical.shared.AttachEvent.Handler;
 import com.google.gwt.event.shared.EventBus;

@@ -2,9 +2,9 @@ package org.tessell.util;
 
 import static org.tessell.widgets.Widgets.newAnimation;
 
-import org.tessell.widgets.AnimationLogic;
-import org.tessell.widgets.HasCss;
-import org.tessell.widgets.IsFocusWidget;
+import org.tessell.gwt.animation.client.AnimationLogic;
+import org.tessell.gwt.user.client.ui.HasCss;
+import org.tessell.gwt.user.client.ui.IsFocusWidget;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Display;

@@ -4,6 +4,8 @@ import static org.tessell.widgets.Widgets.getWindow;
 import static org.tessell.widgets.Widgets.newFadingDialogBox;
 import static org.tessell.widgets.Widgets.newScrollPanel;
 
+import org.tessell.gwt.user.client.IsWindow;
+import org.tessell.gwt.user.client.ui.IsScrollPanel;
 import org.tessell.presenter.BasicPresenter;
 
 import com.google.gwt.core.client.GWT;

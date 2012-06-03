@@ -5,6 +5,7 @@ import static org.tessell.widgets.Widgets.newTextList;
 
 import java.util.ArrayList;
 
+import org.tessell.gwt.user.client.ui.IsListBox;
 import org.tessell.model.dsl.Binder;
 import org.tessell.model.dsl.ListBoxAdaptor;
 import org.tessell.model.dsl.ListBoxIdentityAdaptor;
@@ -12,7 +13,6 @@ import org.tessell.model.properties.Property;
 import org.tessell.model.properties.PropertyGroup;
 import org.tessell.util.HTMLPanelBuilder;
 import org.tessell.util.WidgetUtils;
-import org.tessell.widgets.IsListBox;
 import org.tessell.widgets.IsTextList;
 import org.tessell.widgets.form.FormPresenter;
 
