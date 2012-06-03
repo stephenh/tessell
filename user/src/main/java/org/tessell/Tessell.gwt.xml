@@ -27,10 +27,7 @@
     <exclude name="**/Dummy*"/>
     <exclude name="**/Stub*"/>
   </source>
-  <source path="gwt/dom/client">
-    <exclude name="**/Stub*"/>
-  </source>
-  <source path="gwt/user/client/ui">
+  <source path="gwt">
     <exclude name="**/Stub*"/>
   </source>
   <super-source path="supersrc" />
