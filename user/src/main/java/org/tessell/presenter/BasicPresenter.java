@@ -6,8 +6,10 @@ import java.util.NoSuchElementException;
 import org.tessell.bus.AbstractBound;
 import org.tessell.widgets.IsWidget;
 
+import com.google.gwt.user.client.ui.Widget;
+
 /** A basic presenter that tracks bound handler registrations. */
-public abstract class BasicPresenter<V extends IsWidget> extends AbstractBound implements Presenter {
+public abstract class BasicPresenter<V extends IsWidget> extends AbstractBound implements Presenter, com.google.gwt.user.client.ui.IsWidget {
 
   protected final V view;
   private ArrayList<Presenter> children;
@@ -17,11 +19,23 @@ public abstract class BasicPresenter<V extends IsWidget> extends AbstractBound i
   }
 
   /** @return The view for the presenter. */
+  @Override
   public V getView() {
     if (!isBound()) {
       throw new IllegalStateException(this + " has not been bound");
     }
     return view;
+  }
+
+  /**
+   * So we can pretend we're a widget to GWT APIs.
+   *
+   * I'm not entirely sure when this would be useful--perhaps for referencing
+   * presenters in ui.xml files directly instead of needing panels.
+   */
+  @Override
+  public Widget asWidget() {
+    return getView().asWidget();
   }
 
   @Override
