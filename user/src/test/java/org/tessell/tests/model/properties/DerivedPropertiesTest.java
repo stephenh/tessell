@@ -120,6 +120,25 @@ public class DerivedPropertiesTest extends AbstractRuleTest {
     assertThat(c.count, is(1));
   }
 
+  @Test
+  public void implicitDependsWithMultipleDependencies() {
+    final IntegerProperty a = integerProperty("a", null);
+    final IntegerProperty b = integerProperty("b", null);
+    final IntegerProperty c = integerProperty(new DerivedValue<Integer>("c") {
+      public Integer get() {
+        return a.get() == null ? 0 : b.get() == null ? 1 : 3;
+      }
+    });
+
+    final CountChanged<Integer> count = new CountChanged<Integer>();
+    c.addPropertyChangedHandler(count);
+
+    a.set(2);
+    assertThat(count.count, is(1));
+    b.set(2);
+    assertThat(count.count, is(2));
+  }
+
   private class CountChanged<P> implements PropertyChangedHandler<P> {
     private int count;
 

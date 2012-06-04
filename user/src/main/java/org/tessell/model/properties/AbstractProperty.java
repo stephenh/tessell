@@ -52,22 +52,7 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
 
   public AbstractProperty(final Value<P> value) {
     this.value = value;
-    if (value instanceof DerivedValue) {
-      // If a DerivedValue, turn on implicitUpstream, which will watch for any properties
-      // we evaluate while calling value.get for lastValue purposes.
-      List<Property<?>> oldUpstream = implicitUpstream;
-      implicitUpstream = new ArrayList<Property<?>>();
-      P tempValue = value.get();
-      List<Property<?>> ourUpstream = new ArrayList<Property<?>>(implicitUpstream);
-      implicitUpstream = oldUpstream;
-      // Now continue with copyLastValue and then act upon ourUpstream
-      lastValue = copyLastValue(tempValue);
-      for (Property<?> upstream : ourUpstream) {
-        upstream.addDerived(this);
-      }
-    } else {
-      lastValue = copyLastValue(value.get());
-    }
+    lastValue = copyLastValue(getWithUpstreamTracking());
     RuleHandler ruleHandler = new RuleHandler();
     addRuleTriggeredHandler(ruleHandler);
     addRuleUntriggeredHandler(ruleHandler);
@@ -76,9 +61,10 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
   @Override
   public P get() {
     if (implicitUpstream != null && !implicitUpstream.contains(this)) {
+      // Some other derived property is having it's get() called, so it depends on us now
       implicitUpstream.add(this);
     }
-    return value.get();
+    return getWithUpstreamTracking();
   }
 
   @Override
@@ -271,6 +257,27 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
           rule.untriggerIfNeeded();
         }
       }
+    }
+  }
+
+  private P getWithUpstreamTracking() {
+    // this logic should probably go in DerivedValue somehow, except that
+    // it's only a value and does not know about it's parent property
+    if (value instanceof DerivedValue) {
+      // If a DerivedValue, turn on implicitUpstream, which will watch for any properties
+      // we evaluate while calling value.get for lastValue purposes.
+      List<Property<?>> oldUpstream = implicitUpstream;
+      implicitUpstream = new ArrayList<Property<?>>();
+      P tempValue = value.get();
+      List<Property<?>> ourUpstream = new ArrayList<Property<?>>(implicitUpstream);
+      implicitUpstream = oldUpstream;
+      // Now continue with copyLastValue and then act upon ourUpstream
+      for (Property<?> upstream : ourUpstream) {
+        upstream.addDerived(this);
+      }
+      return tempValue;
+    } else {
+      return value.get();
     }
   }
 
