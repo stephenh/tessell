@@ -1,6 +1,6 @@
 package org.tessell.gwt.dom.client;
 
-import org.tessell.widgets.IsWidget;
+import org.tessell.gwt.user.client.ui.IsWidget;
 import org.tessell.widgets.OtherTypes;
 
 import com.google.gwt.dom.client.Element;

@@ -35,7 +35,8 @@ import org.tessell.model.values.SetValue;
 import org.tessell.tests.model.commands.DummyUiCommand;
 import org.tessell.util.cookies.StringCookie;
 import org.tessell.util.cookies.facade.StubCookies;
-import org.tessell.widgets.*;
+import org.tessell.widgets.StubTextList;
+import org.tessell.widgets.StubWidget;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;

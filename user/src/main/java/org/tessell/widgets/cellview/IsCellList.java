@@ -1,7 +1,7 @@
 package org.tessell.widgets.cellview;
 
+import org.tessell.gwt.user.client.ui.IsWidget;
 import org.tessell.widgets.IsAbstractHasData;
-import org.tessell.widgets.IsWidget;
 
 import com.google.gwt.cell.client.ValueUpdater;
 import com.google.gwt.safehtml.shared.SafeHtml;

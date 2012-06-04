@@ -7,6 +7,7 @@ import org.tessell.gwt.dom.client.GwtElement;
 import org.tessell.gwt.dom.client.IsElement;
 import org.tessell.gwt.dom.client.IsStyle;
 import org.tessell.gwt.user.client.ui.IsColumnsPanel;
+import org.tessell.gwt.user.client.ui.IsWidget;
 import org.tessell.gwt.user.client.ui.IsWidgetIteratorAdaptor;
 import org.tessell.gwt.user.client.ui.StubColumnsPanel;
 
@@ -21,7 +22,7 @@ public class ColumnsPanel extends FlowPanel implements IsColumnsPanel {
   private String columnStyleName;
 
   @Override
-  public void add(final int column, final IsWidget isWidget) {
+  public void add(final int column, final com.google.gwt.user.client.ui.IsWidget isWidget) {
     while (column >= columns.size()) {
       final FlowPanel p = new FlowPanel();
       if (columnStyleName != null) {
@@ -39,16 +40,6 @@ public class ColumnsPanel extends FlowPanel implements IsColumnsPanel {
 
   public void setColumnStyleName(final String columnStyleName) {
     this.columnStyleName = columnStyleName;
-  }
-
-  @Override
-  public void add(final IsWidget isWidget) {
-    add(isWidget.asWidget());
-  }
-
-  @Override
-  public boolean remove(final IsWidget isWidget) {
-    return remove(isWidget.asWidget());
   }
 
   @Override
@@ -72,18 +63,8 @@ public class ColumnsPanel extends FlowPanel implements IsColumnsPanel {
   }
 
   @Override
-  public void insert(IsWidget widget, int beforeIndex) {
-    insert(widget.asWidget(), beforeIndex);
-  }
-
-  @Override
   public IsWidget getIsWidget(int index) {
     return (IsWidget) getWidget(index);
-  }
-
-  @Override
-  public int getWidgetIndex(IsWidget child) {
-    return getWidgetIndex(child.asWidget());
   }
 
 }

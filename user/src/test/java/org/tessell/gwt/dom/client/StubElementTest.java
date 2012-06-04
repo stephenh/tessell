@@ -4,7 +4,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.junit.Test;
-import org.tessell.gwt.dom.client.StubElement;
 
 public class StubElementTest {
 

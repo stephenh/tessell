@@ -1,7 +1,7 @@
 package org.tessell.gwt.dom.client;
 
 
-import com.google.gwt.dom.client.*;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Display;

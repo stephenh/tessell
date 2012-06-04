@@ -3,27 +3,25 @@ package org.tessell.gwt.user.client.ui;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import org.tessell.widgets.IsWidget;
-
 public class StubSimplePanel extends StubPanel implements IsSimplePanel {
 
   private IsWidget isWidget;
 
   @Override
-  public void setWidget(final IsWidget isWidget) {
-    this.isWidget = isWidget;
+  public void setWidget(final com.google.gwt.user.client.ui.IsWidget isWidget) {
+    this.isWidget = (IsWidget) isWidget;
   }
 
   @Override
-  public void add(final IsWidget isWidget) {
+  public void add(final com.google.gwt.user.client.ui.IsWidget isWidget) {
     if (this.isWidget != null) {
       throw new IllegalArgumentException("SimplePanel already populated");
     }
-    this.isWidget = isWidget;
+    this.isWidget = (IsWidget) isWidget;
   }
 
   @Override
-  public boolean remove(final IsWidget isWidget) {
+  public boolean remove(final com.google.gwt.user.client.ui.IsWidget isWidget) {
     this.isWidget = null;
     return true;
   }

@@ -7,6 +7,7 @@ import static org.tessell.model.properties.NewProperty.listProperty;
 import java.util.ArrayList;
 
 import org.junit.Test;
+import org.tessell.gwt.user.client.ui.IsWidget;
 import org.tessell.gwt.user.client.ui.StubFlowPanel;
 import org.tessell.gwt.user.client.ui.StubLabel;
 import org.tessell.model.dsl.Binder;
@@ -15,7 +16,6 @@ import org.tessell.model.dsl.ListPropertyBinder.ListViewFactory;
 import org.tessell.model.properties.ListProperty;
 import org.tessell.presenter.BasicPresenter;
 import org.tessell.presenter.Presenter;
-import org.tessell.widgets.IsWidget;
 
 public class ListPropertyBinderTest {
 

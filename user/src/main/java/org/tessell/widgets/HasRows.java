@@ -1,5 +1,7 @@
 package org.tessell.widgets;
 
+import com.google.gwt.user.client.ui.IsWidget;
+
 /** An interface for {@link RowTable}. */
 public interface HasRows {
 

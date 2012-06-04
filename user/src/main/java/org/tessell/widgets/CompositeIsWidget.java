@@ -2,6 +2,7 @@ package org.tessell.widgets;
 
 import org.tessell.gwt.dom.client.IsElement;
 import org.tessell.gwt.dom.client.IsStyle;
+import org.tessell.gwt.user.client.ui.IsWidget;
 
 import com.google.gwt.event.logical.shared.AttachEvent.Handler;
 import com.google.gwt.event.shared.GwtEvent;

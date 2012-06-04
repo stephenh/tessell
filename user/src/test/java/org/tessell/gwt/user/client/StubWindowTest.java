@@ -5,7 +5,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.junit.Test;
 import org.tessell.gwt.http.client.IsUrlBuilder;
-import org.tessell.gwt.user.client.StubWindow;
 
 public class StubWindowTest {
 

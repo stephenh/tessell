@@ -17,7 +17,7 @@ import org.tessell.generators.resources.ResourcesGenerator;
 import org.tessell.gwt.dom.client.GwtElement;
 import org.tessell.gwt.dom.client.IsElement;
 import org.tessell.gwt.dom.client.IsStyle;
-import org.tessell.widgets.IsWidget;
+import org.tessell.gwt.user.client.ui.IsWidget;
 import org.tessell.widgets.StubView;
 
 import com.google.gwt.core.client.GWT;
@@ -26,7 +26,6 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.UIObject;
-import com.google.gwt.user.client.ui.Widget;
 
 /** A {@code ui.xml} file. */
 class UiXmlFile {
@@ -77,7 +76,6 @@ class UiXmlFile {
   private void generateIsView() throws Exception {
     isView.baseClass(IsWidget.class);
     isView.setInterface();
-    isView.getMethod("asWidget").returnType(Widget.class);
 
     // methods for each ui:field
     for (final UiFieldDeclaration uiField : handler.uiFields) {

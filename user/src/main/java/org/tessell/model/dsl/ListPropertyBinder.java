@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.tessell.gwt.user.client.ui.IsPanel;
+import org.tessell.gwt.user.client.ui.IsWidget;
 import org.tessell.model.events.ValueAddedEvent;
 import org.tessell.model.events.ValueAddedHandler;
 import org.tessell.model.events.ValueRemovedEvent;
@@ -12,7 +13,6 @@ import org.tessell.model.events.ValueRemovedHandler;
 import org.tessell.model.properties.ListProperty;
 import org.tessell.presenter.BasicPresenter;
 import org.tessell.presenter.Presenter;
-import org.tessell.widgets.IsWidget;
 
 /** Fluent binding methods for {@link ListProperty}s. */
 public class ListPropertyBinder<P> extends PropertyBinder<ArrayList<P>> {

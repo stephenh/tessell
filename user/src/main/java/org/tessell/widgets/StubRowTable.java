@@ -3,19 +3,21 @@ package org.tessell.widgets;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.tessell.gwt.user.client.ui.IsWidget;
+
 public class StubRowTable extends StubWidget implements IsRowTable {
 
   private final List<IsWidget> headers = new ArrayList<IsWidget>();
   private final List<IsWidget> rows = new ArrayList<IsWidget>();
 
   @Override
-  public void addHeader(final IsWidget isWidget) {
-    headers.add(isWidget);
+  public void addHeader(final com.google.gwt.user.client.ui.IsWidget isWidget) {
+    headers.add((IsWidget) isWidget);
   }
 
   @Override
-  public void addRow(final IsWidget isWidget) {
-    rows.add(isWidget);
+  public void addRow(final com.google.gwt.user.client.ui.IsWidget isWidget) {
+    rows.add((IsWidget) isWidget);
   }
 
   public List<IsWidget> getHeaders() {
@@ -27,9 +29,9 @@ public class StubRowTable extends StubWidget implements IsRowTable {
   }
 
   @Override
-  public void replaceRow(final int i, final IsWidget isWidget) {
+  public void replaceRow(final int i, final com.google.gwt.user.client.ui.IsWidget isWidget) {
     rows.remove(i);
-    rows.add(i, isWidget);
+    rows.add(i, (IsWidget) isWidget);
   }
 
   @Override
@@ -38,7 +40,7 @@ public class StubRowTable extends StubWidget implements IsRowTable {
   }
 
   @Override
-  public void removeRow(IsWidget view) {
+  public void removeRow(com.google.gwt.user.client.ui.IsWidget view) {
     removeRow(rows.indexOf(view));
   }
 
@@ -48,8 +50,8 @@ public class StubRowTable extends StubWidget implements IsRowTable {
   }
 
   @Override
-  public void insertRow(final int i, final IsWidget isWidget) {
-    rows.add(i, isWidget);
+  public void insertRow(final int i, final com.google.gwt.user.client.ui.IsWidget isWidget) {
+    rows.add(i, (IsWidget) isWidget);
   }
 
   @Override

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.tessell.widgets.IsWidget;
 import org.tessell.widgets.StubWidget;
 
 import com.google.gwt.event.logical.shared.BeforeSelectionEvent;
@@ -20,8 +19,8 @@ public class StubTabLayoutPanel extends StubWidget implements IsTabLayoutPanel {
   private int selected = -1;
 
   @Override
-  public void add(IsWidget w) {
-    widgets.add(w);
+  public void add(com.google.gwt.user.client.ui.IsWidget w) {
+    widgets.add((IsWidget) w);
     tabs.add("none");
   }
 
@@ -37,7 +36,7 @@ public class StubTabLayoutPanel extends StubWidget implements IsTabLayoutPanel {
   }
 
   @Override
-  public boolean remove(IsWidget w) {
+  public boolean remove(com.google.gwt.user.client.ui.IsWidget w) {
     tabs.remove(widgets.indexOf(w));
     return widgets.remove(w);
   }
@@ -53,7 +52,7 @@ public class StubTabLayoutPanel extends StubWidget implements IsTabLayoutPanel {
   }
 
   @Override
-  public int getWidgetIndex(IsWidget child) {
+  public int getWidgetIndex(com.google.gwt.user.client.ui.IsWidget child) {
     return widgets.indexOf(child);
   }
 
@@ -64,19 +63,19 @@ public class StubTabLayoutPanel extends StubWidget implements IsTabLayoutPanel {
   }
 
   @Override
-  public void add(IsWidget w, String tabText) {
+  public void add(com.google.gwt.user.client.ui.IsWidget w, String tabText) {
     add(w);
     tabs.add(tabText);
   }
 
   @Override
-  public void add(IsWidget w, String tabText, boolean tabIsHtml) {
+  public void add(com.google.gwt.user.client.ui.IsWidget w, String tabText, boolean tabIsHtml) {
     add(w);
     tabs.add(tabText);
   }
 
   @Override
-  public void add(IsWidget w, IsWidget tabWidget) {
+  public void add(com.google.gwt.user.client.ui.IsWidget w, com.google.gwt.user.client.ui.IsWidget tabWidget) {
     add(w);
     tabs.add(tabWidget);
   }
@@ -102,31 +101,31 @@ public class StubTabLayoutPanel extends StubWidget implements IsTabLayoutPanel {
   }
 
   @Override
-  public IsWidget getTabIsWidget(IsWidget child) {
+  public IsWidget getTabIsWidget(com.google.gwt.user.client.ui.IsWidget child) {
     return (IsWidget) tabs.get(widgets.indexOf(child));
   }
 
   @Override
-  public void insert(IsWidget child, int beforeIndex) {
-    widgets.add(beforeIndex, child);
+  public void insert(com.google.gwt.user.client.ui.IsWidget child, int beforeIndex) {
+    widgets.add(beforeIndex, (IsWidget) child);
     tabs.add(beforeIndex, "none");
   }
 
   @Override
-  public void insert(IsWidget child, String tabText, boolean tabIsHtml, int beforeIndex) {
-    widgets.add(beforeIndex, child);
+  public void insert(com.google.gwt.user.client.ui.IsWidget child, String tabText, boolean tabIsHtml, int beforeIndex) {
+    widgets.add(beforeIndex, (IsWidget) child);
     tabs.add(beforeIndex, tabText);
   }
 
   @Override
-  public void insert(IsWidget child, String tabText, int beforeIndex) {
-    widgets.add(beforeIndex, child);
+  public void insert(com.google.gwt.user.client.ui.IsWidget child, String tabText, int beforeIndex) {
+    widgets.add(beforeIndex, (IsWidget) child);
     tabs.add(beforeIndex, tabText);
   }
 
   @Override
-  public void insert(IsWidget child, IsWidget tabWidget, int beforeIndex) {
-    widgets.add(beforeIndex, child);
+  public void insert(com.google.gwt.user.client.ui.IsWidget child, com.google.gwt.user.client.ui.IsWidget tabWidget, int beforeIndex) {
+    widgets.add(beforeIndex, (IsWidget) child);
     tabs.add(beforeIndex, tabWidget);
   }
 
@@ -150,12 +149,12 @@ public class StubTabLayoutPanel extends StubWidget implements IsTabLayoutPanel {
   }
 
   @Override
-  public void selectTab(IsWidget child) {
+  public void selectTab(com.google.gwt.user.client.ui.IsWidget child) {
     selectTab(widgets.indexOf(child));
   }
 
   @Override
-  public void selectTab(IsWidget child, boolean fireEvents) {
+  public void selectTab(com.google.gwt.user.client.ui.IsWidget child, boolean fireEvents) {
     selectTab(widgets.indexOf(child), true);
   }
 

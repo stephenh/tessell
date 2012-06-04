@@ -30,6 +30,7 @@ import org.tessell.gwt.user.client.ui.IsSimplePanel;
 import org.tessell.gwt.user.client.ui.IsSuggestBox;
 import org.tessell.gwt.user.client.ui.IsTabLayoutPanel;
 import org.tessell.gwt.user.client.ui.IsTextBox;
+import org.tessell.gwt.user.client.ui.IsWidget;
 import org.tessell.place.history.IsHistory;
 import org.tessell.util.cookies.facade.IsCookies;
 import org.tessell.widgets.cellview.IsCellList;

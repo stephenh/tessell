@@ -2,10 +2,10 @@ package org.tessell.gwt.user.client.ui;
 
 import java.util.Iterator;
 
-import org.tessell.widgets.IsWidget;
-
 import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.RootPanel;
 
+/** For wrapping the {@link RootPanel} instance in {@link IsAbsolutePanel}. */
 public class GwtAbsolutePanelDelegate extends GwtWidgetDelegate implements IsAbsolutePanel {
 
   private final AbsolutePanel delegate;
@@ -16,12 +16,12 @@ public class GwtAbsolutePanelDelegate extends GwtWidgetDelegate implements IsAbs
   }
 
   @Override
-  public void add(IsWidget isWidget) {
+  public void add(com.google.gwt.user.client.ui.IsWidget isWidget) {
     delegate.add(isWidget.asWidget());
   }
 
   @Override
-  public boolean remove(IsWidget isWidget) {
+  public boolean remove(com.google.gwt.user.client.ui.IsWidget isWidget) {
     return delegate.remove(isWidget.asWidget());
   }
 
@@ -46,7 +46,7 @@ public class GwtAbsolutePanelDelegate extends GwtWidgetDelegate implements IsAbs
   }
 
   @Override
-  public int getWidgetIndex(IsWidget child) {
+  public int getWidgetIndex(com.google.gwt.user.client.ui.IsWidget child) {
     return delegate.getWidgetIndex(child.asWidget());
   }
 
@@ -56,32 +56,32 @@ public class GwtAbsolutePanelDelegate extends GwtWidgetDelegate implements IsAbs
   }
 
   @Override
-  public void add(IsWidget w, int left, int top) {
+  public void add(com.google.gwt.user.client.ui.IsWidget w, int left, int top) {
     delegate.add(w.asWidget(), left, top);
   }
 
   @Override
-  public int getIsWidgetLeft(IsWidget w) {
+  public int getIsWidgetLeft(com.google.gwt.user.client.ui.IsWidget w) {
     return delegate.getWidgetLeft(w.asWidget());
   }
 
   @Override
-  public int getIsWidgetTop(IsWidget w) {
+  public int getIsWidgetTop(com.google.gwt.user.client.ui.IsWidget w) {
     return delegate.getWidgetTop(w.asWidget());
   }
 
   @Override
-  public void insert(IsWidget w, int beforeIndex) {
+  public void insert(com.google.gwt.user.client.ui.IsWidget w, int beforeIndex) {
     delegate.insert(w.asWidget(), beforeIndex);
   }
 
   @Override
-  public void insert(IsWidget w, int left, int top, int beforeIndex) {
+  public void insert(com.google.gwt.user.client.ui.IsWidget w, int left, int top, int beforeIndex) {
     delegate.insert(w.asWidget(), left, top, beforeIndex);
   }
 
   @Override
-  public void setWidgetPosition(IsWidget w, int left, int top) {
+  public void setWidgetPosition(com.google.gwt.user.client.ui.IsWidget w, int left, int top) {
     delegate.setWidgetPosition(w.asWidget(), left, top);
   }
 

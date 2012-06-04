@@ -13,7 +13,6 @@ import org.tessell.model.events.PropertyChangedEvent;
 import org.tessell.model.events.PropertyChangedHandler;
 import org.tessell.model.properties.Property;
 import org.tessell.model.properties.StringProperty;
-import org.tessell.util.PropertyUtils;
 
 public class PropertyUtilsTest {
 

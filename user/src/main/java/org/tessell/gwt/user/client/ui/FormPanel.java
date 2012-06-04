@@ -5,7 +5,6 @@ import java.util.Iterator;
 import org.tessell.gwt.dom.client.GwtElement;
 import org.tessell.gwt.dom.client.IsElement;
 import org.tessell.gwt.dom.client.IsStyle;
-import org.tessell.widgets.IsWidget;
 import org.tessell.widgets.OtherTypes;
 
 @OtherTypes(intf = IsFormPanel.class, stub = StubFormPanel.class)
@@ -14,21 +13,6 @@ public class FormPanel extends com.google.gwt.user.client.ui.FormPanel implement
   @Override
   public IsWidget getIsWidget() {
     return (IsWidget) getWidget();
-  }
-
-  @Override
-  public void setWidget(IsWidget isWidget) {
-    setWidget(isWidget.asWidget());
-  }
-
-  @Override
-  public void add(IsWidget isWidget) {
-    add(isWidget.asWidget());
-  }
-
-  @Override
-  public boolean remove(IsWidget isWidget) {
-    return remove(isWidget.asWidget());
   }
 
   @Override

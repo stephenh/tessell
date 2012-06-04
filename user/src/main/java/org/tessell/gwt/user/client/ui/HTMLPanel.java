@@ -5,7 +5,6 @@ import java.util.Iterator;
 import org.tessell.gwt.dom.client.GwtElement;
 import org.tessell.gwt.dom.client.IsElement;
 import org.tessell.gwt.dom.client.IsStyle;
-import org.tessell.widgets.IsWidget;
 import org.tessell.widgets.OtherTypes;
 
 import com.google.gwt.safehtml.shared.SafeHtml;
@@ -23,16 +22,6 @@ public class HTMLPanel extends com.google.gwt.user.client.ui.HTMLPanel implement
 
   public HTMLPanel(String tag, String html) {
     super(tag, html);
-  }
-
-  @Override
-  public void add(IsWidget isWidget) {
-    add(isWidget.asWidget());
-  }
-
-  @Override
-  public boolean remove(IsWidget isWidget) {
-    return remove(isWidget.asWidget());
   }
 
   @Override
@@ -56,23 +45,13 @@ public class HTMLPanel extends com.google.gwt.user.client.ui.HTMLPanel implement
   }
 
   @Override
-  public int getWidgetIndex(IsWidget child) {
-    return getWidgetIndex(child.asWidget());
-  }
-
-  @Override
-  public void add(IsWidget widget, IsElement elem) {
+  public void add(com.google.gwt.user.client.ui.IsWidget widget, IsElement elem) {
     add(widget.asWidget(), elem.asElement());
   }
 
   @Override
-  public void addAndReplaceElement(IsWidget widget, IsElement elem) {
+  public void addAndReplaceElement(com.google.gwt.user.client.ui.IsWidget widget, IsElement elem) {
     addAndReplaceElement(widget.asWidget(), elem.asElement());
-  }
-
-  @Override
-  public void addAndReplaceElement(IsWidget widget, String id) {
-    addAndReplaceElement(widget.asWidget(), id);
   }
 
 }

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import org.tessell.gwt.animation.client.AnimationLogic;
 import org.tessell.gwt.animation.client.IsAnimation;
 import org.tessell.gwt.dom.client.IsElement;
-import org.tessell.widgets.IsWidget;
+import org.tessell.gwt.user.client.ui.IsWidget;
 
 import com.google.gwt.dom.client.Style.Display;
 

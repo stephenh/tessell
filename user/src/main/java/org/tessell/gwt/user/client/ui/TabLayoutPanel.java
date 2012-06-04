@@ -5,7 +5,6 @@ import java.util.Iterator;
 import org.tessell.gwt.dom.client.GwtElement;
 import org.tessell.gwt.dom.client.IsElement;
 import org.tessell.gwt.dom.client.IsStyle;
-import org.tessell.widgets.IsWidget;
 import org.tessell.widgets.OtherTypes;
 
 import com.google.gwt.dom.client.Style.Unit;
@@ -28,73 +27,13 @@ public class TabLayoutPanel extends com.google.gwt.user.client.ui.TabLayoutPanel
   }
 
   @Override
-  public void add(IsWidget w) {
-    add(w.asWidget());
-  }
-
-  @Override
   public Iterator<IsWidget> iteratorIsWidgets() {
     throw new UnsupportedOperationException("not implemented");
   }
 
   @Override
-  public boolean remove(IsWidget w) {
-    return remove(w.asWidget());
-  }
-
-  @Override
-  public int getWidgetIndex(IsWidget child) {
-    return getWidgetIndex(child.asWidget());
-  }
-
-  @Override
-  public void add(IsWidget w, String tabText) {
-    add(w.asWidget(), tabText);
-  }
-
-  @Override
-  public void add(IsWidget w, String tabText, boolean tabIsHtml) {
-    add(w.asWidget(), tabText, tabIsHtml);
-  }
-
-  @Override
-  public void add(IsWidget w, IsWidget tabWidget) {
-    add(w.asWidget(), tabWidget.asWidget());
-  }
-
-  @Override
-  public IsWidget getTabIsWidget(IsWidget child) {
+  public IsWidget getTabIsWidget(com.google.gwt.user.client.ui.IsWidget child) {
     return (IsWidget) getTabWidget(child.asWidget());
-  }
-
-  @Override
-  public void insert(IsWidget child, int beforeIndex) {
-    insert(child.asWidget(), beforeIndex);
-  }
-
-  @Override
-  public void insert(IsWidget child, String tabText, boolean tabIsHtml, int beforeIndex) {
-    insert(child.asWidget(), tabText, tabIsHtml, beforeIndex);
-  }
-
-  @Override
-  public void insert(IsWidget child, String tabText, int beforeIndex) {
-    insert(child.asWidget(), tabText, beforeIndex);
-  }
-
-  @Override
-  public void insert(IsWidget child, IsWidget tabWidget, int beforeIndex) {
-    insert(child.asWidget(), tabWidget.asWidget(), beforeIndex);
-  }
-
-  @Override
-  public void selectTab(IsWidget child) {
-    selectTab(child.asWidget());
-  }
-
-  @Override
-  public void selectTab(IsWidget child, boolean fireEvents) {
-    selectTab(child.asWidget(), fireEvents);
   }
 
   @Override
@@ -105,6 +44,11 @@ public class TabLayoutPanel extends com.google.gwt.user.client.ui.TabLayoutPanel
   @Override
   public IsWidget getTabIsWidget(int index) {
     return (IsWidget) super.getTabWidget(index);
+  }
+
+  @Override
+  public boolean remove(com.google.gwt.user.client.ui.IsWidget w) {
+    return super.remove(w.asWidget());
   }
 
 }

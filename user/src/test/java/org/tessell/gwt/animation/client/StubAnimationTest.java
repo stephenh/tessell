@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
-import org.tessell.gwt.animation.client.StubAnimation;
 
 public class StubAnimationTest {
 

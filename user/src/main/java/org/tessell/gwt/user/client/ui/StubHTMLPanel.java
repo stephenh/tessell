@@ -4,7 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.tessell.gwt.dom.client.IsElement;
-import org.tessell.widgets.IsWidget;
+
+import com.google.gwt.user.client.ui.IsWidget;
 
 public class StubHTMLPanel extends StubComplexPanel implements IsHTMLPanel {
 

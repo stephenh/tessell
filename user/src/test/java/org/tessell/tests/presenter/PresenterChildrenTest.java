@@ -4,9 +4,9 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
+import org.tessell.gwt.user.client.ui.IsWidget;
 import org.tessell.presenter.BasicPresenter;
 import org.tessell.presenter.Presenter;
-import org.tessell.widgets.IsWidget;
 
 public class PresenterChildrenTest {
 

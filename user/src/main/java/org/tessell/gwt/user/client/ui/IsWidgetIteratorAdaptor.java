@@ -2,8 +2,6 @@ package org.tessell.gwt.user.client.ui;
 
 import java.util.Iterator;
 
-import org.tessell.widgets.IsWidget;
-
 import com.google.gwt.user.client.ui.Widget;
 
 public class IsWidgetIteratorAdaptor implements Iterator<IsWidget> {

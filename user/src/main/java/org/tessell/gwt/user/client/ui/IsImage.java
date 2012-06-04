@@ -1,6 +1,5 @@
 package org.tessell.gwt.user.client.ui;
 
-import org.tessell.widgets.IsWidget;
 
 import com.google.gwt.event.dom.client.HasAllMouseHandlers;
 import com.google.gwt.event.dom.client.HasClickHandlers;

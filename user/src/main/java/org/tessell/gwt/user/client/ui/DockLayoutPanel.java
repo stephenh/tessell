@@ -5,7 +5,6 @@ import java.util.Iterator;
 import org.tessell.gwt.dom.client.GwtElement;
 import org.tessell.gwt.dom.client.IsElement;
 import org.tessell.gwt.dom.client.IsStyle;
-import org.tessell.widgets.IsWidget;
 import org.tessell.widgets.OtherTypes;
 
 import com.google.gwt.dom.client.Style.Unit;
@@ -15,11 +14,6 @@ public class DockLayoutPanel extends com.google.gwt.user.client.ui.DockLayoutPan
 
   public DockLayoutPanel(Unit unit) {
     super(unit);
-  }
-
-  @Override
-  public boolean remove(IsWidget isWidget) {
-    return remove(isWidget.asWidget());
   }
 
   @Override
@@ -43,72 +37,42 @@ public class DockLayoutPanel extends com.google.gwt.user.client.ui.DockLayoutPan
   }
 
   @Override
-  public int getWidgetIndex(IsWidget child) {
-    return getWidgetIndex(child.asWidget());
-  }
-
-  @Override
-  public void add(IsWidget widget) {
-    add(widget.asWidget());
-  }
-
-  @Override
-  public void addEast(IsWidget widget, double size) {
-    addEast(widget.asWidget(), size);
-  }
-
-  @Override
-  public void addLineEnd(IsWidget widget, double size) {
+  public void addLineEnd(com.google.gwt.user.client.ui.IsWidget widget, double size) {
     addLineEnd(widget.asWidget(), size);
   }
 
   @Override
-  public void addLineStart(IsWidget widget, double size) {
+  public void addLineStart(com.google.gwt.user.client.ui.IsWidget widget, double size) {
     addLineStart(widget.asWidget(), size);
   }
 
   @Override
-  public void addNorth(IsWidget widget, double size) {
-    addNorth(widget.asWidget(), size);
-  }
-
-  @Override
-  public void addSouth(IsWidget widget, double size) {
-    addSouth(widget.asWidget(), size);
-  }
-
-  @Override
-  public void addWest(IsWidget widget, double size) {
-    addWest(widget.asWidget(), size);
-  }
-
-  @Override
-  public void insertEast(IsWidget widget, double size, IsWidget before) {
+  public void insertEast(com.google.gwt.user.client.ui.IsWidget widget, double size, com.google.gwt.user.client.ui.IsWidget before) {
     insertEast(widget.asWidget(), size, before.asWidget());
   }
 
   @Override
-  public void insertLineEnd(IsWidget widget, double size, IsWidget before) {
+  public void insertLineEnd(com.google.gwt.user.client.ui.IsWidget widget, double size, com.google.gwt.user.client.ui.IsWidget before) {
     insertLineEnd(widget.asWidget(), size, before.asWidget());
   }
 
   @Override
-  public void insertLineStart(IsWidget widget, double size, IsWidget before) {
+  public void insertLineStart(com.google.gwt.user.client.ui.IsWidget widget, double size, com.google.gwt.user.client.ui.IsWidget before) {
     insertLineStart(widget.asWidget(), size, before.asWidget());
   }
 
   @Override
-  public void insertNorth(IsWidget widget, double size, IsWidget before) {
+  public void insertNorth(com.google.gwt.user.client.ui.IsWidget widget, double size, com.google.gwt.user.client.ui.IsWidget before) {
     insertNorth(widget.asWidget(), size, before.asWidget());
   }
 
   @Override
-  public void insertSouth(IsWidget widget, double size, IsWidget before) {
+  public void insertSouth(com.google.gwt.user.client.ui.IsWidget widget, double size, com.google.gwt.user.client.ui.IsWidget before) {
     insertSouth(widget.asWidget(), size, before.asWidget());
   }
 
   @Override
-  public void insertWest(IsWidget widget, double size, IsWidget before) {
+  public void insertWest(com.google.gwt.user.client.ui.IsWidget widget, double size, com.google.gwt.user.client.ui.IsWidget before) {
     insertWest(widget.asWidget(), size, before.asWidget());
   }
 

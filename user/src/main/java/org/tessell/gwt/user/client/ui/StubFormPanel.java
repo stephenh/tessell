@@ -6,7 +6,7 @@ import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteEvent;
 import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteHandler;
 import com.google.gwt.user.client.ui.FormPanel.SubmitEvent;
 import com.google.gwt.user.client.ui.FormPanel.SubmitHandler;
-import com.google.gwt.user.client.ui.*;
+import com.google.gwt.user.client.ui.Leaker;
 
 public class StubFormPanel extends StubSimplePanel implements IsFormPanel {
 

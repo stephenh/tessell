@@ -1,7 +1,5 @@
 package org.tessell.gwt.user.client.ui;
 
-import org.tessell.widgets.IsWidget;
-
 import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant;
 import com.google.gwt.user.client.ui.HasVerticalAlignment.VerticalAlignmentConstant;
 
@@ -21,8 +19,8 @@ public class StubHorizontalPanel extends StubCellPanel implements IsHorizontalPa
   }
 
   @Override
-  public void insert(IsWidget w, int beforeIndex) {
-    widgets.add(beforeIndex, w);
+  public void insert(com.google.gwt.user.client.ui.IsWidget w, int beforeIndex) {
+    widgets.add(beforeIndex, (IsWidget) w);
   }
 
   @Override

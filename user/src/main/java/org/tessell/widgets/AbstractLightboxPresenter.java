@@ -6,6 +6,7 @@ import static org.tessell.widgets.Widgets.newScrollPanel;
 
 import org.tessell.gwt.user.client.IsWindow;
 import org.tessell.gwt.user.client.ui.IsScrollPanel;
+import org.tessell.gwt.user.client.ui.IsWidget;
 import org.tessell.presenter.BasicPresenter;
 
 import com.google.gwt.core.client.GWT;

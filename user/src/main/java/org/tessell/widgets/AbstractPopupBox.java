@@ -7,6 +7,7 @@ import static org.tessell.widgets.Widgets.newTimer;
 import org.tessell.gwt.user.client.IsTimer;
 import org.tessell.gwt.user.client.ui.IsFocusPanel;
 import org.tessell.gwt.user.client.ui.IsPopupPanel;
+import org.tessell.gwt.user.client.ui.IsWidget;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;

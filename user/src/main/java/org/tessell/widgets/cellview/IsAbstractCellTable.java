@@ -1,7 +1,7 @@
 package org.tessell.widgets.cellview;
 
+import org.tessell.gwt.user.client.ui.IsWidget;
 import org.tessell.widgets.IsAbstractHasData;
-import org.tessell.widgets.IsWidget;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.shared.HandlerRegistration;

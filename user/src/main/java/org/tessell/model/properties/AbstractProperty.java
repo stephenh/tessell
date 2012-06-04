@@ -21,8 +21,12 @@ import org.tessell.model.values.DerivedValue;
 import org.tessell.model.values.Value;
 import org.tessell.util.Inflector;
 
-import com.google.gwt.event.shared.*;
+import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.event.shared.EventHandler;
+import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.GwtEvent.Type;
+import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.event.shared.SimplerEventBus;
 
 /** Provides most of the validation/derived/etc. implementation guts of {@link Property}. */
 public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> implements Property<P> {

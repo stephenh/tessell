@@ -1,8 +1,7 @@
 package org.tessell.gwt.user.client.ui;
 
-import org.tessell.widgets.IsWidget;
-
 import com.google.gwt.layout.client.Layout.AnimationCallback;
+import com.google.gwt.user.client.ui.IsWidget;
 
 public class StubDockLayoutPanel extends StubComplexPanel implements IsDockLayoutPanel {
 

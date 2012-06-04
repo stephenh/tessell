@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.tessell.widgets.IsWidget;
+import org.tessell.gwt.user.client.ui.IsWidget;
 import org.tessell.widgets.StubWidget;
 
 import com.google.gwt.dom.client.Element;

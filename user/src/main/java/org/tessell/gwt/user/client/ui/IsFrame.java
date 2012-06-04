@@ -1,6 +1,5 @@
 package org.tessell.gwt.user.client.ui;
 
-import org.tessell.widgets.IsWidget;
 
 public interface IsFrame extends IsWidget {
 

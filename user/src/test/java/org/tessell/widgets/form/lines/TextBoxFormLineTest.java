@@ -15,8 +15,6 @@ import org.tessell.widgets.form.AbstractFormPresenterTest;
 import org.tessell.widgets.form.EmployeeModel;
 import org.tessell.widgets.form.FormPresenter;
 import org.tessell.widgets.form.actions.FormAction;
-import org.tessell.widgets.form.lines.TextBoxBaseFormLine;
-import org.tessell.widgets.form.lines.TextBoxFormLine;
 
 public class TextBoxFormLineTest extends AbstractFormPresenterTest {
 

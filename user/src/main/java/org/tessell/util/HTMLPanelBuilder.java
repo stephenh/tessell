@@ -5,9 +5,9 @@ import static org.tessell.widgets.Widgets.newHTMLPanel;
 import java.util.ArrayList;
 
 import org.tessell.gwt.user.client.ui.IsHTMLPanel;
-import org.tessell.widgets.IsWidget;
 
 import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.IsWidget;
 
 /**
  * Builds an {@link HTMLPanel} iteratively, much like UiBinder, but at runtime.

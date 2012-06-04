@@ -1,7 +1,7 @@
 package org.tessell.gwt.dom.client;
 
 import org.tessell.gwt.user.client.ui.HasCss;
-import org.tessell.widgets.IsWidget;
+import org.tessell.gwt.user.client.ui.IsWidget;
 
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.safehtml.shared.SafeHtml;

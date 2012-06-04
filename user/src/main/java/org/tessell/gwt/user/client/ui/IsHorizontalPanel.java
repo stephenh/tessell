@@ -1,9 +1,8 @@
 package org.tessell.gwt.user.client.ui;
 
-import org.tessell.widgets.IsWidget;
-
 import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant;
 import com.google.gwt.user.client.ui.HasVerticalAlignment.VerticalAlignmentConstant;
+import com.google.gwt.user.client.ui.IsWidget;
 
 public interface IsHorizontalPanel extends IsCellPanel {
 

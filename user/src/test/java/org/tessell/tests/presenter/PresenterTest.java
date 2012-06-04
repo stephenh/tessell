@@ -1,9 +1,9 @@
 package org.tessell.tests.presenter;
 
 import org.junit.Test;
+import org.tessell.gwt.user.client.ui.IsWidget;
 import org.tessell.presenter.BasicPresenter;
 import org.tessell.presenter.Presenter;
-import org.tessell.widgets.IsWidget;
 
 public class PresenterTest {
 

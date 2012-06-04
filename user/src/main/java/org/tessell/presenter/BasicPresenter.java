@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
 import org.tessell.bus.AbstractBound;
-import org.tessell.widgets.IsWidget;
+import org.tessell.gwt.user.client.ui.IsWidget;
 
 import com.google.gwt.user.client.ui.Widget;
 

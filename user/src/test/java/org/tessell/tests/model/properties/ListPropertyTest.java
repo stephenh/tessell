@@ -9,7 +9,12 @@ import java.util.ArrayList;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.tessell.model.events.*;
+import org.tessell.model.events.PropertyChangedEvent;
+import org.tessell.model.events.PropertyChangedHandler;
+import org.tessell.model.events.ValueAddedEvent;
+import org.tessell.model.events.ValueAddedHandler;
+import org.tessell.model.events.ValueRemovedEvent;
+import org.tessell.model.events.ValueRemovedHandler;
 import org.tessell.model.properties.IntegerProperty;
 import org.tessell.model.properties.ListProperty;
 import org.tessell.model.values.SetValue;

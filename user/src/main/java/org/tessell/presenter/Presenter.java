@@ -1,7 +1,8 @@
 package org.tessell.presenter;
 
 import org.tessell.bus.Bound;
-import org.tessell.widgets.IsWidget;
+
+import com.google.gwt.user.client.ui.IsWidget;
 
 public interface Presenter extends Bound {
 

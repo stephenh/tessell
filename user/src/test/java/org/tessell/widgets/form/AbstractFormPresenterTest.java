@@ -10,7 +10,6 @@ import org.tessell.gwt.user.client.ui.StubHTMLPanel;
 import org.tessell.util.HTMLPanelBuilder;
 import org.tessell.widgets.StubWidget;
 import org.tessell.widgets.StubWidgetsProvider;
-import org.tessell.widgets.form.FormPresenter;
 
 public abstract class AbstractFormPresenterTest {
 

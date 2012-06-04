@@ -5,10 +5,10 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
 import org.junit.Test;
+import org.tessell.gwt.user.client.ui.IsWidget;
 import org.tessell.presenter.BasicPresenter;
 import org.tessell.presenter.Presenter;
 import org.tessell.presenter.Slot;
-import org.tessell.widgets.IsWidget;
 
 public class SlotTest {
 

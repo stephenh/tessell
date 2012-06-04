@@ -2,16 +2,14 @@ package org.tessell.gwt.user.client.ui;
 
 import java.util.Iterator;
 
-import org.tessell.widgets.IsWidget;
-
 public interface HasIsWidgets {
 
-  void add(IsWidget w);
+  void add(com.google.gwt.user.client.ui.IsWidget w);
 
   void clear();
 
   Iterator<IsWidget> iteratorIsWidgets();
 
-  boolean remove(IsWidget w);
+  boolean remove(com.google.gwt.user.client.ui.IsWidget w);
 
 }

@@ -2,7 +2,7 @@ package org.tessell.gwt.user.client.ui;
 
 import java.util.ArrayList;
 
-import org.tessell.widgets.IsWidget;
+import com.google.gwt.user.client.ui.IsWidget;
 
 public class StubColumnsPanel extends StubFlowPanel implements IsColumnsPanel {
 

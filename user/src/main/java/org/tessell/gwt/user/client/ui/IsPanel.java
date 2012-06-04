@@ -1,11 +1,9 @@
 package org.tessell.gwt.user.client.ui;
 
-import org.tessell.widgets.IsWidget;
-
 public interface IsPanel extends IsWidget, HasIsWidgets {
 
-  void add(IsWidget isWidget);
+  void add(com.google.gwt.user.client.ui.IsWidget isWidget);
 
-  boolean remove(IsWidget isWidget);
+  boolean remove(com.google.gwt.user.client.ui.IsWidget isWidget);
 
 }

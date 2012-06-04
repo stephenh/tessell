@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.tessell.widgets.IsWidget;
-
 public class StubComplexPanel extends StubPanel implements IsComplexPanel {
 
   protected final List<IsWidget> widgets = new ArrayList<IsWidget>();
@@ -15,12 +13,12 @@ public class StubComplexPanel extends StubPanel implements IsComplexPanel {
   }
 
   @Override
-  public void add(final IsWidget isWidget) {
-    widgets.add(isWidget);
+  public void add(final com.google.gwt.user.client.ui.IsWidget isWidget) {
+    widgets.add((IsWidget) isWidget);
   }
 
   @Override
-  public boolean remove(final IsWidget isWidget) {
+  public boolean remove(final com.google.gwt.user.client.ui.IsWidget isWidget) {
     return widgets.remove(isWidget);
   }
 
@@ -45,7 +43,7 @@ public class StubComplexPanel extends StubPanel implements IsComplexPanel {
   }
 
   @Override
-  public int getWidgetIndex(IsWidget child) {
+  public int getWidgetIndex(com.google.gwt.user.client.ui.IsWidget child) {
     return widgets.indexOf(child);
   }
 

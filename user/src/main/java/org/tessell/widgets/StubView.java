@@ -3,6 +3,8 @@ package org.tessell.widgets;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.tessell.gwt.user.client.ui.IsWidget;
+
 /** Base class for generated views to extend. */
 public abstract class StubView extends StubWidget {
 
