@@ -106,6 +106,11 @@ public class CompositeIsWidget implements IsWidget {
   }
 
   @Override
+  public void setStyleName(String styleName) {
+    widget.setStyleName(styleName);
+  }
+
+  @Override
   public void removeStyleName(final String styleName) {
     widget.removeStyleName(styleName);
   }
@@ -123,6 +128,10 @@ public class CompositeIsWidget implements IsWidget {
   @Override
   public boolean isAttached() {
     return widget.isAttached();
+  }
+
+  public IsWidget getIsWidget() {
+    return widget;
   }
 
 }

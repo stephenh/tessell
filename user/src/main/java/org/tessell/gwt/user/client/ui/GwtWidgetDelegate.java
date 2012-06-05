@@ -79,6 +79,11 @@ public class GwtWidgetDelegate implements IsWidget {
   }
 
   @Override
+  public void setStyleName(String styleName) {
+    delegate.setStyleName(styleName);
+  }
+
+  @Override
   public IsStyle getStyle() {
     return getIsElement().getStyle();
   }

@@ -109,6 +109,11 @@ public class StubWidget implements IsWidget {
   }
 
   @Override
+  public void setStyleName(String styleName) {
+    element.setStyleName(styleName);
+  }
+
+  @Override
   public Widget asWidget() {
     throw new UnsupportedOperationException("This is a stub");
   }

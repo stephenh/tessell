@@ -9,6 +9,8 @@ public interface HasCss {
 
   void removeStyleName(String styleName);
 
+  void setStyleName(String styleName);
+
   String getStyleName();
 
   IsStyle getStyle();

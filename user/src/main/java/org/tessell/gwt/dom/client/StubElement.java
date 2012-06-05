@@ -1,11 +1,9 @@
 package org.tessell.gwt.dom.client;
 
+import static org.apache.commons.lang.StringUtils.split;
 import static org.tessell.util.StringUtils.join;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.tessell.gwt.user.client.ui.IsWidget;
 import org.tessell.widgets.StubWidget;
@@ -91,6 +89,12 @@ public class StubElement implements IsElement {
   @Override
   public String getStyleName() {
     return join(styleNames, " ");
+  }
+
+  @Override
+  public void setStyleName(String styleName) {
+    styleNames.clear();
+    styleNames.addAll(Arrays.asList(split(styleName, " ")));
   }
 
   @Override

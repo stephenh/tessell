@@ -62,6 +62,11 @@ public class GwtElement implements IsElement {
   }
 
   @Override
+  public void setStyleName(String styleName) {
+    element.setClassName(styleName);
+  }
+
+  @Override
   public String getText() {
     return getInnerText();
   }

@@ -3,7 +3,7 @@ package org.tessell.model.validation.rules;
 import org.tessell.model.properties.Property;
 import org.tessell.model.validation.Valid;
 
-/** A rule for applying custom logic. */
+/** A rule that you can explicitly set to valid or invalid as needed. */
 public class Static extends AbstractRule<Object, Static> {
 
   private boolean valid = true;
