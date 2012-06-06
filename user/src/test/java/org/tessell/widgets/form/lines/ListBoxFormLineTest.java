@@ -4,13 +4,17 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
+import static org.tessell.model.properties.NewProperty.enumProperty;
 import static org.tessell.widgets.form.lines.NewFormLine.newListBoxFormLine;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.junit.Test;
 import org.tessell.gwt.user.client.ui.StubListBox;
 import org.tessell.model.dsl.ListBoxAdaptor;
+import org.tessell.model.dsl.ListBoxHumanizerAdaptor;
+import org.tessell.model.properties.EnumProperty;
 import org.tessell.model.validation.rules.Required;
 import org.tessell.widgets.StubTextList;
 import org.tessell.widgets.form.AbstractFormPresenterTest;
@@ -77,6 +81,14 @@ public class ListBoxFormLineTest extends AbstractFormPresenterTest {
     assertThat(employee.employerId.isTouched(), is(true));
   }
 
+  @Test
+  public void listBoxToAnEnum() {
+    EnumProperty<Foo> foo = enumProperty("foo");
+    p.add(newListBoxFormLine(foo, Arrays.asList(Foo.values()), new ListBoxHumanizerAdaptor<Foo>()));
+    assertThat(listBox("p-foo").getItemCount(), is(2));
+    assertThat(listBox("p-foo").getItems(), contains("Value One", "Value Two"));
+  }
+
   private StubListBox listBox(String id) {
     return (StubListBox) html().findById(id);
   }
@@ -93,6 +105,10 @@ public class ListBoxFormLineTest extends AbstractFormPresenterTest {
     public Integer toValue(EmployerDto option) {
       return option == null ? null : option.id;
     }
+  }
+
+  private static enum Foo {
+    VALUE_ONE, VALUE_TWO
   }
 
 }
