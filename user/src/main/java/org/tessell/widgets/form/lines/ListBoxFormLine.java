@@ -3,7 +3,7 @@ package org.tessell.widgets.form.lines;
 import static org.tessell.widgets.Widgets.newListBox;
 import static org.tessell.widgets.Widgets.newTextList;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.tessell.gwt.user.client.ui.IsListBox;
 import org.tessell.model.dsl.Binder;
@@ -24,20 +24,20 @@ import org.tessell.widgets.form.FormPresenter;
  */
 public class ListBoxFormLine<T, O> extends AbstractFormLine<T> {
 
-  public static <T, O> ListBoxFormLine<T, O> of(Property<T> p, ArrayList<O> values, ListBoxAdaptor<T, O> adaptor) {
+  public static <T, O> ListBoxFormLine<T, O> of(Property<T> p, List<O> values, ListBoxAdaptor<T, O> adaptor) {
     return new ListBoxFormLine<T, O>(p, values, adaptor);
   }
 
-  public static <T> ListBoxFormLine<T, T> of(Property<T> p, ArrayList<T> values) {
+  public static <T> ListBoxFormLine<T, T> of(Property<T> p, List<T> values) {
     return new ListBoxFormLine<T, T>(p, values, new ListBoxIdentityAdaptor<T>());
   }
 
-  protected final ArrayList<O> possibleValues;
+  protected final List<O> possibleValues;
   protected final ListBoxAdaptor<T, O> adaptor;
   protected final IsTextList errorList = newTextList();
   protected final IsListBox listBox = newListBox();
 
-  public ListBoxFormLine(Property<T> property, ArrayList<O> possibleValues, ListBoxAdaptor<T, O> adaptor) {
+  public ListBoxFormLine(Property<T> property, List<O> possibleValues, ListBoxAdaptor<T, O> adaptor) {
     super(property);
     this.possibleValues = possibleValues;
     this.adaptor = adaptor;
