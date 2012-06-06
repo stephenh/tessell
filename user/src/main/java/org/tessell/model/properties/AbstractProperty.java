@@ -49,6 +49,8 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
   private boolean touched;
   // the result of the last validate()
   private Valid valid;
+  // whether we're currently reassessing
+  private boolean reassessing = false;
 
   public AbstractProperty(final Value<P> value) {
     this.value = value;
@@ -75,7 +77,7 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
   @Override
   public void set(final P value) {
     this.value.set(copyLastValue(value));
-    if (!touched) {
+    if (!touched && !reassessing) {
       // even if unchanged, treat this as touching
       setTouched(true);
     } else {
@@ -85,30 +87,36 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
 
   @Override
   public void reassess() {
-    final P newValue = get();
-    final P oldValue = lastValue;
-    final boolean valueChanged = !eq(lastValue, newValue);
-    if (valueChanged) {
-      lastValue = copyLastValue(newValue);
-    }
+    try {
+      reassessing = true;
 
-    // run validation before firing change so handlers see latest wasValid
-    final Valid oldValid = valid;
-    validate();
-    final boolean validChanged = oldValid != valid;
-
-    // only reassess derived if needed. this is somehwat odd, but we reassess
-    // our derived properties before firing our own change event. this is so
-    // that if someone listening to us is also going to check a derived
-    // property's state, it would be good for them to be up to date
-    if (valueChanged || validChanged) {
-      for (final Property<?> other : derived) {
-        other.reassess();
+      final P newValue = get();
+      final P oldValue = lastValue;
+      final boolean valueChanged = !eq(lastValue, newValue);
+      if (valueChanged) {
+        lastValue = copyLastValue(newValue);
       }
-    }
 
-    if (valueChanged) {
-      fireEvent(new PropertyChangedEvent<P>(this, oldValue, newValue));
+      // run validation before firing change so handlers see latest wasValid
+      final Valid oldValid = valid;
+      validate();
+      final boolean validChanged = oldValid != valid;
+
+      // only reassess derived if needed. this is somehwat odd, but we reassess
+      // our derived properties before firing our own change event. this is so
+      // that if someone listening to us is also going to check a derived
+      // property's state, it would be good for them to be up to date
+      if (valueChanged || validChanged) {
+        for (final Property<?> other : derived) {
+          other.reassess();
+        }
+      }
+
+      if (valueChanged) {
+        fireEvent(new PropertyChangedEvent<P>(this, oldValue, newValue));
+      }
+    } finally {
+      reassessing = false;
     }
   }
 

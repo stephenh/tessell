@@ -82,6 +82,21 @@ public class BinderTest {
   }
 
   @Test
+  public void propertyToWidgetCanBeUntouched() {
+    SetValue<String> value = new SetValue<String>("value");
+    StringProperty property = stringProperty(value).req();
+    binder.bind(property).to(box);
+    // start out with a good value
+    property.set("good");
+    // now change the value behind the scenes (e.g. a new DTO)
+    value.set(null);
+    // and untouch the property
+    property.setTouched(false);
+    // we shouldn't have any errors
+    assertThat(property.getErrors().size(), is(0));
+  }
+
+  @Test
   public void propertyToListBoxUpdatesListBoxWhenPropertyChanges() {
     StubListBox listBox = new StubListBox();
     ArrayList<String> values = new ArrayList<String>();
