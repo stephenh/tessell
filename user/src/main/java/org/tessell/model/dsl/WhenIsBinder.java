@@ -76,7 +76,7 @@ public class WhenIsBinder<P> {
     return hr;
   }
 
-  public HandlerRegistrations visible(final HasCss css) {
+  public HandlerRegistrations visible(final HasCss... css) {
     HandlerRegistrations hr = new HandlerRegistrations();
     hr.add(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
       public void onPropertyChanged(PropertyChangedEvent<P> event) {
@@ -98,7 +98,7 @@ public class WhenIsBinder<P> {
     return hr;
   }
 
-  public HandlerRegistrations enable(final HasEnabled enabled) {
+  public HandlerRegistrations enable(final HasEnabled... enabled) {
     HandlerRegistrations hr = new HandlerRegistrations();
     hr.add(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
       public void onPropertyChanged(PropertyChangedEvent<P> event) {
@@ -109,7 +109,7 @@ public class WhenIsBinder<P> {
     return hr;
   }
 
-  public HandlerRegistrations disable(final HasEnabled enabled) {
+  public HandlerRegistrations disable(final HasEnabled... enabled) {
     HandlerRegistrations hr = new HandlerRegistrations();
     hr.add(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
       public void onPropertyChanged(PropertyChangedEvent<P> event) {
@@ -120,11 +120,10 @@ public class WhenIsBinder<P> {
     return hr;
   }
 
-  private void updateEnabled(HasEnabled enabled, boolean valueIfTrue) {
-    if (condition.evaluate(property)) {
-      enabled.setEnabled(valueIfTrue);
-    } else {
-      enabled.setEnabled(!valueIfTrue);
+  private void updateEnabled(HasEnabled[] enabled, boolean valueIfTrue) {
+    boolean valueToSet = condition.evaluate(property) ? valueIfTrue : !valueIfTrue;
+    for (HasEnabled e : enabled) {
+      e.setEnabled(valueToSet);
     }
   }
 
@@ -162,11 +161,15 @@ public class WhenIsBinder<P> {
     }
   }
 
-  private void visibleIfCondition(HasCss css) {
+  private void visibleIfCondition(HasCss... csses) {
     if (condition.evaluate(property)) {
-      css.getStyle().clearVisibility();
+      for (HasCss css : csses) {
+        css.getStyle().clearVisibility();
+      }
     } else {
-      css.getStyle().setVisibility(Visibility.HIDDEN);
+      for (HasCss css : csses) {
+        css.getStyle().setVisibility(Visibility.HIDDEN);
+      }
     }
   }
 }
