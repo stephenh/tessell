@@ -21,6 +21,10 @@ public class NewProperty {
     return new BasicProperty<P>(value);
   }
 
+  public static <P> BasicProperty<P> basicProperty(final Value<P> value) {
+    return new BasicProperty<P>(value);
+  }
+
   public static <P> BasicProperty<P> basicProperty(final Binding<P> binding) {
     return new BasicProperty<P>(new BoundValue<P>(binding));
   }
@@ -95,6 +99,10 @@ public class NewProperty {
 
   public static StringProperty stringProperty(final Value<String> value) {
     return new StringProperty(value);
+  }
+
+  public static <E> ListProperty<E> listProperty(final Value<ArrayList<E>> value) {
+    return new ListProperty<E>(value);
   }
 
   public static <E> ListProperty<E> listProperty(final Binding<ArrayList<E>> binding) {
