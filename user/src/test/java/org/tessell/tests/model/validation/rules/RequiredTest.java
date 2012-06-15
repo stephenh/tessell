@@ -3,11 +3,13 @@ package org.tessell.tests.model.validation.rules;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.tessell.model.properties.NewProperty.booleanProperty;
+import static org.tessell.model.properties.NewProperty.listProperty;
 import static org.tessell.model.properties.NewProperty.stringProperty;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.tessell.model.properties.BooleanProperty;
+import org.tessell.model.properties.ListProperty;
 import org.tessell.model.properties.StringProperty;
 import org.tessell.model.validation.rules.Required;
 
@@ -17,6 +19,7 @@ public class RequiredTest extends AbstractRuleTest {
   private class Foo {
     private final StringProperty name = stringProperty("name");
     private final BooleanProperty condition = booleanProperty("condition", true);
+    private final ListProperty<String> colors = listProperty("colors");
   }
 
   private final Foo f = new Foo();
@@ -24,6 +27,8 @@ public class RequiredTest extends AbstractRuleTest {
   @Before
   public void listenToName() {
     listenTo(f.name);
+    listenTo(f.condition);
+    listenTo(f.colors);
   }
 
   @Test
@@ -77,6 +82,16 @@ public class RequiredTest extends AbstractRuleTest {
     // reassessing f.name is required for now
     f.name.reassess();
     assertMessages("name invalid");
+  }
+
+  @Test
+  public void requiredListsMustBeNonEmpty() {
+    new Required(f.colors, "colors required");
+    f.colors.touch();
+    assertMessages("colors required");
+
+    f.colors.add("Blue");
+    assertNoMessages();
   }
 
 }
