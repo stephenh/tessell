@@ -138,6 +138,11 @@ public class FormattedProperty<DP, SP> implements Property<DP> {
   }
 
   @Override
+  public <T extends Property<?>> T removeDerived(T downstream) {
+    return source.removeDerived(downstream);
+  }
+
+  @Override
   public Property<DP> depends(Property<?>... upstream) {
     source.depends(upstream);
     return this;

@@ -29,8 +29,11 @@ public interface Property<P> extends HasHandlers, HasRuleTriggers, Value<P> {
   /** @return whether this property was invalid, does not rerun validation. */
   Valid wasValid();
 
-  /** Adds {@code} downstream as a derivative of us. */
+  /** Adds {@code downstream} as a derivative of us. */
   <T extends Property<?>> T addDerived(final T downstream);
+
+  /** Removes {@code downstream} as a derivative of us. */
+  <T extends Property<?>> T removeDerived(final T downstream);
 
   /** Adds us as a derivative of {@code upstream} properties. */
   Property<P> depends(Property<?>... upstream);

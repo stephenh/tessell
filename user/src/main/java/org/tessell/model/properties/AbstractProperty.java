@@ -36,7 +36,7 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
   // handlers
   private final EventBus handlers = new SimplerEventBus();
   // other properties that are validated off of our value
-  protected final ArrayList<Property<?>> derived = new ArrayList<Property<?>>();
+  protected final ArrayList<Property<?>> downstream = new ArrayList<Property<?>>();
   // rules that validate against our value and fire against our handlers
   private final ArrayList<Rule> rules = new ArrayList<Rule>();
   // outstanding errors
@@ -51,6 +51,8 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
   private Valid valid;
   // whether we're currently reassessing
   private boolean reassessing = false;
+  // only used if this is a derived value
+  private List<Property<?>> lastUpstream;
 
   public AbstractProperty(final Value<P> value) {
     this.value = value;
@@ -102,12 +104,12 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
       validate();
       final boolean validChanged = oldValid != valid;
 
-      // only reassess derived if needed. this is somehwat odd, but we reassess
-      // our derived properties before firing our own change event. this is so
-      // that if someone listening to us is also going to check a derived
+      // only reassess downstream if needed. this is somewhat odd, but we reassess
+      // our downstream properties before firing our own change event. this is so
+      // that if someone listening to us is also going to check a downstream
       // property's state, it would be good for them to be up to date
       if (valueChanged || validChanged) {
-        for (final Property<?> other : derived) {
+        for (final Property<?> other : downstream) {
           other.reassess();
         }
       }
@@ -132,12 +134,18 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
 
   /** Track {@code other} as derived on us, so we'll forward changed/changing events to it. */
   public <P1 extends Property<?>> P1 addDerived(final P1 other) {
-    if (!derived.contains(other)) {
-      derived.add(other);
+    if (!downstream.contains(other)) {
+      downstream.add(other);
       if (touched) {
         other.setTouched(touched);
       }
     }
+    return other;
+  }
+
+  /** Remove {@code other} as derived on us. */
+  public <P1 extends Property<?>> P1 removeDerived(final P1 other) {
+    downstream.remove(other);
     return other;
   }
 
@@ -205,7 +213,7 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
       return;
     }
     this.touched = touched;
-    for (final Property<?> other : derived) {
+    for (final Property<?> other : downstream) {
       other.setTouched(touched);
     }
     reassess();
@@ -272,16 +280,27 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
     // this logic should probably go in DerivedValue somehow, except that
     // it's only a value and does not know about it's parent property
     if (value instanceof DerivedValue) {
-      // If a DerivedValue, turn on implicitUpstream, which will watch for any properties
-      // we evaluate while calling value.get for lastValue purposes.
-      List<Property<?>> oldUpstream = implicitUpstream;
+      // Turn on implicitUpstream, which watches for properties called during value.get.
+      // Also, keep track if anyone was already tracking derived values so we can put it back.
+      List<Property<?>> tempUpstream = implicitUpstream;
       implicitUpstream = new ArrayList<Property<?>>();
       P tempValue = value.get();
-      List<Property<?>> ourUpstream = new ArrayList<Property<?>>(implicitUpstream);
-      implicitUpstream = oldUpstream;
-      // Now continue with copyLastValue and then act upon ourUpstream
-      for (Property<?> upstream : ourUpstream) {
-        upstream.addDerived(this);
+      List<Property<?>> newUpstream = new ArrayList<Property<?>>(implicitUpstream);
+      // Put back the previous upstream before we do anything else
+      implicitUpstream = tempUpstream;
+      // Only update our upstream properties if they've changed
+      if (lastUpstream == null || !lastUpstream.equals(newUpstream)) {
+        // Instead of diffing, just remove all old and re-add all new
+        if (lastUpstream != null) {
+          for (Property<?> last : lastUpstream) {
+            last.removeDerived(this);
+          }
+        }
+        for (Property<?> upstream : newUpstream) {
+          upstream.addDerived(this);
+        }
+        // Remember for change tracking next time
+        lastUpstream = newUpstream;
       }
       return tempValue;
     } else {
