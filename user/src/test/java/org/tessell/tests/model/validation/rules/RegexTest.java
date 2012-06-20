@@ -8,22 +8,9 @@ import org.tessell.model.validation.rules.Regex;
 
 public class RegexTest extends AbstractRuleTest {
 
-  private void assertUrls(String regex, boolean valid, String... urls) {
-    final StringProperty url = stringProperty("url");
-    listenTo(new Regex(url, "invalid", regex));
-    for (String u : urls) {
-      url.set(u);
-      if (valid) {
-        assertNoMessages();
-      } else {
-        assertMessages("invalid");
-      }
-    }
-  }
-
   @Test
   public void urls() {
-    assertUrls(//
+    assertRegex(//
       Regex.URL,
       true,
       null, // null is valid
@@ -35,7 +22,7 @@ public class RegexTest extends AbstractRuleTest {
       "http://foo.com",
       "http://foo1.com",
       "http://foo-bar.com");
-    assertUrls(//
+    assertRegex(//
       Regex.URL,
       false,
       "http://foo",
@@ -47,7 +34,7 @@ public class RegexTest extends AbstractRuleTest {
 
   @Test
   public void urlsNoProtocol() {
-    assertUrls(//
+    assertRegex(//
       Regex.URL_NO_PROTOCOL,
       true,
       null, // null is valid
@@ -56,12 +43,25 @@ public class RegexTest extends AbstractRuleTest {
       "foo.com/n?a=b#c",
       "foo.com",
       "foo-bar.com");
-    assertUrls(//
+    assertRegex(//
       Regex.URL_NO_PROTOCOL,
       false,
       "foo",
       "/n?a=b#c/",
       "foo.com/ n.html",
       "foo.com/\"n.html");
+  }
+
+  private void assertRegex(String regex, boolean valid, String... urls) {
+    final StringProperty url = stringProperty("url");
+    listenTo(new Regex(url, "invalid", regex));
+    for (String u : urls) {
+      url.set(u);
+      if (valid) {
+        assertNoMessages();
+      } else {
+        assertMessages("invalid");
+      }
+    }
   }
 }
