@@ -52,6 +52,28 @@ public class RegexTest extends AbstractRuleTest {
       "foo.com/\"n.html");
   }
 
+  @Test
+  public void domains() {
+    assertRegex(//
+      Regex.DOMAIN,
+      true,
+      null, // null is valid
+      "f.co",
+      "foo1.com",
+      "foo-bar.com",
+      "foo-bar.com.com");
+    assertRegex(//
+      Regex.DOMAIN,
+      false,
+      "foo",
+      "f.c",
+      "http://foo.com",
+      "foo.com/",
+      "foo.com/asdf.html",
+      "/n?a=b#c/",
+      "foo bar.com");
+  }
+
   private void assertRegex(String regex, boolean valid, String... urls) {
     final StringProperty url = stringProperty("url");
     listenTo(new Regex(url, "invalid", regex));
