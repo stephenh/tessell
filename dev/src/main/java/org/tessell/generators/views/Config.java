@@ -1,18 +1,24 @@
 package org.tessell.generators.views;
 
+import static org.apache.commons.lang.StringUtils.splitPreserveAllTokens;
+import static org.apache.commons.lang.StringUtils.substringAfter;
+import static org.apache.commons.lang.StringUtils.substringBefore;
+import static org.apache.commons.lang.StringUtils.substringBeforeLast;
+import static org.apache.commons.lang.StringUtils.substringBetween;
+
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 
-import joist.util.Reflection;
-
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.io.IOUtils;
 import org.tessell.gwt.dom.client.IsElement;
 import org.tessell.gwt.dom.client.StubElement;
-import org.tessell.widgets.OtherTypes;
 
 import com.google.gwt.dom.client.Element;
 
@@ -21,22 +27,13 @@ public class Config {
 
   private final Map<String, String> typeToInterface = new HashMap<String, String>();
   private final Map<String, String> typeToStub = new HashMap<String, String>();
+  private final Map<String, List<String>> stubToCstrParams = new HashMap<String, List<String>>();
 
   public Config() {
-    // if the user's project has both widgets and ui.xml files in the same codebase,
-    // the widget .class files won't be around to access the OtherTypes annotation,
-    // so fall back on our old viewgen.properties file
-    setupUsersViewGenDotProperties();
+    loadViewGenDotProperties();
   }
 
   public String getInterface(final String type) {
-    Class<?> clazz = Reflection.forNameOrNull(type);
-    if (clazz != null) {
-      OtherTypes ot = clazz.getAnnotation(OtherTypes.class);
-      if (ot != null) {
-        return ot.intf().getName();
-      }
-    }
     if (Element.class.getName().equals(type)) {
       return IsElement.class.getName();
     }
@@ -47,13 +44,6 @@ public class Config {
   }
 
   public String getStub(final String type) {
-    Class<?> clazz = Reflection.forNameOrNull(type);
-    if (clazz != null) {
-      OtherTypes ot = clazz.getAnnotation(OtherTypes.class);
-      if (ot != null) {
-        return ot.stub().getName();
-      }
-    }
     if (Element.class.getName().equals(type)) {
       return StubElement.class.getName();
     }
@@ -63,22 +53,49 @@ public class Config {
     throw new RuntimeException("No stub for " + type);
   }
 
-  private void setupUsersViewGenDotProperties() {
-    final InputStream in = ViewGenerator.class.getResourceAsStream("/viewgen.properties");
-    if (in != null) {
-      final Properties p = new Properties();
-      try {
-        p.load(in);
-      } catch (final IOException io) {
-        throw new RuntimeException(io);
+  public List<String> getStubCstrParams(final String type) {
+    List<String> t = stubToCstrParams.get(type);
+    if (t == null) {
+      return Collections.emptyList();
+    }
+    return t;
+  }
+
+  private void loadViewGenDotProperties() {
+    try {
+      for (String file : new String[] { "/viewgen.properties", "/viewgen-root.properties" }) {
+        InputStream in = null;
+        try {
+          in = Config.class.getResourceAsStream(file);
+          if (in == null) {
+            continue;
+          }
+          final Properties p = new Properties();
+          p.load(in);
+          for (final Entry<Object, Object> e : p.entrySet()) {
+            final String type = e.getKey().toString();
+            final String packageName = substringBeforeLast(type, ".");
+
+            String line = e.getValue().toString();
+            typeToInterface.put(type, prependPackageIfNeeded(packageName, substringBefore(line, ",")));
+
+            // watch for stub with cstr params, e.g. TextLine(AppRegistry)
+            String stub = substringAfter(line, ",");
+            String[] params = new String[] {};
+            if (stub.contains("(")) {
+              params = splitPreserveAllTokens(substringBetween(stub, "(", ")"), ",");
+              stub = substringBefore(stub, "(");
+            }
+            stub = prependPackageIfNeeded(packageName, stub);
+            typeToStub.put(type, stub);
+            stubToCstrParams.put(stub, Arrays.asList(params));
+          }
+        } finally {
+          IOUtils.closeQuietly(in);
+        }
       }
-      for (final Entry<Object, Object> e : p.entrySet()) {
-        final String type = e.getKey().toString();
-        final String packageName = StringUtils.substringBeforeLast(type, ".");
-        final String[] parts = e.getValue().toString().split(",");
-        typeToInterface.put(type, prependPackageIfNeeded(packageName, parts[0].trim()));
-        typeToStub.put(type, prependPackageIfNeeded(packageName, parts[1].trim()));
-      }
+    } catch (IOException io) {
+      throw new RuntimeException(io);
     }
   }
 

@@ -5,11 +5,9 @@ import java.util.Iterator;
 import org.tessell.gwt.dom.client.GwtElement;
 import org.tessell.gwt.dom.client.IsElement;
 import org.tessell.gwt.dom.client.IsStyle;
-import org.tessell.widgets.OtherTypes;
 
 import com.google.gwt.safehtml.shared.SafeHtml;
 
-@OtherTypes(intf = IsHTMLPanel.class, stub = StubHTMLPanel.class)
 public class HTMLPanel extends com.google.gwt.user.client.ui.HTMLPanel implements IsHTMLPanel {
 
   public HTMLPanel(String html) {

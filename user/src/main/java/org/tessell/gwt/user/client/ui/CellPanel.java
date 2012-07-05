@@ -5,9 +5,7 @@ import java.util.Iterator;
 import org.tessell.gwt.dom.client.GwtElement;
 import org.tessell.gwt.dom.client.IsElement;
 import org.tessell.gwt.dom.client.IsStyle;
-import org.tessell.widgets.OtherTypes;
 
-@OtherTypes(intf = IsCellPanel.class, stub = StubCellPanel.class)
 public class CellPanel extends com.google.gwt.user.client.ui.CellPanel implements IsCellPanel {
 
   @Override

@@ -5,9 +5,7 @@ import java.util.Iterator;
 import org.tessell.gwt.dom.client.GwtElement;
 import org.tessell.gwt.dom.client.IsElement;
 import org.tessell.gwt.dom.client.IsStyle;
-import org.tessell.widgets.OtherTypes;
 
-@OtherTypes(intf = IsSimplePanel.class, stub = StubSimplePanel.class)
 public class SimplePanel extends com.google.gwt.user.client.ui.SimplePanel implements IsSimplePanel {
 
   @Override

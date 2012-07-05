@@ -22,7 +22,6 @@ import com.google.gwt.user.client.ui.WidgetCollection;
  * We want a table where we can add an entire row at a time, and it was easiest to just roll our own extending from
  * {@link Panel}.
  */
-@OtherTypes(intf = IsRowTable.class, stub = StubRowTable.class)
 public class RowTable extends Panel implements IsRowTable {
 
   private final Element table;

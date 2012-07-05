@@ -1,13 +1,11 @@
 package org.tessell.gwt.dom.client;
 
 import org.tessell.gwt.user.client.ui.IsWidget;
-import org.tessell.widgets.OtherTypes;
 
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.user.client.ui.UIObject;
 
-@OtherTypes(intf = IsElement.class, stub = StubElement.class)
 public class GwtElement implements IsElement {
 
   private final Element element;

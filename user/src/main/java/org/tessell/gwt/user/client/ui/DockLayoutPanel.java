@@ -5,11 +5,9 @@ import java.util.Iterator;
 import org.tessell.gwt.dom.client.GwtElement;
 import org.tessell.gwt.dom.client.IsElement;
 import org.tessell.gwt.dom.client.IsStyle;
-import org.tessell.widgets.OtherTypes;
 
 import com.google.gwt.dom.client.Style.Unit;
 
-@OtherTypes(intf = IsDockLayoutPanel.class, stub = StubDockLayoutPanel.class)
 public class DockLayoutPanel extends com.google.gwt.user.client.ui.DockLayoutPanel implements IsDockLayoutPanel {
 
   public DockLayoutPanel(Unit unit) {

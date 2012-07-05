@@ -3,13 +3,11 @@ package org.tessell.widgets.cellview;
 import org.tessell.gwt.dom.client.GwtElement;
 import org.tessell.gwt.dom.client.IsElement;
 import org.tessell.gwt.dom.client.IsStyle;
-import org.tessell.widgets.OtherTypes;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.user.cellview.client.CellTable;
 
-@OtherTypes(intf = IsCellTable.class, stub = StubCellTable.class)
 public class GwtCellTable<T> extends CellTable<T> implements IsCellTable<T> {
 
   public GwtCellTable() {

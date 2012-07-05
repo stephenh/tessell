@@ -5,9 +5,7 @@ import java.util.Iterator;
 import org.tessell.gwt.dom.client.GwtElement;
 import org.tessell.gwt.dom.client.IsElement;
 import org.tessell.gwt.dom.client.IsStyle;
-import org.tessell.widgets.OtherTypes;
 
-@OtherTypes(intf = IsAbsolutePanel.class, stub = StubAbsolutePanel.class)
 public class AbsolutePanel extends com.google.gwt.user.client.ui.AbsolutePanel implements IsAbsolutePanel {
 
   @Override

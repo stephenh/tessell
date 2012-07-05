@@ -5,9 +5,7 @@ import java.util.Iterator;
 import org.tessell.gwt.dom.client.GwtElement;
 import org.tessell.gwt.dom.client.IsElement;
 import org.tessell.gwt.dom.client.IsStyle;
-import org.tessell.widgets.OtherTypes;
 
-@OtherTypes(intf = IsFormPanel.class, stub = StubFormPanel.class)
 public class FormPanel extends com.google.gwt.user.client.ui.FormPanel implements IsFormPanel {
 
   @Override

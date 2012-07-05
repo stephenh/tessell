@@ -6,6 +6,7 @@ import static org.apache.commons.lang.StringUtils.splitPreserveAllTokens;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,15 +15,35 @@ import joist.util.Join;
 
 import org.apache.commons.io.FileUtils;
 
-/** Caches the "ui:with" types of {@code ui.xml} files between {@code ViewGenerator} runs so that we don't have to re-parse each file every time. */
+/**
+ * Caches the "ui:with" types of {@code ui.xml} files between {@code ViewGenerator}
+ * runs so that we don't have to re-parse each file every time.
+ */
 public class UiXmlCache {
 
-  private static final int cacheVersion = 1;
+  private static final int cacheVersion = 3;
   private final Map<String, Entry> entries = new HashMap<String, Entry>();
-  private final File cache;
 
-  public UiXmlCache(final File outputDirectory) {
-    cache = new File(outputDirectory, "./.viewGenerator." + cacheVersion + ".cache");
+  public static UiXmlCache loadOrCreate(final File outputDirectory) {
+    UiXmlCache c = new UiXmlCache();
+    if (cache(outputDirectory).exists()) {
+      try {
+        for (Object line : FileUtils.readLines(cache(outputDirectory))) {
+          Entry e = new Entry((String) line);
+          c.entries.put(e.uiXmlFileName, e);
+        }
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
+    }
+    return c;
+  }
+
+  private static File cache(File outputDirectory) {
+    return new File(outputDirectory, "./.viewGenerator." + cacheVersion + ".cache");
+  }
+
+  private UiXmlCache() {
   }
 
   /** @return whether we have an entry for {@code uiXmlFile} */
@@ -32,7 +53,11 @@ public class UiXmlCache {
 
   /** Updates the {@code uiXmlFile} entry with {@code withTypes}. */
   public void update(UiXmlFile uiXml) {
-    entries.put(uiXml.getPath(), new Entry(uiXml.getPath(), uiXml.getWiths(), uiXml.getStyles()));
+    entries.put(uiXml.getPath(), new Entry(//
+      uiXml.getPath(),
+      uiXml.getFreshWiths(),
+      uiXml.getFreshStyles(),
+      uiXml.getStubDependencies()));
   }
 
   /** @return the {@code ui:with} declarations for {@code uiXml}. */
@@ -45,26 +70,17 @@ public class UiXmlCache {
     return entries.get(uiXml.getPath()).styles;
   }
 
-  /** Saves the cache to the file system for loading next time. */
-  public void save() {
-    try {
-      FileUtils.writeLines(cache, entriesToLines());
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
+  /** @return the stub dependencies for {@code uiXml}. */
+  public List<String> getCachedStubDependencies(UiXmlFile uiXml) {
+    return entries.get(uiXml.getPath()).stubDependencies;
   }
 
-  /** Populates our cache from the last run's output, if available. */
-  public void loadIfExists() {
-    if (cache.exists()) {
-      try {
-        for (Object line : FileUtils.readLines(cache)) {
-          Entry e = new Entry((String) line);
-          entries.put(e.uiXmlFileName, e);
-        }
-      } catch (IOException e) {
-        throw new RuntimeException(e);
-      }
+  /** Saves the cache to the file system for loading next time. */
+  public void save(File outputDirectory) {
+    try {
+      FileUtils.writeLines(cache(outputDirectory), entriesToLines());
+    } catch (IOException e) {
+      throw new RuntimeException(e);
     }
   }
 
@@ -78,11 +94,12 @@ public class UiXmlCache {
   }
 
   /** One entry per ui.xml file. */
-  private class Entry {
+  private static class Entry {
     // each entry is serialized to 1 line in the cache file, comma separated into a String[]
     private final String uiXmlFileName;
     private final ArrayList<UiFieldDeclaration> withs = new ArrayList<UiFieldDeclaration>();
     private final ArrayList<UiStyleDeclaration> styles = new ArrayList<UiStyleDeclaration>();
+    private final ArrayList<String> stubDependencies = new ArrayList<String>();
 
     /** Make a new entry from the cached line. */
     private Entry(String line) {
@@ -100,13 +117,17 @@ public class UiXmlCache {
           styles.add(new UiStyleDeclaration(sp[0], sp[1]));
         }
       }
+      if (parts[3].length() > 0) {
+        stubDependencies.addAll(Arrays.asList(parts[3]));
+      }
     }
 
     /** Make a new entry from a new {@code ui.xml} file with its {@code ui:with} types. */
-    private Entry(String uiXmlFileName, List<UiFieldDeclaration> withs, List<UiStyleDeclaration> styles) {
+    private Entry(String uiXmlFileName, List<UiFieldDeclaration> withs, List<UiStyleDeclaration> styles, List<String> stubDependencies) {
       this.uiXmlFileName = uiXmlFileName;
       this.withs.addAll(withs);
       this.styles.addAll(styles);
+      this.stubDependencies.addAll(stubDependencies);
     }
 
     private String toLine() {
@@ -121,7 +142,8 @@ public class UiXmlCache {
       final String p0 = uiXmlFileName;
       final String p1 = Join.comma(withStrings);
       final String p2 = Join.comma(styleStrings);
-      return join(new String[] { p0, p1, p2 }, ";");
+      final String p3 = Join.comma(stubDependencies);
+      return join(new String[] { p0, p1, p2, p3 }, ";");
     }
   }
 

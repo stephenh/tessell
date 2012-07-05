@@ -8,7 +8,6 @@ import org.tessell.gwt.dom.client.IsStyle;
 import org.tessell.gwt.user.client.ui.IsWidget;
 import org.tessell.gwt.user.client.ui.IsWidgetIteratorAdaptor;
 
-@OtherTypes(intf = IsFadingDialogBox.class, stub = StubFadingDialogBox.class)
 public class FadingDialogBox extends com.google.gwt.user.client.ui.FadingDialogBox implements IsFadingDialogBox {
 
   @Override

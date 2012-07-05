@@ -1,12 +1,21 @@
 package org.tessell.generators.views;
 
+import static joist.sourcegen.Argument.arg;
+
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 import joist.sourcegen.Access;
+import joist.sourcegen.Argument;
 import joist.sourcegen.GClass;
 import joist.sourcegen.GField;
 import joist.sourcegen.GMethod;
+import joist.util.Join;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
@@ -174,7 +183,16 @@ class UiXmlFile {
   private void generateStubView() throws Exception {
     stubView.baseClass(StubView.class).implementsInterface(isView.getSimpleName());
 
-    final GMethod cstr = stubView.getConstructor();
+    // find any stubs that need parameters
+    final Map<String, Argument> stubDependencies = new TreeMap<String, Argument>();
+    for (String cstrType : getStubDependencies()) {
+      if (!stubDependencies.containsKey(cstrType)) {
+        String name = ViewGenerator.simpleName(cstrType);
+        stubDependencies.put(cstrType, arg(cstrType, name));
+      }
+    }
+
+    final GMethod cstr = stubView.getConstructor(new ArrayList<Argument>(stubDependencies.values()));
 
     final GMethod debugId = stubView.getMethod("onEnsureDebugId").argument("String", "baseDebugId");
     debugId.addAnnotation("@Override").setProtected();
@@ -183,9 +201,19 @@ class UiXmlFile {
     // for each ui:field, add a field assigned to the stub type, and a getter method
     for (final UiFieldDeclaration field : handler.uiFields) {
       final String stubType = viewGenerator.config.getStub(field.type);
-      stubView.getField(field.name).type(stubType).setFinal().initialValue("new {}()", stubType);
+      // our stub may take cstr params
+      final List<String> cstrTypes = viewGenerator.config.getStubCstrParams(stubType);
+      final List<String> cstrNames = new ArrayList<String>();
+      for (String cstrType : cstrTypes) {
+        cstrNames.add(ViewGenerator.simpleName(cstrType));
+      }
+      stubView.getField(field.name).type(stubType).setFinal();
       stubView.getMethod(field.name).returnType(stubType).body.line("return {};", field.name);
       debugId.body.line("{}.ensureDebugId(baseDebugId + \"-{}\");", field.name, field.name);
+      // now use cstrNames in the call to new
+      cstr.body.line("this.{} = new {}({});", field.name, stubType, Join.commaSpace(cstrNames));
+    }
+    for (final UiFieldDeclaration field : handler.uiFields) {
       if (!field.isElement) {
         cstr.body.line("widgets.add({});", field.name);
       }
@@ -209,21 +237,34 @@ class UiXmlFile {
   }
 
   /** @return the ui:with fields, if we parsed the file. */
-  List<UiFieldDeclaration> getWiths() {
+  List<UiFieldDeclaration> getFreshWiths() {
     return handler.withFields;
   }
 
-  List<UiFieldDeclaration> getWithsPossiblyCached() {
-    return handler == null ? viewGenerator.cache.getCachedWiths(this) : getWiths();
+  List<UiFieldDeclaration> getPossiblyCachedWiths(UiXmlCache cache) {
+    return handler == null ? cache.getCachedWiths(this) : getFreshWiths();
   }
 
   /** @return the ui:style fields, if we parsed the file. */
-  List<UiStyleDeclaration> getStyles() {
+  List<UiStyleDeclaration> getFreshStyles() {
     return handler.styleFields;
   }
 
-  List<UiStyleDeclaration> getStylesPossiblyCached() {
-    return handler == null ? viewGenerator.cache.getCachedStyles(this) : getStyles();
+  List<UiStyleDeclaration> getPossiblyCachedStyles(UiXmlCache cache) {
+    return handler == null ? cache.getCachedStyles(this) : getFreshStyles();
+  }
+
+  List<String> getStubDependencies() {
+    final Set<String> stubDependencies = new TreeSet<String>();
+    for (final UiFieldDeclaration field : handler.uiFields) {
+      final String stubType = viewGenerator.config.getStub(field.type);
+      stubDependencies.addAll(viewGenerator.config.getStubCstrParams(stubType));
+    }
+    return new ArrayList<String>(stubDependencies);
+  }
+
+  List<String> getPossiblyCachedStubDependencies(UiXmlCache cache) {
+    return handler == null ? cache.getCachedStubDependencies(this) : getStubDependencies();
   }
 
   private String deriveClassName() {

@@ -14,6 +14,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import joist.sourcegen.Argument;
 import joist.sourcegen.GClass;
 import joist.sourcegen.GMethod;
 import joist.util.Join;
@@ -29,24 +30,23 @@ public class ViewGenerator {
 
   private final String packageName;
   private final List<UiXmlFile> uiXmlFiles = new ArrayList<UiXmlFile>();
+  private final UiXmlCache cache;
   final File input;
   final File output;
   final Cleanup cleanup;
   final Config config = new Config();
-  final UiXmlCache cache;
   final SAXParser parser;
 
   public ViewGenerator(final File inputDirectory, final String packageName, final File outputDirectory, final Cleanup cleanup) {
     input = inputDirectory.getAbsoluteFile();
     output = outputDirectory.getAbsoluteFile();
-    cache = new UiXmlCache(output);
+    cache = UiXmlCache.loadOrCreate(output);
     this.packageName = packageName;
     this.cleanup = cleanup;
     parser = makeNewParser();
   }
 
   public void generate() throws Exception {
-    cache.loadIfExists();
     for (final File uiXml : findUiXmlFiles()) {
       if (uiXml.getName().contains("-nogen.")) {
         continue;
@@ -63,7 +63,7 @@ public class ViewGenerator {
       cleanup.markOkay(uiXml.gwtView);
       cleanup.markOkay(uiXml.stubView);
       cleanup.markOkay(uiXml.uiXmlCopy);
-      for (final UiStyleDeclaration style : uiXml.getStylesPossiblyCached()) {
+      for (final UiStyleDeclaration style : uiXml.getPossiblyCachedStyles(cache)) {
         cleanup.markTypeOkay(style.type);
         cleanup.markTypeOkay(style.getStubClassName());
       }
@@ -74,7 +74,7 @@ public class ViewGenerator {
     generateGwtViews();
     generateStubViews();
 
-    cache.save();
+    cache.save(output);
   }
 
   private void generateAppViews() {
@@ -116,7 +116,7 @@ public class ViewGenerator {
     for (final UiXmlFile uiXml : uiXmlFiles) {
       final GMethod m = gwtViews.getMethod("new" + uiXml.baseName).returnType(uiXml.isView.getFullName());
       final List<String> withFieldNames = new ArrayList<String>();
-      for (final UiFieldDeclaration with : uiXml.getWithsPossiblyCached()) {
+      for (final UiFieldDeclaration with : uiXml.getPossiblyCachedWiths(cache)) {
         withFieldNames.add("this." + simpleName(with.type));
       }
       m.addAnnotation("@Override");
@@ -128,14 +128,31 @@ public class ViewGenerator {
   private void generateStubViews() {
     final GClass stubViews = new GClass(packageName + ".StubViewsProvider").implementsInterface("AppViewsProvider");
 
+    // aggregate stub dependencies across all the files
+    List<Argument> cstrArgs = new ArrayList<Argument>();
+    List<String> cstrNames = new ArrayList<String>();
+    for (String type : getUniqueStubDependencies()) {
+      final String name = simpleName(type);
+      stubViews.getField(name).type(type).setFinal();
+      cstrArgs.add(arg(type, name));
+      cstrNames.add(name);
+    }
+
+    stubViews.getConstructor(cstrArgs).assignFields();
+
     for (final UiXmlFile uiXml : uiXmlFiles) {
       final GMethod m = stubViews.getMethod("new" + uiXml.baseName).returnType(uiXml.stubView.getFullName());
       m.addAnnotation("@Override");
-      m.body.line("return new {}();", uiXml.stubView.getFullName());
+      // look for stub dependencies
+      List<String> stubArgs = new ArrayList<String>();
+      for (String type : uiXml.getPossiblyCachedStubDependencies(cache)) {
+        stubArgs.add(simpleName(type));
+      }
+      m.body.line("return new {}({});", uiXml.stubView.getFullName(), Join.commaSpace(stubArgs));
     }
 
-    final GMethod i = stubViews.getMethod("install").setStatic();
-    i.body.line("AppViews.setProvider(new StubViewsProvider());");
+    final GMethod i = stubViews.getMethod("install", cstrArgs).setStatic();
+    i.body.line("AppViews.setProvider(new StubViewsProvider({}));", Join.commaSpace(cstrNames));
 
     markAndSaveIfChanged(stubViews);
   }
@@ -144,9 +161,18 @@ public class ViewGenerator {
   private Set<String> getUniqueWithTypes() {
     final Set<String> all = new TreeSet<String>();
     for (final UiXmlFile uiXml : uiXmlFiles) {
-      for (final UiFieldDeclaration field : uiXml.getWithsPossiblyCached()) {
+      for (final UiFieldDeclaration field : uiXml.getPossiblyCachedWiths(cache)) {
         all.add(field.type);
       }
+    }
+    return all;
+  }
+
+  /** @return the unique stub dependencies across all views */
+  private Set<String> getUniqueStubDependencies() {
+    final Set<String> all = new TreeSet<String>();
+    for (final UiXmlFile uiXml : uiXmlFiles) {
+      all.addAll(uiXml.getPossiblyCachedStubDependencies(cache));
     }
     return all;
   }
@@ -188,7 +214,7 @@ public class ViewGenerator {
     }
   }
 
-  private static String simpleName(String fullName) {
+  protected static String simpleName(String fullName) {
     return StringUtils.uncapitalize(StringUtils.substringAfterLast(fullName, "."));
   }
 
