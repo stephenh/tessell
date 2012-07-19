@@ -1,6 +1,5 @@
 package org.tessell.gwt.user.client.ui;
 
-
 import com.google.gwt.user.client.ui.TextBoxBase.TextAlignConstant;
 
 @SuppressWarnings("deprecation")
@@ -15,13 +14,20 @@ public class StubTextBoxBase extends StubValueBoxBase<String> implements IsTextB
     blur();
   }
 
-  public void press(final char... chars) {
-    for (char c : chars) {
-      keyDown();
-      setValue(getValue() + c, false);
-      keyPress();
-      keyUp();
+  public void typeEach(String value) {
+    for (char c : value.toCharArray()) {
+      press(c);
     }
+    // now fire the change + blur event
+    type(value);
+  }
+
+  @Override
+  public void press(char c) {
+    keyDown(c);
+    setValue(getValue() + c, false);
+    keyPress(c);
+    keyUp(c);
   }
 
   @Override

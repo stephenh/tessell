@@ -1,39 +1,9 @@
 package org.tessell.gwt.user.client.ui;
 
-import org.tessell.gwt.dom.client.StubBlurEvent;
-import org.tessell.gwt.dom.client.StubClickEvent;
-import org.tessell.gwt.dom.client.StubFocusEvent;
-import org.tessell.gwt.dom.client.StubKeyDownEvent;
-import org.tessell.gwt.dom.client.StubKeyPressEvent;
-import org.tessell.gwt.dom.client.StubKeyUpEvent;
-import org.tessell.gwt.dom.client.StubMouseOutEvent;
-import org.tessell.gwt.dom.client.StubMouseOverEvent;
+import org.tessell.gwt.dom.client.*;
 import org.tessell.widgets.StubWidget;
 
-import com.google.gwt.event.dom.client.BlurEvent;
-import com.google.gwt.event.dom.client.BlurHandler;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.FocusEvent;
-import com.google.gwt.event.dom.client.FocusHandler;
-import com.google.gwt.event.dom.client.KeyDownEvent;
-import com.google.gwt.event.dom.client.KeyDownHandler;
-import com.google.gwt.event.dom.client.KeyPressEvent;
-import com.google.gwt.event.dom.client.KeyPressHandler;
-import com.google.gwt.event.dom.client.KeyUpEvent;
-import com.google.gwt.event.dom.client.KeyUpHandler;
-import com.google.gwt.event.dom.client.MouseDownEvent;
-import com.google.gwt.event.dom.client.MouseDownHandler;
-import com.google.gwt.event.dom.client.MouseMoveEvent;
-import com.google.gwt.event.dom.client.MouseMoveHandler;
-import com.google.gwt.event.dom.client.MouseOutEvent;
-import com.google.gwt.event.dom.client.MouseOutHandler;
-import com.google.gwt.event.dom.client.MouseOverEvent;
-import com.google.gwt.event.dom.client.MouseOverHandler;
-import com.google.gwt.event.dom.client.MouseUpEvent;
-import com.google.gwt.event.dom.client.MouseUpHandler;
-import com.google.gwt.event.dom.client.MouseWheelEvent;
-import com.google.gwt.event.dom.client.MouseWheelHandler;
+import com.google.gwt.event.dom.client.*;
 import com.google.gwt.event.shared.HandlerRegistration;
 
 public class StubFocusWidget extends StubWidget implements IsFocusWidget {
@@ -88,24 +58,50 @@ public class StubFocusWidget extends StubWidget implements IsFocusWidget {
     fireEvent(new StubMouseOutEvent());
   }
 
-  public void keyUp() {
-    fireEvent(new StubKeyUpEvent(0));
-  }
-
   public void keyUp(int keyCode) {
-    fireEvent(new StubKeyUpEvent(keyCode));
+    keyUp((char) keyCode, new StubKeyModifiers());
   }
 
-  public void keyDown() {
-    fireEvent(new StubKeyDownEvent(0));
+  public void keyUp(char keyCode) {
+    keyUp(keyCode, new StubKeyModifiers());
+  }
+
+  public void keyUp(char keyCode, StubKeyModifiers mods) {
+    fireEvent(new StubKeyUpEvent(keyCode, mods));
   }
 
   public void keyDown(int keyCode) {
-    fireEvent(new StubKeyDownEvent(keyCode));
+    keyDown((char) keyCode, new StubKeyModifiers());
   }
 
-  public void keyPress() {
-    fireEvent(new StubKeyPressEvent());
+  public void keyDown(char keyCode) {
+    keyDown(keyCode, new StubKeyModifiers());
+  }
+
+  public void keyDown(char keyCode, StubKeyModifiers mods) {
+    fireEvent(new StubKeyDownEvent(keyCode, mods));
+  }
+
+  public void keyPress(int c) {
+    keyPress((char) c, new StubKeyModifiers());
+  }
+
+  public void keyPress(char c) {
+    keyPress(c, new StubKeyModifiers());
+  }
+
+  public void keyPress(char c, StubKeyModifiers mods) {
+    fireEvent(new StubKeyPressEvent(c, mods));
+  }
+
+  public void press(int c) {
+    press((char) c);
+  }
+
+  public void press(char c) {
+    keyDown(c);
+    keyPress(c);
+    keyUp(c);
   }
 
   @Override
