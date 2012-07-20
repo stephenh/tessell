@@ -20,11 +20,7 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 import org.tessell.gwt.dom.client.StubClickEvent;
-import org.tessell.gwt.user.client.ui.StubButton;
-import org.tessell.gwt.user.client.ui.StubFocusWidget;
-import org.tessell.gwt.user.client.ui.StubLabel;
-import org.tessell.gwt.user.client.ui.StubListBox;
-import org.tessell.gwt.user.client.ui.StubTextBox;
+import org.tessell.gwt.user.client.ui.*;
 import org.tessell.model.dsl.Binder;
 import org.tessell.model.properties.BooleanProperty;
 import org.tessell.model.properties.EnumProperty;
@@ -47,6 +43,10 @@ public class BinderTest {
   final StringProperty s = stringProperty("s");
   final StubTextBox box = new StubTextBox();
   final StubTextList errors = new StubTextList();
+
+  public static enum Color {
+    Blue, Green
+  };
 
   @Test
   public void propertyToWidget() {
@@ -394,13 +394,32 @@ public class BinderTest {
     StringCookie c = new StringCookie(cookies, "c");
     cookies.set("c", "foo");
     binder.bind(s).to(c);
-
     assertThat(s.get(), is("foo"));
+    assertThat(c.getValue(), is("foo"));
   }
 
-  public static enum Color {
-    Blue, Green
-  };
+  @Test
+  public void propertyToCookieGetsInitialCookieValueUnlessAlreadyTouched() {
+    StubCookies cookies = new StubCookies();
+    StringCookie c = new StringCookie(cookies, "c");
+    cookies.set("c", "foo");
+    s.touch();
+    binder.bind(s).to(c);
+    assertThat(s.get(), is(nullValue()));
+    assertThat(c.getValue(), is(nullValue()));
+  }
+
+  @Test
+  public void propertyToCookieGetsInitialCookieValueUnlessAlreadySet() {
+    StubCookies cookies = new StubCookies();
+    StringCookie c = new StringCookie(cookies, "c");
+    cookies.set("c", "foo");
+    s.setValue("bar");
+    s.setTouched(false); // make sure to untouch
+    binder.bind(s).to(c);
+    assertThat(s.get(), is("bar"));
+    assertThat(c.getValue(), is("bar"));
+  }
 
   @Test
   public void whenIsNull() {

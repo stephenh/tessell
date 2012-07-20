@@ -9,8 +9,9 @@ import org.tessell.model.values.Value;
 
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.event.shared.HasHandlers;
+import com.google.gwt.user.client.TakesValue;
 
-public interface Property<P> extends HasHandlers, HasRuleTriggers, Value<P> {
+public interface Property<P> extends HasHandlers, HasRuleTriggers, Value<P>, TakesValue<P> {
 
   P get();
 

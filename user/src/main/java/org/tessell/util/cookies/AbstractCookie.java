@@ -4,7 +4,7 @@ import java.util.Date;
 
 import org.tessell.util.cookies.facade.IsCookies;
 
-public abstract class AbstractCookie<T> implements Cookie<T> {
+public abstract class AbstractCookie<T> implements IsCookie<T> {
 
   private final IsCookies cookies;
   private final String name;
@@ -32,7 +32,7 @@ public abstract class AbstractCookie<T> implements Cookie<T> {
   // setCookie appends its value, so instead of null, pass empty string
 
   @Override
-  public final T get() {
+  public final T getValue() {
     String value = cookies.get(name);
     if (value != null) {
       return fromString(value);
@@ -42,13 +42,13 @@ public abstract class AbstractCookie<T> implements Cookie<T> {
   }
 
   @Override
-  public final void set(T value) {
+  public final void setValue(T value) {
     String asString = value == null ? null : toString(value);
     cookies.set(name, asString, domain, expires, secure);
   }
 
   @Override
-  public final void unset() {
+  public final void clear() {
     cookies.remove(name);
   }
 

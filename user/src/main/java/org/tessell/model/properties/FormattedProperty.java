@@ -74,6 +74,16 @@ public class FormattedProperty<DP, SP> implements Property<DP> {
     source.set(parsed);
   }
 
+  @Override
+  public DP getValue() {
+    return get();
+  }
+
+  @Override
+  public void setValue(DP value) {
+    set(value);
+  }
+
   /**
    * Changes the message shown when the formatter cannot parse input.
    *

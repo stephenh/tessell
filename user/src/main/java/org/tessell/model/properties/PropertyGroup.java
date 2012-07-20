@@ -35,7 +35,7 @@ public class PropertyGroup extends AbstractProperty<Boolean, PropertyGroup> {
 
   @Override
   public void reassess() {
-    ((SetValue<Boolean>) getValue()).set(invalid.size() == 0);
+    ((SetValue<Boolean>) getValueObject()).set(invalid.size() == 0);
     super.reassess();
   }
 
