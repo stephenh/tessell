@@ -2,7 +2,7 @@ package org.tessell.util.cookies;
 
 import java.util.Date;
 
-import org.tessell.util.cookies.facade.IsCookies;
+import org.tessell.gwt.user.client.IsCookies;
 
 public abstract class AbstractCookie<T> implements IsCookie<T> {
 

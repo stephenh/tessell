@@ -1,4 +1,4 @@
-package org.tessell.util.cookies.facade;
+package org.tessell.gwt.user.client;
 
 import java.util.Date;
 

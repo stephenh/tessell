@@ -1,6 +1,6 @@
 package org.tessell.util.cookies;
 
-import org.tessell.util.cookies.facade.IsCookies;
+import org.tessell.gwt.user.client.IsCookies;
 
 public class IntCookie extends AbstractCookie<Integer> {
 

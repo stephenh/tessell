@@ -3,6 +3,7 @@ package org.tessell.widgets;
 import org.tessell.gwt.animation.client.AnimationLogic;
 import org.tessell.gwt.animation.client.IsAnimation;
 import org.tessell.gwt.dom.client.IsElement;
+import org.tessell.gwt.user.client.IsCookies;
 import org.tessell.gwt.user.client.IsTimer;
 import org.tessell.gwt.user.client.IsWindow;
 import org.tessell.gwt.user.client.ui.IsAbsolutePanel;
@@ -31,7 +32,6 @@ import org.tessell.gwt.user.client.ui.IsSuggestBox;
 import org.tessell.gwt.user.client.ui.IsTabLayoutPanel;
 import org.tessell.gwt.user.client.ui.IsTextBox;
 import org.tessell.place.history.IsHistory;
-import org.tessell.util.cookies.facade.IsCookies;
 import org.tessell.widgets.cellview.IsCellList;
 import org.tessell.widgets.cellview.IsCellTable;
 
