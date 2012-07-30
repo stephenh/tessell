@@ -3,19 +3,10 @@ package org.tessell.model.dsl;
 import static com.google.gwt.event.dom.client.KeyCodes.KEY_TAB;
 
 import org.tessell.model.commands.UiCommand;
-import org.tessell.model.properties.EnumProperty;
-import org.tessell.model.properties.ListProperty;
-import org.tessell.model.properties.Property;
-import org.tessell.model.properties.StringProperty;
+import org.tessell.model.properties.*;
 import org.tessell.model.validation.rules.Rule;
 
-import com.google.gwt.event.dom.client.BlurEvent;
-import com.google.gwt.event.dom.client.BlurHandler;
-import com.google.gwt.event.dom.client.HasBlurHandlers;
-import com.google.gwt.event.dom.client.HasClickHandlers;
-import com.google.gwt.event.dom.client.HasKeyUpHandlers;
-import com.google.gwt.event.dom.client.KeyUpEvent;
-import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.event.dom.client.*;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.user.client.ui.HasValue;
 
@@ -44,6 +35,11 @@ public class Binder {
   /** @return a fluent {@link StringPropertyBinder} against {@code property}. */
   public <P> StringPropertyBinder bind(StringProperty property) {
     return new StringPropertyBinder(property);
+  }
+
+  /** @return a fluent {@link BooleanPropertyBinder} against {@code property}. */
+  public <P> BooleanPropertyBinder bind(BooleanProperty property) {
+    return new BooleanPropertyBinder(property);
   }
 
   /** @return a fluent {@link EnumPropertyBinder} against {@code property}. */

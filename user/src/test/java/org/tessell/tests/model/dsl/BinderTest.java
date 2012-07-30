@@ -478,4 +478,76 @@ public class BinderTest {
     button.click();
     assertThat(s.get(), is("clicked"));
   }
+
+  @Test
+  public void booleanToRadioGroupSetsTheInitialValueWhenNull() {
+    StubRadioButton b1 = new StubRadioButton();
+    StubRadioButton b2 = new StubRadioButton();
+    BooleanProperty b = booleanProperty("b");
+    binder.bind(b).to(b1, b2);
+    assertThat(b1.getValue(), is(false));
+    assertThat(b2.getValue(), is(true));
+  }
+
+  @Test
+  public void booleanToRadioGroupSetsTheInitialValueWhenTrue() {
+    StubRadioButton b1 = new StubRadioButton();
+    StubRadioButton b2 = new StubRadioButton();
+    BooleanProperty b = booleanProperty("b", true);
+    binder.bind(b).to(b1, b2);
+    assertThat(b1.getValue(), is(true));
+    assertThat(b2.getValue(), is(false));
+  }
+
+  @Test
+  public void booleanToRadioGroupSetsTheInitialValueWhenFalse() {
+    StubRadioButton b1 = new StubRadioButton();
+    StubRadioButton b2 = new StubRadioButton();
+    BooleanProperty b = booleanProperty("b", false);
+    binder.bind(b).to(b1, b2);
+    assertThat(b1.getValue(), is(false));
+    assertThat(b2.getValue(), is(true));
+  }
+
+  @Test
+  public void booleanToRadioGroupSetsOnTrueClick() {
+    StubRadioButton b1 = new StubRadioButton();
+    StubRadioButton b2 = new StubRadioButton();
+    BooleanProperty b = booleanProperty("b", false);
+    binder.bind(b).to(b1, b2);
+    b1.click();
+    assertThat(b.get(), is(true));
+  }
+
+  @Test
+  public void booleanToRadioGroupSetsOnFalse() {
+    StubRadioButton b1 = new StubRadioButton();
+    StubRadioButton b2 = new StubRadioButton();
+    BooleanProperty b = booleanProperty("b", true);
+    binder.bind(b).to(b1, b2);
+    b2.click();
+    assertThat(b.get(), is(false));
+  }
+
+  @Test
+  public void booleanToRadioGroupSetsOnUpdateFalse() {
+    StubRadioButton b1 = new StubRadioButton();
+    StubRadioButton b2 = new StubRadioButton();
+    BooleanProperty b = booleanProperty("b", true);
+    binder.bind(b).to(b1, b2);
+    b.set(false);
+    assertThat(b1.getValue(), is(false));
+    assertThat(b2.getValue(), is(true));
+  }
+
+  @Test
+  public void booleanToRadioGroupSetsOnUpdateTrue() {
+    StubRadioButton b1 = new StubRadioButton();
+    StubRadioButton b2 = new StubRadioButton();
+    BooleanProperty b = booleanProperty("b", false);
+    binder.bind(b).to(b1, b2);
+    b.set(true);
+    assertThat(b1.getValue(), is(true));
+    assertThat(b2.getValue(), is(false));
+  }
 }
