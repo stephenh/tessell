@@ -4,8 +4,11 @@ import org.tessell.gwt.dom.client.GwtElement;
 import org.tessell.gwt.dom.client.IsElement;
 import org.tessell.gwt.dom.client.IsStyle;
 
+import com.google.gwt.uibinder.client.UiConstructor;
+
 public class RadioButton extends com.google.gwt.user.client.ui.RadioButton implements IsRadioButton {
 
+  @UiConstructor
   public RadioButton(String name) {
     super(name);
   }
