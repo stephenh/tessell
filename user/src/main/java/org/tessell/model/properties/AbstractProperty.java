@@ -20,6 +20,7 @@ import org.tessell.model.validation.rules.Rule;
 import org.tessell.model.values.DerivedValue;
 import org.tessell.model.values.Value;
 import org.tessell.util.Inflector;
+import org.tessell.util.ListDiff;
 
 import com.google.gwt.event.shared.*;
 import com.google.gwt.event.shared.GwtEvent.Type;
@@ -296,14 +297,12 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
       implicitUpstream = tempUpstream;
       // Only update our upstream properties if they've changed
       if (lastUpstream == null || !lastUpstream.equals(newUpstream)) {
-        // Instead of diffing, just remove all old and re-add all new
-        if (lastUpstream != null) {
-          for (Property<?> last : lastUpstream) {
-            last.removeDerived(this);
-          }
+        ListDiff<Property<?>> diff = ListDiff.of(lastUpstream, newUpstream);
+        for (Property<?> removed : diff.removed) {
+          removed.removeDerived(this);
         }
-        for (Property<?> upstream : newUpstream) {
-          upstream.addDerived(this);
+        for (Property<?> added : diff.added) {
+          added.addDerived(this);
         }
         // Remember for change tracking next time
         lastUpstream = newUpstream;
