@@ -70,16 +70,8 @@ public class PropertyBinder<P> {
     // would have messed up our 'touched' state), listen for others changes
     if (!p.isReadOnly()) {
       hr.add(source.addValueChangeHandler(new ValueChangeHandler<P>() {
-        @SuppressWarnings("unchecked")
         public void onValueChange(ValueChangeEvent<P> event) {
-          P value = source.getValue();
-          if (value instanceof String) {
-            value = (P) ((String) value).trim();
-            if (value.equals("")) {
-              value = null;
-            }
-          }
-          p.set(value);
+          p.set(sanitizeIfString(source.getValue()));
         }
       }));
     }
@@ -174,6 +166,17 @@ public class PropertyBinder<P> {
         }
       }));
     }
+  }
+
+  @SuppressWarnings("unchecked")
+  protected static <P> P sanitizeIfString(P value) {
+    if (value instanceof String) {
+      value = (P) ((String) value).trim();
+      if ("".equals(value)) {
+        value = null;
+      }
+    }
+    return value;
   }
 
 }

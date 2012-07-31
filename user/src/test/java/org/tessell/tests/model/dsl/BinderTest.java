@@ -550,4 +550,32 @@ public class BinderTest {
     assertThat(b1.getValue(), is(true));
     assertThat(b2.getValue(), is(false));
   }
+
+  @Test
+  public void stringToKeyUpSetsInitialValue() {
+    s.set("a");
+    binder.bind(s).toKeyUp(box);
+    assertThat(box.getValue(), is("a"));
+  }
+
+  @Test
+  public void stringToKeyUpUpdatesModelOnKeyUp() {
+    binder.bind(s).toKeyUp(box);
+    box.press('a');
+    assertThat(s.get(), is("a"));
+  }
+
+  @Test
+  public void stringToKeyUpUpdatesModelOnChange() {
+    binder.bind(s).toKeyUp(box);
+    box.type("a"); // just a change, no key up
+    assertThat(s.get(), is("a"));
+  }
+
+  @Test
+  public void stringToKeyUpUpdatesViewOnChange() {
+    binder.bind(s).toKeyUp(box);
+    s.set("a");
+    assertThat(box.getValue(), is("a"));
+  }
 }
