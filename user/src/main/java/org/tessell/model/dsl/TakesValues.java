@@ -28,6 +28,20 @@ public class TakesValues {
     };
   }
 
+  public static TakesValue<String> textOf(final IsElement target) {
+    return new TakesValue<String>() {
+      @Override
+      public String getValue() {
+        return target.getInnerText();
+      }
+
+      @Override
+      public void setValue(String value) {
+        target.setInnerText(value);
+      }
+    };
+  }
+
   public static TakesValue<String> htmlOf(final HasHTML target) {
     return new TakesValue<String>() {
       @Override
