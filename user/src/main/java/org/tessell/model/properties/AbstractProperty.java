@@ -106,7 +106,7 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
       // that if someone listening to us is also going to check a downstream
       // property's state, it would be good for them to be up to date
       if (valueChanged || validChanged) {
-        for (final Property<?> other : downstream) {
+        for (final Property<?> other : new ArrayList<Property<?>>(downstream)) {
           other.reassess();
         }
       }
