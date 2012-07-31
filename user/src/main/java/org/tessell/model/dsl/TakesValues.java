@@ -1,5 +1,6 @@
 package org.tessell.model.dsl;
 
+import org.tessell.gwt.dom.client.IsElement;
 import org.tessell.gwt.user.client.ui.IsImage;
 
 import com.google.gwt.user.client.TakesValue;
@@ -37,6 +38,20 @@ public class TakesValues {
       @Override
       public void setValue(String value) {
         target.setHTML(value);
+      }
+    };
+  }
+
+  public static TakesValue<String> htmlOf(final IsElement target) {
+    return new TakesValue<String>() {
+      @Override
+      public String getValue() {
+        return target.getInnerHTML();
+      }
+
+      @Override
+      public void setValue(String value) {
+        target.setInnerHTML(value);
       }
     };
   }
