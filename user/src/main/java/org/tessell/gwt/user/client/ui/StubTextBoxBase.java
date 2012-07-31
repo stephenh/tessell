@@ -1,5 +1,6 @@
 package org.tessell.gwt.user.client.ui;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.user.client.ui.TextBoxBase.TextAlignConstant;
 
 @SuppressWarnings("deprecation")
@@ -9,17 +10,22 @@ public class StubTextBoxBase extends StubValueBoxBase<String> implements IsTextB
     super("");
   }
 
+  /** Simulates the user typing {@code} all at once, e.g. a single change event. */
   public void type(final String value) {
     setValue(value, true);
     blur();
   }
 
+  /** Simulates the user typing {@code value}, with a key down/press/up for each char, then a final change. */
   public void typeEach(String value) {
+    String oldValue = getValue();
     for (char c : value.toCharArray()) {
       press(c);
     }
-    // now fire the change + blur event
-    type(value);
+    // can't use type because our value is already the same,
+    // since press(c) has iteratively updated it
+    ValueChangeEvent.fireIfNotEqual(this, oldValue, value);
+    blur();
   }
 
   @Override
