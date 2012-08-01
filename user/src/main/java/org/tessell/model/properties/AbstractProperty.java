@@ -251,6 +251,12 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
     return errors;
   }
 
+  public void setIfNull(P value) {
+    if (get() == null) {
+      set(value);
+    }
+  }
+
   protected Value<P> getValueObject() {
     return value;
   }
