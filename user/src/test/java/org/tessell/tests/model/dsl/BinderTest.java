@@ -578,4 +578,34 @@ public class BinderTest {
     s.set("a");
     assertThat(box.getValue(), is("a"));
   }
+
+  @Test
+  public void onClickToggleSetsNoInitialValue() {
+    BooleanProperty b = booleanProperty("b");
+    StubAnchor a = new StubAnchor();
+    binder.onClick(a).toggle(b);
+    assertThat(b.get(), is(nullValue()));
+  }
+
+  @Test
+  public void onClickToggleDoesActuallyToggle() {
+    BooleanProperty b = booleanProperty("b");
+    StubAnchor a = new StubAnchor();
+    binder.onClick(a).toggle(b);
+    a.click();
+    assertThat(b.get(), is(true));
+    a.click();
+    assertThat(b.get(), is(false));
+  }
+
+  @Test
+  public void onClickTogglePreventsDefault() {
+    BooleanProperty b = booleanProperty("b");
+    StubAnchor a = new StubAnchor();
+    binder.onClick(a).toggle(b);
+    StubClickEvent c = new StubClickEvent();
+    a.fireEvent(c);
+    assertThat(c.prevented, is(true));
+  }
+
 }

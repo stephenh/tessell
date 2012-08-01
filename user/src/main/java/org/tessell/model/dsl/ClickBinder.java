@@ -1,5 +1,6 @@
 package org.tessell.model.dsl;
 
+import org.tessell.model.properties.BooleanProperty;
 import org.tessell.model.properties.Property;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -24,6 +25,17 @@ public class ClickBinder {
         }));
       }
     });
+  }
+
+  public HandlerRegistrations toggle(final BooleanProperty property) {
+    HandlerRegistrations hrs = new HandlerRegistrations();
+    hrs.add(clickable.addClickHandler(new ClickHandler() {
+      public void onClick(ClickEvent event) {
+        property.toggle();
+        event.preventDefault();
+      }
+    }));
+    return hrs;
   }
 
 }
