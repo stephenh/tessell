@@ -154,4 +154,11 @@ public class RulesTest extends AbstractRuleTest {
     f.name.touch();
     assertThat(order, contains("rule", "property"));
   }
+
+  @Test
+  public void whenLengthOnlyThenEmptyIsOkay() {
+    new Length(f.name, "name length");
+    f.name.set(null);
+    assertNoMessages();
+  }
 }

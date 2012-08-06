@@ -25,7 +25,7 @@ public class Length extends AbstractRule<String, Length> {
   protected Valid isValid() {
     final String value = property.get();
     if (value == null) {
-      return Valid.NO;
+      return Valid.YES; // defer to Required, if it's around
     }
     return value.length() >= min && value.length() <= max ? Valid.YES : Valid.NO;
   }
