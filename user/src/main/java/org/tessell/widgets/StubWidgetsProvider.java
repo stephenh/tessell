@@ -7,56 +7,7 @@ import org.tessell.gwt.animation.client.StubAnimations;
 import org.tessell.gwt.dom.client.IsElement;
 import org.tessell.gwt.dom.client.StubElement;
 import org.tessell.gwt.user.client.*;
-import org.tessell.gwt.user.client.ui.IsAbsolutePanel;
-import org.tessell.gwt.user.client.ui.IsAnchor;
-import org.tessell.gwt.user.client.ui.IsButton;
-import org.tessell.gwt.user.client.ui.IsCheckBox;
-import org.tessell.gwt.user.client.ui.IsDataGrid;
-import org.tessell.gwt.user.client.ui.IsDockLayoutPanel;
-import org.tessell.gwt.user.client.ui.IsFlowPanel;
-import org.tessell.gwt.user.client.ui.IsFocusPanel;
-import org.tessell.gwt.user.client.ui.IsHTML;
-import org.tessell.gwt.user.client.ui.IsHTMLPanel;
-import org.tessell.gwt.user.client.ui.IsHyperlink;
-import org.tessell.gwt.user.client.ui.IsImage;
-import org.tessell.gwt.user.client.ui.IsInlineHTML;
-import org.tessell.gwt.user.client.ui.IsInlineHyperlink;
-import org.tessell.gwt.user.client.ui.IsInlineLabel;
-import org.tessell.gwt.user.client.ui.IsLabel;
-import org.tessell.gwt.user.client.ui.IsListBox;
-import org.tessell.gwt.user.client.ui.IsPasswordTextBox;
-import org.tessell.gwt.user.client.ui.IsPopupPanel;
-import org.tessell.gwt.user.client.ui.IsResizeLayoutPanel;
-import org.tessell.gwt.user.client.ui.IsScrollPanel;
-import org.tessell.gwt.user.client.ui.IsSimplePanel;
-import org.tessell.gwt.user.client.ui.IsSuggestBox;
-import org.tessell.gwt.user.client.ui.IsTabLayoutPanel;
-import org.tessell.gwt.user.client.ui.IsTextBox;
-import org.tessell.gwt.user.client.ui.StubAbsolutePanel;
-import org.tessell.gwt.user.client.ui.StubAnchor;
-import org.tessell.gwt.user.client.ui.StubButton;
-import org.tessell.gwt.user.client.ui.StubCheckBox;
-import org.tessell.gwt.user.client.ui.StubDataGrid;
-import org.tessell.gwt.user.client.ui.StubDockLayoutPanel;
-import org.tessell.gwt.user.client.ui.StubFlowPanel;
-import org.tessell.gwt.user.client.ui.StubFocusPanel;
-import org.tessell.gwt.user.client.ui.StubHTML;
-import org.tessell.gwt.user.client.ui.StubHTMLPanel;
-import org.tessell.gwt.user.client.ui.StubHyperlink;
-import org.tessell.gwt.user.client.ui.StubImage;
-import org.tessell.gwt.user.client.ui.StubInlineHTML;
-import org.tessell.gwt.user.client.ui.StubInlineHyperlink;
-import org.tessell.gwt.user.client.ui.StubInlineLabel;
-import org.tessell.gwt.user.client.ui.StubLabel;
-import org.tessell.gwt.user.client.ui.StubListBox;
-import org.tessell.gwt.user.client.ui.StubPasswordTextBox;
-import org.tessell.gwt.user.client.ui.StubPopupPanel;
-import org.tessell.gwt.user.client.ui.StubResizeLayoutPanel;
-import org.tessell.gwt.user.client.ui.StubScrollPanel;
-import org.tessell.gwt.user.client.ui.StubSimplePanel;
-import org.tessell.gwt.user.client.ui.StubSuggestBox;
-import org.tessell.gwt.user.client.ui.StubTabLayoutPanel;
-import org.tessell.gwt.user.client.ui.StubTextBox;
+import org.tessell.gwt.user.client.ui.*;
 import org.tessell.place.history.IsHistory;
 import org.tessell.place.history.StubHistory;
 import org.tessell.widgets.cellview.IsCellList;
@@ -101,6 +52,11 @@ public class StubWidgetsProvider implements WidgetsProvider {
   @Override
   public IsElement newElement(String tag) {
     return new StubElement();
+  }
+
+  @Override
+  public IsTextArea newTextArea() {
+    return new StubTextArea();
   }
 
   @Override

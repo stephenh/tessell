@@ -6,57 +6,7 @@ import org.tessell.gwt.animation.client.IsAnimation;
 import org.tessell.gwt.dom.client.GwtElement;
 import org.tessell.gwt.dom.client.IsElement;
 import org.tessell.gwt.user.client.*;
-import org.tessell.gwt.user.client.ui.AbsolutePanel;
-import org.tessell.gwt.user.client.ui.Anchor;
-import org.tessell.gwt.user.client.ui.Button;
-import org.tessell.gwt.user.client.ui.CheckBox;
-import org.tessell.gwt.user.client.ui.DataGrid;
-import org.tessell.gwt.user.client.ui.DockLayoutPanel;
-import org.tessell.gwt.user.client.ui.FlowPanel;
-import org.tessell.gwt.user.client.ui.FocusPanel;
-import org.tessell.gwt.user.client.ui.GwtAbsolutePanelDelegate;
-import org.tessell.gwt.user.client.ui.HTML;
-import org.tessell.gwt.user.client.ui.HTMLPanel;
-import org.tessell.gwt.user.client.ui.Hyperlink;
-import org.tessell.gwt.user.client.ui.Image;
-import org.tessell.gwt.user.client.ui.InlineHTML;
-import org.tessell.gwt.user.client.ui.InlineHyperlink;
-import org.tessell.gwt.user.client.ui.InlineLabel;
-import org.tessell.gwt.user.client.ui.IsAbsolutePanel;
-import org.tessell.gwt.user.client.ui.IsAnchor;
-import org.tessell.gwt.user.client.ui.IsButton;
-import org.tessell.gwt.user.client.ui.IsCheckBox;
-import org.tessell.gwt.user.client.ui.IsDataGrid;
-import org.tessell.gwt.user.client.ui.IsDockLayoutPanel;
-import org.tessell.gwt.user.client.ui.IsFlowPanel;
-import org.tessell.gwt.user.client.ui.IsFocusPanel;
-import org.tessell.gwt.user.client.ui.IsHTML;
-import org.tessell.gwt.user.client.ui.IsHTMLPanel;
-import org.tessell.gwt.user.client.ui.IsHyperlink;
-import org.tessell.gwt.user.client.ui.IsImage;
-import org.tessell.gwt.user.client.ui.IsInlineHTML;
-import org.tessell.gwt.user.client.ui.IsInlineHyperlink;
-import org.tessell.gwt.user.client.ui.IsInlineLabel;
-import org.tessell.gwt.user.client.ui.IsLabel;
-import org.tessell.gwt.user.client.ui.IsListBox;
-import org.tessell.gwt.user.client.ui.IsPasswordTextBox;
-import org.tessell.gwt.user.client.ui.IsPopupPanel;
-import org.tessell.gwt.user.client.ui.IsResizeLayoutPanel;
-import org.tessell.gwt.user.client.ui.IsScrollPanel;
-import org.tessell.gwt.user.client.ui.IsSimplePanel;
-import org.tessell.gwt.user.client.ui.IsSuggestBox;
-import org.tessell.gwt.user.client.ui.IsTabLayoutPanel;
-import org.tessell.gwt.user.client.ui.IsTextBox;
-import org.tessell.gwt.user.client.ui.Label;
-import org.tessell.gwt.user.client.ui.ListBox;
-import org.tessell.gwt.user.client.ui.PasswordTextBox;
-import org.tessell.gwt.user.client.ui.PopupPanel;
-import org.tessell.gwt.user.client.ui.ResizeLayoutPanel;
-import org.tessell.gwt.user.client.ui.ScrollPanel;
-import org.tessell.gwt.user.client.ui.SimplePanel;
-import org.tessell.gwt.user.client.ui.SuggestBox;
-import org.tessell.gwt.user.client.ui.TabLayoutPanel;
-import org.tessell.gwt.user.client.ui.TextBox;
+import org.tessell.gwt.user.client.ui.*;
 import org.tessell.place.history.GwtHistory;
 import org.tessell.place.history.IsHistory;
 import org.tessell.widgets.cellview.GwtCellList;
@@ -92,6 +42,11 @@ public class GwtWidgetsProvider implements WidgetsProvider {
   @Override
   public IsElement newElement(String tag) {
     return new GwtElement(DOM.createElement(tag));
+  }
+
+  @Override
+  public IsTextArea newTextArea() {
+    return new TextArea();
   }
 
   @Override
