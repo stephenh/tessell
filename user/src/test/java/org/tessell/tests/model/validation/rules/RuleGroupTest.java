@@ -17,21 +17,21 @@ public class RuleGroupTest extends AbstractRuleTest {
   @Test
   public void bothInAGroupIsInValid() {
     f.all.touch();
-    assertMessages("name required", "description required", "some invalid");
+    assertMessages("some invalid", "name required", "description required");
   }
 
   @Test
   public void oneInAGroupIsInValid() {
     f.name.set("somename");
     f.all.touch();
-    assertMessages("description required", "some invalid");
+    assertMessages("some invalid", "description required");
   }
 
   @Test
   public void invalidInAGroupBecomingValidUnfiresGroup() {
     f.name.set("somename");
     f.all.touch();
-    assertMessages("description required", "some invalid");
+    assertMessages("some invalid", "description required");
     f.description.set("somedesc");
     assertMessages();
   }

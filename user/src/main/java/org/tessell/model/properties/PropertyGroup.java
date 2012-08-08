@@ -25,8 +25,13 @@ public class PropertyGroup extends AbstractProperty<Boolean, PropertyGroup> {
 
   public PropertyGroup(final String name, final String message) {
     super(new SetValue<Boolean>(name, true));
-    // add a rule that fires whenever we're false
+    // add a rule that fires whenever we're false (and touched)
     new Custom(this, message, this);
+    // We always want to consider ourselves "touched", so that our
+    // error message fires right away, and the UI/parent property
+    // group can see it. However, we don't want to touch our children
+    // right away, we only do that when the client calls setTouched.
+    super.setTouched(true);
   }
 
   @Override
@@ -76,7 +81,15 @@ public class PropertyGroup extends AbstractProperty<Boolean, PropertyGroup> {
     for (final PropertyWithHandlers other : properties) {
       other.property.setTouched(touched);
     }
-    super.setTouched(touched);
+    // Per comment in the constructor, we don't actually want
+    // to toggle our touched state, it should always be true.
+    // So don't call super, but copy/paste some of it's logic
+    // here to be at least somewhat consistent.
+    // super.setTouched(touched);
+    for (final Property<?> other : downstream) {
+      other.setTouched(touched);
+    }
+    reassess();
   }
 
   public void capture() {
