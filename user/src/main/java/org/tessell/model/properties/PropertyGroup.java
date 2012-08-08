@@ -10,7 +10,6 @@ import org.tessell.model.validation.events.RuleTriggeredHandler;
 import org.tessell.model.validation.events.RuleUntriggeredEvent;
 import org.tessell.model.validation.events.RuleUntriggeredHandler;
 import org.tessell.model.validation.rules.Custom;
-import org.tessell.model.values.DerivedValue;
 import org.tessell.model.values.SetValue;
 
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -26,11 +25,8 @@ public class PropertyGroup extends AbstractProperty<Boolean, PropertyGroup> {
 
   public PropertyGroup(final String name, final String message) {
     super(new SetValue<Boolean>(name, true));
-    new Custom(this, message, new DerivedValue<Boolean>() {
-      public Boolean get() {
-        return invalid.size() == 0;
-      }
-    });
+    // add a rule that fires whenever we're false
+    new Custom(this, message, this);
   }
 
   @Override
