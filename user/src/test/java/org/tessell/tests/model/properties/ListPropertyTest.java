@@ -4,19 +4,16 @@ import static joist.util.Copy.list;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.contains;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.tessell.model.events.PropertyChangedEvent;
-import org.tessell.model.events.PropertyChangedHandler;
-import org.tessell.model.events.ValueAddedEvent;
-import org.tessell.model.events.ValueAddedHandler;
-import org.tessell.model.events.ValueRemovedEvent;
-import org.tessell.model.events.ValueRemovedHandler;
+import org.tessell.model.events.*;
 import org.tessell.model.properties.IntegerProperty;
 import org.tessell.model.properties.ListProperty;
+import org.tessell.model.properties.ListProperty.ElementConverter;
 import org.tessell.model.values.SetValue;
 
 public class ListPropertyTest {
@@ -130,6 +127,107 @@ public class ListPropertyTest {
     assertThat(changes.count, is(2));
   }
 
+  @Test
+  public void asIntsConvertsExistingValues() {
+    p.add("2");
+    ListProperty<Integer> ints = p.as(new StringToElementConverter());
+    assertThat(ints.get(), contains(2));
+    assertThat(p.get(), contains("2"));
+  }
+
+  @Test
+  public void asIntsFailsIfConverterFails() {
+    p.add("not an int");
+    try {
+      p.as(new StringToElementConverter());
+      fail();
+    } catch (NumberFormatException nfe) {
+      // expected
+    }
+  }
+
+  @Test
+  public void asIntsConvertsStringsLater() {
+    ListProperty<Integer> ints = p.as(new StringToElementConverter());
+    p.add("3");
+    assertThat(ints.get(), contains(3));
+    assertThat(p.get(), contains("3"));
+  }
+
+  @Test
+  public void asIntsRemovesIntsLater() {
+    ListProperty<Integer> ints = p.as(new StringToElementConverter());
+    p.add("3");
+    p.clear();
+    assertThat(ints.get().size(), is(0));
+    assertThat(p.get().size(), is(0));
+  }
+
+  @Test
+  public void asIntsConvertsIntsLater() {
+    ListProperty<Integer> ints = p.as(new StringToElementConverter());
+    ints.add(3);
+    assertThat(p.get(), contains("3"));
+    assertThat(ints.get(), contains(3));
+  }
+
+  @Test
+  public void asIntsRemovesStringsLater() {
+    ListProperty<Integer> ints = p.as(new StringToElementConverter());
+    ints.add(3);
+    ints.clear();
+    assertThat(p.get().size(), is(0));
+  }
+
+  @Test
+  public void asIntsRemovesStringThatAddedAsAnInt() {
+    ListProperty<Integer> ints = p.as(new StringToElementConverter());
+    ints.add(3);
+    p.remove("3");
+    assertThat(p.get().size(), is(0));
+    assertThat(ints.get().size(), is(0));
+  }
+
+  @Test
+  public void asIntsRemovesIntThatAddedAsAString() {
+    ListProperty<Integer> ints = p.as(new StringToElementConverter());
+    p.add("3");
+    ints.remove(3);
+    assertThat(p.get().size(), is(0));
+    assertThat(ints.get().size(), is(0));
+  }
+
+  @Test
+  public void asIntsRemovesIntThatAddedInitially() {
+    p.add("3");
+    ListProperty<Integer> ints = p.as(new StringToElementConverter());
+    ints.remove(3);
+    assertThat(p.get().size(), is(0));
+    assertThat(ints.get().size(), is(0));
+  }
+
+  @Test
+  public void asIntsRemovesMultipleInts() {
+    ListProperty<Integer> ints = p.as(new StringToElementConverter());
+    p.add("3");
+    p.add("3");
+    ints.remove(3);
+    ints.remove(3);
+    assertThat(p.get().size(), is(0));
+    assertThat(ints.get().size(), is(0));
+  }
+
+  @Test
+  public void asIntsRemovesMultipleStrings() {
+    ListProperty<Integer> ints = p.as(new StringToElementConverter());
+    ints.add(3);
+    ints.add(3);
+    p.remove("3");
+    p.remove("3");
+    assertThat(p.get().size(), is(0));
+    assertThat(ints.get().size(), is(0));
+  }
+
   public static class CountingChanges<P> implements PropertyChangedHandler<P> {
     public int count;
 
@@ -154,6 +252,18 @@ public class ListPropertyTest {
     @Override
     public void onValueRemoved(final ValueRemovedEvent<P> event) {
       count++;
+    }
+  }
+
+  private final class StringToElementConverter implements ElementConverter<String, Integer> {
+    @Override
+    public Integer to(String element) {
+      return element == null ? null : Integer.parseInt(element);
+    }
+
+    @Override
+    public String from(Integer element) {
+      return element == null ? null : element.toString();
     }
   }
 }
