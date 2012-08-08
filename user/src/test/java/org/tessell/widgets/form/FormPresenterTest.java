@@ -80,7 +80,7 @@ public class FormPresenterTest extends AbstractFormPresenterTest {
   @Test
   public void buttonTouchesProperties() {
     final DummyUiCommand command = new DummyUiCommand();
-    final StringProperty name = stringProperty("name").max(10);
+    final StringProperty name = stringProperty("name").req();
     p.add(new TextBoxFormLine(name));
     ButtonFormAction action = new ButtonFormAction(command, "foo");
     p.add(action);
