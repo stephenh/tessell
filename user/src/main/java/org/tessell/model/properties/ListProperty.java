@@ -5,6 +5,7 @@ import static org.tessell.model.properties.NewProperty.listProperty;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.tessell.model.events.ValueAddedEvent;
@@ -20,6 +21,8 @@ import com.google.gwt.event.shared.HandlerRegistration;
 public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> {
 
   private IntegerProperty size;
+  private List<E> readOnly;
+  private List<E> readOnlySource;
 
   /** Used to convert a list from one type of element to another. */
   public interface ElementConverter<E, F> {
@@ -35,15 +38,26 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
     super((Value<List<E>>) value);
   }
 
+  @Override
+  public List<E> get() {
+    List<E> current = super.get();
+    // change the wrapped list only when the source identity changes
+    if (readOnly == null || current != readOnlySource) {
+      readOnly = current == null ? null : Collections.unmodifiableList(current);
+      readOnlySource = current;
+    }
+    return readOnly;
+  }
+
   /** @return a copy of our list as an {@link ArrayList}, e.g. for GWT-RPC calls. */
   public ArrayList<E> getArrayList() {
-    return new ArrayList<E>(get());
+    return new ArrayList<E>(getDirect());
   }
 
   @Override
   public void set(final List<E> items) {
-    List<E> added = diff(get(), items);
-    List<E> removed = diff(items, get());
+    List<E> added = diff(getDirect(), items);
+    List<E> removed = diff(items, getDirect());
     super.set(items);
     for (E add : added) {
       fireEvent(new ValueAddedEvent<E>(this, add));
@@ -55,7 +69,7 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
 
   /** Adds {@code item}, firing a {@link ValueAddedEvent}. */
   public void add(final E item) {
-    get().add(item);
+    getDirect().add(item);
     setTouched(true);
     fireEvent(new ValueAddedEvent<E>(this, item));
     // will fire change if needed
@@ -69,7 +83,7 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
     }
     setTouched(true);
     for (E item : items) {
-      get().add(item);
+      getDirect().add(item);
       fireEvent(new ValueAddedEvent<E>(this, item));
     }
     // will fire change if needed
@@ -79,7 +93,7 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
   /** Removes {@code item}, firing a {@link ValueRemovedEvent}. */
   public void remove(final E item) {
     // should be considered touched?
-    if (get().remove(item)) {
+    if (getDirect().remove(item)) {
       fireEvent(new ValueRemovedEvent<E>(this, item));
       reassess();
     }
@@ -87,9 +101,9 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
 
   /** Removes all entries, firing a {@link ValueRemovedEvent} for each. */
   public void clear() {
-    final int size = get().size();
+    final int size = getDirect().size();
     for (int i = size - 1; i >= 0; i--) {
-      final E value = get().remove(i);
+      final E value = getDirect().remove(i);
       fireEvent(new ValueRemovedEvent<E>(this, value));
     }
     reassess();
@@ -207,6 +221,10 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
       return null;
     }
     return new ArrayList<E>(newValue);
+  }
+
+  private List<E> getDirect() {
+    return super.get();
   }
 
   /** @return the elements in two that are not in one */

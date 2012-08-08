@@ -2,9 +2,11 @@ package org.tessell.tests.model.properties;
 
 import static joist.util.Copy.list;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.contains;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
+import static org.tessell.model.properties.NewProperty.listProperty;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -227,6 +229,18 @@ public class ListPropertyTest {
     p.remove("3");
     assertThat(p.get().size(), is(0));
     assertThat(ints.get().size(), is(0));
+  }
+
+  @Test(expected = UnsupportedOperationException.class)
+  public void getReturnsUnmodifiableList() {
+    p.get().add("1");
+  }
+
+  @Test
+  public void passedANullListDoesNotNpe() {
+    // only constructor and get will work; most other things will fail
+    ListProperty<String> l = listProperty("l", null);
+    assertThat(l.get(), is(nullValue()));
   }
 
   public static class CountingChanges<P> implements PropertyChangedHandler<P> {
