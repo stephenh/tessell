@@ -7,6 +7,7 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -18,10 +19,10 @@ import org.tessell.model.values.SetValue;
 
 public class ListPropertyTest {
 
-  final ListProperty<String> p = new ListProperty<String>(new SetValue<ArrayList<String>>("p"));
+  final ListProperty<String> p = new ListProperty<String>(new SetValue<List<String>>("p"));
   final CountingAdds<String> adds = new CountingAdds<String>();
   final CountingRemoves<String> removes = new CountingRemoves<String>();
-  final CountingChanges<ArrayList<String>> changes = new CountingChanges<ArrayList<String>>();
+  final CountingChanges<List<String>> changes = new CountingChanges<List<String>>();
 
   @Before
   public void initialValue() {
@@ -44,7 +45,7 @@ public class ListPropertyTest {
 
   @Test
   public void addingFiresValueAddedAndChangedWhenUsedViaTheCstr() {
-    ListProperty<String> b = new ListProperty<String>(new SetValue<ArrayList<String>>("b", new ArrayList<String>()));
+    ListProperty<String> b = new ListProperty<String>(new SetValue<List<String>>("b", new ArrayList<String>()));
     b.addValueAddedHandler(adds);
     b.addPropertyChangedHandler(changes);
     assertThat(adds.count, is(0));

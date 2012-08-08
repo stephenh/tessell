@@ -5,6 +5,7 @@ import static org.tessell.model.properties.NewProperty.listProperty;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.tessell.model.events.ValueAddedEvent;
 import org.tessell.model.events.ValueAddedHandler;
@@ -16,7 +17,7 @@ import org.tessell.util.MapToList;
 
 import com.google.gwt.event.shared.HandlerRegistration;
 
-public class ListProperty<E> extends AbstractProperty<ArrayList<E>, ListProperty<E>> {
+public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> {
 
   private IntegerProperty size;
 
@@ -27,14 +28,22 @@ public class ListProperty<E> extends AbstractProperty<ArrayList<E>, ListProperty
     E from(F element);
   }
 
-  public ListProperty(final Value<ArrayList<E>> value) {
-    super(value);
+  @SuppressWarnings("unchecked")
+  public ListProperty(final Value<? extends List<E>> value) {
+    // the "? extends List<E>" is so we can be called with Value<ArrayList<E>>
+    // types, which dtonator currently generates in the value inner classes
+    super((Value<List<E>>) value);
+  }
+
+  /** @return a copy of our list as an {@link ArrayList}, e.g. for GWT-RPC calls. */
+  public ArrayList<E> getArrayList() {
+    return new ArrayList<E>(get());
   }
 
   @Override
-  public void set(final ArrayList<E> items) {
-    ArrayList<E> added = diff(get(), items);
-    ArrayList<E> removed = diff(items, get());
+  public void set(final List<E> items) {
+    List<E> added = diff(get(), items);
+    List<E> removed = diff(items, get());
     super.set(items);
     for (E add : added) {
       fireEvent(new ValueAddedEvent<E>(this, add));
@@ -91,7 +100,7 @@ public class ListProperty<E> extends AbstractProperty<ArrayList<E>, ListProperty
     if (size == null) {
       size = addDerived(integerProperty(new DerivedValue<Integer>() {
         public Integer get() {
-          final ArrayList<E> current = ListProperty.this.get();
+          final List<E> current = ListProperty.this.get();
           return (current == null) ? null : current.size();
         }
       }));
@@ -119,12 +128,14 @@ public class ListProperty<E> extends AbstractProperty<ArrayList<E>, ListProperty
     final MapToList<E, F> eToF = new MapToList<E, F>();
     final MapToList<F, E> fToE = new MapToList<F, E>();
     // make an intial copy of all the elements currently in our list
-    ArrayList<F> initial = new ArrayList<F>();
-    for (E e : get()) {
-      F f = converter.to(e);
-      eToF.add(e, f);
-      fToE.add(f, e);
-      initial.add(f);
+    List<F> initial = new ArrayList<F>();
+    if (get() != null) {
+      for (E e : get()) {
+        F f = converter.to(e);
+        eToF.add(e, f);
+        fToE.add(f, e);
+        initial.add(f);
+      }
     }
     final ListProperty<F> as = listProperty(getName(), initial);
     final boolean[] active = { false };
@@ -191,7 +202,7 @@ public class ListProperty<E> extends AbstractProperty<ArrayList<E>, ListProperty
   }
 
   @Override
-  protected ArrayList<E> copyLastValue(ArrayList<E> newValue) {
+  protected List<E> copyLastValue(List<E> newValue) {
     if (newValue == null) {
       return null;
     }
@@ -199,8 +210,8 @@ public class ListProperty<E> extends AbstractProperty<ArrayList<E>, ListProperty
   }
 
   /** @return the elements in two that are not in one */
-  private static <E> ArrayList<E> diff(ArrayList<E> one, ArrayList<E> two) {
-    ArrayList<E> diff = new ArrayList<E>();
+  private static <E> List<E> diff(List<E> one, List<E> two) {
+    List<E> diff = new ArrayList<E>();
     if (one == null || two == null) {
       return diff;
     }

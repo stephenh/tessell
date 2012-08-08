@@ -1,6 +1,7 @@
 package org.tessell.model.properties;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.bindgen.Binding;
 import org.tessell.model.Dto;
@@ -101,25 +102,25 @@ public class NewProperty {
     return new StringProperty(value);
   }
 
-  public static <E> ListProperty<E> listProperty(final Value<ArrayList<E>> value) {
+  public static <E> ListProperty<E> listProperty(final Value<List<E>> value) {
     return new ListProperty<E>(value);
   }
 
-  public static <E> ListProperty<E> listProperty(final Binding<ArrayList<E>> binding) {
-    return new ListProperty<E>(new BoundValue<ArrayList<E>>(binding));
+  public static <E> ListProperty<E> listProperty(final Binding<List<E>> binding) {
+    return new ListProperty<E>(new BoundValue<List<E>>(binding));
   }
 
-  public static <E> ListProperty<E> listProperty(final String name, final ArrayList<E> list) {
-    return new ListProperty<E>(new SetValue<ArrayList<E>>(name, list));
+  public static <E> ListProperty<E> listProperty(final String name, final List<E> list) {
+    return new ListProperty<E>(new SetValue<List<E>>(name, list));
   }
 
-  public static <E extends Model<F>, F extends Dto<E>> DtoListProperty<E, F> dtoListProperty(final Binding<ArrayList<F>> binding) {
-    final SetValue<ArrayList<E>> modelListValue = new SetValue<ArrayList<E>>("modelList", new ArrayList<E>());
-    return new DtoListProperty<E, F>(modelListValue, new BoundValue<ArrayList<F>>(binding));
+  public static <E extends Model<F>, F extends Dto<E>> DtoListProperty<E, F> dtoListProperty(final Binding<List<F>> binding) {
+    final SetValue<List<E>> modelListValue = new SetValue<List<E>>("modelList", new ArrayList<E>());
+    return new DtoListProperty<E, F>(modelListValue, new BoundValue<List<F>>(binding));
   }
 
   public static <E> ListProperty<E> listProperty(final String name) {
-    return new ListProperty<E>(new SetValue<ArrayList<E>>(name, new ArrayList<E>()));
+    return new ListProperty<E>(new SetValue<List<E>>(name, new ArrayList<E>()));
   }
 
   public static <P> SetValue<P> setValue(String name) {

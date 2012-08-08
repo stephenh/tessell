@@ -3,6 +3,7 @@ package org.tessell.model.properties;
 import static org.tessell.model.properties.NewProperty.integerProperty;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.tessell.model.Dto;
 import org.tessell.model.Model;
@@ -25,19 +26,19 @@ import com.google.gwt.event.shared.HandlerRegistration;
  * @param E the model type
  * @param F the real backing dto type
  */
-public class DtoListProperty<E extends Model<F>, F extends Dto<E>> extends AbstractProperty<ArrayList<E>, DtoListProperty<E, F>> {
+public class DtoListProperty<E extends Model<F>, F extends Dto<E>> extends AbstractProperty<List<E>, DtoListProperty<E, F>> {
 
   /** The real dto array. */
-  private final Value<ArrayList<F>> dtoList;
+  private final Value<List<F>> dtoList;
   private boolean hasCopiedDtos = false;
 
-  public DtoListProperty(final Value<ArrayList<E>> modelList, final Value<ArrayList<F>> dtoList) {
+  public DtoListProperty(final Value<List<E>> modelList, final Value<List<F>> dtoList) {
     super(modelList);
     this.dtoList = dtoList;
   }
 
   @Override
-  public ArrayList<E> get() {
+  public List<E> get() {
     // funny dance--check dtoList field because our base class constructor
     // calls this method and the dtoList field may not have been set yet
     if (dtoList != null && !hasCopiedDtos) {
@@ -115,7 +116,7 @@ public class DtoListProperty<E extends Model<F>, F extends Dto<E>> extends Abstr
   public IntegerProperty size() {
     return addDerived(integerProperty(new DerivedValue<Integer>() {
       public Integer get() {
-        final ArrayList<E> current = DtoListProperty.this.get();
+        final List<E> current = DtoListProperty.this.get();
         return (current == null) ? null : current.size();
       }
     }));
@@ -137,14 +138,14 @@ public class DtoListProperty<E extends Model<F>, F extends Dto<E>> extends Abstr
   }
 
   @Override
-  protected ArrayList<E> copyLastValue(ArrayList<E> newValue) {
+  protected List<E> copyLastValue(List<E> newValue) {
     if (newValue == null) {
       return null;
     }
     return new ArrayList<E>(newValue);
   }
 
-  private ArrayList<F> dtoList() {
+  private List<F> dtoList() {
     return dtoList.get();
   }
 

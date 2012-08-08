@@ -1,7 +1,7 @@
 package org.tessell.model.dsl;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.tessell.gwt.user.client.ui.IsPanel;
@@ -15,7 +15,7 @@ import org.tessell.presenter.BasicPresenter;
 import org.tessell.presenter.Presenter;
 
 /** Fluent binding methods for {@link ListProperty}s. */
-public class ListPropertyBinder<P> extends PropertyBinder<ArrayList<P>> {
+public class ListPropertyBinder<P> extends PropertyBinder<List<P>> {
 
   /** Factory for creating {@link IsWidget}s for each item in a list. */
   public interface ListViewFactory<P> {

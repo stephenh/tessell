@@ -6,6 +6,7 @@ import static org.tessell.model.properties.NewProperty.setValue;
 import static org.tessell.model.properties.NewProperty.stringProperty;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.bindgen.Bindable;
 import org.junit.Test;
@@ -14,13 +15,14 @@ import org.tessell.model.Dto;
 import org.tessell.model.properties.DtoListProperty;
 import org.tessell.model.properties.StringProperty;
 import org.tessell.model.validation.Valid;
+import org.tessell.model.values.SetValue;
 import org.tessell.model.values.Value;
 import org.tessell.tests.model.properties.dtoListPropertyTest.DBinding;
 
 public class DtoListPropertyTest {
 
-  final Value<ArrayList<D>> dtos = setValue("dtos", new ArrayList<D>());
-  final Value<ArrayList<M>> models = setValue("models", new ArrayList<M>());
+  final Value<List<D>> dtos = new SetValue<List<D>>("dtos", new ArrayList<D>());
+  final Value<List<M>> models = new SetValue<List<M>>("models", new ArrayList<M>());
 
   @Test
   public void dtosToModels() {
@@ -88,7 +90,7 @@ public class DtoListPropertyTest {
 
   @Test
   public void nullInitialDtosValue() {
-    final Value<ArrayList<D>> nullDtos = setValue("dtos", null);
+    final Value<List<D>> nullDtos = setValue("dtos", null);
     final DtoListProperty<M, D> l = new DtoListProperty<M, D>(models, nullDtos);
     assertThat(l.get().size(), is(0));
 
