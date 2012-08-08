@@ -10,6 +10,8 @@ import org.tessell.model.AbstractModel;
 import org.tessell.model.properties.IntegerProperty;
 import org.tessell.model.properties.StringProperty;
 import org.tessell.model.validation.Valid;
+import org.tessell.model.validation.events.RuleTriggeredEvent;
+import org.tessell.model.validation.events.RuleTriggeredHandler;
 
 public class AbstractModelTest {
 
@@ -48,6 +50,18 @@ public class AbstractModelTest {
 
     e.name.set("a");
     assertThat(e.allValid().wasValid(), is(Valid.YES));
+  }
+
+  @Test
+  public void allFiresAnErrorMessage() {
+    final String[] message = { null };
+    e.all().addRuleTriggeredHandler(new RuleTriggeredHandler() {
+      public void onTrigger(RuleTriggeredEvent event) {
+        message[0] = event.getMessage();
+      }
+    });
+    e.name.setTouched(true);
+    assertThat(message[0], is("model invalid"));
   }
 
   public static class EmployeeModel extends AbstractModel<EmployeeDto> {

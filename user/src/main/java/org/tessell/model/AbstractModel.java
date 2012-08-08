@@ -5,7 +5,7 @@ import org.tessell.model.properties.PropertyGroup;
 
 public abstract class AbstractModel<T> implements Model<T> {
 
-  protected PropertyGroup all = new PropertyGroup("all", null);
+  protected PropertyGroup all = new PropertyGroup("all", "model invalid");
 
   public PropertyGroup all() {
     return all;
