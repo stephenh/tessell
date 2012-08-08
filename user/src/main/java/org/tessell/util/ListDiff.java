@@ -6,31 +6,38 @@ import java.util.List;
 
 public class ListDiff<T> {
 
-  public static <T> ListDiff<T> of(Collection<T> original, Collection<T> updated) {
+  public static <T> ListDiff<T> of(Collection<T> oldValue, Collection<T> newValue) {
     List<T> added = new ArrayList<T>();
     List<T> removed = new ArrayList<T>();
-    if (original == null) {
-      added.addAll(updated);
+    if (oldValue == null) {
+      added.addAll(newValue);
       return new ListDiff<T>(added, removed);
     }
-    for (T t : original) {
-      if (!updated.contains(t)) {
+    List<T> newCopy = new ArrayList<T>(newValue);
+    for (T t : oldValue) {
+      if (!newCopy.remove(t)) {
         removed.add(t);
       }
     }
-    for (T t : updated) {
-      if (!original.contains(t)) {
+    List<T> oldCopy = new ArrayList<T>(oldValue);
+    for (T t : newValue) {
+      if (!oldCopy.remove(t)) {
         added.add(t);
       }
     }
     return new ListDiff<T>(added, removed);
   }
 
-  public final List<T> added;
-  public final List<T> removed;
+  public final Collection<T> added;
+  public final Collection<T> removed;
 
   private ListDiff(List<T> added, List<T> removed) {
     this.added = added;
     this.removed = removed;
+  }
+
+  @Override
+  public String toString() {
+    return added + "; " + removed;
   }
 }

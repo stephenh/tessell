@@ -112,7 +112,7 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
       }
 
       if (valueChanged) {
-        fireEvent(new PropertyChangedEvent<P>(this, oldValue, newValue));
+        fireChanged(oldValue, newValue);
       }
     } finally {
       reassessing = false;
@@ -265,6 +265,10 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
 
   protected <H extends EventHandler> HandlerRegistration addHandler(Type<H> type, H handler) {
     return handlers.addHandlerToSource(type, this, handler);
+  }
+
+  protected void fireChanged(P oldValue, P newValue) {
+    fireEvent(new PropertyChangedEvent<P>(this, oldValue, newValue));
   }
 
   /** Runs validation against our rules. */

@@ -13,7 +13,12 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.tessell.model.events.*;
+import org.tessell.model.events.PropertyChangedEvent;
+import org.tessell.model.events.PropertyChangedHandler;
+import org.tessell.model.events.ValueAddedEvent;
+import org.tessell.model.events.ValueAddedHandler;
+import org.tessell.model.events.ValueRemovedEvent;
+import org.tessell.model.events.ValueRemovedHandler;
 import org.tessell.model.properties.IntegerProperty;
 import org.tessell.model.properties.ListProperty;
 import org.tessell.model.properties.ListProperty.ElementConverter;
@@ -21,7 +26,8 @@ import org.tessell.model.values.SetValue;
 
 public class ListPropertyTest {
 
-  final ListProperty<String> p = new ListProperty<String>(new SetValue<List<String>>("p"));
+  final SetValue<List<String>> pValue = new SetValue<List<String>>("p");
+  final ListProperty<String> p = new ListProperty<String>(pValue);
   final CountingAdds<String> adds = new CountingAdds<String>();
   final CountingRemoves<String> removes = new CountingRemoves<String>();
   final CountingChanges<List<String>> changes = new CountingChanges<List<String>>();
@@ -131,6 +137,18 @@ public class ListPropertyTest {
   }
 
   @Test
+  public void reassessFiresWhenValueWasNull() {
+    SetValue<List<String>> qValue = new SetValue<List<String>>("q", null); // start out null
+    ListProperty<String> q = listProperty(qValue);
+    q.addValueAddedHandler(adds);
+    q.addPropertyChangedHandler(changes);
+    qValue.set(list("2", "3"));
+    q.reassess();
+    assertThat(adds.count, is(2));
+    assertThat(changes.count, is(1));
+  }
+
+  @Test
   public void asIntsConvertsExistingValues() {
     p.add("2");
     ListProperty<Integer> ints = p.as(new StringToElementConverter());
@@ -229,6 +247,24 @@ public class ListPropertyTest {
     p.remove("3");
     assertThat(p.get().size(), is(0));
     assertThat(ints.get().size(), is(0));
+  }
+
+  @Test
+  public void asIntsUpdatedAfterReassess() {
+    ListProperty<Integer> ints = p.as(new StringToElementConverter());
+    p.setValue(list("3"));
+    p.reassess();
+    assertThat(ints.get(), contains(3));
+  }
+
+  @Test
+  public void asIntsUpdatedAfterNullReassess() {
+    SetValue<List<String>> qValue = new SetValue<List<String>>("q", null); // pass null
+    ListProperty<String> q = listProperty(qValue);
+    ListProperty<Integer> ints = q.as(new StringToElementConverter());
+    qValue.set(list("3"));
+    q.reassess();
+    assertThat(ints.get(), contains(3));
   }
 
   @Test(expected = UnsupportedOperationException.class)

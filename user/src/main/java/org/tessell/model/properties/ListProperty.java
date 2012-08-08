@@ -14,6 +14,7 @@ import org.tessell.model.events.ValueRemovedEvent;
 import org.tessell.model.events.ValueRemovedHandler;
 import org.tessell.model.values.DerivedValue;
 import org.tessell.model.values.Value;
+import org.tessell.util.ListDiff;
 import org.tessell.util.MapToList;
 
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -54,25 +55,11 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
     return new ArrayList<E>(getDirect());
   }
 
-  @Override
-  public void set(final List<E> items) {
-    List<E> added = diff(getDirect(), items);
-    List<E> removed = diff(items, getDirect());
-    super.set(items);
-    for (E add : added) {
-      fireEvent(new ValueAddedEvent<E>(this, add));
-    }
-    for (E remove : removed) {
-      fireEvent(new ValueRemovedEvent<E>(this, remove));
-    }
-  }
-
   /** Adds {@code item}, firing a {@link ValueAddedEvent}. */
   public void add(final E item) {
     getDirect().add(item);
     setTouched(true);
-    fireEvent(new ValueAddedEvent<E>(this, item));
-    // will fire change if needed
+    // will fire add+change if needed
     reassess();
   }
 
@@ -82,11 +69,8 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
       return; // this makes sense, right?
     }
     setTouched(true);
-    for (E item : items) {
-      getDirect().add(item);
-      fireEvent(new ValueAddedEvent<E>(this, item));
-    }
-    // will fire change if needed
+    getDirect().addAll(items);
+    // will fire adds+change if needed
     reassess();
   }
 
@@ -94,18 +78,15 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
   public void remove(final E item) {
     // should be considered touched?
     if (getDirect().remove(item)) {
-      fireEvent(new ValueRemovedEvent<E>(this, item));
+      // will fire remove+change if needed
       reassess();
     }
   }
 
   /** Removes all entries, firing a {@link ValueRemovedEvent} for each. */
   public void clear() {
-    final int size = getDirect().size();
-    for (int i = size - 1; i >= 0; i--) {
-      final E value = getDirect().remove(i);
-      fireEvent(new ValueRemovedEvent<E>(this, value));
-    }
+    getDirect().clear();
+    // will fire removes+change if needed
     reassess();
   }
 
@@ -223,22 +204,20 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
     return new ArrayList<E>(newValue);
   }
 
-  private List<E> getDirect() {
-    return super.get();
+  @Override
+  protected void fireChanged(List<E> oldValue, List<E> newValue) {
+    ListDiff<E> diff = ListDiff.of(oldValue, newValue);
+    for (E added : diff.added) {
+      fireEvent(new ValueAddedEvent<E>(this, added));
+    }
+    for (E removed : diff.removed) {
+      fireEvent(new ValueRemovedEvent<E>(this, removed));
+    }
+    super.fireChanged(oldValue, newValue);
   }
 
-  /** @return the elements in two that are not in one */
-  private static <E> List<E> diff(List<E> one, List<E> two) {
-    List<E> diff = new ArrayList<E>();
-    if (one == null || two == null) {
-      return diff;
-    }
-    for (E t : two) {
-      if (!one.contains(t)) {
-        diff.add(t);
-      }
-    }
-    return diff;
+  private List<E> getDirect() {
+    return super.get();
   }
 
 }
