@@ -44,18 +44,6 @@ public class PropertyBinder<P> {
     return new HandlerRegistrations(p.addPropertyChangedHandler(h));
   }
 
-  /** Sets up one-way binding from this property to {@code other}. */
-  public HandlerRegistrations to(final Property<P> other) {
-    final PropertyChangedHandler<P> h = new PropertyChangedHandler<P>() {
-      public void onPropertyChanged(final PropertyChangedEvent<P> event) {
-        other.set(event.getProperty().get());
-      }
-    };
-    // set initial value
-    h.onPropertyChanged(new PropertyChangedEvent<P>(p, null, other.get()));
-    return new HandlerRegistrations(p.addPropertyChangedHandler(h));
-  }
-
   /** Binds our property to {@code source} (two-way). */
   public HandlerRegistrations to(final HasValue<P> source) {
     final HandlerRegistrations hr = new HandlerRegistrations();
