@@ -21,13 +21,13 @@ public class PropertyBinder<P> {
 
   protected final Property<P> p;
 
-  public PropertyBinder(Property<P> p) {
+  public PropertyBinder(final Property<P> p) {
     this.p = p;
   }
 
   /** Binds our property to {@code value} (one-way). */
   public HandlerRegistrations to(final TakesValue<P> value) {
-    PropertyChangedHandler<P> h = new PropertyChangedHandler<P>() {
+    final PropertyChangedHandler<P> h = new PropertyChangedHandler<P>() {
       public void onPropertyChanged(final PropertyChangedEvent<P> event) {
         value.setValue(p.get());
       }
@@ -36,7 +36,7 @@ public class PropertyBinder<P> {
     // we may want to set the initial value of our property back to the current
     // value of value. Do this only one, and only if the property looks unset
     // (non-touched and null).
-    if (!p.isTouched() && p.get() == null && value.getValue() != null) {
+    if (!p.isReadOnly() && !p.isTouched() && p.get() == null && value.getValue() != null) {
       p.set(value.getValue());
     } else {
       value.setValue(p.get());
@@ -46,7 +46,7 @@ public class PropertyBinder<P> {
 
   /** Sets up one-way binding from this property to {@code other}. */
   public HandlerRegistrations to(final Property<P> other) {
-    PropertyChangedHandler<P> h = new PropertyChangedHandler<P>() {
+    final PropertyChangedHandler<P> h = new PropertyChangedHandler<P>() {
       public void onPropertyChanged(final PropertyChangedEvent<P> event) {
         other.set(event.getProperty().get());
       }
@@ -58,8 +58,8 @@ public class PropertyBinder<P> {
 
   /** Binds our property to {@code source} (two-way). */
   public HandlerRegistrations to(final HasValue<P> source) {
-    HandlerRegistrations hr = new HandlerRegistrations();
-    PropertyChangedHandler<P> h = new PropertyChangedHandler<P>() {
+    final HandlerRegistrations hr = new HandlerRegistrations();
+    final PropertyChangedHandler<P> h = new PropertyChangedHandler<P>() {
       public void onPropertyChanged(final PropertyChangedEvent<P> event) {
         source.setValue(event.getProperty().get(), true);
       }
@@ -70,7 +70,7 @@ public class PropertyBinder<P> {
     // would have messed up our 'touched' state), listen for others changes
     if (!p.isReadOnly()) {
       hr.add(source.addValueChangeHandler(new ValueChangeHandler<P>() {
-        public void onValueChange(ValueChangeEvent<P> event) {
+        public void onValueChange(final ValueChangeEvent<P> event) {
           p.set(sanitizeIfString(source.getValue()));
         }
       }));
@@ -87,7 +87,7 @@ public class PropertyBinder<P> {
   /** Binds our {@code p} to the selection in {@code source}, given the {@code options}. */
   public <O> HandlerRegistrations to(final IsListBox source, final List<O> options, final ListBoxAdaptor<P, O> adaptor) {
     int i = 0;
-    for (O option : options) {
+    for (final O option : options) {
       source.addItem(adaptor.toDisplay(option), Integer.toString(i++));
     }
     if (p.get() == null) {
@@ -96,9 +96,9 @@ public class PropertyBinder<P> {
       }
     }
     source.setSelectedIndex(options.indexOf(p.get()));
-    HandlerRegistration a = source.addChangeHandler(new ChangeHandler() {
-      public void onChange(ChangeEvent event) {
-        int i = source.getSelectedIndex();
+    final HandlerRegistration a = source.addChangeHandler(new ChangeHandler() {
+      public void onChange(final ChangeEvent event) {
+        final int i = source.getSelectedIndex();
         if (i == -1) {
           p.set(null);
         } else {
@@ -106,15 +106,15 @@ public class PropertyBinder<P> {
         }
       }
     });
-    HandlerRegistration b = p.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
-      public void onPropertyChanged(PropertyChangedEvent<P> event) {
+    final HandlerRegistration b = p.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
+      public void onPropertyChanged(final PropertyChangedEvent<P> event) {
         source.setSelectedIndex(indexInOptions());
       }
 
       // can't use indexOf because we can't map value -> option, only option -> value
       private int indexInOptions() {
         int i = 0;
-        for (O option : options) {
+        for (final O option : options) {
           if (ObjectUtils.eq(adaptor.toValue(option), p.get())) {
             return i;
           }
@@ -127,9 +127,9 @@ public class PropertyBinder<P> {
   }
 
   /** Binds errors for our property to {@code errors}. */
-  public HandlerRegistrations errorsTo(IsTextList errors) {
+  public HandlerRegistrations errorsTo(final IsTextList errors) {
     final TextListOnError i = new TextListOnError(errors);
-    HandlerRegistrations hr = new HandlerRegistrations();
+    final HandlerRegistrations hr = new HandlerRegistrations();
     hr.add(p.addRuleTriggeredHandler(i));
     hr.add(p.addRuleUntriggeredHandler(i));
     i.addExisting(p);
@@ -137,15 +137,15 @@ public class PropertyBinder<P> {
   }
 
   /** Binds our property to {@code source} and its errors to {@code errors}. */
-  public HandlerRegistrations to(final HasValue<P> source, IsTextList errors) {
-    HandlerRegistrations hr = new HandlerRegistrations();
+  public HandlerRegistrations to(final HasValue<P> source, final IsTextList errors) {
+    final HandlerRegistrations hr = new HandlerRegistrations();
     hr.add(to(source));
     hr.add(errorsTo(errors));
     return hr;
   }
 
   /** @return a {@link ValueBinder} to our property for a specific value. */
-  public ValueBinder<P> withValue(P value) {
+  public ValueBinder<P> withValue(final P value) {
     return new ValueBinder<P>(p, value);
   }
 
@@ -161,7 +161,7 @@ public class PropertyBinder<P> {
 
     public HandlerRegistrations to(final HasClickHandlers clickable) {
       return new HandlerRegistrations(clickable.addClickHandler(new ClickHandler() {
-        public void onClick(ClickEvent e) {
+        public void onClick(final ClickEvent e) {
           p.set(value);
         }
       }));

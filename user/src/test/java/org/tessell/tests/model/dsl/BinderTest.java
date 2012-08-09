@@ -20,6 +20,7 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 import org.tessell.gwt.dom.client.StubClickEvent;
+import org.tessell.gwt.dom.client.StubElement;
 import org.tessell.gwt.user.client.StubCookies;
 import org.tessell.gwt.user.client.ui.*;
 import org.tessell.model.dsl.Binder;
@@ -28,6 +29,7 @@ import org.tessell.model.properties.EnumProperty;
 import org.tessell.model.properties.IntegerProperty;
 import org.tessell.model.properties.StringProperty;
 import org.tessell.model.validation.Valid;
+import org.tessell.model.values.DerivedValue;
 import org.tessell.model.values.SetValue;
 import org.tessell.tests.model.commands.DummyUiCommand;
 import org.tessell.util.cookies.StringCookie;
@@ -73,7 +75,7 @@ public class BinderTest {
     binder.bind(s).to(box);
     final boolean[] changed = { false };
     box.addValueChangeHandler(new ValueChangeHandler<String>() {
-      public void onValueChange(ValueChangeEvent<String> event) {
+      public void onValueChange(final ValueChangeEvent<String> event) {
         changed[0] = true;
       }
     });
@@ -83,8 +85,8 @@ public class BinderTest {
 
   @Test
   public void propertyToWidgetCanBeUntouched() {
-    SetValue<String> value = new SetValue<String>("value");
-    StringProperty property = stringProperty(value).req();
+    final SetValue<String> value = new SetValue<String>("value");
+    final StringProperty property = stringProperty(value).req();
     binder.bind(property).to(box);
     // start out with a good value
     property.set("good");
@@ -98,8 +100,8 @@ public class BinderTest {
 
   @Test
   public void propertyToListBoxUpdatesListBoxWhenPropertyChanges() {
-    StubListBox listBox = new StubListBox();
-    ArrayList<String> values = new ArrayList<String>();
+    final StubListBox listBox = new StubListBox();
+    final ArrayList<String> values = new ArrayList<String>();
     values.add(null);
     values.add("a");
     values.add("b");
@@ -114,8 +116,8 @@ public class BinderTest {
 
   @Test
   public void propertyToListBoxUpdatesPropertyWhenListBoxChange() {
-    StubListBox listBox = new StubListBox();
-    ArrayList<String> values = new ArrayList<String>();
+    final StubListBox listBox = new StubListBox();
+    final ArrayList<String> values = new ArrayList<String>();
     values.add("a");
     values.add("b");
 
@@ -126,8 +128,8 @@ public class BinderTest {
 
   @Test
   public void propertyToListBoxHandlesNullValue() {
-    StubListBox listBox = new StubListBox();
-    ArrayList<String> values = new ArrayList<String>();
+    final StubListBox listBox = new StubListBox();
+    final ArrayList<String> values = new ArrayList<String>();
     values.add(null);
     values.add("a");
     values.add("b");
@@ -143,8 +145,8 @@ public class BinderTest {
 
   @Test
   public void propertyToListBoxHandlesEmptyString() {
-    StubListBox listBox = new StubListBox();
-    ArrayList<String> values = new ArrayList<String>();
+    final StubListBox listBox = new StubListBox();
+    final ArrayList<String> values = new ArrayList<String>();
     values.add("");
     values.add("a");
     values.add("b");
@@ -189,24 +191,24 @@ public class BinderTest {
 
   @Test
   public void whenTrueFiresInitialValueWhenTrue() {
-    BooleanProperty b = booleanProperty("b", true);
-    StubWidget w = new StubWidget();
+    final BooleanProperty b = booleanProperty("b", true);
+    final StubWidget w = new StubWidget();
     binder.when(b).is(true).set("c").on(w);
     assertThat(w, hasStyle("c"));
   }
 
   @Test
   public void whenTrueDoesNotFireInitialValueWhenFalse() {
-    BooleanProperty b = booleanProperty("b", false);
-    StubWidget w = new StubWidget();
+    final BooleanProperty b = booleanProperty("b", false);
+    final StubWidget w = new StubWidget();
     binder.when(b).is(true).set("c").on(w);
     assertThat(w, not(hasStyle("c")));
   }
 
   @Test
   public void whenTrueFiresWhenFalseChangesToTrue() {
-    BooleanProperty b = booleanProperty("b", false);
-    StubWidget w = new StubWidget();
+    final BooleanProperty b = booleanProperty("b", false);
+    final StubWidget w = new StubWidget();
     binder.when(b).is(true).set("c").on(w);
     b.set(true);
     assertThat(w, hasStyle("c"));
@@ -214,24 +216,24 @@ public class BinderTest {
 
   @Test
   public void whenTrueShowHidesWhenFalse() {
-    BooleanProperty b = booleanProperty("b", false);
-    StubWidget w = new StubWidget();
+    final BooleanProperty b = booleanProperty("b", false);
+    final StubWidget w = new StubWidget();
     binder.when(b).is(true).show(w);
     assertThat(w, is(hidden()));
   }
 
   @Test
   public void whenTrueShowDisplaysWhenTrue() {
-    BooleanProperty b = booleanProperty("b", true);
-    StubWidget w = new StubWidget();
+    final BooleanProperty b = booleanProperty("b", true);
+    final StubWidget w = new StubWidget();
     binder.when(b).is(true).show(w);
     assertThat(w, is(shown()));
   }
 
   @Test
   public void whenTrueShowHidesWhenChangesToFalse() {
-    BooleanProperty b = booleanProperty("b", true);
-    StubWidget w = new StubWidget();
+    final BooleanProperty b = booleanProperty("b", true);
+    final StubWidget w = new StubWidget();
     binder.when(b).is(true).show(w);
     b.set(false);
     assertThat(w, is(hidden()));
@@ -239,16 +241,16 @@ public class BinderTest {
 
   @Test
   public void whenTrueAddDoesInitialSet() {
-    BooleanProperty b = booleanProperty("b", true);
-    ArrayList<String> list = new ArrayList<String>();
+    final BooleanProperty b = booleanProperty("b", true);
+    final ArrayList<String> list = new ArrayList<String>();
     binder.when(b).is(true).add("foo").to(list);
     assertThat(list, hasItem("foo"));
   }
 
   @Test
   public void whenTrueRemovesFromInitialSet() {
-    BooleanProperty b = booleanProperty("b", false);
-    ArrayList<String> list = new ArrayList<String>();
+    final BooleanProperty b = booleanProperty("b", false);
+    final ArrayList<String> list = new ArrayList<String>();
     list.add("foo");
     binder.when(b).is(true).add("foo").to(list);
     assertThat(list, not(hasItem("foo")));
@@ -256,8 +258,8 @@ public class BinderTest {
 
   @Test
   public void enhanceIgnoresTabKeyUpEvent() {
-    StubTextBox b = new StubTextBox();
-    StringProperty s = stringProperty("s");
+    final StubTextBox b = new StubTextBox();
+    final StringProperty s = stringProperty("s");
     binder.bind(s).to(b);
     binder.enhance(b);
     b.keyUp(KEY_TAB);
@@ -266,24 +268,24 @@ public class BinderTest {
 
   @Test
   public void whenTrueEnableLeavesEnabled() {
-    BooleanProperty b = booleanProperty("b", true);
-    StubFocusWidget w = new StubFocusWidget();
+    final BooleanProperty b = booleanProperty("b", true);
+    final StubFocusWidget w = new StubFocusWidget();
     binder.when(b).is(true).enable(w);
     assertThat(w.isEnabled(), is(true));
   }
 
   @Test
   public void whenTrueEnableIsFalseThenSetsDisabled() {
-    BooleanProperty b = booleanProperty("b", false);
-    StubFocusWidget w = new StubFocusWidget();
+    final BooleanProperty b = booleanProperty("b", false);
+    final StubFocusWidget w = new StubFocusWidget();
     binder.when(b).is(true).enable(w);
     assertThat(w.isEnabled(), is(false));
   }
 
   @Test
   public void whenTrueEnableChangesToFalseThenSetsDisabled() {
-    BooleanProperty b = booleanProperty("b", true);
-    StubFocusWidget w = new StubFocusWidget();
+    final BooleanProperty b = booleanProperty("b", true);
+    final StubFocusWidget w = new StubFocusWidget();
     binder.when(b).is(true).enable(w);
     b.set(false);
     assertThat(w.isEnabled(), is(false));
@@ -291,16 +293,16 @@ public class BinderTest {
 
   @Test
   public void whenTrueDisabledChangesToDisabled() {
-    BooleanProperty b = booleanProperty("b", true);
-    StubFocusWidget w = new StubFocusWidget();
+    final BooleanProperty b = booleanProperty("b", true);
+    final StubFocusWidget w = new StubFocusWidget();
     binder.when(b).is(true).disable(w);
     assertThat(w.isEnabled(), is(false));
   }
 
   @Test
   public void whenTrueSetAnotherProperty() {
-    BooleanProperty b = booleanProperty("b", false);
-    IntegerProperty i = integerProperty("i", 1);
+    final BooleanProperty b = booleanProperty("b", false);
+    final IntegerProperty i = integerProperty("i", 1);
     binder.when(b).is(true).set(i).to(10);
     b.set(true);
     assertThat(i.get(), is(10));
@@ -308,18 +310,18 @@ public class BinderTest {
 
   @Test
   public void whenAlreadyTrueSetAnotherProperty() {
-    BooleanProperty b = booleanProperty("b", true);
-    IntegerProperty i = integerProperty("i", 1);
+    final BooleanProperty b = booleanProperty("b", true);
+    final IntegerProperty i = integerProperty("i", 1);
     binder.when(b).is(true).set(i).to(10);
     assertThat(i.get(), is(10));
   }
 
   @Test
   public void bindEnumCreatesItems() {
-    SetValue<Color> v = new SetValue<Color>("v", Color.Blue);
-    EnumProperty<Color> e = enumProperty(v);
+    final SetValue<Color> v = new SetValue<Color>("v", Color.Blue);
+    final EnumProperty<Color> e = enumProperty(v);
 
-    StubListBox box = new StubListBox();
+    final StubListBox box = new StubListBox();
     binder.bind(e).to(box, Color.values());
     assertThat(box.getItemCount(), is(2));
     assertThat(box.getItemText(0), is("Blue"));
@@ -328,20 +330,20 @@ public class BinderTest {
 
   @Test
   public void bindEnumSetsInitialValue() {
-    SetValue<Color> v = new SetValue<Color>("v", Color.Blue);
-    EnumProperty<Color> e = enumProperty(v);
+    final SetValue<Color> v = new SetValue<Color>("v", Color.Blue);
+    final EnumProperty<Color> e = enumProperty(v);
 
-    StubListBox box = new StubListBox();
+    final StubListBox box = new StubListBox();
     binder.bind(e).to(box, Color.values());
     assertThat(box.getSelectedIndex(), is(0));
   }
 
   @Test
   public void bindEnumAutoSelectsFirstValueIfNull() {
-    SetValue<Color> v = new SetValue<Color>("v", null);
-    EnumProperty<Color> e = enumProperty(v);
+    final SetValue<Color> v = new SetValue<Color>("v", null);
+    final EnumProperty<Color> e = enumProperty(v);
 
-    StubListBox box = new StubListBox();
+    final StubListBox box = new StubListBox();
     binder.bind(e).to(box, Color.values());
     assertThat(box.getSelectedIndex(), is(0));
     assertThat(v.get(), is(Color.Blue));
@@ -349,20 +351,20 @@ public class BinderTest {
 
   @Test
   public void bindEnumSetsInitialValueToOtherValue() {
-    SetValue<Color> v = new SetValue<Color>("v", Color.Green);
-    EnumProperty<Color> e = enumProperty(v);
+    final SetValue<Color> v = new SetValue<Color>("v", Color.Green);
+    final EnumProperty<Color> e = enumProperty(v);
 
-    StubListBox box = new StubListBox();
+    final StubListBox box = new StubListBox();
     binder.bind(e).to(box, Color.values());
     assertThat(box.getSelectedIndex(), is(1));
   }
 
   @Test
   public void bindEnumSetsValueOnChange() {
-    SetValue<Color> v = new SetValue<Color>("v", Color.Green);
-    EnumProperty<Color> e = enumProperty(v);
+    final SetValue<Color> v = new SetValue<Color>("v", Color.Green);
+    final EnumProperty<Color> e = enumProperty(v);
 
-    StubListBox box = new StubListBox();
+    final StubListBox box = new StubListBox();
     binder.bind(e).to(box, Color.values());
     box.select("Blue");
     assertThat(v.get(), is(Color.Blue));
@@ -378,8 +380,8 @@ public class BinderTest {
 
   @Test
   public void propertyToCookie() {
-    StubCookies cookies = new StubCookies();
-    StringCookie c = new StringCookie(cookies, "c");
+    final StubCookies cookies = new StubCookies();
+    final StringCookie c = new StringCookie(cookies, "c");
     binder.bind(s).to(c);
     assertThat(s.get(), is(nullValue()));
     assertThat(cookies.get("c"), is(nullValue()));
@@ -390,8 +392,8 @@ public class BinderTest {
 
   @Test
   public void propertyToCookieGetsInitialCookieValue() {
-    StubCookies cookies = new StubCookies();
-    StringCookie c = new StringCookie(cookies, "c");
+    final StubCookies cookies = new StubCookies();
+    final StringCookie c = new StringCookie(cookies, "c");
     cookies.set("c", "foo");
     binder.bind(s).to(c);
     assertThat(s.get(), is("foo"));
@@ -400,8 +402,8 @@ public class BinderTest {
 
   @Test
   public void propertyToCookieGetsInitialCookieValueUnlessAlreadyTouched() {
-    StubCookies cookies = new StubCookies();
-    StringCookie c = new StringCookie(cookies, "c");
+    final StubCookies cookies = new StubCookies();
+    final StringCookie c = new StringCookie(cookies, "c");
     cookies.set("c", "foo");
     s.touch();
     binder.bind(s).to(c);
@@ -411,8 +413,8 @@ public class BinderTest {
 
   @Test
   public void propertyToCookieGetsInitialCookieValueUnlessAlreadySet() {
-    StubCookies cookies = new StubCookies();
-    StringCookie c = new StringCookie(cookies, "c");
+    final StubCookies cookies = new StubCookies();
+    final StringCookie c = new StringCookie(cookies, "c");
     cookies.set("c", "foo");
     s.setValue("bar");
     s.setTouched(false); // make sure to untouch
@@ -422,9 +424,21 @@ public class BinderTest {
   }
 
   @Test
+  public void derivedValueToIsElement() {
+    final StringProperty p = stringProperty(new DerivedValue<String>("p") {
+      public String get() {
+        return null;
+      }
+    });
+    final StubElement e = new StubElement();
+    // should skip the "set null property logic", otherwise will fail
+    binder.bind(p).to(textOf(e));
+  }
+
+  @Test
   public void whenIsNull() {
-    BooleanProperty b = booleanProperty("b", false);
-    StubWidget w = new StubWidget();
+    final BooleanProperty b = booleanProperty("b", false);
+    final StubWidget w = new StubWidget();
     binder.when(b).is(notNull()).set("c").on(w);
     assertThat(w, hasStyle("c"));
     b.set(null);
@@ -433,8 +447,8 @@ public class BinderTest {
 
   @Test
   public void propertyToHasText() {
-    StubLabel label = new StubLabel();
-    StringProperty b = stringProperty("b", "foo");
+    final StubLabel label = new StubLabel();
+    final StringProperty b = stringProperty("b", "foo");
     binder.bind(b).to(textOf(label));
     // text is initially set
     assertThat(label.getText(), is("foo"));
@@ -463,17 +477,17 @@ public class BinderTest {
 
   @Test
   public void commandPreventsEventDefault() {
-    DummyUiCommand command = new DummyUiCommand();
-    StubButton button = new StubButton();
+    final DummyUiCommand command = new DummyUiCommand();
+    final StubButton button = new StubButton();
     binder.bind(command).to(button);
-    StubClickEvent click = new StubClickEvent();
+    final StubClickEvent click = new StubClickEvent();
     button.fireEvent(click);
     assertThat(click.prevented, is(true));
   }
 
   @Test
   public void onClick() {
-    StubButton button = new StubButton();
+    final StubButton button = new StubButton();
     binder.onClick(button).set(s).to("clicked");
     button.click();
     assertThat(s.get(), is("clicked"));
@@ -481,9 +495,9 @@ public class BinderTest {
 
   @Test
   public void booleanToRadioGroupSetsTheInitialValueWhenNull() {
-    StubRadioButton b1 = new StubRadioButton();
-    StubRadioButton b2 = new StubRadioButton();
-    BooleanProperty b = booleanProperty("b");
+    final StubRadioButton b1 = new StubRadioButton();
+    final StubRadioButton b2 = new StubRadioButton();
+    final BooleanProperty b = booleanProperty("b");
     binder.bind(b).to(b1, b2);
     assertThat(b1.getValue(), is(false));
     assertThat(b2.getValue(), is(true));
@@ -491,9 +505,9 @@ public class BinderTest {
 
   @Test
   public void booleanToRadioGroupSetsTheInitialValueWhenTrue() {
-    StubRadioButton b1 = new StubRadioButton();
-    StubRadioButton b2 = new StubRadioButton();
-    BooleanProperty b = booleanProperty("b", true);
+    final StubRadioButton b1 = new StubRadioButton();
+    final StubRadioButton b2 = new StubRadioButton();
+    final BooleanProperty b = booleanProperty("b", true);
     binder.bind(b).to(b1, b2);
     assertThat(b1.getValue(), is(true));
     assertThat(b2.getValue(), is(false));
@@ -501,9 +515,9 @@ public class BinderTest {
 
   @Test
   public void booleanToRadioGroupSetsTheInitialValueWhenFalse() {
-    StubRadioButton b1 = new StubRadioButton();
-    StubRadioButton b2 = new StubRadioButton();
-    BooleanProperty b = booleanProperty("b", false);
+    final StubRadioButton b1 = new StubRadioButton();
+    final StubRadioButton b2 = new StubRadioButton();
+    final BooleanProperty b = booleanProperty("b", false);
     binder.bind(b).to(b1, b2);
     assertThat(b1.getValue(), is(false));
     assertThat(b2.getValue(), is(true));
@@ -511,9 +525,9 @@ public class BinderTest {
 
   @Test
   public void booleanToRadioGroupSetsOnTrueClick() {
-    StubRadioButton b1 = new StubRadioButton();
-    StubRadioButton b2 = new StubRadioButton();
-    BooleanProperty b = booleanProperty("b", false);
+    final StubRadioButton b1 = new StubRadioButton();
+    final StubRadioButton b2 = new StubRadioButton();
+    final BooleanProperty b = booleanProperty("b", false);
     binder.bind(b).to(b1, b2);
     b1.click();
     assertThat(b.get(), is(true));
@@ -521,9 +535,9 @@ public class BinderTest {
 
   @Test
   public void booleanToRadioGroupSetsOnFalse() {
-    StubRadioButton b1 = new StubRadioButton();
-    StubRadioButton b2 = new StubRadioButton();
-    BooleanProperty b = booleanProperty("b", true);
+    final StubRadioButton b1 = new StubRadioButton();
+    final StubRadioButton b2 = new StubRadioButton();
+    final BooleanProperty b = booleanProperty("b", true);
     binder.bind(b).to(b1, b2);
     b2.click();
     assertThat(b.get(), is(false));
@@ -531,9 +545,9 @@ public class BinderTest {
 
   @Test
   public void booleanToRadioGroupSetsOnUpdateFalse() {
-    StubRadioButton b1 = new StubRadioButton();
-    StubRadioButton b2 = new StubRadioButton();
-    BooleanProperty b = booleanProperty("b", true);
+    final StubRadioButton b1 = new StubRadioButton();
+    final StubRadioButton b2 = new StubRadioButton();
+    final BooleanProperty b = booleanProperty("b", true);
     binder.bind(b).to(b1, b2);
     b.set(false);
     assertThat(b1.getValue(), is(false));
@@ -542,9 +556,9 @@ public class BinderTest {
 
   @Test
   public void booleanToRadioGroupSetsOnUpdateTrue() {
-    StubRadioButton b1 = new StubRadioButton();
-    StubRadioButton b2 = new StubRadioButton();
-    BooleanProperty b = booleanProperty("b", false);
+    final StubRadioButton b1 = new StubRadioButton();
+    final StubRadioButton b2 = new StubRadioButton();
+    final BooleanProperty b = booleanProperty("b", false);
     binder.bind(b).to(b1, b2);
     b.set(true);
     assertThat(b1.getValue(), is(true));
@@ -581,16 +595,16 @@ public class BinderTest {
 
   @Test
   public void onClickToggleSetsNoInitialValue() {
-    BooleanProperty b = booleanProperty("b");
-    StubAnchor a = new StubAnchor();
+    final BooleanProperty b = booleanProperty("b");
+    final StubAnchor a = new StubAnchor();
     binder.onClick(a).toggle(b);
     assertThat(b.get(), is(nullValue()));
   }
 
   @Test
   public void onClickToggleDoesActuallyToggle() {
-    BooleanProperty b = booleanProperty("b");
-    StubAnchor a = new StubAnchor();
+    final BooleanProperty b = booleanProperty("b");
+    final StubAnchor a = new StubAnchor();
     binder.onClick(a).toggle(b);
     a.click();
     assertThat(b.get(), is(true));
@@ -600,10 +614,10 @@ public class BinderTest {
 
   @Test
   public void onClickTogglePreventsDefault() {
-    BooleanProperty b = booleanProperty("b");
-    StubAnchor a = new StubAnchor();
+    final BooleanProperty b = booleanProperty("b");
+    final StubAnchor a = new StubAnchor();
     binder.onClick(a).toggle(b);
-    StubClickEvent c = new StubClickEvent();
+    final StubClickEvent c = new StubClickEvent();
     a.fireEvent(c);
     assertThat(c.prevented, is(true));
   }
