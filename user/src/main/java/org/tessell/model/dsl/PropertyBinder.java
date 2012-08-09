@@ -47,13 +47,8 @@ public class PropertyBinder<P> {
   /** Binds our property to {@code source} (two-way). */
   public HandlerRegistrations to(final HasValue<P> source) {
     final HandlerRegistrations hr = new HandlerRegistrations();
-    final PropertyChangedHandler<P> h = new PropertyChangedHandler<P>() {
-      public void onPropertyChanged(final PropertyChangedEvent<P> event) {
-        source.setValue(event.getProperty().get(), true);
-      }
-    };
     // set initial value
-    h.onPropertyChanged(new PropertyChangedEvent<P>(p, null, source.getValue()));
+    source.setValue(p.get(), true);
     // after we've set the initial value (which fired ValueChangeEvent and
     // would have messed up our 'touched' state), listen for others changes
     if (!p.isReadOnly()) {
@@ -63,7 +58,11 @@ public class PropertyBinder<P> {
         }
       }));
     }
-    hr.add(p.addPropertyChangedHandler(h));
+    hr.add(p.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
+      public void onPropertyChanged(final PropertyChangedEvent<P> event) {
+        source.setValue(event.getProperty().get(), true);
+      }
+    }));
     return hr;
   }
 
