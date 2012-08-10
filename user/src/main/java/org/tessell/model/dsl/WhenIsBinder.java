@@ -1,7 +1,6 @@
 package org.tessell.model.dsl;
 
 import org.tessell.gwt.user.client.ui.HasCss;
-import org.tessell.model.dsl.SetPropertyBinder.Setup;
 import org.tessell.model.events.PropertyChangedEvent;
 import org.tessell.model.events.PropertyChangedHandler;
 import org.tessell.model.properties.Property;
@@ -29,22 +28,8 @@ public class WhenIsBinder<P> {
   }
 
   /** @return a fluent {@link SetPropertyBinder} to set a value on {@code other} when this condition is true. */
-  public <Q> SetPropertyBinder<Q> set(final TakesValue<Q> other) {
-    return new SetPropertyBinder<Q>(other, new Setup() {
-      public HandlerRegistrations setup(final Runnable runnable) {
-        final HandlerRegistrations hr = new HandlerRegistrations(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
-          public void onPropertyChanged(final PropertyChangedEvent<P> event) {
-            if (condition.evaluate(property)) {
-              runnable.run();
-            }
-          }
-        }));
-        if (condition.evaluate(property)) {
-          runnable.run(); // set initial
-        }
-        return hr;
-      }
-    });
+  public <Q> WhenIsSetValueBinder<P, Q> set(final TakesValue<Q> value) {
+    return new WhenIsSetValueBinder<P, Q>(property, condition, value);
   }
 
   public <V> WhenIsRemoveBinder<P, V> remove(final V newValue) {

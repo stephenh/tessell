@@ -455,6 +455,17 @@ public class BinderTest {
   }
 
   @Test
+  public void whenSetToOrElse() {
+    final BooleanProperty b = booleanProperty("b");
+    binder.when(b).is(true).set(s).toOrElse("a", "b");
+    assertThat(s.get(), is("b"));
+    b.set(true);
+    assertThat(s.get(), is("a"));
+    b.set(false);
+    assertThat(s.get(), is("b"));
+  }
+
+  @Test
   public void propertyToHasText() {
     final StubLabel label = new StubLabel();
     final StringProperty b = stringProperty("b", "foo");
