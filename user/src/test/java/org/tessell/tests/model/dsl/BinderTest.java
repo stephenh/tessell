@@ -446,6 +446,15 @@ public class BinderTest {
   }
 
   @Test
+  public void whenSetToTakesValues() {
+    final BooleanProperty b = booleanProperty("b", false);
+    final StubElement e = new StubElement();
+    binder.when(b).is(true).set(textOf(e)).to("t");
+    b.set(true);
+    assertThat(e.getInnerText(), is("t"));
+  }
+
+  @Test
   public void propertyToHasText() {
     final StubLabel label = new StubLabel();
     final StringProperty b = stringProperty("b", "foo");

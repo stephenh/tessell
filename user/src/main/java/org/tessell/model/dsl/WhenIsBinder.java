@@ -10,6 +10,7 @@ import org.tessell.model.validation.events.RuleUntriggeredEvent;
 
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Visibility;
+import com.google.gwt.user.client.TakesValue;
 import com.google.gwt.user.client.ui.HasEnabled;
 
 public class WhenIsBinder<P> {
@@ -18,21 +19,21 @@ public class WhenIsBinder<P> {
   private final WhenCondition<P> condition;
   private boolean trigged = false;
 
-  public WhenIsBinder(Property<P> property, WhenCondition<P> condition) {
+  public WhenIsBinder(final Property<P> property, final WhenCondition<P> condition) {
     this.property = property;
     this.condition = condition;
   }
 
-  public WhenIsSetBinder<P> set(String style) {
+  public WhenIsSetBinder<P> set(final String style) {
     return new WhenIsSetBinder<P>(property, condition, style);
   }
 
   /** @return a fluent {@link SetPropertyBinder} to set a value on {@code other} when this condition is true. */
-  public <Q> SetPropertyBinder<Q> set(final Property<Q> other) {
+  public <Q> SetPropertyBinder<Q> set(final TakesValue<Q> other) {
     return new SetPropertyBinder<Q>(other, new Setup() {
       public HandlerRegistrations setup(final Runnable runnable) {
-        HandlerRegistrations hr = new HandlerRegistrations(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
-          public void onPropertyChanged(PropertyChangedEvent<P> event) {
+        final HandlerRegistrations hr = new HandlerRegistrations(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
+          public void onPropertyChanged(final PropertyChangedEvent<P> event) {
             if (condition.evaluate(property)) {
               runnable.run();
             }
@@ -46,18 +47,18 @@ public class WhenIsBinder<P> {
     });
   }
 
-  public <V> WhenIsRemoveBinder<P, V> remove(V newValue) {
+  public <V> WhenIsRemoveBinder<P, V> remove(final V newValue) {
     return new WhenIsRemoveBinder<P, V>(property, condition, newValue);
   }
 
-  public <V> WhenIsAddBinder<P, V> add(V newValue) {
+  public <V> WhenIsAddBinder<P, V> add(final V newValue) {
     return new WhenIsAddBinder<P, V>(property, condition, newValue);
   }
 
   public HandlerRegistrations show(final HasCss... csses) {
-    HandlerRegistrations hr = new HandlerRegistrations();
+    final HandlerRegistrations hr = new HandlerRegistrations();
     hr.add(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
-      public void onPropertyChanged(PropertyChangedEvent<P> event) {
+      public void onPropertyChanged(final PropertyChangedEvent<P> event) {
         showIfCondition(csses);
       }
     }));
@@ -66,9 +67,9 @@ public class WhenIsBinder<P> {
   }
 
   public HandlerRegistrations hide(final HasCss... csses) {
-    HandlerRegistrations hr = new HandlerRegistrations();
+    final HandlerRegistrations hr = new HandlerRegistrations();
     hr.add(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
-      public void onPropertyChanged(PropertyChangedEvent<P> event) {
+      public void onPropertyChanged(final PropertyChangedEvent<P> event) {
         hideIfCondition(csses);
       }
     }));
@@ -77,9 +78,9 @@ public class WhenIsBinder<P> {
   }
 
   public HandlerRegistrations visible(final HasCss... css) {
-    HandlerRegistrations hr = new HandlerRegistrations();
+    final HandlerRegistrations hr = new HandlerRegistrations();
     hr.add(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
-      public void onPropertyChanged(PropertyChangedEvent<P> event) {
+      public void onPropertyChanged(final PropertyChangedEvent<P> event) {
         visibleIfCondition(css);
       }
     }));
@@ -88,9 +89,9 @@ public class WhenIsBinder<P> {
   }
 
   public HandlerRegistrations error(final String message) {
-    HandlerRegistrations hr = new HandlerRegistrations();
+    final HandlerRegistrations hr = new HandlerRegistrations();
     hr.add(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
-      public void onPropertyChanged(PropertyChangedEvent<P> event) {
+      public void onPropertyChanged(final PropertyChangedEvent<P> event) {
         errorIfCondition(message);
       }
     }));
@@ -99,9 +100,9 @@ public class WhenIsBinder<P> {
   }
 
   public HandlerRegistrations enable(final HasEnabled... enabled) {
-    HandlerRegistrations hr = new HandlerRegistrations();
+    final HandlerRegistrations hr = new HandlerRegistrations();
     hr.add(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
-      public void onPropertyChanged(PropertyChangedEvent<P> event) {
+      public void onPropertyChanged(final PropertyChangedEvent<P> event) {
         updateEnabled(enabled, true);
       }
     }));
@@ -110,9 +111,9 @@ public class WhenIsBinder<P> {
   }
 
   public HandlerRegistrations disable(final HasEnabled... enabled) {
-    HandlerRegistrations hr = new HandlerRegistrations();
+    final HandlerRegistrations hr = new HandlerRegistrations();
     hr.add(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
-      public void onPropertyChanged(PropertyChangedEvent<P> event) {
+      public void onPropertyChanged(final PropertyChangedEvent<P> event) {
         updateEnabled(enabled, false);
       }
     }));
@@ -120,14 +121,14 @@ public class WhenIsBinder<P> {
     return hr;
   }
 
-  private void updateEnabled(HasEnabled[] enabled, boolean valueIfTrue) {
-    boolean valueToSet = condition.evaluate(property) ? valueIfTrue : !valueIfTrue;
-    for (HasEnabled e : enabled) {
+  private void updateEnabled(final HasEnabled[] enabled, final boolean valueIfTrue) {
+    final boolean valueToSet = condition.evaluate(property) ? valueIfTrue : !valueIfTrue;
+    for (final HasEnabled e : enabled) {
       e.setEnabled(valueToSet);
     }
   }
 
-  private void errorIfCondition(String message) {
+  private void errorIfCondition(final String message) {
     if (condition.evaluate(property)) {
       property.fireEvent(new RuleTriggeredEvent(this, message, new Boolean[] { false }));
       trigged = true;
@@ -137,37 +138,37 @@ public class WhenIsBinder<P> {
     }
   }
 
-  private void showIfCondition(HasCss... csses) {
+  private void showIfCondition(final HasCss... csses) {
     if (condition.evaluate(property)) {
-      for (HasCss css : csses) {
+      for (final HasCss css : csses) {
         css.getStyle().clearDisplay();
       }
     } else {
-      for (HasCss css : csses) {
+      for (final HasCss css : csses) {
         css.getStyle().setDisplay(Display.NONE);
       }
     }
   }
 
-  private void hideIfCondition(HasCss... csses) {
+  private void hideIfCondition(final HasCss... csses) {
     if (condition.evaluate(property)) {
-      for (HasCss css : csses) {
+      for (final HasCss css : csses) {
         css.getStyle().setDisplay(Display.NONE);
       }
     } else {
-      for (HasCss css : csses) {
+      for (final HasCss css : csses) {
         css.getStyle().clearDisplay();
       }
     }
   }
 
-  private void visibleIfCondition(HasCss... csses) {
+  private void visibleIfCondition(final HasCss... csses) {
     if (condition.evaluate(property)) {
-      for (HasCss css : csses) {
+      for (final HasCss css : csses) {
         css.getStyle().clearVisibility();
       }
     } else {
-      for (HasCss css : csses) {
+      for (final HasCss css : csses) {
         css.getStyle().setVisibility(Visibility.HIDDEN);
       }
     }
