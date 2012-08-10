@@ -600,6 +600,21 @@ public class BinderTest {
   }
 
   @Test
+  public void stringToKeyUpDoesNotTrimOnPress() {
+    binder.bind(s).toKeyUp(box);
+    box.press('a');
+    box.press(' ');
+    assertThat(s.get(), is("a "));
+  }
+
+  @Test
+  public void stringToKeyUpDoestTrimOnChange() {
+    binder.bind(s).toKeyUp(box);
+    box.type("a ");
+    assertThat(s.get(), is("a"));
+  }
+
+  @Test
   public void stringToKeyUpUpdatesModelOnChange() {
     binder.bind(s).toKeyUp(box);
     box.type("a"); // just a change, no key up

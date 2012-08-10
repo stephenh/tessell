@@ -47,7 +47,7 @@ public class StringPropertyBinder extends PropertyBinder<String> {
     if (!p.isReadOnly()) {
       hr.add(source.addKeyUpHandler(new KeyUpHandler() {
         public void onKeyUp(final KeyUpEvent event) {
-          p.set(sanitizeIfString(source.getValue()));
+          p.set(source.getValue());
         }
       }));
       hr.add(source.addValueChangeHandler(new ValueChangeHandler<String>() {
