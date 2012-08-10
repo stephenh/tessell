@@ -23,8 +23,8 @@ public class WhenIsBinder<P> {
     this.condition = condition;
   }
 
-  public WhenIsSetBinder<P> set(final String style) {
-    return new WhenIsSetBinder<P>(property, condition, style);
+  public WhenIsSetStyleBinder<P> set(final String style) {
+    return new WhenIsSetStyleBinder<P>(property, condition, style);
   }
 
   /** @return a fluent {@link SetPropertyBinder} to set a value on {@code other} when this condition is true. */

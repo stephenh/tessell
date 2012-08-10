@@ -6,13 +6,13 @@ import org.tessell.model.events.PropertyChangedHandler;
 import org.tessell.model.properties.Property;
 
 /** Sets the style based on the property value. */
-public class WhenIsSetBinder<P> {
+public class WhenIsSetStyleBinder<P> {
 
   private final Property<P> property;
   private final WhenCondition<P> condition;
   private final String style;
 
-  public WhenIsSetBinder(Property<P> property, WhenCondition<P> condition, final String style) {
+  public WhenIsSetStyleBinder(Property<P> property, WhenCondition<P> condition, final String style) {
     this.property = property;
     this.style = style;
     this.condition = condition;
