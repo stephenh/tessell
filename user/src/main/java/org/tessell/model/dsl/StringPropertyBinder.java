@@ -17,7 +17,7 @@ public class StringPropertyBinder extends PropertyBinder<String> {
 
   private final StringProperty sp;
 
-  public StringPropertyBinder(StringProperty sp) {
+  public StringPropertyBinder(final StringProperty sp) {
     super(sp);
     this.sp = sp;
   }
@@ -31,7 +31,10 @@ public class StringPropertyBinder extends PropertyBinder<String> {
   }
 
   public <V extends HasValue<String> & HasKeyUpHandlers> HandlerRegistrations toKeyUp(final V source) {
-    HandlerRegistrations hr = new HandlerRegistrations();
+    if (sp.getMaxLength() != null && source instanceof IsTextBox) {
+      ((IsTextBox) source).setMaxLength(sp.getMaxLength());
+    }
+    final HandlerRegistrations hr = new HandlerRegistrations();
     hr.add(sp.addPropertyChangedHandler(new PropertyChangedHandler<String>() {
       public void onPropertyChanged(final PropertyChangedEvent<String> event) {
         source.setValue(event.getProperty().get(), true);
@@ -43,12 +46,12 @@ public class StringPropertyBinder extends PropertyBinder<String> {
     // would have messed up our 'touched' state), listen for others changes
     if (!p.isReadOnly()) {
       hr.add(source.addKeyUpHandler(new KeyUpHandler() {
-        public void onKeyUp(KeyUpEvent event) {
+        public void onKeyUp(final KeyUpEvent event) {
           p.set(sanitizeIfString(source.getValue()));
         }
       }));
       hr.add(source.addValueChangeHandler(new ValueChangeHandler<String>() {
-        public void onValueChange(ValueChangeEvent<String> event) {
+        public void onValueChange(final ValueChangeEvent<String> event) {
           p.set(sanitizeIfString(source.getValue()));
         }
       }));
