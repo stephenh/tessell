@@ -17,4 +17,11 @@ public class StubWindowTest {
     assertThat(u.buildString(), is("http://server:80/path?a=b#place"));
   }
 
+
+  @Test
+  public void testUserAgent() {
+    w.userAgent = "foo";
+    assertThat(w.getUserAgent(), is("foo"));
+  }
+
 }

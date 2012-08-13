@@ -129,6 +129,11 @@ public class GwtWindow implements IsWindow {
   }
 
   @Override
+  public String getUserAgent() {
+    return Window.Navigator.getUserAgent();
+  }
+
+  @Override
   public Map<String, List<String>> getParameterMap() {
     return Window.Location.getParameterMap();
   }

@@ -34,6 +34,7 @@ public class StubWindow implements IsWindow {
   public String port = "80";
   public String queryString = "";
   public String hash = "";
+  public String userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_4) AppleWebKit/536.11 (KHTML, like Gecko) Chrome/20.0.1132.57 Safari/536.11";
 
   public void setLocation(String url) {
     try {
@@ -190,6 +191,11 @@ public class StubWindow implements IsWindow {
   @Override
   public String getParameter(String name) {
     return buildParamMap(getQueryString()).get(name);
+  }
+
+  @Override
+  public String getUserAgent() {
+    return userAgent;
   }
 
   @Override
