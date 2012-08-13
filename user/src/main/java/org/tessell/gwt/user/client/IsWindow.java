@@ -58,6 +58,8 @@ public interface IsWindow {
 
   String getParameter(String name);
 
+  String getUserAgent();
+
   Map<String, List<String>> getParameterMap();
 
 }
