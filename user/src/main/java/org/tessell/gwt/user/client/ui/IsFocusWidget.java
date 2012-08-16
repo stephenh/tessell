@@ -5,18 +5,13 @@ import com.google.gwt.event.dom.client.HasAllKeyHandlers;
 import com.google.gwt.event.dom.client.HasAllMouseHandlers;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.user.client.ui.HasEnabled;
+import com.google.gwt.user.client.ui.HasFocus;
 
-public interface IsFocusWidget extends IsWidget, HasClickHandlers, HasAllFocusHandlers, HasAllKeyHandlers, HasAllMouseHandlers, HasEnabled {
-
-  int getTabIndex();
+@SuppressWarnings("deprecation")
+public interface IsFocusWidget extends IsWidget, HasClickHandlers, HasAllFocusHandlers, HasAllKeyHandlers, HasAllMouseHandlers, HasEnabled, HasFocus {
 
   boolean isEnabled();
 
-  void setAccessKey(char key);
-
   void setEnabled(boolean enabled);
 
-  void setFocus(boolean focused);
-
-  void setTabIndex(int index);
 }

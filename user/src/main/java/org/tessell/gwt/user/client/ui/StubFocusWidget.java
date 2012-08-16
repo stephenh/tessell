@@ -5,7 +5,10 @@ import org.tessell.widgets.StubWidget;
 
 import com.google.gwt.event.dom.client.*;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.ui.FocusListener;
+import com.google.gwt.user.client.ui.KeyboardListener;
 
+@SuppressWarnings("deprecation")
 public class StubFocusWidget extends StubWidget implements IsFocusWidget {
 
   private static StubFocusWidget lastFocus;
@@ -191,6 +194,26 @@ public class StubFocusWidget extends StubWidget implements IsFocusWidget {
   @Override
   public void setEnabled(final boolean enabled) {
     this.enabled = enabled;
+  }
+
+  @Override
+  public void addFocusListener(FocusListener listener) {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public void removeFocusListener(FocusListener listener) {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public void addKeyboardListener(KeyboardListener listener) {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public void removeKeyboardListener(KeyboardListener listener) {
+    throw new UnsupportedOperationException();
   }
 
 }
