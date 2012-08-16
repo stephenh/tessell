@@ -7,6 +7,7 @@ import org.tessell.model.properties.*;
 import org.tessell.model.validation.rules.Rule;
 
 import com.google.gwt.event.dom.client.*;
+import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.user.client.ui.HasValue;
 
@@ -60,6 +61,17 @@ public class Binder {
   /** @return a fluent {@link ClickBinder} against {@code clickable}. */
   public ClickBinder onClick(HasClickHandlers clickable) {
     return new ClickBinder(clickable);
+  }
+
+  /** @return a fluent {@link BlurBinder} against {@code blurable}. */
+  public BlurBinder onBlur(HasBlurHandlers blurable) {
+    return new BlurBinder(blurable);
+  }
+
+  /** @return a fluent {@link ChangeBinder} against {@code changable}. */
+  @SuppressWarnings("unchecked")
+  public ChangeBinder onChange(HasValueChangeHandlers<?> changable) {
+    return new ChangeBinder((HasValueChangeHandlers<Object>) changable);
   }
 
   /** Enhances each {@code source} to fire change events on key up and blur. */

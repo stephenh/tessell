@@ -1,13 +1,11 @@
 package org.tessell.model.dsl;
 
-import org.tessell.model.properties.BooleanProperty;
-import org.tessell.model.properties.Property;
-
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.shared.HandlerRegistration;
 
-public class ClickBinder {
+public class ClickBinder extends AbstractEventBinder {
 
   private final HasClickHandlers clickable;
 
@@ -15,27 +13,22 @@ public class ClickBinder {
     this.clickable = clickable;
   }
 
-  public <P> SetPropertyBinder<P> set(Property<P> property) {
-    return new SetPropertyBinder<P>(property, new SetPropertyBinder.Setup() {
-      public HandlerRegistrations setup(final Runnable runnable) {
-        return new HandlerRegistrations(clickable.addClickHandler(new ClickHandler() {
-          public void onClick(ClickEvent arg0) {
-            runnable.run();
-          }
-        }));
+  @Override
+  protected HandlerRegistration hookUpRunnable(final Runnable runnable) {
+    return clickable.addClickHandler(new ClickHandler() {
+      public void onClick(ClickEvent event) {
+        runnable.run();
       }
     });
   }
 
-  public HandlerRegistrations toggle(final BooleanProperty property) {
-    HandlerRegistrations hrs = new HandlerRegistrations();
-    hrs.add(clickable.addClickHandler(new ClickHandler() {
+  @Override
+  protected HandlerRegistration hookUpEventRunnable(final DomEventRunnable runnable) {
+    return clickable.addClickHandler(new ClickHandler() {
       public void onClick(ClickEvent event) {
-        property.toggle();
-        event.preventDefault();
+        runnable.run(event);
       }
-    }));
-    return hrs;
+    });
   }
 
 }

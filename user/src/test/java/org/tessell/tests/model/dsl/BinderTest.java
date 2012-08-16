@@ -664,4 +664,30 @@ public class BinderTest {
     assertThat(c.prevented, is(true));
   }
 
+  @Test
+  public void onClickFocus() {
+    final StubFocusWidget f = new StubFocusWidget();
+    final StubAnchor a = new StubAnchor();
+    binder.onClick(a).focus(f);
+    a.click();
+    assertThat(f.isFocused(), is(true));
+  }
+
+  @Test
+  public void onChangeToggleSetsNoInitialValue() {
+    final BooleanProperty b = booleanProperty("b");
+    binder.onChange(box).toggle(b);
+    assertThat(b.get(), is(nullValue()));
+  }
+
+  @Test
+  public void onChangeToggleDoesActuallyToggle() {
+    final BooleanProperty b = booleanProperty("b");
+    binder.onChange(box).toggle(b);
+    box.type("asdf");
+    assertThat(b.get(), is(true));
+    box.type("fdas");
+    assertThat(b.get(), is(false));
+  }
+
 }
