@@ -41,6 +41,7 @@ public class PropertyGroupNestedTest extends AbstractRuleTest {
     childName.setTouched(true);
     assertThat(childAll.get(), is(false));
     assertThat(parentAll.get(), is(false));
+    assertThat(parentAll.isTouched(), is(true));
     assertThat(parentName.isTouched(), is(false));
   }
 
