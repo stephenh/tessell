@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bindgen.Binding;
-import org.tessell.model.Dto;
-import org.tessell.model.Model;
 import org.tessell.model.values.BoundValue;
 import org.tessell.model.values.DerivedValue;
 import org.tessell.model.values.SetValue;
@@ -112,11 +110,6 @@ public class NewProperty {
 
   public static <E> ListProperty<E> listProperty(final String name, final List<E> list) {
     return new ListProperty<E>(new SetValue<List<E>>(name, list));
-  }
-
-  public static <E extends Model<F>, F extends Dto<E>> DtoListProperty<E, F> dtoListProperty(final Binding<List<F>> binding) {
-    final SetValue<List<E>> modelListValue = new SetValue<List<E>>("modelList", new ArrayList<E>());
-    return new DtoListProperty<E, F>(modelListValue, new BoundValue<List<F>>(binding));
   }
 
   public static <E> ListProperty<E> listProperty(final String name) {
