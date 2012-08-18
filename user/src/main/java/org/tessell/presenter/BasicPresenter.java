@@ -5,6 +5,10 @@ import java.util.NoSuchElementException;
 
 import org.tessell.bus.AbstractBound;
 import org.tessell.gwt.user.client.ui.IsWidget;
+import org.tessell.model.commands.UiCommand;
+import org.tessell.model.dsl.*;
+import org.tessell.model.properties.*;
+import org.tessell.model.validation.rules.Rule;
 
 import com.google.gwt.user.client.ui.Widget;
 
@@ -86,4 +90,34 @@ public abstract class BasicPresenter<V extends IsWidget> extends AbstractBound i
     return children;
   }
 
+  // the Presenter.bind method means subclasses cannot use the
+  // Binder.bind method as a static import, so we setup forwarding
+  // methods here.
+  protected static <P> PropertyBinder<P> bind(Property<P> property) {
+    return Binder.bind(property);
+  }
+
+  protected static <P> ListPropertyBinder<P> bind(ListProperty<P> property) {
+    return Binder.bind(property);
+  }
+
+  protected static RuleBinder bind(Rule rule) {
+    return Binder.bind(rule);
+  }
+
+  protected static <P> StringPropertyBinder bind(StringProperty property) {
+    return Binder.bind(property);
+  }
+
+  protected static <P> BooleanPropertyBinder bind(BooleanProperty property) {
+    return Binder.bind(property);
+  }
+
+  protected static <E extends Enum<E>> EnumPropertyBinder<E> bind(EnumProperty<E> property) {
+    return Binder.bind(property);
+  }
+
+  protected static UiCommandBinder bind(UiCommand command) {
+    return Binder.bind(command);
+  }
 }
