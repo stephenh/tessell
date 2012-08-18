@@ -33,6 +33,9 @@ Notes
   * `entity field errors -> dto -> model property errors`
   * have the codegen make both the dtos and the mapping
   * List<Entity> <-> List<String> names
+* Serializing to local storage would require chained events, e.g. child name fires change, then child model fires change (or "shallow change"), then parent list fires shallow change, and parent fires shallow change. Then a single listen on parent can reserialize to JSON.
+* Fixing todovmc's `allTodos` and `doneTodos` also requires shallow events, where each time todo done changes, the todo model fires shallow change, and then the todo list fires shallow change. Then any `DerivedValue` that accessed a `ListProperty` during it's evaluation would need to be added as downstream of it's shallow changes.
+* Could potentially use models to go to/from JSON, but seems like AutoBeans-based DTOs is a cleaner approach
 
 EventBus Todo
 -------------
