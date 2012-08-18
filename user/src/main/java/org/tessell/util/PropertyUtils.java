@@ -23,7 +23,7 @@ public class PropertyUtils {
   }
 
   /** Adds/removes the model's {@code allValid} property in {@code models} to/from {@code all}. */
-  public static <M extends Model<?>> void syncModelsToGroup(final PropertyGroup all, final ListProperty<M> models) {
+  public static <M extends Model> void syncModelsToGroup(final PropertyGroup all, final ListProperty<M> models) {
     models.addValueAddedHandler(new ValueAddedHandler<M>() {
       public void onValueAdded(ValueAddedEvent<M> event) {
         all.add(event.getValue().allValid());

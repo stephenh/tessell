@@ -6,7 +6,7 @@ import static org.tessell.model.properties.NewProperty.integerProperty;
 import static org.tessell.model.properties.NewProperty.stringProperty;
 
 import org.junit.Test;
-import org.tessell.model.AbstractModel;
+import org.tessell.model.AbstractDtoModel;
 import org.tessell.model.properties.IntegerProperty;
 import org.tessell.model.properties.StringProperty;
 import org.tessell.model.validation.Valid;
@@ -64,7 +64,7 @@ public class AbstractModelTest {
     assertThat(message[0], is("model invalid"));
   }
 
-  public static class EmployeeModel extends AbstractModel<EmployeeDto> {
+  public static class EmployeeModel extends AbstractDtoModel<EmployeeDto> {
     public final IntegerProperty id = integerProperty("id").req().in(all);
     public final StringProperty name = stringProperty("name").req().in(all);
     public final StringProperty address = stringProperty("address").in(all);

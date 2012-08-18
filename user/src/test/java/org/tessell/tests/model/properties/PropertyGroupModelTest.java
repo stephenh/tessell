@@ -81,17 +81,8 @@ public class PropertyGroupModelTest extends AbstractRuleTest {
     assertThat(all.getProperties().size(), is(1));
   }
 
-  private static class TestModel extends AbstractModel<Object> {
+  private static class TestModel extends AbstractModel {
     public final StringProperty name = add(stringProperty("name")).req();
-
-    @Override
-    public void merge(Object dto) {
-    }
-
-    @Override
-    public Object getDto() {
-      return null;
-    }
   }
 
 }

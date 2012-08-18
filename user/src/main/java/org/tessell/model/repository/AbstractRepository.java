@@ -3,9 +3,9 @@ package org.tessell.model.repository;
 import java.util.HashMap;
 
 import org.tessell.dispatch.client.DispatchAsync;
-import org.tessell.model.Model;
+import org.tessell.model.DtoModel;
 
-public abstract class AbstractRepository<K, D, M extends Model<D>> {
+public abstract class AbstractRepository<K, D, M extends DtoModel<D>> {
 
   // Identity map
   protected final HashMap<K, M> instances = new HashMap<K, M>();

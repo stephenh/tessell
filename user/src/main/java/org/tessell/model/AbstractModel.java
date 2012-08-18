@@ -3,7 +3,8 @@ package org.tessell.model;
 import org.tessell.model.properties.Property;
 import org.tessell.model.properties.PropertyGroup;
 
-public abstract class AbstractModel<T> implements Model<T> {
+/** A base class for models. Provides a {@link PropertyGroup} for all of the properties. */
+public abstract class AbstractModel implements Model {
 
   protected PropertyGroup all = new PropertyGroup("all", "model invalid");
 
