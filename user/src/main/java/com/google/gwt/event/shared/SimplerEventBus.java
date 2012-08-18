@@ -96,8 +96,7 @@ public class SimplerEventBus extends EventBus {
       firingDepth++;
 
       if (source != null) {
-        // not visible in 2.3
-        // event.setSource(source);
+        setSourceOfEvent(event, source);
       }
 
       Set<Throwable> causes = null;
