@@ -35,6 +35,11 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
     E from(F element);
   }
 
+  /** Used to filter a list to a matching condition. */
+  public interface ElementFilter<E> {
+    boolean matches(E element);
+  }
+
   @SuppressWarnings("unchecked")
   public ListProperty(final Value<? extends List<E>> value) {
     // the "? extends List<E>" is so we can be called with Value<ArrayList<E>>
@@ -201,6 +206,20 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
       }
     });
     return as;
+  }
+
+  public ListProperty<E> filter(final ElementFilter<E> filter) {
+    return listProperty(new DerivedValue<List<E>>() {
+      public List<E> get() {
+        List<E> filtered = new ArrayList<E>();
+        for (E item : ListProperty.this.get()) {
+          if (filter.matches(item)) {
+            filtered.add(item);
+          }
+        }
+        return filtered;
+      }
+    });
   }
 
   @Override

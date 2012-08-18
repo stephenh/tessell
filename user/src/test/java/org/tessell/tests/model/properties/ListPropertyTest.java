@@ -25,6 +25,7 @@ import org.tessell.model.events.ValueRemovedHandler;
 import org.tessell.model.properties.IntegerProperty;
 import org.tessell.model.properties.ListProperty;
 import org.tessell.model.properties.ListProperty.ElementConverter;
+import org.tessell.model.properties.ListProperty.ElementFilter;
 import org.tessell.model.properties.Property;
 import org.tessell.model.values.DerivedValue;
 import org.tessell.model.values.SetValue;
@@ -319,6 +320,36 @@ public class ListPropertyTest {
     final int[] changed = { 0 };
     startsWithFoo.addPropertyChangedHandler(new PropertyChangedHandler<Integer>() {
       public void onPropertyChanged(PropertyChangedEvent<Integer> event) {
+        changed[0]++;
+      }
+    });
+    // adding a non-foo doesn't change it
+    models.add(new DummyModel("bar"));
+    assertThat(changed[0], is(0));
+    // adding a foo does change it
+    models.add(new DummyModel("foo"));
+    assertThat(changed[0], is(1));
+    // changing a non-foo to a foo does change it
+    models.get().get(0).name.set("foot");
+    assertThat(changed[0], is(2));
+    // removing a foo does change it
+    models.remove(models.get().get(1));
+    assertThat(changed[0], is(3));
+  }
+
+  @Test
+  public void filteredValues() {
+    final ListProperty<DummyModel> models = listProperty("models");
+    final ListProperty<DummyModel> foos = models.filter(new ElementFilter<DummyModel>() {
+      public boolean matches(DummyModel element) {
+        return element.name.get() != null && element.name.get().startsWith("foo");
+      }
+    });
+    assertThat(foos.get().size(), is(0));
+    // watch for when foo know's it has changed
+    final int[] changed = { 0 };
+    foos.addPropertyChangedHandler(new PropertyChangedHandler<List<DummyModel>>() {
+      public void onPropertyChanged(PropertyChangedEvent<List<DummyModel>> event) {
         changed[0]++;
       }
     });
