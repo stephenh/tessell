@@ -6,8 +6,12 @@ import static org.tessell.model.properties.NewProperty.integerProperty;
 import static org.tessell.model.properties.NewProperty.stringProperty;
 
 import org.junit.Test;
-import org.tessell.model.AbstractDtoModel;
+import org.tessell.model.AbstractModel;
+import org.tessell.model.events.MemberChangedEvent;
+import org.tessell.model.events.MemberChangedHandler;
 import org.tessell.model.properties.IntegerProperty;
+import org.tessell.model.properties.ListProperty;
+import org.tessell.model.properties.NewProperty;
 import org.tessell.model.properties.StringProperty;
 import org.tessell.model.validation.Valid;
 import org.tessell.model.validation.events.RuleTriggeredEvent;
@@ -64,22 +68,46 @@ public class AbstractModelTest {
     assertThat(message[0], is("model invalid"));
   }
 
-  public static class EmployeeModel extends AbstractDtoModel<EmployeeDto> {
-    public final IntegerProperty id = integerProperty("id").req().in(all);
-    public final StringProperty name = stringProperty("name").req().in(all);
-    public final StringProperty address = stringProperty("address").in(all);
-
-    @Override
-    public void merge(EmployeeDto dto) {
-    }
-
-    @Override
-    public EmployeeDto getDto() {
-      return null;
-    }
+  @Test
+  public void firesMemberChangedEvent() {
+    final int[] fires = { 0 };
+    EmployeeModel m = new EmployeeModel();
+    m.addMemberChangedHandler(new MemberChangedHandler() {
+      public void onMemberChanged(MemberChangedEvent event) {
+        fires[0]++;
+      }
+    });
+    m.name.set("asdf");
+    assertThat(fires[0], is(1));
+    m.address.set("asdf");
+    assertThat(fires[0], is(2));
   }
 
-  public static class EmployeeDto {
+  @Test
+  public void firesMemberChangedEventForListProperties() {
+    final int[] fires = { 0 };
+    EmployeeModel m = new EmployeeModel();
+    m.addMemberChangedHandler(new MemberChangedHandler() {
+      public void onMemberChanged(MemberChangedEvent event) {
+        fires[0]++;
+      }
+    });
+    AccountModel a = new AccountModel();
+    m.accounts.add(a);
+    assertThat(fires[0], is(1));
+    a.name.set("asdf");
+    assertThat(fires[0], is(2));
+  }
+
+  public static class EmployeeModel extends AbstractModel {
+    public final IntegerProperty id = add(integerProperty("id").req());
+    public final StringProperty name = add(stringProperty("name").req());
+    public final StringProperty address = add(stringProperty("address"));
+    public final ListProperty<AccountModel> accounts = add(NewProperty.<AccountModel> listProperty("accounts"));
+  }
+
+  public static class AccountModel extends AbstractModel {
+    public final StringProperty name = add(stringProperty("name"));
   }
 
 }

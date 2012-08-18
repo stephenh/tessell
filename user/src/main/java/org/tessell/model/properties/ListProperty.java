@@ -8,6 +8,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import org.tessell.model.events.HasMemberChangedHandlers;
+import org.tessell.model.events.MemberChangedEvent;
+import org.tessell.model.events.MemberChangedHandler;
 import org.tessell.model.events.ValueAddedEvent;
 import org.tessell.model.events.ValueAddedHandler;
 import org.tessell.model.events.ValueRemovedEvent;
@@ -19,7 +22,7 @@ import org.tessell.util.MapToList;
 
 import com.google.gwt.event.shared.HandlerRegistration;
 
-public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> {
+public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> implements HasMemberChangedHandlers {
 
   private IntegerProperty size;
   private List<E> readOnly;
@@ -59,6 +62,7 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
   public void add(final E item) {
     getDirect().add(item);
     setTouched(true);
+    listenForMemberChanged(item);
     // will fire add+change if needed
     reassess();
   }
@@ -68,8 +72,11 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
     if (items.size() == 0) {
       return; // this makes sense, right?
     }
-    setTouched(true);
+    setTouched(true); // move this to be after the addAll to match add?
     getDirect().addAll(items);
+    for (E item : items) {
+      listenForMemberChanged(item);
+    }
     // will fire adds+change if needed
     reassess();
   }
@@ -111,6 +118,11 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
   /** Registers {@code handler} to be called when values are removed. */
   public HandlerRegistration addValueRemovedHandler(final ValueRemovedHandler<E> handler) {
     return addHandler(ValueRemovedEvent.getType(), handler);
+  }
+
+  /** Registers {@code handler} to be called when values changed. */
+  public HandlerRegistration addMemberChangedHandler(final MemberChangedHandler handler) {
+    return addHandler(MemberChangedEvent.getType(), handler);
   }
 
   /**
@@ -218,6 +230,20 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
 
   private List<E> getDirect() {
     return super.get();
+  }
+
+  // Forwards member changed events on our models to our own model
+  private void listenForMemberChanged(final E item) {
+    if (item instanceof HasMemberChangedHandlers) {
+      ((HasMemberChangedHandlers) item).addMemberChangedHandler(new MemberChangedHandler() {
+        public void onMemberChanged(MemberChangedEvent event) {
+          // in case the item was removed, we don't currently unsubscribe
+          if (getDirect().contains(item)) {
+            fireEvent(event);
+          }
+        }
+      });
+    }
   }
 
 }

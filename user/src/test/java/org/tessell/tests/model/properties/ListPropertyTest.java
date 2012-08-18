@@ -6,6 +6,7 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.contains;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
+import static org.tessell.model.properties.NewProperty.integerProperty;
 import static org.tessell.model.properties.NewProperty.listProperty;
 
 import java.util.ArrayList;
@@ -13,6 +14,8 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.tessell.model.events.MemberChangedEvent;
+import org.tessell.model.events.MemberChangedHandler;
 import org.tessell.model.events.PropertyChangedEvent;
 import org.tessell.model.events.PropertyChangedHandler;
 import org.tessell.model.events.ValueAddedEvent;
@@ -22,6 +25,8 @@ import org.tessell.model.events.ValueRemovedHandler;
 import org.tessell.model.properties.IntegerProperty;
 import org.tessell.model.properties.ListProperty;
 import org.tessell.model.properties.ListProperty.ElementConverter;
+import org.tessell.model.properties.Property;
+import org.tessell.model.values.DerivedValue;
 import org.tessell.model.values.SetValue;
 
 public class ListPropertyTest {
@@ -277,6 +282,58 @@ public class ListPropertyTest {
     // only constructor and get will work; most other things will fail
     ListProperty<String> l = listProperty("l", null);
     assertThat(l.get(), is(nullValue()));
+  }
+
+  @Test
+  public void firesMemberChanged() {
+    final int[] fires = { 0 };
+    ListProperty<DummyModel> models = listProperty("models");
+    models.addMemberChangedHandler(new MemberChangedHandler() {
+      public void onMemberChanged(MemberChangedEvent event) {
+        fires[0]++;
+      }
+    });
+    DummyModel m1 = new DummyModel();
+    models.add(m1);
+    assertThat(fires[0], is(0));
+    m1.name.set("adsf");
+    assertThat(fires[0], is(1));
+  }
+
+  @Test
+  public void derivedValueOfMembers() {
+    final ListProperty<DummyModel> models = listProperty("models");
+    Property<Integer> startsWithFoo = integerProperty(new DerivedValue<Integer>("startsWithFoo") {
+      public Integer get() {
+        int i = 0;
+        for (DummyModel model : models.get()) {
+          if (model.name.get() != null && model.name.get().startsWith("foo")) {
+            i++;
+          }
+        }
+        return i;
+      }
+    });
+    assertThat(startsWithFoo.get(), is(0));
+    // watch for when foo know's it has changed
+    final int[] changed = { 0 };
+    startsWithFoo.addPropertyChangedHandler(new PropertyChangedHandler<Integer>() {
+      public void onPropertyChanged(PropertyChangedEvent<Integer> event) {
+        changed[0]++;
+      }
+    });
+    // adding a non-foo doesn't change it
+    models.add(new DummyModel("bar"));
+    assertThat(changed[0], is(0));
+    // adding a foo does change it
+    models.add(new DummyModel("foo"));
+    assertThat(changed[0], is(1));
+    // changing a non-foo to a foo does change it
+    models.get().get(0).name.set("foot");
+    assertThat(changed[0], is(2));
+    // removing a foo does change it
+    models.remove(models.get().get(1));
+    assertThat(changed[0], is(3));
   }
 
   public static class CountingChanges<P> implements PropertyChangedHandler<P> {
