@@ -63,6 +63,11 @@ public class Binder {
     return new ClickBinder(clickable);
   }
 
+  /** @return a fluent {@link DoubleClickBinder} against {@code clickable}. */
+  public DoubleClickBinder onDoubleClick(HasDoubleClickHandlers clickable) {
+    return new DoubleClickBinder(clickable);
+  }
+
   /** @return a fluent {@link BlurBinder} against {@code blurable}. */
   public BlurBinder onBlur(HasBlurHandlers blurable) {
     return new BlurBinder(blurable);
