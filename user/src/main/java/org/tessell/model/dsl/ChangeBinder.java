@@ -5,7 +5,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 
-public class ChangeBinder extends AbstractEventBinder {
+public class ChangeBinder extends EventBinder {
 
   private final HasValueChangeHandlers<Object> changable;
 

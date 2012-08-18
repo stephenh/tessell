@@ -5,7 +5,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.shared.HandlerRegistration;
 
-public class ClickBinder extends AbstractEventBinder {
+public class ClickBinder extends EventBinder {
 
   private final HasClickHandlers clickable;
 

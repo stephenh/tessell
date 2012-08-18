@@ -5,7 +5,7 @@ import com.google.gwt.event.dom.client.DoubleClickHandler;
 import com.google.gwt.event.dom.client.HasDoubleClickHandlers;
 import com.google.gwt.event.shared.HandlerRegistration;
 
-public class DoubleClickBinder extends AbstractEventBinder {
+public class DoubleClickBinder extends EventBinder {
 
   private final HasDoubleClickHandlers clickable;
 

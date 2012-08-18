@@ -10,7 +10,7 @@ import com.google.gwt.event.dom.client.DomEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Focusable;
 
-abstract class AbstractEventBinder {
+public abstract class EventBinder {
 
   /** @return a fluent builder to set {@code property} when triggered. */
   public <P> SetPropertyBinder<P> set(Property<P> property) {

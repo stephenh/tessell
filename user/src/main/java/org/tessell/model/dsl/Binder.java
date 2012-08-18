@@ -58,24 +58,24 @@ public class Binder {
     return new WhenBinder<P>(property);
   }
 
-  /** @return a fluent {@link ClickBinder} against {@code clickable}. */
-  public ClickBinder onClick(HasClickHandlers clickable) {
+  /** @return a fluent {@link EventBinder} against {@code clickable}. */
+  public EventBinder onClick(HasClickHandlers clickable) {
     return new ClickBinder(clickable);
   }
 
-  /** @return a fluent {@link DoubleClickBinder} against {@code clickable}. */
-  public DoubleClickBinder onDoubleClick(HasDoubleClickHandlers clickable) {
+  /** @return a fluent {@link EventBinder} against {@code clickable}. */
+  public EventBinder onDoubleClick(HasDoubleClickHandlers clickable) {
     return new DoubleClickBinder(clickable);
   }
 
-  /** @return a fluent {@link BlurBinder} against {@code blurable}. */
-  public BlurBinder onBlur(HasBlurHandlers blurable) {
+  /** @return a fluent {@link EventBinder} against {@code blurable}. */
+  public EventBinder onBlur(HasBlurHandlers blurable) {
     return new BlurBinder(blurable);
   }
 
-  /** @return a fluent {@link ChangeBinder} against {@code changable}. */
+  /** @return a fluent {@link EventBinder} against {@code changable}. */
   @SuppressWarnings("unchecked")
-  public ChangeBinder onChange(HasValueChangeHandlers<?> changable) {
+  public EventBinder onChange(HasValueChangeHandlers<?> changable) {
     return new ChangeBinder((HasValueChangeHandlers<Object>) changable);
   }
 

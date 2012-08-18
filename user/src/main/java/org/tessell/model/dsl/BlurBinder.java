@@ -5,7 +5,7 @@ import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.HasBlurHandlers;
 import com.google.gwt.event.shared.HandlerRegistration;
 
-public class BlurBinder extends AbstractEventBinder {
+public class BlurBinder extends EventBinder {
 
   private final HasBlurHandlers blurable;
 
