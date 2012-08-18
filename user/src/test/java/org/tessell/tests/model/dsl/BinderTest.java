@@ -30,6 +30,7 @@ import org.tessell.util.cookies.StringCookie;
 import org.tessell.widgets.StubTextList;
 import org.tessell.widgets.StubWidget;
 
+import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
@@ -686,6 +687,24 @@ public class BinderTest {
     binder.onClick(a).focus(f);
     a.click();
     assertThat(f.isFocused(), is(true));
+  }
+
+  @Test
+  public void onKeyDown() {
+    final StubTextBox b = new StubTextBox();
+    binder.onKeyDown(b).set(s).to("asdf");
+    b.keyDown('a');
+    assertThat(s.get(), is("asdf"));
+  }
+
+  @Test
+  public void onKeyDownFiltered() {
+    final StubTextBox b = new StubTextBox();
+    binder.onKeyDown(b, KeyCodes.KEY_ENTER).set(s).to("asdf");
+    b.keyDown('a');
+    assertThat(s.get(), is(nullValue()));
+    b.keyDown(KeyCodes.KEY_ENTER);
+    assertThat(s.get(), is("asdf"));
   }
 
   @Test

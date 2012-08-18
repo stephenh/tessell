@@ -2,6 +2,8 @@ package org.tessell.model.dsl;
 
 import static com.google.gwt.event.dom.client.KeyCodes.KEY_TAB;
 
+import java.util.Arrays;
+
 import org.tessell.model.commands.UiCommand;
 import org.tessell.model.properties.*;
 import org.tessell.model.validation.rules.Rule;
@@ -77,6 +79,16 @@ public class Binder {
   @SuppressWarnings("unchecked")
   public EventBinder onChange(HasValueChangeHandlers<?> changable) {
     return new ChangeBinder((HasValueChangeHandlers<Object>) changable);
+  }
+
+  /** @return a fluent {@link EventBinder} against {@code keyDownable}. */
+  public EventBinder onKeyDown(HasKeyDownHandlers keyDownable) {
+    return new KeyDownBinder(keyDownable, null);
+  }
+
+  /** @return a fluent {@link EventBinder} against {@code keyDownable}, when {@code char} is pressed. */
+  public EventBinder onKeyDown(HasKeyDownHandlers keyDownable, Integer... filter) {
+    return new KeyDownBinder(keyDownable, Arrays.asList(filter));
   }
 
   /** Enhances each {@code source} to fire change events on key up and blur. */
