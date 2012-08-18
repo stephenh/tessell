@@ -2,13 +2,13 @@ package org.tessell.tests.model.properties;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.tessell.model.dsl.Binder.bind;
 import static org.tessell.model.properties.NewProperty.booleanProperty;
 import static org.tessell.model.properties.NewProperty.integerProperty;
 import static org.tessell.model.properties.NewProperty.stringProperty;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.tessell.model.dsl.Binder;
 import org.tessell.model.events.PropertyChangedEvent;
 import org.tessell.model.events.PropertyChangedHandler;
 import org.tessell.model.properties.IntegerProperty;
@@ -54,8 +54,7 @@ public class DerivedPropertiesTest extends AbstractRuleTest {
   public void binderDoesFireChangedIfPropertyAlreadySet() {
     f.name.set("foo");
     final StubHasValue<Integer> value = new StubHasValue<Integer>();
-    Binder b = new Binder();
-    b.bind(f.name.remaining()).to(value);
+    bind(f.name.remaining()).to(value);
     assertThat(value.getValue(), is(7));
   }
 

@@ -6,7 +6,6 @@ import java.util.ArrayList;
 
 import org.tessell.gwt.user.client.ui.IsFlowPanel;
 import org.tessell.gwt.user.client.ui.IsHTMLPanel;
-import org.tessell.model.dsl.Binder;
 import org.tessell.model.properties.PropertyGroup;
 import org.tessell.presenter.BasicPresenter;
 import org.tessell.util.HTMLPanelBuilder;
@@ -29,7 +28,6 @@ public class FormPresenter extends BasicPresenter<IsFlowPanel> {
   private final ArrayList<FormAction> formActions = new ArrayList<FormAction>();
   private final PropertyGroup all = new PropertyGroup("all", null);
   private final String id;
-  private final Binder binder = new Binder();
   private final FormLayout layout;
   private boolean needsRender = true;
   private FormAction defaultAction;
@@ -58,14 +56,14 @@ public class FormPresenter extends BasicPresenter<IsFlowPanel> {
   /** Adds {@code line}. */
   public void add(FormLine line) {
     formLines.add(line);
-    line.bind(this, all, binder);
+    line.bind(this, all);
     renderNeeded();
   }
 
   /** Adds {@code action}. */
   public void add(FormAction action) {
     formActions.add(action);
-    action.bind(this, binder);
+    action.bind(this);
     renderNeeded();
     defaultAction = action;
   }

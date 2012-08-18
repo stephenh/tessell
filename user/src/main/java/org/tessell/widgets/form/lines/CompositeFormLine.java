@@ -2,7 +2,6 @@ package org.tessell.widgets.form.lines;
 
 import java.util.List;
 
-import org.tessell.model.dsl.Binder;
 import org.tessell.model.properties.PropertyGroup;
 import org.tessell.util.HTMLPanelBuilder;
 import org.tessell.widgets.form.FormLayout;
@@ -26,9 +25,9 @@ public class CompositeFormLine implements FormLine {
   }
 
   @Override
-  public void bind(final FormPresenter p, final PropertyGroup all, final Binder binder) {
+  public void bind(final FormPresenter p, final PropertyGroup all) {
     for (final FormLine line : lines) {
-      line.bind(p, all, binder);
+      line.bind(p, all);
     }
   }
 

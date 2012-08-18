@@ -3,7 +3,6 @@ package org.tessell.widgets.form.lines;
 import static org.tessell.util.Inflector.camelize;
 import static org.tessell.util.StringUtils.uncapitalize;
 
-import org.tessell.model.dsl.Binder;
 import org.tessell.model.properties.Property;
 import org.tessell.model.properties.PropertyGroup;
 import org.tessell.util.HTMLPanelBuilder;
@@ -26,7 +25,7 @@ public abstract class AbstractFormLine<T> implements FormLine {
   }
 
   @Override
-  public void bind(final FormPresenter p, PropertyGroup all, Binder binder) {
+  public void bind(final FormPresenter p, PropertyGroup all) {
     id = p.getId() + "-" + idSuffix;
     all.add(property);
   }

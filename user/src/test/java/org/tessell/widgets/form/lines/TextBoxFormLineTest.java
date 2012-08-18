@@ -8,7 +8,6 @@ import static org.tessell.testing.TessellMatchers.hasErrors;
 
 import org.junit.Test;
 import org.tessell.gwt.user.client.ui.StubTextBox;
-import org.tessell.model.dsl.Binder;
 import org.tessell.util.HTMLPanelBuilder;
 import org.tessell.widgets.StubTextList;
 import org.tessell.widgets.form.AbstractFormPresenterTest;
@@ -116,7 +115,7 @@ public class TextBoxFormLineTest extends AbstractFormPresenterTest {
     private boolean triggered;
 
     @Override
-    public void bind(FormPresenter p, Binder binder) {
+    public void bind(FormPresenter p) {
     }
 
     @Override

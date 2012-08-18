@@ -6,6 +6,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
+import static org.tessell.model.dsl.Binder.*;
 import static org.tessell.model.dsl.TakesValues.textOf;
 import static org.tessell.model.dsl.WhenConditions.notNull;
 import static org.tessell.model.properties.NewProperty.*;
@@ -20,7 +21,6 @@ import org.tessell.gwt.dom.client.StubClickEvent;
 import org.tessell.gwt.dom.client.StubElement;
 import org.tessell.gwt.user.client.StubCookies;
 import org.tessell.gwt.user.client.ui.*;
-import org.tessell.model.dsl.Binder;
 import org.tessell.model.properties.*;
 import org.tessell.model.validation.Valid;
 import org.tessell.model.values.DerivedValue;
@@ -36,7 +36,6 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
 public class BinderTest {
 
-  final Binder binder = new Binder();
   final StringProperty s = stringProperty("s");
   final StubTextBox box = new StubTextBox();
   final StubTextList errors = new StubTextList();
@@ -47,27 +46,27 @@ public class BinderTest {
 
   @Test
   public void propertyToWidget() {
-    binder.bind(s).to(box);
+    bind(s).to(box);
     s.set("test");
     assertThat(box.getValue(), is("test"));
   }
 
   @Test
   public void propertyToWidgetIsInitiallyUntouched() {
-    binder.bind(s).to(box);
+    bind(s).to(box);
     assertThat(s.isTouched(), is(false));
   }
 
   @Test
   public void propertyToWidgetImmediatelySetsTheWidgetsValue() {
     s.set("test");
-    binder.bind(s).to(box);
+    bind(s).to(box);
     assertThat(box.getValue(), is("test"));
   }
 
   @Test
   public void propertyToWidgetFiresWidgetChange() {
-    binder.bind(s).to(box);
+    bind(s).to(box);
     final boolean[] changed = { false };
     box.addValueChangeHandler(new ValueChangeHandler<String>() {
       public void onValueChange(final ValueChangeEvent<String> event) {
@@ -82,7 +81,7 @@ public class BinderTest {
   public void propertyToWidgetCanBeUntouched() {
     final SetValue<String> value = new SetValue<String>("value");
     final StringProperty property = stringProperty(value).req();
-    binder.bind(property).to(box);
+    bind(property).to(box);
     // start out with a good value
     property.set("good");
     // now change the value behind the scenes (e.g. a new DTO)
@@ -101,7 +100,7 @@ public class BinderTest {
     values.add("a");
     values.add("b");
 
-    binder.bind(s).to(listBox, values);
+    bind(s).to(listBox, values);
     s.set("b");
     assertThat(listBox.getSelectedIndex(), is(2));
 
@@ -116,7 +115,7 @@ public class BinderTest {
     values.add("a");
     values.add("b");
 
-    binder.bind(s).to(listBox, values);
+    bind(s).to(listBox, values);
     listBox.select("b");
     assertThat(s.get(), is("b"));
   }
@@ -129,7 +128,7 @@ public class BinderTest {
     values.add("a");
     values.add("b");
 
-    binder.bind(s).to(listBox, values);
+    bind(s).to(listBox, values);
     listBox.select("b");
     assertThat(s.get(), is("b"));
 
@@ -146,7 +145,7 @@ public class BinderTest {
     values.add("a");
     values.add("b");
 
-    binder.bind(s).to(listBox, values);
+    bind(s).to(listBox, values);
     listBox.select("b");
     assertThat(s.get(), is("b"));
 
@@ -159,13 +158,13 @@ public class BinderTest {
     s.req().touch();
     assertThat(s.wasValid(), is(Valid.NO));
 
-    binder.bind(s).errorsTo(errors);
+    bind(s).errorsTo(errors);
     assertThat(errors.getList().size(), is(1));
   }
 
   @Test
   public void widgetToProperty() {
-    binder.bind(s).to(box);
+    bind(s).to(box);
     box.type("test");
     assertThat(s.get(), is("test"));
   }
@@ -173,13 +172,13 @@ public class BinderTest {
   @Test
   public void stringPropertyToWidgetSetsMaxLength() {
     s.max(100);
-    binder.bind(s).to(box);
+    bind(s).to(box);
     assertThat(box.getMaxLength(), is(100));
   }
 
   @Test
   public void clickableWidgetToProperty() {
-    binder.bind(s).withValue("gotclicked").to(box);
+    bind(s).withValue("gotclicked").to(box);
     box.click();
     assertThat(s.get(), is("gotclicked"));
   }
@@ -188,7 +187,7 @@ public class BinderTest {
   public void whenTrueFiresInitialValueWhenTrue() {
     final BooleanProperty b = booleanProperty("b", true);
     final StubWidget w = new StubWidget();
-    binder.when(b).is(true).set("c").on(w);
+    when(b).is(true).set("c").on(w);
     assertThat(w, hasStyle("c"));
   }
 
@@ -196,7 +195,7 @@ public class BinderTest {
   public void whenTrueDoesNotFireInitialValueWhenFalse() {
     final BooleanProperty b = booleanProperty("b", false);
     final StubWidget w = new StubWidget();
-    binder.when(b).is(true).set("c").on(w);
+    when(b).is(true).set("c").on(w);
     assertThat(w, not(hasStyle("c")));
   }
 
@@ -204,7 +203,7 @@ public class BinderTest {
   public void whenTrueFiresWhenFalseChangesToTrue() {
     final BooleanProperty b = booleanProperty("b", false);
     final StubWidget w = new StubWidget();
-    binder.when(b).is(true).set("c").on(w);
+    when(b).is(true).set("c").on(w);
     b.set(true);
     assertThat(w, hasStyle("c"));
   }
@@ -213,7 +212,7 @@ public class BinderTest {
   public void whenTrueShowHidesWhenFalse() {
     final BooleanProperty b = booleanProperty("b", false);
     final StubWidget w = new StubWidget();
-    binder.when(b).is(true).show(w);
+    when(b).is(true).show(w);
     assertThat(w, is(hidden()));
   }
 
@@ -221,7 +220,7 @@ public class BinderTest {
   public void whenTrueShowDisplaysWhenTrue() {
     final BooleanProperty b = booleanProperty("b", true);
     final StubWidget w = new StubWidget();
-    binder.when(b).is(true).show(w);
+    when(b).is(true).show(w);
     assertThat(w, is(shown()));
   }
 
@@ -229,7 +228,7 @@ public class BinderTest {
   public void whenTrueShowHidesWhenChangesToFalse() {
     final BooleanProperty b = booleanProperty("b", true);
     final StubWidget w = new StubWidget();
-    binder.when(b).is(true).show(w);
+    when(b).is(true).show(w);
     b.set(false);
     assertThat(w, is(hidden()));
   }
@@ -238,7 +237,7 @@ public class BinderTest {
   public void whenTrueAddDoesInitialSet() {
     final BooleanProperty b = booleanProperty("b", true);
     final ArrayList<String> list = new ArrayList<String>();
-    binder.when(b).is(true).add("foo").to(list);
+    when(b).is(true).add("foo").to(list);
     assertThat(list, hasItem("foo"));
   }
 
@@ -247,7 +246,7 @@ public class BinderTest {
     final BooleanProperty b = booleanProperty("b", false);
     final ArrayList<String> list = new ArrayList<String>();
     list.add("foo");
-    binder.when(b).is(true).add("foo").to(list);
+    when(b).is(true).add("foo").to(list);
     assertThat(list, not(hasItem("foo")));
   }
 
@@ -255,8 +254,8 @@ public class BinderTest {
   public void enhanceIgnoresTabKeyUpEvent() {
     final StubTextBox b = new StubTextBox();
     final StringProperty s = stringProperty("s");
-    binder.bind(s).to(b);
-    binder.enhance(b);
+    bind(s).to(b);
+    enhance(b);
     b.keyUp(KEY_TAB);
     assertThat(s.get(), is(nullValue()));
   }
@@ -265,7 +264,7 @@ public class BinderTest {
   public void whenTrueEnableLeavesEnabled() {
     final BooleanProperty b = booleanProperty("b", true);
     final StubFocusWidget w = new StubFocusWidget();
-    binder.when(b).is(true).enable(w);
+    when(b).is(true).enable(w);
     assertThat(w.isEnabled(), is(true));
   }
 
@@ -273,7 +272,7 @@ public class BinderTest {
   public void whenTrueEnableIsFalseThenSetsDisabled() {
     final BooleanProperty b = booleanProperty("b", false);
     final StubFocusWidget w = new StubFocusWidget();
-    binder.when(b).is(true).enable(w);
+    when(b).is(true).enable(w);
     assertThat(w.isEnabled(), is(false));
   }
 
@@ -281,7 +280,7 @@ public class BinderTest {
   public void whenTrueEnableChangesToFalseThenSetsDisabled() {
     final BooleanProperty b = booleanProperty("b", true);
     final StubFocusWidget w = new StubFocusWidget();
-    binder.when(b).is(true).enable(w);
+    when(b).is(true).enable(w);
     b.set(false);
     assertThat(w.isEnabled(), is(false));
   }
@@ -290,7 +289,7 @@ public class BinderTest {
   public void whenTrueDisabledChangesToDisabled() {
     final BooleanProperty b = booleanProperty("b", true);
     final StubFocusWidget w = new StubFocusWidget();
-    binder.when(b).is(true).disable(w);
+    when(b).is(true).disable(w);
     assertThat(w.isEnabled(), is(false));
   }
 
@@ -298,7 +297,7 @@ public class BinderTest {
   public void whenTrueSetAnotherProperty() {
     final BooleanProperty b = booleanProperty("b", false);
     final IntegerProperty i = integerProperty("i", 1);
-    binder.when(b).is(true).set(i).to(10);
+    when(b).is(true).set(i).to(10);
     b.set(true);
     assertThat(i.get(), is(10));
   }
@@ -307,7 +306,7 @@ public class BinderTest {
   public void whenAlreadyTrueSetAnotherProperty() {
     final BooleanProperty b = booleanProperty("b", true);
     final IntegerProperty i = integerProperty("i", 1);
-    binder.when(b).is(true).set(i).to(10);
+    when(b).is(true).set(i).to(10);
     assertThat(i.get(), is(10));
   }
 
@@ -317,7 +316,7 @@ public class BinderTest {
     final EnumProperty<Color> e = enumProperty(v);
 
     final StubListBox box = new StubListBox();
-    binder.bind(e).to(box, Color.values());
+    bind(e).to(box, Color.values());
     assertThat(box.getItemCount(), is(2));
     assertThat(box.getItemText(0), is("Blue"));
     assertThat(box.getItemText(1), is("Green"));
@@ -329,7 +328,7 @@ public class BinderTest {
     final EnumProperty<Color> e = enumProperty(v);
 
     final StubListBox box = new StubListBox();
-    binder.bind(e).to(box, Color.values());
+    bind(e).to(box, Color.values());
     assertThat(box.getSelectedIndex(), is(0));
   }
 
@@ -339,7 +338,7 @@ public class BinderTest {
     final EnumProperty<Color> e = enumProperty(v);
 
     final StubListBox box = new StubListBox();
-    binder.bind(e).to(box, Color.values());
+    bind(e).to(box, Color.values());
     assertThat(box.getSelectedIndex(), is(0));
     assertThat(v.get(), is(Color.Blue));
   }
@@ -350,7 +349,7 @@ public class BinderTest {
     final EnumProperty<Color> e = enumProperty(v);
 
     final StubListBox box = new StubListBox();
-    binder.bind(e).to(box, Color.values());
+    bind(e).to(box, Color.values());
     assertThat(box.getSelectedIndex(), is(1));
   }
 
@@ -360,7 +359,7 @@ public class BinderTest {
     final EnumProperty<Color> e = enumProperty(v);
 
     final StubListBox box = new StubListBox();
-    binder.bind(e).to(box, Color.values());
+    bind(e).to(box, Color.values());
     box.select("Blue");
     assertThat(v.get(), is(Color.Blue));
   }
@@ -368,7 +367,7 @@ public class BinderTest {
   @Test
   public void emptyStringIsTreatedAsNull() {
     s.set("a");
-    binder.bind(s).to(box);
+    bind(s).to(box);
     box.setValue("", true);
     assertThat(s.get(), is(nullValue()));
   }
@@ -377,7 +376,7 @@ public class BinderTest {
   public void propertyToCookie() {
     final StubCookies cookies = new StubCookies();
     final StringCookie c = new StringCookie(cookies, "c");
-    binder.bind(s).to(c);
+    bind(s).to(c);
     assertThat(s.get(), is(nullValue()));
     assertThat(cookies.get("c"), is(nullValue()));
 
@@ -390,7 +389,7 @@ public class BinderTest {
     final StubCookies cookies = new StubCookies();
     final StringCookie c = new StringCookie(cookies, "c");
     cookies.set("c", "foo");
-    binder.bind(s).to(c);
+    bind(s).to(c);
     assertThat(s.get(), is("foo"));
     assertThat(c.getValue(), is("foo"));
   }
@@ -401,7 +400,7 @@ public class BinderTest {
     final StringCookie c = new StringCookie(cookies, "c");
     cookies.set("c", "foo");
     s.touch();
-    binder.bind(s).to(c);
+    bind(s).to(c);
     assertThat(s.get(), is(nullValue()));
     assertThat(c.getValue(), is(nullValue()));
   }
@@ -413,7 +412,7 @@ public class BinderTest {
     cookies.set("c", "foo");
     s.setValue("bar");
     s.setTouched(false); // make sure to untouch
-    binder.bind(s).to(c);
+    bind(s).to(c);
     assertThat(s.get(), is("bar"));
     assertThat(c.getValue(), is("bar"));
   }
@@ -427,14 +426,14 @@ public class BinderTest {
     });
     final StubElement e = new StubElement();
     // should skip the "set null property logic", otherwise will fail
-    binder.bind(p).to(textOf(e));
+    bind(p).to(textOf(e));
   }
 
   @Test
   public void whenIsNull() {
     final BooleanProperty b = booleanProperty("b", false);
     final StubWidget w = new StubWidget();
-    binder.when(b).is(notNull()).set("c").on(w);
+    when(b).is(notNull()).set("c").on(w);
     assertThat(w, hasStyle("c"));
     b.set(null);
     assertThat(w, not(hasStyle("c")));
@@ -444,7 +443,7 @@ public class BinderTest {
   public void whenSetToTakesValues() {
     final BooleanProperty b = booleanProperty("b", false);
     final StubElement e = new StubElement();
-    binder.when(b).is(true).set(textOf(e)).to("t");
+    when(b).is(true).set(textOf(e)).to("t");
     b.set(true);
     assertThat(e.getInnerText(), is("t"));
   }
@@ -452,7 +451,7 @@ public class BinderTest {
   @Test
   public void whenSetToOrElse() {
     final BooleanProperty b = booleanProperty("b");
-    binder.when(b).is(true).set(s).toOrElse("a", "b");
+    when(b).is(true).set(s).toOrElse("a", "b");
     assertThat(s.get(), is("b"));
     b.set(true);
     assertThat(s.get(), is("a"));
@@ -464,7 +463,7 @@ public class BinderTest {
   public void propertyToHasText() {
     final StubLabel label = new StubLabel();
     final StringProperty b = stringProperty("b", "foo");
-    binder.bind(b).to(textOf(label));
+    bind(b).to(textOf(label));
     // text is initially set
     assertThat(label.getText(), is("foo"));
     // and updated on change
@@ -474,7 +473,7 @@ public class BinderTest {
 
   @Test
   public void propertyToStringTrims() {
-    binder.bind(s).to(box);
+    bind(s).to(box);
     box.type(" foo bar ");
     assertThat(s.get(), is("foo bar"));
     // to the property the value changed from null to "foo bar", so it updates the text box
@@ -483,7 +482,7 @@ public class BinderTest {
 
   @Test
   public void propertyToStringTrimsToNull() {
-    binder.bind(s).to(box);
+    bind(s).to(box);
     box.type("  ");
     assertThat(s.get(), is(nullValue()));
     // to the property the value is still null, so it doesn't update the text box
@@ -494,16 +493,16 @@ public class BinderTest {
   public void commandPreventsEventDefault() {
     final DummyUiCommand command = new DummyUiCommand();
     final StubButton button = new StubButton();
-    binder.bind(command).to(button);
+    bind(command).to(button);
     final StubClickEvent click = new StubClickEvent();
     button.fireEvent(click);
     assertThat(click.prevented, is(true));
   }
 
   @Test
-  public void onClick() {
+  public void onClickTest() {
     final StubButton button = new StubButton();
-    binder.onClick(button).set(s).to("clicked");
+    onClick(button).set(s).to("clicked");
     button.click();
     assertThat(s.get(), is("clicked"));
   }
@@ -513,7 +512,7 @@ public class BinderTest {
     final StubRadioButton b1 = new StubRadioButton();
     final StubRadioButton b2 = new StubRadioButton();
     final BooleanProperty b = booleanProperty("b");
-    binder.bind(b).to(b1, b2);
+    bind(b).to(b1, b2);
     assertThat(b1.getValue(), is(false));
     assertThat(b2.getValue(), is(true));
   }
@@ -523,7 +522,7 @@ public class BinderTest {
     final StubRadioButton b1 = new StubRadioButton();
     final StubRadioButton b2 = new StubRadioButton();
     final BooleanProperty b = booleanProperty("b", true);
-    binder.bind(b).to(b1, b2);
+    bind(b).to(b1, b2);
     assertThat(b1.getValue(), is(true));
     assertThat(b2.getValue(), is(false));
   }
@@ -533,7 +532,7 @@ public class BinderTest {
     final StubRadioButton b1 = new StubRadioButton();
     final StubRadioButton b2 = new StubRadioButton();
     final BooleanProperty b = booleanProperty("b", false);
-    binder.bind(b).to(b1, b2);
+    bind(b).to(b1, b2);
     assertThat(b1.getValue(), is(false));
     assertThat(b2.getValue(), is(true));
   }
@@ -543,7 +542,7 @@ public class BinderTest {
     final StubRadioButton b1 = new StubRadioButton();
     final StubRadioButton b2 = new StubRadioButton();
     final BooleanProperty b = booleanProperty("b", false);
-    binder.bind(b).to(b1, b2);
+    bind(b).to(b1, b2);
     b1.click();
     assertThat(b.get(), is(true));
   }
@@ -553,7 +552,7 @@ public class BinderTest {
     final StubRadioButton b1 = new StubRadioButton();
     final StubRadioButton b2 = new StubRadioButton();
     final BooleanProperty b = booleanProperty("b", true);
-    binder.bind(b).to(b1, b2);
+    bind(b).to(b1, b2);
     b2.click();
     assertThat(b.get(), is(false));
   }
@@ -563,7 +562,7 @@ public class BinderTest {
     final StubRadioButton b1 = new StubRadioButton();
     final StubRadioButton b2 = new StubRadioButton();
     final BooleanProperty b = booleanProperty("b", true);
-    binder.bind(b).to(b1, b2);
+    bind(b).to(b1, b2);
     b.set(false);
     assertThat(b1.getValue(), is(false));
     assertThat(b2.getValue(), is(true));
@@ -574,7 +573,7 @@ public class BinderTest {
     final StubRadioButton b1 = new StubRadioButton();
     final StubRadioButton b2 = new StubRadioButton();
     final BooleanProperty b = booleanProperty("b", false);
-    binder.bind(b).to(b1, b2);
+    bind(b).to(b1, b2);
     b.set(true);
     assertThat(b1.getValue(), is(true));
     assertThat(b2.getValue(), is(false));
@@ -583,20 +582,20 @@ public class BinderTest {
   @Test
   public void stringToKeyUpSetsInitialValue() {
     s.set("a");
-    binder.bind(s).toKeyUp(box);
+    bind(s).toKeyUp(box);
     assertThat(box.getValue(), is("a"));
   }
 
   @Test
   public void stringToKeyUpUpdatesModelOnKeyUp() {
-    binder.bind(s).toKeyUp(box);
+    bind(s).toKeyUp(box);
     box.press('a');
     assertThat(s.get(), is("a"));
   }
 
   @Test
   public void stringToKeyUpDoesNotTrimOnPress() {
-    binder.bind(s).toKeyUp(box);
+    bind(s).toKeyUp(box);
     box.press('a');
     box.press(' ');
     assertThat(s.get(), is("a "));
@@ -604,21 +603,21 @@ public class BinderTest {
 
   @Test
   public void stringToKeyUpDoestTrimOnChange() {
-    binder.bind(s).toKeyUp(box);
+    bind(s).toKeyUp(box);
     box.type("a ");
     assertThat(s.get(), is("a"));
   }
 
   @Test
   public void stringToKeyUpUpdatesModelOnChange() {
-    binder.bind(s).toKeyUp(box);
+    bind(s).toKeyUp(box);
     box.type("a"); // just a change, no key up
     assertThat(s.get(), is("a"));
   }
 
   @Test
   public void stringToKeyUpUpdatesViewOnChange() {
-    binder.bind(s).toKeyUp(box);
+    bind(s).toKeyUp(box);
     s.set("a");
     assertThat(box.getValue(), is("a"));
   }
@@ -626,7 +625,7 @@ public class BinderTest {
   @Test
   public void stringToKeyUpSetsMaxLength() {
     s.max(20);
-    binder.bind(s).toKeyUp(box);
+    bind(s).toKeyUp(box);
     assertThat(box.getMaxLength(), is(20));
   }
 
@@ -634,7 +633,7 @@ public class BinderTest {
   public void onClickToggleSetsNoInitialValue() {
     final BooleanProperty b = booleanProperty("b");
     final StubAnchor a = new StubAnchor();
-    binder.onClick(a).toggle(b);
+    onClick(a).toggle(b);
     assertThat(b.get(), is(nullValue()));
   }
 
@@ -642,7 +641,7 @@ public class BinderTest {
   public void onClickToggleDoesActuallyToggle() {
     final BooleanProperty b = booleanProperty("b");
     final StubAnchor a = new StubAnchor();
-    binder.onClick(a).toggle(b);
+    onClick(a).toggle(b);
     a.click();
     assertThat(b.get(), is(true));
     a.click();
@@ -653,7 +652,7 @@ public class BinderTest {
   public void onClickTogglePreventsDefault() {
     final BooleanProperty b = booleanProperty("b");
     final StubAnchor a = new StubAnchor();
-    binder.onClick(a).toggle(b);
+    onClick(a).toggle(b);
     final StubClickEvent c = new StubClickEvent();
     a.fireEvent(c);
     assertThat(c.prevented, is(true));
@@ -663,7 +662,7 @@ public class BinderTest {
   public void onClickAdd() {
     ListProperty<String> strings = listProperty("strings");
     final StubAnchor a = new StubAnchor();
-    binder.onClick(a).add("a").to(strings);
+    onClick(a).add("a").to(strings);
     assertThat(strings.get().size(), is(0));
     a.click();
     assertThat(strings.get().size(), is(1));
@@ -674,7 +673,7 @@ public class BinderTest {
     ListProperty<String> strings = listProperty("strings");
     strings.add("a");
     final StubAnchor a = new StubAnchor();
-    binder.onClick(a).remove("a").from(strings);
+    onClick(a).remove("a").from(strings);
     assertThat(strings.get().size(), is(1));
     a.click();
     assertThat(strings.get().size(), is(0));
@@ -684,15 +683,15 @@ public class BinderTest {
   public void onClickFocus() {
     final StubFocusWidget f = new StubFocusWidget();
     final StubAnchor a = new StubAnchor();
-    binder.onClick(a).focus(f);
+    onClick(a).focus(f);
     a.click();
     assertThat(f.isFocused(), is(true));
   }
 
   @Test
-  public void onKeyDown() {
+  public void onKeyDownUnfiltered() {
     final StubTextBox b = new StubTextBox();
-    binder.onKeyDown(b).set(s).to("asdf");
+    onKeyDown(b).set(s).to("asdf");
     b.keyDown('a');
     assertThat(s.get(), is("asdf"));
   }
@@ -700,7 +699,7 @@ public class BinderTest {
   @Test
   public void onKeyDownFiltered() {
     final StubTextBox b = new StubTextBox();
-    binder.onKeyDown(b, KeyCodes.KEY_ENTER).set(s).to("asdf");
+    onKeyDown(b, KeyCodes.KEY_ENTER).set(s).to("asdf");
     b.keyDown('a');
     assertThat(s.get(), is(nullValue()));
     b.keyDown(KeyCodes.KEY_ENTER);
@@ -710,14 +709,14 @@ public class BinderTest {
   @Test
   public void onChangeToggleSetsNoInitialValue() {
     final BooleanProperty b = booleanProperty("b");
-    binder.onChange(box).toggle(b);
+    onChange(box).toggle(b);
     assertThat(b.get(), is(nullValue()));
   }
 
   @Test
   public void onChangeToggleDoesActuallyToggle() {
     final BooleanProperty b = booleanProperty("b");
-    binder.onChange(box).toggle(b);
+    onChange(box).toggle(b);
     box.type("asdf");
     assertThat(b.get(), is(true));
     box.type("fdas");
