@@ -8,10 +8,7 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 import static org.tessell.model.dsl.TakesValues.textOf;
 import static org.tessell.model.dsl.WhenConditions.notNull;
-import static org.tessell.model.properties.NewProperty.booleanProperty;
-import static org.tessell.model.properties.NewProperty.enumProperty;
-import static org.tessell.model.properties.NewProperty.integerProperty;
-import static org.tessell.model.properties.NewProperty.stringProperty;
+import static org.tessell.model.properties.NewProperty.*;
 import static org.tessell.testing.TessellMatchers.hasStyle;
 import static org.tessell.testing.TessellMatchers.hidden;
 import static org.tessell.testing.TessellMatchers.shown;
@@ -24,10 +21,7 @@ import org.tessell.gwt.dom.client.StubElement;
 import org.tessell.gwt.user.client.StubCookies;
 import org.tessell.gwt.user.client.ui.*;
 import org.tessell.model.dsl.Binder;
-import org.tessell.model.properties.BooleanProperty;
-import org.tessell.model.properties.EnumProperty;
-import org.tessell.model.properties.IntegerProperty;
-import org.tessell.model.properties.StringProperty;
+import org.tessell.model.properties.*;
 import org.tessell.model.validation.Valid;
 import org.tessell.model.values.DerivedValue;
 import org.tessell.model.values.SetValue;
@@ -662,6 +656,27 @@ public class BinderTest {
     final StubClickEvent c = new StubClickEvent();
     a.fireEvent(c);
     assertThat(c.prevented, is(true));
+  }
+
+  @Test
+  public void onClickAdd() {
+    ListProperty<String> strings = listProperty("strings");
+    final StubAnchor a = new StubAnchor();
+    binder.onClick(a).add("a").to(strings);
+    assertThat(strings.get().size(), is(0));
+    a.click();
+    assertThat(strings.get().size(), is(1));
+  }
+
+  @Test
+  public void onClickRemove() {
+    ListProperty<String> strings = listProperty("strings");
+    strings.add("a");
+    final StubAnchor a = new StubAnchor();
+    binder.onClick(a).remove("a").from(strings);
+    assertThat(strings.get().size(), is(1));
+    a.click();
+    assertThat(strings.get().size(), is(0));
   }
 
   @Test
