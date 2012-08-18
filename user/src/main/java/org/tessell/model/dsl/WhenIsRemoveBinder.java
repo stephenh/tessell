@@ -1,6 +1,6 @@
 package org.tessell.model.dsl;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.tessell.model.events.PropertyChangedEvent;
 import org.tessell.model.events.PropertyChangedHandler;
@@ -21,7 +21,7 @@ public class WhenIsRemoveBinder<P, V> {
   }
 
   /** Adds/removes our {@code value} when our property is {@code true}. */
-  public HandlerRegistrations from(final ArrayList<V> values) {
+  public HandlerRegistrations from(final List<V> values) {
     HandlerRegistrations hr = new HandlerRegistrations();
     hr.add(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
       public void onPropertyChanged(PropertyChangedEvent<P> event) {
@@ -44,7 +44,7 @@ public class WhenIsRemoveBinder<P, V> {
     return hr;
   }
 
-  private void update(ArrayList<V> values) {
+  private void update(List<V> values) {
     if (condition.evaluate(property)) {
       values.remove(newValue);
     } else if (!values.contains(newValue)) {
