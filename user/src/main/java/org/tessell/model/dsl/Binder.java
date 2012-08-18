@@ -20,7 +20,7 @@ import com.google.gwt.user.client.ui.HasValue;
  */
 public class Binder {
 
-  private Binder() {
+  protected Binder() {
   }
 
   /** @return a fluent {@link PropertyBinder} against {@code property}. */

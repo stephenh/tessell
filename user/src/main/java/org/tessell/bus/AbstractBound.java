@@ -2,10 +2,19 @@ package org.tessell.bus;
 
 import java.util.ArrayList;
 
+import org.tessell.model.dsl.Binder;
+
 import com.google.gwt.event.shared.HandlerRegistration;
 
-/** A basic presenter that tracks bound handler registrations. */
-public abstract class AbstractBound implements Bound {
+/**
+ * A basic presenter that tracks bound handler registrations.
+ *
+ * We inherit from Binder in an ugly way of auto-importing the static
+ * Binder.* methods into scope for our subclasses, particularly because
+ * our bind instance method prevents subclasses from using a static
+ * import for Binder.bind.
+ */
+public abstract class AbstractBound extends Binder implements Bound {
 
   private boolean bound = false;
   private boolean hasBeenUnbound = false;
