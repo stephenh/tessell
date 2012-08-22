@@ -1,11 +1,11 @@
 package org.tessell.widgets.form.actions;
 
-import static org.tessell.model.dsl.Binder.when;
 import static org.tessell.widgets.Widgets.newButton;
 
 import org.tessell.gwt.user.client.ui.IsButton;
 import org.tessell.model.commands.DispatchUiCommand;
 import org.tessell.model.commands.UiCommand;
+import org.tessell.model.dsl.Binder;
 import org.tessell.util.HTMLPanelBuilder;
 import org.tessell.util.Inflector;
 import org.tessell.widgets.form.FormPresenter;
@@ -37,15 +37,15 @@ public class ButtonFormAction implements FormAction {
   }
 
   @Override
-  public void bind(FormPresenter p) {
+  public void bind(FormPresenter p, Binder binder) {
     String id = p.getId() + "-" + Inflector.camelize(text);
     button.ensureDebugId(id);
     if (addOnlyIf) {
       command.addOnlyIf(p.allValid());
     }
-    when(command.enabled()).is(true).show(button);
+    binder.when(command.enabled()).is(true).show(button);
     if (command instanceof DispatchUiCommand) {
-      when(((DispatchUiCommand<?, ?>) command).active()).is(false).enable(button);
+      binder.when(((DispatchUiCommand<?, ?>) command).active()).is(false).enable(button);
     }
   }
 

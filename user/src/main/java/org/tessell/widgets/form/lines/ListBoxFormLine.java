@@ -44,12 +44,12 @@ public class ListBoxFormLine<T, O> extends AbstractFormLine<T> {
   }
 
   @Override
-  public void bind(FormPresenter p, PropertyGroup all) {
-    super.bind(p, all);
+  public void bind(FormPresenter p, PropertyGroup all, Binder binder) {
+    super.bind(p, all, binder);
     listBox.ensureDebugId(id);
     errorList.ensureDebugId(id + "-errors");
-    Binder.bind(property).to(listBox, possibleValues, adaptor);
-    Binder.bind(property).errorsTo(errorList);
+    binder.bind(property).to(listBox, possibleValues, adaptor);
+    binder.bind(property).errorsTo(errorList);
   }
 
   @Override

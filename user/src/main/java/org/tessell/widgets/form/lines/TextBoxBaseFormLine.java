@@ -23,13 +23,13 @@ public abstract class TextBoxBaseFormLine extends AbstractFormLine<String> {
   }
 
   @Override
-  public void bind(final FormPresenter p, PropertyGroup all) {
-    super.bind(p, all);
+  public void bind(final FormPresenter p, PropertyGroup all, Binder binder) {
+    super.bind(p, all, binder);
     textBox.ensureDebugId(id);
     errorList.ensureDebugId(id + "-errors");
     p.watchForEnterKey(textBox);
-    Binder.bind(property).to(textBox, errorList);
-    Binder.fireChangeOnBlur(textBox);
+    binder.bind(property).to(textBox, errorList);
+    binder.fireChangeOnBlur(textBox);
   }
 
   @Override

@@ -1,5 +1,6 @@
 package org.tessell.widgets.form.lines;
 
+import org.tessell.model.dsl.Binder;
 import org.tessell.model.properties.PropertyGroup;
 import org.tessell.util.HTMLPanelBuilder;
 import org.tessell.widgets.form.FormPresenter;
@@ -8,7 +9,7 @@ import org.tessell.widgets.form.FormPresenter;
 public abstract class StaticFormLine implements FormLine {
 
   @Override
-  public void bind(FormPresenter p, PropertyGroup all) {
+  public void bind(FormPresenter p, PropertyGroup all, Binder binder) {
   }
 
   @Override
