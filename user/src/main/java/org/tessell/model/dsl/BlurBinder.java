@@ -9,7 +9,8 @@ public class BlurBinder extends EventBinder {
 
   private final HasBlurHandlers blurable;
 
-  BlurBinder(HasBlurHandlers blurable) {
+  BlurBinder(final Binder b, final HasBlurHandlers blurable) {
+    super(b);
     this.blurable = blurable;
   }
 

@@ -6,17 +6,17 @@ import org.tessell.widgets.IsTextList;
 /** Binds specific rule outcomes to widgets, really only text lists. */
 public class RuleBinder {
 
+  private final Binder b;
   private final Rule rule;
 
-  public RuleBinder(final Rule rule) {
+  public RuleBinder(final Binder b, final Rule rule) {
+    this.b = b;
     this.rule = rule;
   }
 
-  public HandlerRegistrations errorsTo(final IsTextList list) {
+  public void errorsTo(final IsTextList list) {
     final TextListOnError i = new TextListOnError(list);
-    HandlerRegistrations hr = new HandlerRegistrations();
-    hr.add(rule.addRuleTriggeredHandler(i));
-    hr.add(rule.addRuleUntriggeredHandler(i));
-    return hr;
+    b.add(rule.addRuleTriggeredHandler(i));
+    b.add(rule.addRuleUntriggeredHandler(i));
   }
 }

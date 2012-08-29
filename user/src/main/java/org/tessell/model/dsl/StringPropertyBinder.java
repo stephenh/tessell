@@ -17,25 +17,24 @@ public class StringPropertyBinder extends PropertyBinder<String> {
 
   private final StringProperty sp;
 
-  public StringPropertyBinder(final StringProperty sp) {
-    super(sp);
+  public StringPropertyBinder(final Binder b, final StringProperty sp) {
+    super(b, sp);
     this.sp = sp;
   }
 
   @Override
-  public HandlerRegistrations to(final HasValue<String> source) {
+  public void to(final HasValue<String> source) {
     if (sp.getMaxLength() != null && source instanceof IsTextBox) {
       ((IsTextBox) source).setMaxLength(sp.getMaxLength());
     }
-    return super.to(source);
+    super.to(source);
   }
 
-  public <V extends HasValue<String> & HasKeyUpHandlers> HandlerRegistrations toKeyUp(final V source) {
+  public <V extends HasValue<String> & HasKeyUpHandlers> void toKeyUp(final V source) {
     if (sp.getMaxLength() != null && source instanceof IsTextBox) {
       ((IsTextBox) source).setMaxLength(sp.getMaxLength());
     }
-    final HandlerRegistrations hr = new HandlerRegistrations();
-    hr.add(sp.addPropertyChangedHandler(new PropertyChangedHandler<String>() {
+    b.add(sp.addPropertyChangedHandler(new PropertyChangedHandler<String>() {
       public void onPropertyChanged(final PropertyChangedEvent<String> event) {
         source.setValue(event.getProperty().get(), true);
       }
@@ -45,17 +44,16 @@ public class StringPropertyBinder extends PropertyBinder<String> {
     // after we've set the initial value (which fired ValueChangeEvent and
     // would have messed up our 'touched' state), listen for others changes
     if (!p.isReadOnly()) {
-      hr.add(source.addKeyUpHandler(new KeyUpHandler() {
+      b.add(source.addKeyUpHandler(new KeyUpHandler() {
         public void onKeyUp(final KeyUpEvent event) {
           p.set(source.getValue());
         }
       }));
-      hr.add(source.addValueChangeHandler(new ValueChangeHandler<String>() {
+      b.add(source.addValueChangeHandler(new ValueChangeHandler<String>() {
         public void onValueChange(final ValueChangeEvent<String> event) {
           p.set(sanitizeIfString(source.getValue()));
         }
       }));
     }
-    return hr;
   }
 }

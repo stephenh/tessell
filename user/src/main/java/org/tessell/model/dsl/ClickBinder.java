@@ -9,7 +9,8 @@ public class ClickBinder extends EventBinder {
 
   private final HasClickHandlers clickable;
 
-  ClickBinder(HasClickHandlers clickable) {
+  ClickBinder(final Binder b, final HasClickHandlers clickable) {
+    super(b);
     this.clickable = clickable;
   }
 

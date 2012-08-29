@@ -8,26 +8,26 @@ import org.tessell.model.properties.Property;
 /** Sets the style based on the property value. */
 public class WhenIsSetStyleBinder<P> {
 
+  private final Binder b;
   private final Property<P> property;
   private final WhenCondition<P> condition;
   private final String style;
 
-  public WhenIsSetStyleBinder(Property<P> property, WhenCondition<P> condition, final String style) {
+  public WhenIsSetStyleBinder(Binder b, Property<P> property, WhenCondition<P> condition, final String style) {
+    this.b = b;
     this.property = property;
     this.style = style;
     this.condition = condition;
   }
 
   /** Sets/removes our {@code style} when our property is {@code true}. */
-  public HandlerRegistrations on(final HasCss css) {
-    HandlerRegistrations hr = new HandlerRegistrations();
-    hr.add(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
+  public void on(final HasCss css) {
+    b.add(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
       public void onPropertyChanged(PropertyChangedEvent<P> event) {
         update(css);
       }
     }));
     update(css); // set initial value
-    return hr;
   }
 
   private void update(HasCss css) {

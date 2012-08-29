@@ -9,7 +9,8 @@ public class ChangeBinder extends EventBinder {
 
   private final HasValueChangeHandlers<Object> changable;
 
-  ChangeBinder(HasValueChangeHandlers<Object> changable) {
+  ChangeBinder(final Binder b, final HasValueChangeHandlers<Object> changable) {
+    super(b);
     this.changable = changable;
   }
 

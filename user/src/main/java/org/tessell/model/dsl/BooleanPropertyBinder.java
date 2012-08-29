@@ -15,14 +15,13 @@ public class BooleanPropertyBinder extends PropertyBinder<Boolean> {
 
   private final BooleanProperty bp;
 
-  public BooleanPropertyBinder(BooleanProperty bp) {
-    super(bp);
+  public BooleanPropertyBinder(final Binder b, final BooleanProperty bp) {
+    super(b, bp);
     this.bp = bp;
   }
 
-  public HandlerRegistrations to(final IsRadioButton ifTrue, final IsRadioButton ifFalse) {
-    HandlerRegistrations hr = new HandlerRegistrations();
-    hr.add(ifTrue.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+  public void to(final IsRadioButton ifTrue, final IsRadioButton ifFalse) {
+    b.add(ifTrue.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
       public void onValueChange(ValueChangeEvent<Boolean> event) {
         if (TRUE.equals(event.getValue())) {
           bp.set(true);
@@ -30,7 +29,7 @@ public class BooleanPropertyBinder extends PropertyBinder<Boolean> {
         }
       }
     }));
-    hr.add(ifFalse.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+    b.add(ifFalse.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
       public void onValueChange(ValueChangeEvent<Boolean> event) {
         if (TRUE.equals(event.getValue())) {
           bp.set(false);
@@ -38,7 +37,7 @@ public class BooleanPropertyBinder extends PropertyBinder<Boolean> {
         }
       }
     }));
-    hr.add(bp.addPropertyChangedHandler(new PropertyChangedHandler<Boolean>() {
+    b.add(bp.addPropertyChangedHandler(new PropertyChangedHandler<Boolean>() {
       public void onPropertyChanged(PropertyChangedEvent<Boolean> event) {
         if (bp.isTrue()) {
           set(ifTrue, ifFalse);
@@ -53,7 +52,6 @@ public class BooleanPropertyBinder extends PropertyBinder<Boolean> {
     } else {
       set(ifFalse, ifTrue);
     }
-    return hr;
   }
 
   private void set(IsRadioButton nowChecked, IsRadioButton notChecked) {

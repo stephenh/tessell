@@ -12,18 +12,24 @@ import com.google.gwt.user.client.ui.Focusable;
 
 public abstract class EventBinder {
 
+  private final Binder b;
+
+  protected EventBinder(final Binder b) {
+    this.b = b;
+  }
+
   /** @return a fluent builder to set {@code property} when triggered. */
   public <P> SetPropertyBinder<P> set(Property<P> property) {
-    return new SetPropertyBinder<P>(property, new SetPropertyBinder.Setup() {
-      public HandlerRegistrations setup(final Runnable runnable) {
-        return new HandlerRegistrations(hookUpRunnable(runnable));
+    return new SetPropertyBinder<P>(b, property, new SetPropertyBinder.Setup() {
+      public HandlerRegistration setup(final Runnable runnable) {
+        return hookUpRunnable(runnable);
       }
     });
   }
 
   /** Toggles {@code property} each time the event is triggered. */
-  public HandlerRegistrations toggle(final BooleanProperty property) {
-    return new HandlerRegistrations(hookUpEventRunnable(new DomEventRunnable() {
+  public void toggle(final BooleanProperty property) {
+    b.add(hookUpEventRunnable(new DomEventRunnable() {
       public void run(DomEvent<?> event) {
         property.toggle();
         if (event != null) {
@@ -34,8 +40,8 @@ public abstract class EventBinder {
   }
 
   /** Focuses on {@code focusable} when triggered. */
-  public HandlerRegistrations focus(final Focusable focusable) {
-    return new HandlerRegistrations(hookUpEventRunnable(new DomEventRunnable() {
+  public void focus(final Focusable focusable) {
+    b.add(hookUpEventRunnable(new DomEventRunnable() {
       public void run(DomEvent<?> event) {
         focusable.setFocus(true);
         if (event != null) {
@@ -70,20 +76,20 @@ public abstract class EventBinder {
       this.value = value;
     }
 
-    public HandlerRegistration to(final List<P> values) {
-      return hookUpRunnable(new Runnable() {
+    public void to(final List<P> values) {
+      b.add(hookUpRunnable(new Runnable() {
         public void run() {
           values.add(value);
         }
-      });
+      }));
     }
 
-    public HandlerRegistration to(final ListProperty<P> values) {
-      return hookUpRunnable(new Runnable() {
+    public void to(final ListProperty<P> values) {
+      b.add(hookUpRunnable(new Runnable() {
         public void run() {
           values.add(value);
         }
-      });
+      }));
     }
   }
 
@@ -94,20 +100,20 @@ public abstract class EventBinder {
       this.value = value;
     }
 
-    public HandlerRegistration from(final List<P> values) {
-      return hookUpRunnable(new Runnable() {
+    public void from(final List<P> values) {
+      b.add(hookUpRunnable(new Runnable() {
         public void run() {
           values.remove(value);
         }
-      });
+      }));
     }
 
-    public HandlerRegistration from(final ListProperty<P> values) {
-      return hookUpRunnable(new Runnable() {
+    public void from(final ListProperty<P> values) {
+      b.add(hookUpRunnable(new Runnable() {
         public void run() {
           values.remove(value);
         }
-      });
+      }));
     }
   }
 

@@ -4,6 +4,7 @@ import static com.google.gwt.event.dom.client.KeyCodes.KEY_TAB;
 
 import java.util.Arrays;
 
+import org.tessell.bus.AbstractBound;
 import org.tessell.model.commands.UiCommand;
 import org.tessell.model.properties.*;
 import org.tessell.model.validation.rules.Rule;
@@ -11,6 +12,7 @@ import org.tessell.model.validation.rules.Rule;
 import com.google.gwt.event.dom.client.*;
 import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.HasValue;
 
 /**
@@ -18,104 +20,100 @@ import com.google.gwt.user.client.ui.HasValue;
  * 
  * Very heavily influenced by gwt-pectin.
  */
-public class Binder {
+public class Binder extends AbstractBound {
 
   /** @return a fluent {@link PropertyBinder} against {@code property}. */
   public <P> PropertyBinder<P> bind(Property<P> property) {
-    return new PropertyBinder<P>(property);
+    return new PropertyBinder<P>(this, property);
   }
 
   /** @return a fluent {@link ListPropertyBinder} against {@code property}. */
   public <P> ListPropertyBinder<P> bind(ListProperty<P> property) {
-    return new ListPropertyBinder<P>(property);
+    return new ListPropertyBinder<P>(this, property);
   }
 
   /** @return a fluent {@link RuleBinder} against {@code rule}. */
   public RuleBinder bind(Rule rule) {
-    return new RuleBinder(rule);
+    return new RuleBinder(this, rule);
   }
 
   /** @return a fluent {@link StringPropertyBinder} against {@code property}. */
   public <P> StringPropertyBinder bind(StringProperty property) {
-    return new StringPropertyBinder(property);
+    return new StringPropertyBinder(this, property);
   }
 
   /** @return a fluent {@link BooleanPropertyBinder} against {@code property}. */
   public <P> BooleanPropertyBinder bind(BooleanProperty property) {
-    return new BooleanPropertyBinder(property);
+    return new BooleanPropertyBinder(this, property);
   }
 
   /** @return a fluent {@link EnumPropertyBinder} against {@code property}. */
   public <E extends Enum<E>> EnumPropertyBinder<E> bind(EnumProperty<E> property) {
-    return new EnumPropertyBinder<E>(property);
+    return new EnumPropertyBinder<E>(this, property);
   }
 
   /** @return a fluent {@link UiCommandBinder} against {@code command}. */
   public UiCommandBinder bind(UiCommand command) {
-    return new UiCommandBinder(command);
+    return new UiCommandBinder(this, command);
   }
 
   /** @return a fluent {@link WhenBinder} against {@code property}. */
   public <P> WhenBinder<P> when(Property<P> property) {
-    return new WhenBinder<P>(property);
+    return new WhenBinder<P>(this, property);
   }
 
   /** @return a fluent {@link EventBinder} against {@code clickable}. */
   public EventBinder onClick(HasClickHandlers clickable) {
-    return new ClickBinder(clickable);
+    return new ClickBinder(this, clickable);
   }
 
   /** @return a fluent {@link EventBinder} against {@code clickable}. */
   public EventBinder onDoubleClick(HasDoubleClickHandlers clickable) {
-    return new DoubleClickBinder(clickable);
+    return new DoubleClickBinder(this, clickable);
   }
 
   /** @return a fluent {@link EventBinder} against {@code blurable}. */
   public EventBinder onBlur(HasBlurHandlers blurable) {
-    return new BlurBinder(blurable);
+    return new BlurBinder(this, blurable);
   }
 
   /** @return a fluent {@link EventBinder} against {@code changable}. */
   @SuppressWarnings("unchecked")
   public EventBinder onChange(HasValueChangeHandlers<?> changable) {
-    return new ChangeBinder((HasValueChangeHandlers<Object>) changable);
+    return new ChangeBinder(this, (HasValueChangeHandlers<Object>) changable);
   }
 
   /** @return a fluent {@link EventBinder} against {@code keyDownable}. */
   public EventBinder onKeyDown(HasKeyDownHandlers keyDownable) {
-    return new KeyDownBinder(keyDownable, null);
+    return new KeyDownBinder(this, keyDownable, null);
   }
 
   /** @return a fluent {@link EventBinder} against {@code keyDownable}, when {@code char} is pressed. */
   public EventBinder onKeyDown(HasKeyDownHandlers keyDownable, Integer... filter) {
-    return new KeyDownBinder(keyDownable, Arrays.asList(filter));
+    return new KeyDownBinder(this, keyDownable, Arrays.asList(filter));
   }
 
   /** Enhances each {@code source} to fire change events on key up and blur. */
-  public <P, S extends HasKeyUpHandlers & HasBlurHandlers & HasValue<P>> Binder enhance(S... sources) {
+  public <P, S extends HasKeyUpHandlers & HasBlurHandlers & HasValue<P>> void enhance(S... sources) {
     fireChangeOnBlur(sources);
     fireChangeOnKeyUp(sources);
-    return this;
   }
 
   /** Forces a {@link ValueChangeEvent} (and hence touching) of each {@code source} on blur. */
-  public <P, S extends HasBlurHandlers & HasValue<P>> HandlerRegistrations fireChangeOnBlur(S... sources) {
-    HandlerRegistrations hrs = new HandlerRegistrations();
+  public <P, S extends HasBlurHandlers & HasValue<P>> void fireChangeOnBlur(S... sources) {
     for (final S source : sources) {
-      hrs.add(source.addBlurHandler(new BlurHandler() {
+      add(source.addBlurHandler(new BlurHandler() {
         public void onBlur(final BlurEvent event) {
           ValueChangeEvent.fire(source, source.getValue());
         }
       }));
     }
-    return hrs;
   }
 
   /** Forces a {@link ValueChangeEvent} (and hence touching) of each {@code source} on key up. */
-  public <P, S extends HasKeyUpHandlers & HasValue<P>> HandlerRegistrations fireChangeOnKeyUp(S... sources) {
-    HandlerRegistrations hrs = new HandlerRegistrations();
+  public <P, S extends HasKeyUpHandlers & HasValue<P>> void fireChangeOnKeyUp(S... sources) {
     for (final S source : sources) {
-      hrs.add(source.addKeyUpHandler(new KeyUpHandler() {
+      add(source.addKeyUpHandler(new KeyUpHandler() {
         public void onKeyUp(final KeyUpEvent event) {
           if (event.getNativeKeyCode() == KEY_TAB) {
             return; // ignore tabbing into the field
@@ -124,7 +122,6 @@ public class Binder {
         }
       }));
     }
-    return hrs;
   }
 
   /*
@@ -154,14 +151,12 @@ public class Binder {
    */
 
   /** Forces a {@link ValueChangeEvent} of each {@code source} on key up, after it's been touched. */
-  public <P, S extends HasKeyUpHandlers & HasBlurHandlers & HasValue<P>> HandlerRegistrations fireChangeOnBlurThenKeyUp(S... sources) {
-    HandlerRegistrations hr = new HandlerRegistrations();
+  public <P, S extends HasKeyUpHandlers & HasBlurHandlers & HasValue<P>> void fireChangeOnBlurThenKeyUp(S... sources) {
     for (final S source : sources) {
       BlurThenKeyUp<P> h = new BlurThenKeyUp<P>(source);
-      hr.add(source.addKeyUpHandler(h));
-      hr.add(source.addBlurHandler(h));
+      add(source.addKeyUpHandler(h));
+      add(source.addBlurHandler(h));
     }
-    return hr;
   }
 
   /** Fires {@link ValueChangeEvent} on blur (always) and key up (after a blur has been fired). */
@@ -202,4 +197,7 @@ public class Binder {
     }
   }
 
+  protected void add(HandlerRegistration registration) {
+    super.registerHandler(registration);
+  }
 }

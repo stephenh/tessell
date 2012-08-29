@@ -8,19 +8,20 @@ import com.google.gwt.user.client.TakesValue;
 
 public class WhenIsSetValueBinder<P, Q> {
 
+  private final Binder b;
   private final Property<P> property;
   private final WhenCondition<P> condition;
   private final TakesValue<Q> value;
 
-  WhenIsSetValueBinder(final Property<P> property, final WhenCondition<P> condition, final TakesValue<Q> value) {
+  WhenIsSetValueBinder(final Binder b, final Property<P> property, final WhenCondition<P> condition, final TakesValue<Q> value) {
+    this.b = b;
     this.property = property;
     this.condition = condition;
     this.value = value;
   }
 
-  public HandlerRegistrations to(final Q newValue) {
-    final HandlerRegistrations hr = new HandlerRegistrations();
-    hr.add(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
+  public void to(final Q newValue) {
+    b.add(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
       public void onPropertyChanged(final PropertyChangedEvent<P> event) {
         if (condition.evaluate(property)) {
           value.setValue(newValue);
@@ -31,19 +32,16 @@ public class WhenIsSetValueBinder<P, Q> {
       // set initial
       value.setValue(newValue);
     }
-    return hr;
   }
 
-  public HandlerRegistrations toOrElse(final Q ifTrue, final Q ifFalse) {
-    final HandlerRegistrations hr = new HandlerRegistrations();
-    hr.add(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
+  public void toOrElse(final Q ifTrue, final Q ifFalse) {
+    b.add(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
       public void onPropertyChanged(final PropertyChangedEvent<P> event) {
         update(ifTrue, ifFalse);
       }
     }));
     // set initial value
     update(ifTrue, ifFalse);
-    return hr;
   }
 
   private void update(final Q ifTrue, final Q ifFalse) {

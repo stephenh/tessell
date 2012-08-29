@@ -13,12 +13,12 @@ public class EnumPropertyBinder<E extends Enum<E>> extends PropertyBinder<E> {
 
   private final EnumProperty<E> ep;
 
-  EnumPropertyBinder(EnumProperty<E> ep) {
-    super(ep);
+  EnumPropertyBinder(final Binder b, final EnumProperty<E> ep) {
+    super(b, ep);
     this.ep = ep;
   }
 
-  public HandlerRegistrations to(final IsListBox source, final E[] values) {
+  public void to(final IsListBox source, final E[] values) {
     int i = 0;
     for (E value : values) {
       source.addItem(value.toString(), Integer.toString(i++));
@@ -28,7 +28,7 @@ public class EnumPropertyBinder<E extends Enum<E>> extends PropertyBinder<E> {
       ep.set(values[0]);
     }
     source.setSelectedIndex(Arrays.asList(values).indexOf(ep.get()));
-    return new HandlerRegistrations(source.addChangeHandler(new ChangeHandler() {
+    b.add(source.addChangeHandler(new ChangeHandler() {
       public void onChange(ChangeEvent event) {
         int i = source.getSelectedIndex();
         if (i == -1) {

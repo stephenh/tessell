@@ -13,33 +13,30 @@ import com.google.gwt.event.dom.client.HasClickHandlers;
 /** Binds various things to a command. */
 public class UiCommandBinder {
 
+  private final Binder b;
   private final UiCommand command;
 
-  public UiCommandBinder(final UiCommand command) {
+  public UiCommandBinder(final Binder b, final UiCommand command) {
+    this.b = b;
     this.command = command;
   }
 
   /** Binds clicks from {@code clickable} to our command, and our errors to {@code errors}. */
-  public HandlerRegistrations to(final HasClickHandlers clickable, final IsTextList errors) {
-    HandlerRegistrations hr = new HandlerRegistrations();
-    hr.add(to(clickable));
-    hr.add(errorsTo(errors));
-    return hr;
+  public void to(final HasClickHandlers clickable, final IsTextList errors) {
+    to(clickable);
+    errorsTo(errors);
   }
 
   /** Binds "enter" from key down handlers to our command. */
-  public HandlerRegistrations toEnterKey(final HasAllKeyHandlers... allKeys) {
-    HandlerRegistrations hr = new HandlerRegistrations();
+  public void toEnterKey(final HasAllKeyHandlers... allKeys) {
+    OnEnterKeyHandler h = new OnEnterKeyHandler(new Runnable() {
+      public void run() {
+        command.execute();
+      }
+    });
     for (HasAllKeyHandlers allKey : allKeys) {
-      OnEnterKeyHandler h = new OnEnterKeyHandler(new Runnable() {
-        public void run() {
-          command.execute();
-        }
-      });
-      hr.add(allKey.addKeyDownHandler(h));
-      hr.add(allKey.addKeyDownHandler(h));
+      b.add(allKey.addKeyDownHandler(h));
     }
-    return hr;
   }
 
   /** Has our command execute only if {@code onlyIf} is true. */
@@ -49,8 +46,8 @@ public class UiCommandBinder {
   }
 
   /** Binds clicks from {@code clickable} to our command. */
-  public HandlerRegistrations to(final HasClickHandlers clickable) {
-    return new HandlerRegistrations(clickable.addClickHandler(new ClickHandler() {
+  public void to(final HasClickHandlers clickable) {
+    b.add(clickable.addClickHandler(new ClickHandler() {
       public void onClick(ClickEvent event) {
         command.execute();
         event.preventDefault();
@@ -59,11 +56,9 @@ public class UiCommandBinder {
   }
 
   /** Binds errors for our command to {@code errors}. */
-  public HandlerRegistrations errorsTo(IsTextList errors) {
+  public void errorsTo(IsTextList errors) {
     final TextListOnError i = new TextListOnError(errors);
-    HandlerRegistrations hr = new HandlerRegistrations();
-    hr.add(command.addRuleTriggeredHandler(i));
-    hr.add(command.addRuleUntriggeredHandler(i));
-    return hr;
+    b.add(command.addRuleTriggeredHandler(i));
+    b.add(command.addRuleUntriggeredHandler(i));
   }
 }

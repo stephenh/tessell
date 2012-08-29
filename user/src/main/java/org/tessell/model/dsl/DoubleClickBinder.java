@@ -9,7 +9,8 @@ public class DoubleClickBinder extends EventBinder {
 
   private final HasDoubleClickHandlers clickable;
 
-  DoubleClickBinder(HasDoubleClickHandlers clickable) {
+  DoubleClickBinder(final Binder b, final HasDoubleClickHandlers clickable) {
+    super(b);
     this.clickable = clickable;
   }
 

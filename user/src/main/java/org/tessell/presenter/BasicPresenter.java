@@ -5,12 +5,14 @@ import java.util.NoSuchElementException;
 
 import org.tessell.bus.AbstractBound;
 import org.tessell.gwt.user.client.ui.IsWidget;
+import org.tessell.model.dsl.Binder;
 
 import com.google.gwt.user.client.ui.Widget;
 
 /** A basic presenter that tracks bound handler registrations. */
 public abstract class BasicPresenter<V extends IsWidget> extends AbstractBound implements Presenter, com.google.gwt.user.client.ui.IsWidget {
 
+  protected final Binder binder = new Binder();
   protected final V view;
   private ArrayList<Presenter> children;
 
@@ -41,6 +43,8 @@ public abstract class BasicPresenter<V extends IsWidget> extends AbstractBound i
   @Override
   protected void onBind() {
     super.onBind();
+    // allow handler registrations
+    binder.bind();
     // bind anybody that got added before we were bound
     if (children != null) {
       for (final Presenter child : children) {
@@ -57,6 +61,7 @@ public abstract class BasicPresenter<V extends IsWidget> extends AbstractBound i
         child.unbind();
       }
     }
+    binder.unbind();
   }
 
   /** Adds {@code child} as a child presenter, and binds it if we're already bound. */

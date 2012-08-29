@@ -12,7 +12,8 @@ public class KeyDownBinder extends EventBinder {
   private final HasKeyDownHandlers keyDownable;
   private final List<Integer> charFilter;
 
-  public KeyDownBinder(HasKeyDownHandlers keyDownable, List<Integer> charFilter) {
+  public KeyDownBinder(final Binder b, final HasKeyDownHandlers keyDownable, final List<Integer> charFilter) {
+    super(b);
     this.keyDownable = keyDownable;
     this.charFilter = charFilter;
   }
