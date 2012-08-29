@@ -19,7 +19,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  *
  * This allows conditional action on the command's activeness, e.g. disabling buttons.
  */
-public abstract class DispatchUiCommand<A extends Action<R>, R extends Result> extends UiCommand {
+public abstract class DispatchUiCommand<A extends Action<R>, R extends Result> extends UiCommand implements HasActive {
 
   private final OutstandingDispatchAsync async;
   private final BooleanProperty active = booleanProperty("active", false);

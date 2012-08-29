@@ -25,6 +25,7 @@ import org.tessell.model.properties.*;
 import org.tessell.model.validation.Valid;
 import org.tessell.model.values.DerivedValue;
 import org.tessell.model.values.SetValue;
+import org.tessell.tests.model.commands.DummyActiveCommand;
 import org.tessell.tests.model.commands.DummyUiCommand;
 import org.tessell.util.cookies.StringCookie;
 import org.tessell.widgets.StubTextList;
@@ -498,6 +499,17 @@ public class BinderTest {
     final StubClickEvent click = new StubClickEvent();
     button.fireEvent(click);
     assertThat(click.prevented, is(true));
+  }
+
+  @Test
+  public void commandDisablesButton() {
+    final DummyActiveCommand command = new DummyActiveCommand();
+    final StubButton button = new StubButton();
+    binder.bind(command).to(button);
+    button.click();
+    assertThat(button.isEnabled(), is(false));
+    command.done();
+    assertThat(button.isEnabled(), is(true));
   }
 
   @Test

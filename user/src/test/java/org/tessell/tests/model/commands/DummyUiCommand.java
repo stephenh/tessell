@@ -3,7 +3,7 @@ package org.tessell.tests.model.commands;
 import org.tessell.model.commands.UiCommand;
 
 /** Fails depending on the instance variable {@code fail}. */
-public final class DummyUiCommand extends UiCommand {
+public class DummyUiCommand extends UiCommand {
 
   private boolean fail = false;
   private int executions = 0;

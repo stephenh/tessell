@@ -1,5 +1,6 @@
 package org.tessell.model.dsl;
 
+import org.tessell.model.commands.HasActive;
 import org.tessell.model.commands.UiCommand;
 import org.tessell.model.properties.Property;
 import org.tessell.util.OnEnterKeyHandler;
@@ -9,6 +10,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasAllKeyHandlers;
 import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.user.client.ui.HasEnabled;
 
 /** Binds various things to a command. */
 public class UiCommandBinder {
@@ -53,6 +55,10 @@ public class UiCommandBinder {
         event.preventDefault();
       }
     }));
+    if (command instanceof HasActive && clickable instanceof HasEnabled) {
+      Property<Boolean> active = ((HasActive) command).active();
+      b.when(active).is(true).disable((HasEnabled) clickable);
+    }
   }
 
   /** Binds errors for our command to {@code errors}. */
