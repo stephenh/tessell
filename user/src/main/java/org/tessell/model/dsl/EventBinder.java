@@ -51,6 +51,15 @@ public abstract class EventBinder {
     }));
   }
 
+  /** Cancels the event's default action. */
+  public void preventDefault() {
+    b.add(hookUpEventRunnable(new DomEventRunnable() {
+      public void run(DomEvent<?> event) {
+        event.preventDefault();
+      }
+    }));
+  }
+
   /** @return a fluent binder to add {@code value} to a list when triggered. */
   public <P> AddBinder<P> add(P value) {
     return new AddBinder<P>(value);

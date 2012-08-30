@@ -713,6 +713,14 @@ public class BinderTest {
   }
 
   @Test
+  public void onClickPreventDefault() {
+    binder.onClick(box).preventDefault();
+    StubClickEvent e = new StubClickEvent();
+    box.fireEvent(e);
+    assertThat(e.prevented, is(true));
+  }
+
+  @Test
   public void onKeyDown() {
     final StubTextBox b = new StubTextBox();
     binder.onKeyDown(b).set(s).to("asdf");
