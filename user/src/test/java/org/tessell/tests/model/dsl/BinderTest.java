@@ -9,9 +9,7 @@ import static org.junit.Assert.assertThat;
 import static org.tessell.model.dsl.TakesValues.textOf;
 import static org.tessell.model.dsl.WhenConditions.notNull;
 import static org.tessell.model.properties.NewProperty.*;
-import static org.tessell.testing.TessellMatchers.hasStyle;
-import static org.tessell.testing.TessellMatchers.hidden;
-import static org.tessell.testing.TessellMatchers.shown;
+import static org.tessell.testing.TessellMatchers.*;
 
 import java.util.ArrayList;
 
@@ -510,6 +508,19 @@ public class BinderTest {
     assertThat(button.isEnabled(), is(false));
     command.done();
     assertThat(button.isEnabled(), is(true));
+  }
+
+  @Test
+  public void commandShowsSpinner() {
+    final DummyActiveCommand command = new DummyActiveCommand();
+    final StubButton button = new StubButton();
+    final StubImage spinner = new StubImage();
+    binder.bind(command).to(button).spin(spinner);
+    assertThat(spinner, is(invisible()));
+    button.click();
+    assertThat(spinner, is(visible()));
+    command.done();
+    assertThat(spinner, is(invisible()));
   }
 
   @Test
