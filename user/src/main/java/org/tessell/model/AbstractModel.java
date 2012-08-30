@@ -1,10 +1,6 @@
 package org.tessell.model;
 
-import org.tessell.model.events.HasMemberChangedHandlers;
-import org.tessell.model.events.MemberChangedEvent;
-import org.tessell.model.events.MemberChangedHandler;
-import org.tessell.model.events.PropertyChangedEvent;
-import org.tessell.model.events.PropertyChangedHandler;
+import org.tessell.model.events.*;
 import org.tessell.model.properties.Property;
 import org.tessell.model.properties.PropertyGroup;
 
@@ -16,13 +12,8 @@ import com.google.gwt.event.shared.SimplerEventBus;
 /** A base class for models. Provides a {@link PropertyGroup} for all of the properties. */
 public abstract class AbstractModel implements Model {
 
-  private final PropertyGroup all = new PropertyGroup("all", "model invalid");
+  protected final PropertyGroup all = new PropertyGroup("all", "model invalid");
   private final EventBus handlers = new SimplerEventBus();
-
-  // eventually may not be public?
-  public PropertyGroup all() {
-    return all;
-  }
 
   @Override
   public Property<Boolean> allValid() {

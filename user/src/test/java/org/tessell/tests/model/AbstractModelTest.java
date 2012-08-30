@@ -59,7 +59,7 @@ public class AbstractModelTest {
   @Test
   public void allFiresAnErrorMessage() {
     final String[] message = { null };
-    e.all().addRuleTriggeredHandler(new RuleTriggeredHandler() {
+    e.allValid().addRuleTriggeredHandler(new RuleTriggeredHandler() {
       public void onTrigger(RuleTriggeredEvent event) {
         message[0] = event.getMessage();
       }
