@@ -25,6 +25,7 @@ import org.tessell.model.values.DerivedValue;
 import org.tessell.model.values.SetValue;
 import org.tessell.tests.model.commands.DummyActiveCommand;
 import org.tessell.tests.model.commands.DummyUiCommand;
+import org.tessell.tests.model.properties.DummyModel;
 import org.tessell.util.cookies.StringCookie;
 import org.tessell.widgets.StubTextList;
 import org.tessell.widgets.StubWidget;
@@ -721,6 +722,14 @@ public class BinderTest {
   }
 
   @Test
+  public void onClickExecute() {
+    DummyUiCommand c = new DummyUiCommand();
+    binder.onClick(box).execute(c);
+    box.click();
+    assertThat(c.getExecutions(), is(1));
+  }
+
+  @Test
   public void onKeyDown() {
     final StubTextBox b = new StubTextBox();
     binder.onKeyDown(b).set(s).to("asdf");
@@ -753,6 +762,23 @@ public class BinderTest {
     assertThat(b.get(), is(true));
     box.type("fdas");
     assertThat(b.get(), is(false));
+  }
+
+  @Test
+  public void onPropertyChange() {
+    DummyUiCommand c = new DummyUiCommand();
+    binder.onChange(s).execute(c);
+    s.set("asdf");
+    assertThat(c.getExecutions(), is(1));
+  }
+
+  @Test
+  public void onMemberChange() {
+    DummyUiCommand c = new DummyUiCommand();
+    DummyModel m = new DummyModel();
+    binder.onMemberChange(m).execute(c);
+    m.name.set("asdf");
+    assertThat(c.getExecutions(), is(1));
   }
 
 }

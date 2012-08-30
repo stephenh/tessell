@@ -2,6 +2,7 @@ package org.tessell.model.dsl;
 
 import java.util.List;
 
+import org.tessell.model.commands.UiCommand;
 import org.tessell.model.properties.BooleanProperty;
 import org.tessell.model.properties.ListProperty;
 import org.tessell.model.properties.Property;
@@ -56,6 +57,15 @@ public abstract class EventBinder {
     b.add(hookUpEventRunnable(new DomEventRunnable() {
       public void run(DomEvent<?> event) {
         event.preventDefault();
+      }
+    }));
+  }
+
+  /** Executes {@code command} when triggered. */
+  public void execute(final UiCommand command) {
+    b.add(hookUpRunnable(new Runnable() {
+      public void run() {
+        command.execute();
       }
     }));
   }

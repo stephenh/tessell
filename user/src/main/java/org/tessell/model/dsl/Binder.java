@@ -6,6 +6,7 @@ import java.util.Arrays;
 
 import org.tessell.bus.AbstractBound;
 import org.tessell.model.commands.UiCommand;
+import org.tessell.model.events.HasMemberChangedHandlers;
 import org.tessell.model.properties.*;
 import org.tessell.model.validation.rules.Rule;
 
@@ -81,6 +82,17 @@ public class Binder extends AbstractBound {
   @SuppressWarnings("unchecked")
   public EventBinder onChange(HasValueChangeHandlers<?> changable) {
     return new ChangeBinder(this, (HasValueChangeHandlers<Object>) changable);
+  }
+
+  /** @return a fluent {@link EventBinder} against {@code property}. */
+  @SuppressWarnings("unchecked")
+  public EventBinder onChange(Property<?> property) {
+    return new PropertyChangeBinder(this, (Property<Object>) property);
+  }
+
+  /** @return a fluent {@link EventBinder} against {@code hasMembers}. */
+  public EventBinder onMemberChange(HasMemberChangedHandlers hasMembers) {
+    return new MemberChangeBinder(this, hasMembers);
   }
 
   /** @return a fluent {@link EventBinder} against {@code keyDownable}. */
