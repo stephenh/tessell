@@ -111,6 +111,26 @@ public class FormattedPropertyTest extends AbstractRuleTest {
     assertThat(tracker.values, contains("2-2"));
   }
 
+  @Test
+  public void setInitialLeavesSourcePropertyUntouched() {
+    IntegerProperty i = integerProperty("i", 1);
+    Property<String> p = i.formatted(f);
+    p.setInitialValue("2");
+    assertThat(i.getValue(), is(2));
+    assertThat(i.isTouched(), is(false));
+  }
+
+  @Test
+  public void setInitialLeavesSourcePropertyUntouchedEvenOnErrors() {
+    // note that this behavior seems right; but it's not
+    // driven from real world usage
+    IntegerProperty i = integerProperty("i", 1);
+    Property<String> p = i.formatted(f);
+    p.setInitialValue("blah");
+    assertThat(i.getValue(), is(1));
+    assertThat(i.isTouched(), is(false));
+  }
+
   private final PropertyFormatter<Integer, String> f = new PropertyFormatter<Integer, String>() {
     @Override
     public String format(Integer a) {

@@ -89,4 +89,11 @@ public class PropertyTest extends AbstractRuleTest {
     assertThat(asWasInvalid[0], is(true));
   }
 
+  @Test
+  public void setInitialLeavesPropertiesUnTouched() {
+    final IntegerProperty a = integerProperty("a");
+    a.setInitialValue(1);
+    assertThat(a.isTouched(), is(false));
+  }
+
 }
