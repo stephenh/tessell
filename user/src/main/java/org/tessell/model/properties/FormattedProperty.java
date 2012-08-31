@@ -75,11 +75,11 @@ public class FormattedProperty<DP, SP> implements Property<DP> {
   }
 
   @Override
-  public void setInitial(DP value) {
+  public void setInitialValue(DP value) {
     // null and "" are special
     if (value == null || "".equals(value)) {
       isValid.set(true);
-      source.setInitial(null);
+      source.setInitialValue(null);
       return;
     }
     final SP parsed;
@@ -90,7 +90,7 @@ public class FormattedProperty<DP, SP> implements Property<DP> {
       return;
     }
     isValid.set(true);
-    source.setInitial(parsed);
+    source.setInitialValue(parsed);
   }
 
   @Override

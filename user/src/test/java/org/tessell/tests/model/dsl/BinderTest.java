@@ -393,6 +393,7 @@ public class BinderTest {
     cookies.set("c", "foo");
     binder.bind(s).to(c);
     assertThat(s.get(), is("foo"));
+    assertThat(s.isTouched(), is(false));
     assertThat(c.getValue(), is("foo"));
   }
 

@@ -38,7 +38,7 @@ public class PropertyBinder<P> {
     // value of value. Do this only one, and only if the property looks unset
     // (non-touched and null).
     if (b.canSetInitialValue(p) && value.getValue() != null) {
-      p.set(value.getValue());
+      p.setInitialValue(value.getValue());
     } else {
       value.setValue(p.get());
     }

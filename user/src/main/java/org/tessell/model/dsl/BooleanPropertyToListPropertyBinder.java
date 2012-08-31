@@ -31,7 +31,7 @@ public class BooleanPropertyToListPropertyBinder<V> {
       }
     }));
     if (b.canSetInitialValue(p)) {
-      p.setInitial(values.get().contains(value));
+      p.setInitialValue(values.get().contains(value));
     } else {
       update(value); // set initial
     }
