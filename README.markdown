@@ -24,4 +24,12 @@ Notes
 
 * ResourcesGenerator assumes a global namespace of image/CSS files, even if you use subdirectories. It also assumes all image/CSS files are below the packageName you pass to it.
 
+Binder DSL Ideas
+----------------
+
+* SetActions
+
+      binder.when(...).is(true).set(//
+        textOf(...).toOrElse("", ""), // toOrElse returns SetAction
+        styleOf(...).to(bz.active())); // to returns SetAction
 
