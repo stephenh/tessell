@@ -253,6 +253,54 @@ public class BinderTest {
   }
 
   @Test
+  public void whenValueAddToListInitializesProperty() {
+    final EnumProperty<Color> color = enumProperty("color");
+    final ArrayList<String> list = new ArrayList<String>();
+    list.add("foo");
+    binder.when(color).is(Color.Blue).add("foo").to(list);
+    assertThat(color.get(), is(Color.Blue));
+    assertThat(color.isTouched(), is(false));
+  }
+
+  @Test
+  public void whenValueAddToListDoesNotInitializeProperty() {
+    final EnumProperty<Color> color = enumProperty("color");
+    final ArrayList<String> list = new ArrayList<String>();
+    // foo isn't in the list, so we leave color alone
+    binder.when(color).is(Color.Blue).add("foo").to(list);
+    assertThat(color.get(), is(nullValue()));
+    assertThat(color.isTouched(), is(false));
+  }
+
+  @Test
+  public void whenValueRemoveFromListInitializesProperty() {
+    final EnumProperty<Color> color = enumProperty("color");
+    final ArrayList<String> list = new ArrayList<String>();
+    binder.when(color).is(Color.Blue).remove("foo").from(list);
+    assertThat(color.get(), is(Color.Blue));
+    assertThat(color.isTouched(), is(false));
+  }
+
+  @Test
+  public void whenValueAddToListPropertyInitializesProperty() {
+    final EnumProperty<Color> color = enumProperty("color");
+    final ListProperty<String> list = listProperty("list");
+    list.add("foo");
+    binder.when(color).is(Color.Blue).add("foo").to(list);
+    assertThat(color.get(), is(Color.Blue));
+    assertThat(color.isTouched(), is(false));
+  }
+
+  @Test
+  public void whenValueRemoveFromListPropertyInitializesProperty() {
+    final EnumProperty<Color> color = enumProperty("color");
+    final ListProperty<String> list = listProperty("list");
+    binder.when(color).is(Color.Blue).remove("foo").from(list);
+    assertThat(color.get(), is(Color.Blue));
+    assertThat(color.isTouched(), is(false));
+  }
+
+  @Test
   public void enhanceIgnoresTabKeyUpEvent() {
     final StubTextBox b = new StubTextBox();
     final StringProperty s = stringProperty("s");

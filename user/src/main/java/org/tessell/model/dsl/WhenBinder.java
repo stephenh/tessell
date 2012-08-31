@@ -20,6 +20,10 @@ public class WhenBinder<P> {
       public boolean evaluate(Property<P> property) {
         return eq(property.get(), value);
       }
+
+      public void setInitialValue(Property<P> property) {
+        property.setInitialValue(value);
+      }
     });
   }
 

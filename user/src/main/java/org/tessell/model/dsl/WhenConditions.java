@@ -8,11 +8,17 @@ public class WhenConditions {
     public boolean evaluate(Property<Object> property) {
       return property.get() != null;
     }
+
+    public void setInitialValue(Property<Object> property) {
+    }
   };
 
   private static final WhenCondition<Object> nullValue = new WhenCondition<Object>() {
     public boolean evaluate(Property<Object> property) {
       return property.get() == null;
+    }
+
+    public void setInitialValue(Property<Object> property) {
     }
   };
 
@@ -29,6 +35,9 @@ public class WhenConditions {
       public boolean evaluate(Property<Integer> property) {
         return number != null && property.get() != null && property.get().intValue() > number.intValue();
       }
+
+      public void setInitialValue(Property<Integer> property) {
+      }
     };
   }
 
@@ -36,6 +45,9 @@ public class WhenConditions {
     return new WhenCondition<Integer>() {
       public boolean evaluate(Property<Integer> property) {
         return number != null && property.get() != null && property.get().intValue() < number.intValue();
+      }
+
+      public void setInitialValue(Property<Integer> property) {
       }
     };
   }

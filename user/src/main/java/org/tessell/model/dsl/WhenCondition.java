@@ -6,4 +6,6 @@ public interface WhenCondition<P> {
 
   boolean evaluate(Property<P> property);
 
+  void setInitialValue(Property<P> property);
+
 }

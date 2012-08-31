@@ -29,7 +29,11 @@ public class WhenIsAddBinder<P, V> {
         update(values);
       }
     }));
-    update(values); // set initial value
+    if (b.canSetInitialValue(property) && values.contains(newValue)) {
+      condition.setInitialValue(property);
+    } else {
+      update(values); // set initial value
+    }
   }
 
   /** Adds/removes our {@code value} when our {@code property} is {@code value}. */
@@ -39,7 +43,11 @@ public class WhenIsAddBinder<P, V> {
         update(values);
       }
     }));
-    update(values); // set initial value
+    if (b.canSetInitialValue(property) && values.get().contains(newValue)) {
+      condition.setInitialValue(property);
+    } else {
+      update(values); // set initial value
+    }
   }
 
   private void update(List<V> values) {
