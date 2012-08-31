@@ -26,4 +26,6 @@ public interface HasRows {
   /** @return the number of rows shown */
   int size();
 
+  /** Removes all rows from the table. */
+  void clearRows();
 }

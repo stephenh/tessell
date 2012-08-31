@@ -50,6 +50,13 @@ public class StubRowTable extends StubWidget implements IsRowTable {
   }
 
   @Override
+  public void clearRows() {
+    while (rows.size() > 0) {
+      removeRow(0);
+    }
+  }
+
+  @Override
   public void insertRow(final int i, final com.google.gwt.user.client.ui.IsWidget isWidget) {
     rows.add(i, (IsWidget) isWidget);
   }

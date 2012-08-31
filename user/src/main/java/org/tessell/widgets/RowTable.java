@@ -153,6 +153,13 @@ public class RowTable extends Panel implements IsRowTable {
   }
 
   @Override
+  public void clearRows() {
+    while (rows.size() > 0) {
+      removeRow(0);
+    }
+  }
+
+  @Override
   public Widget asWidget() {
     return this;
   }
