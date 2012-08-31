@@ -12,6 +12,7 @@ import static org.tessell.model.properties.NewProperty.*;
 import static org.tessell.testing.TessellMatchers.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Test;
 import org.tessell.gwt.dom.client.StubClickEvent;
@@ -779,6 +780,140 @@ public class BinderTest {
     binder.onMemberChange(m).execute(c);
     m.name.set("asdf");
     assertThat(c.getExecutions(), is(1));
+  }
+
+  @Test
+  public void booleanToListAddsInitiallyWhenTrue() {
+    BooleanProperty b = booleanProperty("b", true);
+    List<String> names = new ArrayList<String>();
+    binder.bind(b).to(names).has("foo");
+    assertThat(names, hasItem("foo"));
+  }
+
+  @Test
+  public void booleanToListInitiallyRemovesWhenTrue() {
+    BooleanProperty b = booleanProperty("b", false);
+    List<String> names = new ArrayList<String>();
+    names.add("foo");
+    binder.bind(b).to(names).has("foo");
+    assertThat(names.size(), is(0));
+  }
+
+  @Test
+  public void booleanToListAddsOnChange() {
+    BooleanProperty b = booleanProperty("b", false);
+    List<String> names = new ArrayList<String>();
+    binder.bind(b).to(names).has("foo");
+    assertThat(names.size(), is(0));
+    b.set(true);
+    assertThat(names, hasItem("foo"));
+  }
+
+  @Test
+  public void booleanToListRemovesOnChange() {
+    BooleanProperty b = booleanProperty("b", true);
+    List<String> names = new ArrayList<String>();
+    names.add("foo");
+    binder.bind(b).to(names).has("foo");
+    assertThat(names.size(), is(1));
+    b.set(false);
+    assertThat(names.size(), is(0));
+  }
+
+  @Test
+  public void booleanToListInitializePropertyToTrue() {
+    BooleanProperty b = booleanProperty("b");
+    List<String> names = new ArrayList<String>();
+    names.add("foo");
+    binder.bind(b).to(names).has("foo");
+    assertThat(b.get(), is(true));
+    assertThat(b.isTouched(), is(false));
+  }
+
+  @Test
+  public void booleanToListInitializePropertyToFalse() {
+    BooleanProperty b = booleanProperty("b");
+    List<String> names = new ArrayList<String>();
+    binder.bind(b).to(names).has("foo");
+    assertThat(b.get(), is(false));
+    assertThat(b.isTouched(), is(false));
+  }
+
+  @Test
+  public void booleanToListPropertyAddsInitiallyWhenTrue() {
+    BooleanProperty b = booleanProperty("b", true);
+    ListProperty<String> names = listProperty("names");
+    binder.bind(b).to(names).has("foo");
+    assertThat(names.get(), hasItem("foo"));
+  }
+
+  @Test
+  public void booleanToListPropertyInitiallyRemovesWhenTrue() {
+    BooleanProperty b = booleanProperty("b", false);
+    ListProperty<String> names = listProperty("names");
+    names.add("foo");
+    binder.bind(b).to(names).has("foo");
+    assertThat(names.get().size(), is(0));
+  }
+
+  @Test
+  public void booleanToListPropertyAddsOnChange() {
+    BooleanProperty b = booleanProperty("b", false);
+    ListProperty<String> names = listProperty("names");
+    binder.bind(b).to(names).has("foo");
+    assertThat(names.get().size(), is(0));
+    b.set(true);
+    assertThat(names.get(), hasItem("foo"));
+  }
+
+  @Test
+  public void booleanToListPropertyRemovesOnChange() {
+    BooleanProperty b = booleanProperty("b", true);
+    ListProperty<String> names = listProperty("names");
+    names.add("foo");
+    binder.bind(b).to(names).has("foo");
+    assertThat(names.get().size(), is(1));
+    b.set(false);
+    assertThat(names.get().size(), is(0));
+  }
+
+  @Test
+  public void booleanToListPropertyInitializePropertyToTrue() {
+    BooleanProperty b = booleanProperty("b");
+    ListProperty<String> names = listProperty("names");
+    names.add("foo");
+    binder.bind(b).to(names).has("foo");
+    assertThat(b.get(), is(true));
+    assertThat(b.isTouched(), is(false));
+  }
+
+  @Test
+  public void booleanToListPropertyInitializePropertyToFalse() {
+    BooleanProperty b = booleanProperty("b");
+    ListProperty<String> names = listProperty("names");
+    binder.bind(b).to(names).has("foo");
+    assertThat(b.get(), is(false));
+    assertThat(b.isTouched(), is(false));
+  }
+
+  @Test
+  public void booleanToListPropertySetsTrueOnAdd() {
+    BooleanProperty b = booleanProperty("b", false);
+    ListProperty<String> names = listProperty("names");
+    binder.bind(b).to(names).has("foo");
+    assertThat(names.get().size(), is(0));
+    names.add("foo");
+    assertThat(b.get(), is(true));
+  }
+
+  @Test
+  public void booleanToListPropertySetsFalseOnRemove() {
+    BooleanProperty b = booleanProperty("b", true);
+    ListProperty<String> names = listProperty("names");
+    binder.bind(b).to(names).has("foo");
+    assertThat(names.get().size(), is(1));
+    names.remove("foo");
+    assertThat(b.get(), is(false));
   }
 
 }

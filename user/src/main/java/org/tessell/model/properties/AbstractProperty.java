@@ -85,6 +85,12 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
   }
 
   @Override
+  public void setInitial(final P value) {
+    this.value.set(copyLastValue(value));
+    reassess();
+  }
+
+  @Override
   public void reassess() {
     try {
       reassessing = true;

@@ -2,10 +2,13 @@ package org.tessell.model.dsl;
 
 import static java.lang.Boolean.TRUE;
 
+import java.util.List;
+
 import org.tessell.gwt.user.client.ui.IsRadioButton;
 import org.tessell.model.events.PropertyChangedEvent;
 import org.tessell.model.events.PropertyChangedHandler;
 import org.tessell.model.properties.BooleanProperty;
+import org.tessell.model.properties.ListProperty;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -18,6 +21,14 @@ public class BooleanPropertyBinder extends PropertyBinder<Boolean> {
   public BooleanPropertyBinder(final Binder b, final BooleanProperty bp) {
     super(b, bp);
     this.bp = bp;
+  }
+
+  public <V> BooleanPropertyToListBinder<V> to(final List<V> values) {
+    return new BooleanPropertyToListBinder<V>(b, bp, values);
+  }
+
+  public <V> BooleanPropertyToListPropertyBinder<V> to(final ListProperty<V> values) {
+    return new BooleanPropertyToListPropertyBinder<V>(b, bp, values);
   }
 
   public void to(final IsRadioButton ifTrue, final IsRadioButton ifFalse) {

@@ -75,6 +75,25 @@ public class FormattedProperty<DP, SP> implements Property<DP> {
   }
 
   @Override
+  public void setInitial(DP value) {
+    // null and "" are special
+    if (value == null || "".equals(value)) {
+      isValid.set(true);
+      source.setInitial(null);
+      return;
+    }
+    final SP parsed;
+    try {
+      parsed = formatter.parse(value);
+    } catch (Exception e) {
+      isValid.set(false);
+      return;
+    }
+    isValid.set(true);
+    source.setInitial(parsed);
+  }
+
+  @Override
   public DP getValue() {
     return get();
   }
