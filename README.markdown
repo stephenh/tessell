@@ -33,3 +33,10 @@ Binder DSL Ideas
         textOf(...).toOrElse("", ""), // toOrElse returns SetAction
         styleOf(...).to(bz.active())); // to returns SetAction
 
+      binder.on(keyPressOf(...)).then(execute(command));
+      binder.on(clickOf(...)).then(toggle(button));
+      binder.on(clickOf(...)).set(SetAction...);
+      binder.on(blurOf(...)).set(SetAction...);
+
+      // or, for more unique static imports
+      binder.on(blurOf(...), thenSet(textOf(...).to(asdf)));
