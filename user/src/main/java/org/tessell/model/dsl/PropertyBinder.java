@@ -37,7 +37,7 @@ public class PropertyBinder<P> {
     // we may want to set the initial value of our property back to the current
     // value of value. Do this only one, and only if the property looks unset
     // (non-touched and null).
-    if (!p.isReadOnly() && !p.isTouched() && p.get() == null && value.getValue() != null) {
+    if (b.canSetInitialValue(p) && value.getValue() != null) {
       p.set(value.getValue());
     } else {
       value.setValue(p.get());

@@ -212,4 +212,8 @@ public class Binder extends AbstractBound {
   protected void add(HandlerRegistration registration) {
     super.registerHandler(registration);
   }
+
+  boolean canSetInitialValue(Property<?> property) {
+    return !property.isReadOnly() && !property.isTouched() && property.get() == null;
+  }
 }
