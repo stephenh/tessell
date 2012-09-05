@@ -2,6 +2,7 @@ package org.tessell.processor;
 
 import static joist.sourcegen.Argument.arg;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -82,28 +83,20 @@ public class DispatchGenerator {
 
 		command.getConstructor(arg("org.tessell.dispatch.client.util.OutstandingDispatchAsync", "async")).body.line("super(async);");
 
-    String actionWithoutBounds = simpleName + "Action" + generics.vars;
+		String actionWithoutBounds = simpleName + "Action" + generics.vars;
 
 		// if no arguments to the action, just implement createAction for the user
 		if (inParams.size() == 0) {
 			GMethod createAction = command.getMethod("createAction").setProtected().returnType(actionWithoutBounds);
+			createAction.addAnnotation("@Override");
 			createAction.body.line("return new {}();", actionWithoutBounds);
-      createAction.addAnnotation("@Override");
 		} else {
-			// add a helper method with all the incoming params
-			GMethod createActionHelper = command.getMethod("createAction", Copy.list(inParams.values()).map(new Function1<Argument, VariableElement>() {
-				public Argument apply(VariableElement p1) {
-					return new Argument(p1.asType().toString(), p1.getSimpleName().toString());
-				}
-			})).setProtected().returnType(actionWithoutBounds);
-			createActionHelper.body.line(
-				"return new {}({});",
-				actionWithoutBounds,
-				Join.commaSpace(Copy.list(inParams.values()).map(new Function1<String, VariableElement>() {
-					public String apply(VariableElement p1) {
-						return p1.getSimpleName().toString();
-					}
-				})));
+			// add createAction helper method with all the incoming params (to avoid a long new Xxx(...) call)
+			GMethod createActionHelper = command.getMethod("createAction", asArguments(inParams.values())).setProtected().returnType(actionWithoutBounds);
+			createActionHelper.body.line("return new {}({});", actionWithoutBounds, Join.commaSpace(asNames(inParams.values())));
+			// add an execute overload that will make an action
+			GMethod executeOverload = command.getMethod("execute", asArguments(inParams.values()));
+			executeOverload.body.line("doExecute(createAction({}));", Join.commaSpace(asNames(inParams.values())));
 		}
 
 		PropUtil.addGenerated(command, DispatchGenerator.class);
@@ -197,6 +190,22 @@ public class DispatchGenerator {
 		gclass.getMethod("get" + Util.upper(name)).returnType(type).body.append("return this.{};", name);
 		cstr.argument(type, name);
 		cstr.body.line("this.{} = {};", name, name);
+	}
+
+	private static List<Argument> asArguments(Collection<VariableElement> elements) {
+		return Copy.list(elements).map(new Function1<Argument, VariableElement>() {
+			public Argument apply(VariableElement p1) {
+				return new Argument(p1.asType().toString(), p1.getSimpleName().toString());
+			}
+		});
+	}
+
+	private static List<String> asNames(Collection<VariableElement> elements) {
+		return Copy.list(elements).map(new Function1<String, VariableElement>() {
+			public String apply(VariableElement p1) {
+				return p1.getSimpleName().toString();
+			}
+		});
 	}
 
 }

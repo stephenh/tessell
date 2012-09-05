@@ -33,7 +33,10 @@ public abstract class DispatchUiCommand<A extends Action<R>, R extends Result> e
 
   @Override
   protected final void doExecute() {
-    final A action = createAction();
+    doExecute(createAction());
+  }
+
+  protected final void doExecute(final A action) {
     lastAction = action;
     if (action != null) {
       active.set(true);
