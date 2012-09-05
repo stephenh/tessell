@@ -44,7 +44,7 @@ public class DispatchUiCommandTest extends AbstractRuleTest {
   @Test
   public void allowsReExecution() {
     DummyUiCommand command = new DummyUiCommand(async);
-    // initial execute is find
+    // initial execute is fine
     command.execute();
     assertThat(command.createActionCalls, is(1));
 
@@ -56,7 +56,9 @@ public class DispatchUiCommandTest extends AbstractRuleTest {
     // it calls onResult
     assertThat(command.onResultCalls, is(1));
     // but it could tell it was a stale result
-    assertThat(command.wasStale, is(true));
+    assertThat(command.hasNewerAction, is(true));
+    // but not out of order
+    assertThat(command.hasNewerResult, is(false));
 
     // note that the command is still active
     assertThat(command.active().get(), is(true));
@@ -66,14 +68,49 @@ public class DispatchUiCommandTest extends AbstractRuleTest {
     // it also calls onResult
     assertThat(command.onResultCalls, is(2));
     // and this result was not stale
-    assertThat(command.wasStale, is(false));
+    assertThat(command.hasNewerAction, is(false));
+    // nor out of order
+    assertThat(command.hasNewerResult, is(false));
+  }
+
+  @Test
+  public void handlesOutOfOrderResponses() {
+    DummyUiCommand command = new DummyUiCommand(async);
+    // initial execute is fine
+    command.execute();
+    assertThat(command.createActionCalls, is(1));
+
+    command.execute();
+    assertThat(command.createActionCalls, is(2));
+
+    // now the 2nd request completes first
+    async.getCalls().get(1).onSuccessOutOfOrder(null);
+    // it calls onResult
+    assertThat(command.onResultCalls, is(1));
+    // and it was not a stale result
+    assertThat(command.hasNewerAction, is(false));
+    // nor out of order (yet)
+    assertThat(command.hasNewerResult, is(false));
+
+    // we consider the command no longer active?
+    assertThat(command.active().get(), is(false));
+
+    // and now the 1st request is responded to
+    async.getCalls().get(0).onSuccess(null);
+    // it also calls onResult
+    assertThat(command.onResultCalls, is(2));
+    // but it could tell is was stale
+    assertThat(command.hasNewerAction, is(true));
+    // and also out of order
+    assertThat(command.hasNewerResult, is(true));
   }
 
   /** Fails depending on the instance variable {@code fail}. */
   private final class DummyUiCommand extends DispatchUiCommand<Action<Result>, Result> {
     private int createActionCalls = 0;
     private int onResultCalls = 0;
-    private boolean wasStale = false;
+    private boolean hasNewerAction = false;
+    private boolean hasNewerResult = false;
 
     public DummyUiCommand(OutstandingDispatchAsync async) {
       super(async);
@@ -88,7 +125,8 @@ public class DispatchUiCommandTest extends AbstractRuleTest {
 
     @Override
     protected void onResult() {
-      wasStale = isStale();
+      hasNewerAction = hasNewerActionBeenSent();
+      hasNewerResult = hasNewerResultBeenReceived();
       onResultCalls++;
     }
   }

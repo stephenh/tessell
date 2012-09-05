@@ -23,8 +23,9 @@ public abstract class DispatchUiCommand<A extends Action<R>, R extends Result> e
 
   private final OutstandingDispatchAsync async;
   private final BooleanProperty active = booleanProperty("active", false);
-  private A lastAction;
-  private A currentAction;
+  private int highestActionIndex;
+  private int highestResultIndex;
+  private int currentActionIndex;
   protected R result;
 
   public DispatchUiCommand(OutstandingDispatchAsync async) {
@@ -37,26 +38,28 @@ public abstract class DispatchUiCommand<A extends Action<R>, R extends Result> e
   }
 
   protected final void doExecute(final A action) {
-    lastAction = action;
     if (action != null) {
       active.set(true);
+      final int thisActionIndex = ++highestActionIndex;
       // It would be nice to use a SuccessCallback, but we need to know
       // when the failure happened to toggle active back to false
       async.execute(action, new AsyncCallback<R>() {
         public void onSuccess(R r) {
-          currentAction = action;
+          highestResultIndex = Math.max(highestResultIndex, thisActionIndex);
+          currentActionIndex = thisActionIndex;
           result = r;
           onResult();
-          if (currentAction == lastAction) {
+          if (thisActionIndex == highestActionIndex) {
             active.set(false);
           }
         }
 
         public void onFailure(Throwable caught) {
-          currentAction = action;
+          highestResultIndex = Math.max(highestResultIndex, thisActionIndex);
+          currentActionIndex = thisActionIndex;
           result = null;
           DispatchUiCommand.this.onFailure(caught);
-          if (currentAction == lastAction) {
+          if (thisActionIndex == highestActionIndex) {
             active.set(false);
           }
         }
@@ -80,9 +83,14 @@ public abstract class DispatchUiCommand<A extends Action<R>, R extends Result> e
     async.unhandledFailure(caught);
   }
 
-  /** Allows subclasses to tell if the current onResult is stale. */
-  protected boolean isStale() {
-    return lastAction != currentAction;
+  /** Allows subclasses to tell if the current action is stale. */
+  protected boolean hasNewerActionBeenSent() {
+    return currentActionIndex < highestActionIndex;
+  }
+
+  /** Allows subclasses to tell if the current result is stale. */
+  protected boolean hasNewerResultBeenReceived() {
+    return currentActionIndex < highestResultIndex;
   }
 
 }
