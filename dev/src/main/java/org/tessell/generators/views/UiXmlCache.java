@@ -21,7 +21,7 @@ import org.apache.commons.io.FileUtils;
  */
 public class UiXmlCache {
 
-  private static final int cacheVersion = 3;
+  private static final int cacheVersion = 4;
   private final Map<String, Entry> entries = new HashMap<String, Entry>();
 
   public static UiXmlCache loadOrCreate(final File outputDirectory) {

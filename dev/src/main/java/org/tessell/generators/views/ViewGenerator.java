@@ -137,6 +137,16 @@ public class ViewGenerator {
       cstrArgs.add(arg(type, name));
       cstrNames.add(name);
     }
+    // ui:withs in separate files could use the same type but different
+    // variable names, so we resolve based on the type only
+    for (String type : getUniqueWithTypes()) {
+      final String name = simpleName(type);
+      if (!cstrNames.contains(name)) {
+        stubViews.getField(name).type(type).setFinal();
+        cstrArgs.add(arg(type, name));
+        cstrNames.add(name);
+      }
+    }
 
     stubViews.getConstructor(cstrArgs).assignFields();
 
@@ -147,6 +157,11 @@ public class ViewGenerator {
       List<String> stubArgs = new ArrayList<String>();
       for (String type : uiXml.getPossiblyCachedStubDependencies(cache)) {
         stubArgs.add(simpleName(type));
+      }
+      for (UiFieldDeclaration uiWith : uiXml.getPossiblyCachedWiths(cache)) {
+        if (!stubArgs.contains(simpleName(uiWith.type))) {
+          stubArgs.add(simpleName(uiWith.type));
+        }
       }
       m.body.line("return new {}({});", uiXml.stubView.getFullName(), Join.commaSpace(stubArgs));
     }
