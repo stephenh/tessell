@@ -29,6 +29,10 @@ public class WhenIsBinder<P> {
     return new WhenIsSetStyleBinder<P>(b, property, condition, style);
   }
 
+  public WhenIsSetOrElseStyleBinder<P> setOrElse(final String ifTrueStyle, final String ifFalseStyle) {
+    return new WhenIsSetOrElseStyleBinder<P>(b, property, condition, ifTrueStyle, ifFalseStyle);
+  }
+
   /** @return a fluent {@link SetPropertyBinder} to set a value on {@code other} when this condition is true. */
   public <Q> WhenIsSetValueBinder<P, Q> set(final TakesValue<Q> value) {
     return new WhenIsSetValueBinder<P, Q>(b, property, condition, value);

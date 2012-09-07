@@ -965,4 +965,16 @@ public class BinderTest {
     assertThat(b.get(), is(false));
   }
 
+  @Test
+  public void whenIsOrElse() {
+    final BooleanProperty b = booleanProperty("b", false);
+    final StubWidget w = new StubWidget();
+    binder.when(b).is(true).setOrElse("c", "d").on(w);
+    assertThat(w, hasStyle("d"));
+    assertThat(w, not(hasStyle("c")));
+    b.set(true);
+    assertThat(w, hasStyle("c"));
+    assertThat(w, not(hasStyle("d")));
+  }
+
 }
