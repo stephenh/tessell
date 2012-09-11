@@ -14,19 +14,10 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.tessell.model.events.MemberChangedEvent;
-import org.tessell.model.events.MemberChangedHandler;
-import org.tessell.model.events.PropertyChangedEvent;
-import org.tessell.model.events.PropertyChangedHandler;
-import org.tessell.model.events.ValueAddedEvent;
-import org.tessell.model.events.ValueAddedHandler;
-import org.tessell.model.events.ValueRemovedEvent;
-import org.tessell.model.events.ValueRemovedHandler;
-import org.tessell.model.properties.IntegerProperty;
-import org.tessell.model.properties.ListProperty;
+import org.tessell.model.events.*;
+import org.tessell.model.properties.*;
 import org.tessell.model.properties.ListProperty.ElementConverter;
 import org.tessell.model.properties.ListProperty.ElementFilter;
-import org.tessell.model.properties.Property;
 import org.tessell.model.values.DerivedValue;
 import org.tessell.model.values.SetValue;
 
@@ -365,6 +356,27 @@ public class ListPropertyTest {
     // removing a foo does change it
     models.remove(models.get().get(1));
     assertThat(changed[0], is(3));
+  }
+
+  @Test
+  public void filteredValuesWithNull() {
+    final ListProperty<DummyModel> models = listProperty("models", null);
+    final ListProperty<DummyModel> foos = models.filter(new ElementFilter<DummyModel>() {
+      public boolean matches(DummyModel element) {
+        return element.name.get() != null && element.name.get().startsWith("foo");
+      }
+    });
+    assertThat(foos.get().size(), is(0));
+    // watch for when foo know's it has changed
+    final int[] changed = { 0 };
+    foos.addPropertyChangedHandler(new PropertyChangedHandler<List<DummyModel>>() {
+      public void onPropertyChanged(PropertyChangedEvent<List<DummyModel>> event) {
+        changed[0]++;
+      }
+    });
+    // setting to non-null
+    models.set(list(new DummyModel("bar")));
+    assertThat(changed[0], is(0));
   }
 
   public static class CountingChanges<P> implements PropertyChangedHandler<P> {

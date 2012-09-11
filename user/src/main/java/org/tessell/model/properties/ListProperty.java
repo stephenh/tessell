@@ -8,13 +8,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.tessell.model.events.HasMemberChangedHandlers;
-import org.tessell.model.events.MemberChangedEvent;
-import org.tessell.model.events.MemberChangedHandler;
-import org.tessell.model.events.ValueAddedEvent;
-import org.tessell.model.events.ValueAddedHandler;
-import org.tessell.model.events.ValueRemovedEvent;
-import org.tessell.model.events.ValueRemovedHandler;
+import org.tessell.model.events.*;
 import org.tessell.model.values.DerivedValue;
 import org.tessell.model.values.Value;
 import org.tessell.util.ListDiff;
@@ -212,9 +206,11 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
     return listProperty(new DerivedValue<List<E>>() {
       public List<E> get() {
         List<E> filtered = new ArrayList<E>();
-        for (E item : ListProperty.this.get()) {
-          if (filter.matches(item)) {
-            filtered.add(item);
+        if (ListProperty.this.get() != null) {
+          for (E item : ListProperty.this.get()) {
+            if (filter.matches(item)) {
+              filtered.add(item);
+            }
           }
         }
         return filtered;
