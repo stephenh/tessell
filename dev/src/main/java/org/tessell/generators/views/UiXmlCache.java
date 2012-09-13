@@ -21,7 +21,7 @@ import org.apache.commons.io.FileUtils;
  */
 public class UiXmlCache {
 
-  private static final int cacheVersion = 4;
+  private static final int cacheVersion = 5;
   private final Map<String, Entry> entries = new HashMap<String, Entry>();
 
   public static UiXmlCache loadOrCreate(final File outputDirectory) {
@@ -105,18 +105,21 @@ public class UiXmlCache {
     private Entry(String line) {
       final String[] parts = splitPreserveAllTokens(line, ";");
       uiXmlFileName = parts[0];
+      // parse out ui:withs
       if (parts[1].length() > 0) {
         for (String with : parts[1].split(",")) {
           String[] wp = with.split(" ");
           withs.add(new UiFieldDeclaration(wp[0], wp[1], null));
         }
       }
+      // parse out ui:styles
       if (parts[2].length() > 0) {
         for (String style : parts[2].split(",")) {
           String[] sp = style.split(" ");
           styles.add(new UiStyleDeclaration(sp[0], sp[1]));
         }
       }
+      // parse out stub dependencies
       if (parts[3].length() > 0) {
         stubDependencies.addAll(Arrays.asList(parts[3]));
       }

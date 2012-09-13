@@ -153,15 +153,13 @@ public class ViewGenerator {
     for (final UiXmlFile uiXml : uiXmlFiles) {
       final GMethod m = stubViews.getMethod("new" + uiXml.baseName).returnType(uiXml.stubView.getFullName());
       m.addAnnotation("@Override");
-      // look for stub dependencies
-      List<String> stubArgs = new ArrayList<String>();
+      // look for stub dependencies, sort by simple name
+      Set<String> stubArgs = new TreeSet<String>();
       for (String type : uiXml.getPossiblyCachedStubDependencies(cache)) {
         stubArgs.add(simpleName(type));
       }
       for (UiFieldDeclaration uiWith : uiXml.getPossiblyCachedWiths(cache)) {
-        if (!stubArgs.contains(simpleName(uiWith.type))) {
-          stubArgs.add(simpleName(uiWith.type));
-        }
+        stubArgs.add(simpleName(uiWith.type));
       }
       m.body.line("return new {}({});", uiXml.stubView.getFullName(), Join.commaSpace(stubArgs));
     }

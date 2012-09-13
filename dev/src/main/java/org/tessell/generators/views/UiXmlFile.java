@@ -188,17 +188,17 @@ class UiXmlFile {
   private void generateStubView() throws Exception {
     stubView.baseClass(StubView.class).implementsInterface(isView.getSimpleName());
 
-    // find any stubs that need parameters
+    // find any stubs (and ui:withs) that need parameters, sorted by simple name
     final Map<String, Argument> cstrArguments = new TreeMap<String, Argument>();
     for (String cstrType : getStubDependencies()) {
-      if (!cstrArguments.containsKey(cstrType)) {
-        String name = ViewGenerator.simpleName(cstrType);
-        cstrArguments.put(cstrType, arg(cstrType, name));
-      }
+      String simpleName = ViewGenerator.simpleName(cstrType);
+      cstrArguments.put(simpleName, arg(cstrType, simpleName));
     }
-    // and any ui:withs
+    // and any ui:withs, also using simple name for the arg name, so we use
+    // the same namespace as the stub dependencies
     for (UiFieldDeclaration with : handler.withFields) {
-      cstrArguments.put(with.type, arg(with.type, with.name));
+      String simpleName = ViewGenerator.simpleName(with.type);
+      cstrArguments.put(simpleName, arg(with.type, simpleName));
     }
 
     final GMethod cstr = stubView.getConstructor(new ArrayList<Argument>(cstrArguments.values()));
@@ -211,23 +211,23 @@ class UiXmlFile {
     for (final UiFieldDeclaration field : handler.uiFields) {
       final String stubType = viewGenerator.config.getStub(field.type);
       // our stub may take cstr params
-      final List<String> cstrTypes = viewGenerator.config.getStubCstrParams(stubType);
-      final List<String> cstrNames = new ArrayList<String>();
-      for (String cstrType : cstrTypes) {
-        cstrNames.add(ViewGenerator.simpleName(cstrType));
+      final List<String> stubConstructorTypes = viewGenerator.config.getStubCstrParams(stubType);
+      final List<String> stubConstructorNames = new ArrayList<String>();
+      for (String cstrType : stubConstructorTypes) {
+        stubConstructorNames.add(ViewGenerator.simpleName(cstrType));
       }
       stubView.getField(field.name).type(stubType).setFinal();
       stubView.getMethod(field.name).returnType(stubType).body.line("return {};", field.name);
       debugId.body.line("{}.ensureDebugId(baseDebugId + \"-{}\");", field.name, field.name);
       // now use cstrNames in the call to new
-      cstr.body.line("this.{} = new {}({});", field.name, stubType, Join.commaSpace(cstrNames));
+      cstr.body.line("this.{} = new {}({});", field.name, stubType, Join.commaSpace(stubConstructorNames));
     }
 
     // for each ui:with, add a field, field assignment, and getter
     for (UiFieldDeclaration with : handler.withFields) {
       stubView.getField(with.name).type(with.type).setFinal();
       stubView.getMethod(with.name).addAnnotation("@Override").returnType(with.type).body.line("return {};", with.name);
-      cstr.body.line("this.{} = {};", with.name, with.name);
+      cstr.body.line("this.{} = {};", with.name, ViewGenerator.simpleName(with.type));
     }
 
     for (final UiFieldDeclaration field : handler.uiFields) {
