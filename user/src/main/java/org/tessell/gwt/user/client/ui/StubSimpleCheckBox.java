@@ -37,6 +37,11 @@ public class StubSimpleCheckBox extends StubFocusWidget implements IsSimpleCheck
   }
 
   @Override
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  @Override
   public void setValue(Boolean value) {
     this.value = value;
   }

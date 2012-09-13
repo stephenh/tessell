@@ -1,6 +1,6 @@
 package org.tessell.gwt.user.client.ui;
 
-import com.google.gwt.dev.jjs.ast.HasName;
+import com.google.gwt.user.client.ui.HasName;
 import com.google.gwt.user.client.ui.HasValue;
 
 public interface IsSimpleCheckBox extends IsFocusWidget, HasName, HasValue<Boolean> {
