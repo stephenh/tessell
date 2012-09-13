@@ -1,8 +1,12 @@
 package org.tessell.model.dsl;
 
+import static org.tessell.util.ObjectUtils.eq;
+
 import java.util.List;
 
 import org.tessell.gwt.user.client.ui.IsListBox;
+import org.tessell.gwt.user.client.ui.IsRadioButton;
+import org.tessell.gwt.user.client.ui.IsSimpleRadioButton;
 import org.tessell.model.events.PropertyChangedEvent;
 import org.tessell.model.events.PropertyChangedHandler;
 import org.tessell.model.properties.Property;
@@ -123,6 +127,40 @@ public class PropertyBinder<P> {
   public void to(final HasValue<P> source, final IsTextList errors) {
     to(source);
     errorsTo(errors);
+  }
+
+  /** Binds our property to a list of radio buttons. */
+  public MoreRadioButtons to(IsRadioButton button, P value) {
+    return new MoreRadioButtons().and(button, value);
+  }
+
+  /** Binds our property to a list of radio buttons. */
+  public MoreRadioButtons to(IsSimpleRadioButton button, P value) {
+    return new MoreRadioButtons().and(button, value);
+  }
+
+  public class MoreRadioButtons {
+    public MoreRadioButtons and(final IsSimpleRadioButton button, final P value) {
+      return add(button, value);
+    }
+
+    public MoreRadioButtons and(final IsRadioButton button, final P value) {
+      return add(button, value);
+    }
+
+    private MoreRadioButtons add(final HasValue<Boolean> button, final P value) {
+      b.add(button.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+        public void onValueChange(ValueChangeEvent<Boolean> event) {
+          if (event.getValue()) {
+            p.set(value);
+          }
+        }
+      }));
+      if (eq(p.get(), value)) {
+        button.setValue(true); // set initial
+      }
+      return this;
+    }
   }
 
   @SuppressWarnings("unchecked")

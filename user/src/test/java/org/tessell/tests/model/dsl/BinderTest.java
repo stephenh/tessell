@@ -977,4 +977,40 @@ public class BinderTest {
     assertThat(w, not(hasStyle("d")));
   }
 
+  @Test
+  public void toRadioButtons() {
+    final StubRadioButton b1 = new StubRadioButton();
+    final StubRadioButton b2 = new StubRadioButton();
+    final StubRadioButton b3 = new StubRadioButton();
+    binder.bind(s).to(b1, "b1").and(b2, "b2").and(b3, "b3");
+    // s wasn't touched
+    assertThat(s.get(), is(nullValue()));
+    // and we didn't have any value to know what to set
+    assertThat(b1.getValue(), is(nullValue()));
+    assertThat(b2.getValue(), is(nullValue()));
+    assertThat(b3.getValue(), is(nullValue()));
+    // clicking each button works
+    b1.click();
+    assertThat(s.get(), is("b1"));
+    b2.click();
+    assertThat(s.get(), is("b2"));
+  }
+
+  @Test
+  public void toRadioButtonsWithAnExistingValue() {
+    final StubRadioButton b1 = new StubRadioButton();
+    final StubRadioButton b2 = new StubRadioButton();
+    s.set("b1");
+    binder.bind(s).to(b1, "b1").and(b2, "b2");
+    // s1 didn't change
+    assertThat(s.get(), is("b1"));
+    // but we know which button to mark as checked
+    assertThat(b1.getValue(), is(true));
+    assertThat(b2.getValue(), is(nullValue()));
+    // clicking each button works
+    b1.click();
+    assertThat(s.get(), is("b1"));
+    b2.click();
+    assertThat(s.get(), is("b2"));
+  }
 }
