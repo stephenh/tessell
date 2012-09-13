@@ -379,6 +379,22 @@ public class ListPropertyTest {
     assertThat(changed[0], is(0));
   }
 
+  @Test
+  public void filteredValuesIsReadOnly() {
+    final ListProperty<DummyModel> models = listProperty("models");
+    final ListProperty<DummyModel> foos = models.filter(new ElementFilter<DummyModel>() {
+      public boolean matches(DummyModel element) {
+        return element.name.get() != null && element.name.get().startsWith("foo");
+      }
+    });
+    try {
+      foos.add(new DummyModel("foo"));
+      fail();
+    } catch (UnsupportedOperationException uoe) {
+      // expected
+    }
+  }
+
   public static class CountingChanges<P> implements PropertyChangedHandler<P> {
     public int count;
 

@@ -213,7 +213,7 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
             }
           }
         }
-        return filtered;
+        return Collections.unmodifiableList(filtered);
       }
     });
   }
