@@ -10,6 +10,27 @@ public class StubSimpleCheckBox extends StubFocusWidget implements IsSimpleCheck
   private String formValue;
   private Boolean value;
 
+  public void check() {
+    if (value != null && value.booleanValue()) {
+      throw new RuntimeException(name + " is already checked");
+    }
+    click();
+  }
+
+  public void uncheck() {
+    if (value == null || !value.booleanValue()) {
+      throw new RuntimeException(name + " is not checked");
+    }
+    click();
+  }
+
+  @Override
+  public void click() {
+    final Boolean newValue = (value == null) ? true : !value;
+    setValue(newValue, true);
+    super.click();
+  }
+
   @Override
   public String getName() {
     return name;
