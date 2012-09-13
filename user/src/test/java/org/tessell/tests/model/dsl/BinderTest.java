@@ -986,14 +986,19 @@ public class BinderTest {
     // s wasn't touched
     assertThat(s.get(), is(nullValue()));
     // and we didn't have any value to know what to set
-    assertThat(b1.getValue(), is(nullValue()));
-    assertThat(b2.getValue(), is(nullValue()));
-    assertThat(b3.getValue(), is(nullValue()));
+    assertThat(b1.getValue(), is(false));
+    assertThat(b2.getValue(), is(false));
+    assertThat(b3.getValue(), is(false));
     // clicking each button works
     b1.click();
     assertThat(s.get(), is("b1"));
     b2.click();
     assertThat(s.get(), is("b2"));
+    // when model changes, the view is updated
+    s.set("b3");
+    assertThat(b1.getValue(), is(false));
+    assertThat(b2.getValue(), is(false));
+    assertThat(b3.getValue(), is(true));
   }
 
   @Test
@@ -1006,7 +1011,7 @@ public class BinderTest {
     assertThat(s.get(), is("b1"));
     // but we know which button to mark as checked
     assertThat(b1.getValue(), is(true));
-    assertThat(b2.getValue(), is(nullValue()));
+    assertThat(b2.getValue(), is(false));
     // clicking each button works
     b1.click();
     assertThat(s.get(), is("b1"));

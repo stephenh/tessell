@@ -2,7 +2,9 @@ package org.tessell.model.dsl;
 
 import static org.tessell.util.ObjectUtils.eq;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.tessell.gwt.user.client.ui.IsListBox;
 import org.tessell.gwt.user.client.ui.IsRadioButton;
@@ -140,6 +142,22 @@ public class PropertyBinder<P> {
   }
 
   public class MoreRadioButtons {
+    private final Map<HasValue<Boolean>, P> buttons = new HashMap<HasValue<Boolean>, P>();
+
+    private MoreRadioButtons() {
+      // any time p changes, update all of the buttons. Granted, the browser
+      // does this implicitly for radio buttons, but implementing the logic
+      // like this means it will work for the stubs too.
+      b.add(p.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
+        public void onPropertyChanged(PropertyChangedEvent<P> event) {
+          for (Map.Entry<HasValue<Boolean>, P> e : buttons.entrySet()) {
+            boolean isForThisValue = eq(e.getValue(), event.getNewValue());
+            e.getKey().setValue(isForThisValue, true);
+          }
+        }
+      }));
+    }
+
     public MoreRadioButtons and(final IsSimpleRadioButton button, final P value) {
       return add(button, value);
     }
@@ -149,6 +167,7 @@ public class PropertyBinder<P> {
     }
 
     private MoreRadioButtons add(final HasValue<Boolean> button, final P value) {
+      buttons.put(button, value);
       b.add(button.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
         public void onValueChange(ValueChangeEvent<Boolean> event) {
           if (event.getValue()) {
@@ -156,9 +175,7 @@ public class PropertyBinder<P> {
           }
         }
       }));
-      if (eq(p.get(), value)) {
-        button.setValue(true); // set initial
-      }
+      button.setValue(eq(p.get(), value), true); // set initial
       return this;
     }
   }
