@@ -229,4 +229,19 @@ public class StubWidgetsProvider implements WidgetsProvider {
     return new StubResizeLayoutPanel();
   }
 
+  @Override
+  public IsSimpleCheckBox newSimpleCheckBox() {
+    return new StubSimpleCheckBox();
+  }
+
+  @Override
+  public IsRadioButton newRadioButton(String name) {
+    return new StubRadioButton();
+  }
+
+  @Override
+  public IsSimpleRadioButton newSimpleRadioButton(String name) {
+    return new StubSimpleRadioButton();
+  }
+
 }

@@ -75,6 +75,18 @@ public class Widgets {
     return provider.newCheckBox();
   }
 
+  public static IsSimpleCheckBox newSimpleCheckBox() {
+    return provider.newSimpleCheckBox();
+  }
+
+  public static IsRadioButton newRadioButton(String name) {
+    return provider.newRadioButton(name);
+  }
+
+  public static IsSimpleRadioButton newSimpleRadioButton(String name) {
+    return provider.newSimpleRadioButton(name);
+  }
+
   public static IsTextArea newTextArea() {
     return provider.newTextArea();
   }

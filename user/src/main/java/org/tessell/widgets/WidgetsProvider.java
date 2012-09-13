@@ -51,6 +51,12 @@ public interface WidgetsProvider {
 
   IsCheckBox newCheckBox();
 
+  IsSimpleCheckBox newSimpleCheckBox();
+
+  IsRadioButton newRadioButton(String name);
+
+  IsSimpleRadioButton newSimpleRadioButton(String name);
+
   IsAnchor newAnchor();
 
   IsButton newButton();

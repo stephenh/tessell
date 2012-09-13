@@ -224,4 +224,19 @@ public class GwtWidgetsProvider implements WidgetsProvider {
     return new ResizeLayoutPanel();
   }
 
+  @Override
+  public IsSimpleCheckBox newSimpleCheckBox() {
+    return new SimpleCheckBox();
+  }
+
+  @Override
+  public IsRadioButton newRadioButton(String name) {
+    return new RadioButton(name);
+  }
+
+  @Override
+  public IsSimpleRadioButton newSimpleRadioButton(String name) {
+    return new SimpleRadioButton(name);
+  }
+
 }
