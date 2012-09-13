@@ -180,7 +180,7 @@ public class BinderTest {
 
   @Test
   public void clickableWidgetToProperty() {
-    binder.bind(s).withValue("gotclicked").to(box);
+    binder.onClick(box).set(s).to("gotclicked");
     box.click();
     assertThat(s.get(), is("gotclicked"));
   }

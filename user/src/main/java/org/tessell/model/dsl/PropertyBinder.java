@@ -9,7 +9,8 @@ import org.tessell.model.properties.Property;
 import org.tessell.util.ObjectUtils;
 import org.tessell.widgets.IsTextList;
 
-import com.google.gwt.event.dom.client.*;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.TakesValue;
@@ -122,30 +123,6 @@ public class PropertyBinder<P> {
   public void to(final HasValue<P> source, final IsTextList errors) {
     to(source);
     errorsTo(errors);
-  }
-
-  /** @return a {@link ValueBinder} to our property for a specific value. */
-  public ValueBinder<P> withValue(final P value) {
-    return new ValueBinder<P>(p, value);
-  }
-
-  /** Binds a specific value to a widget. */
-  public class ValueBinder<P1> {
-    private final Property<P1> p;
-    private final P1 value;
-
-    private ValueBinder(final Property<P1> p, final P1 value) {
-      this.p = p;
-      this.value = value;
-    }
-
-    public void to(final HasClickHandlers clickable) {
-      b.add(clickable.addClickHandler(new ClickHandler() {
-        public void onClick(final ClickEvent e) {
-          p.set(value);
-        }
-      }));
-    }
   }
 
   @SuppressWarnings("unchecked")
