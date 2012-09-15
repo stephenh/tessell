@@ -43,8 +43,10 @@ public class CompositeIsWidget implements IsWidget {
 
   protected IsWidget widget;
 
-  protected void setWidget(final IsWidget widget) {
+  /** Sets our composite widgets, and returns it for fluent/inline assignments. */
+  protected <W extends IsWidget> W setWidget(final W widget) {
     this.widget = widget;
+    return widget;
   }
 
   @Override
