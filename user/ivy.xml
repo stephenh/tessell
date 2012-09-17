@@ -24,9 +24,9 @@
 
     <!-- test time only dependencies -->
     <dependency org="junit" name="junit-dep" rev="4.8.2" conf="default,test" />
-    <dependency org="org.hamcrest" name="hamcrest-core" rev="1.2" conf="default,test" /><!-- include -core to kick out -core.1.1 from junit-dep -->
+    <dependency org="org.hamcrest" name="hamcrest-core" rev="1.3" conf="default,test" /><!-- include -core to kick out -core.1.1 from junit-dep -->
     <dependency org="org.hamcrest" name="hamcrest-all" rev="1.2" conf="default,test" />
-    <dependency org="joist" name="joist-util" rev="0.6.3" conf="test"/>
+    <dependency org="joist" name="joist-util" rev="1.4.17" conf="test"/>
     <dependency org="commons-lang" name="commons-lang" rev="2.4" conf="test"/>
   </dependencies>
 </ivy-module>
