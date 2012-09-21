@@ -4,7 +4,6 @@ import static org.tessell.util.ObjectUtils.eq;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -21,7 +20,6 @@ import org.tessell.model.validation.rules.Rule;
 import org.tessell.model.values.DerivedValue;
 import org.tessell.model.values.Value;
 import org.tessell.util.Inflector;
-import org.tessell.util.ListDiff;
 
 import com.google.gwt.event.shared.*;
 import com.google.gwt.event.shared.GwtEvent.Type;
@@ -49,7 +47,7 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
   // whether we're currently reassessing
   private boolean reassessing = false;
   // only used if this is a derived value
-  private List<Property<?>> lastUpstream;
+  private UpstreamState lastUpstream;
 
   public AbstractProperty(final Value<P> value) {
     this.value = value;
@@ -300,21 +298,12 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
     // this logic should probably go in DerivedValue somehow, except that
     // it's only a value and does not know about it's parent property
     if (value instanceof DerivedValue) {
+      if (lastUpstream == null) {
+        lastUpstream = new UpstreamState(this);
+      }
       Capture c = Upstream.start();
       P tempValue = value.get();
-      List<Property<?>> newUpstream = c.finish();
-      // Only update our upstream properties if they've changed
-      if (lastUpstream == null || !lastUpstream.equals(newUpstream)) {
-        ListDiff<Property<?>> diff = ListDiff.of(lastUpstream, newUpstream);
-        for (Property<?> removed : diff.removed) {
-          removed.removeDerived(this);
-        }
-        for (Property<?> added : diff.added) {
-          added.addDerived(this);
-        }
-        // Remember for change tracking next time
-        lastUpstream = newUpstream;
-      }
+      lastUpstream.update(c.finish());
       return tempValue;
     } else {
       return value.get();

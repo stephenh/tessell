@@ -37,6 +37,7 @@ public class RulesTest extends AbstractRuleTest {
   @Before
   public void listenToName() {
     listenTo(f.name);
+    listenTo(f.description);
   }
 
   @Test
@@ -160,5 +161,43 @@ public class RulesTest extends AbstractRuleTest {
     new Length(f.name, "name length");
     f.name.set(null);
     assertNoMessages();
+  }
+
+  @Test
+  public void tracksUpstreamDependencies() {
+    new Custom(f.name, "cannot be the description", new Supplier<Boolean>() {
+      public Boolean get() {
+        return f.description.get() == null || f.name.get() == null || !f.name.get().equals(f.description.get());
+      }
+    });
+    f.description.set("a");
+    f.name.set("a");
+    assertMessages("cannot be the description");
+    // just changing description, the rules for a get rerun
+    f.description.set("b");
+    assertNoMessages();
+  }
+
+  @Test
+  public void tracksTwoWayUpstreamDependencies() {
+    new Custom(f.name, "cannot be the description", new Supplier<Boolean>() {
+      public Boolean get() {
+        return f.description.get() == null || f.name.get() == null || !f.name.get().equals(f.description.get());
+      }
+    });
+    new Custom(f.description, "cannot be the name", new Supplier<Boolean>() {
+      public Boolean get() {
+        return f.description.get() == null || f.name.get() == null || !f.name.get().equals(f.description.get());
+      }
+    });
+    f.description.set("a");
+    f.name.set("a");
+    assertMessages("cannot be the description", "cannot be the name");
+    // just changing description reassesses both properties
+    f.description.set("b");
+    assertNoMessages();
+    // also changing name reassesses both properties
+    f.name.set("b");
+    assertMessages("cannot be the description", "cannot be the name");
   }
 }

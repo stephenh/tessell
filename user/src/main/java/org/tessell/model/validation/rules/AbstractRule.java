@@ -5,6 +5,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.tessell.model.properties.Property;
+import org.tessell.model.properties.Upstream;
+import org.tessell.model.properties.Upstream.Capture;
+import org.tessell.model.properties.UpstreamState;
 import org.tessell.model.validation.Valid;
 import org.tessell.model.validation.events.RuleTriggeredEvent;
 import org.tessell.model.validation.events.RuleTriggeredHandler;
@@ -37,6 +40,8 @@ public abstract class AbstractRule<T, U extends AbstractRule<T, U>> implements R
   protected String message;
   // Whether this rule has been invalid and fired a RuleTriggeredEvent
   private boolean triggered = false;
+  // only used if this is a derived value
+  private UpstreamState lastUpstream;
 
   protected AbstractRule(final Property<T> property, final String message) {
     this.message = message;
@@ -55,7 +60,17 @@ public abstract class AbstractRule<T, U extends AbstractRule<T, U>> implements R
     if (onlyIfSaysToSkip()) {
       return Valid.YES;
     }
-    return this.isValid();
+    if (this instanceof Custom) {
+      if (lastUpstream == null) {
+        lastUpstream = new UpstreamState(property);
+      }
+      Capture c = Upstream.start();
+      Valid v = this.isValid();
+      lastUpstream.update(c.finish());
+      return v;
+    } else {
+      return this.isValid();
+    }
   }
 
   @Override
