@@ -1,17 +1,17 @@
 package org.tessell.testing;
 
-import static org.tessell.util.StringUtils.join;
+import static org.hamcrest.CoreMatchers.hasItem;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.empty;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.hamcrest.BaseMatcher;
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeMatcher;
+import org.hamcrest.*;
 import org.tessell.bus.StubEventBus;
-import org.tessell.gwt.dom.client.StubStyle;
 import org.tessell.gwt.user.client.ui.HasCss;
 import org.tessell.place.events.PlaceRequestEvent;
 import org.tessell.widgets.IsTextList;
@@ -21,147 +21,61 @@ public class TessellMatchers {
 
   /** A matcher to assert display != none. */
   public static Matcher<HasCss> shown() {
-    return new AbstractCssMatcher("shown", "display", null, "block", "inline");
+    return hasCssValue("display", "showing because display", is(not("none")));
   }
 
   /** A matcher to assert display == none. */
   public static Matcher<HasCss> hidden() {
-    return new AbstractCssMatcher("hidden", "display", "none");
+    return hasCssValue("display", "hidden because display", is("none"));
   }
 
   /** A matcher to assert visible == hidden. */
   public static Matcher<HasCss> visible() {
-    return new AbstractCssMatcher("visible", "visibility", null, "visible");
+    return hasCssValue("visibility", "visible because visibility", is(not("hidden")));
   }
 
   /** A matcher to assert visible == visible|unset. */
   public static Matcher<HasCss> invisible() {
-    return new AbstractCssMatcher("invisible", "visibility", "hidden");
-  }
-
-  public static class AbstractCssMatcher extends TypeSafeMatcher<HasCss> {
-    private final String description;
-    private final String styleName;
-    private final List<String> goodValues;
-
-    public AbstractCssMatcher(String description, String styleName, String... goodValues) {
-      this.description = description;
-      this.styleName = styleName;
-      this.goodValues = Arrays.asList(goodValues);
-    }
-
-    @Override
-    public void describeTo(Description description) {
-      description.appendText(this.description);
-    }
-
-    @Override
-    protected boolean matchesSafely(HasCss item) {
-      return goodValues.contains(getValue(item));
-    }
-
-    @Override
-    protected void describeMismatchSafely(HasCss item, Description mismatchDescription) {
-      mismatchDescription.appendValue(item);
-      mismatchDescription.appendText(" " + styleName + " is ");
-      mismatchDescription.appendValue(getValue(item));
-    }
-
-    private String getValue(HasCss item) {
-      return ((StubStyle) item.getStyle()).getStyle().get(styleName);
-    }
+    return hasCssValue("visibility", "invisible because visibility", is("hidden"));
   }
 
   /** A matcher to assert an arbitrary CSS property. */
   public static Matcher<HasCss> hasCssValue(final String name, final String value) {
-    return new TypeSafeMatcher<HasCss>() {
-      @Override
-      protected boolean matchesSafely(HasCss item) {
-        return value.equals(get(item));
-      }
+    return hasCssValue(name, name, is(value));
+  }
 
-      @Override
-      public void describeTo(Description description) {
-        description.appendText(name + " is ").appendValue(value);
-      }
-
-      @Override
-      protected void describeMismatchSafely(HasCss item, Description mismatchDescription) {
-        mismatchDescription.appendValue(item);
-        mismatchDescription.appendText(" " + name + " is ");
-        mismatchDescription.appendValue(get(item));
-      }
-
-      private String get(HasCss item) {
-        return ((StubStyle) item.getStyle()).getStyle().get(name);
+  /** A matcher to assert an arbitrary CSS property. */
+  public static Matcher<HasCss> hasCssValue(final String name, final String description, final Matcher<String> valueMatcher) {
+    return new FeatureMatcher<HasCss, String>(valueMatcher, description, name) {
+      protected String featureValueOf(HasCss actual) {
+        return actual.getStyle().getProperty(name);
       }
     };
   }
 
   /** A matcher to assert a class name being present. */
   public static Matcher<HasCss> hasStyle(final String className) {
-    return new TypeSafeMatcher<HasCss>() {
-      @Override
-      protected boolean matchesSafely(HasCss item) {
-        return (" " + item.getStyleName() + " ").indexOf(" " + className + " ") > -1;
-      }
-
-      @Override
-      public void describeTo(Description description) {
-        description.appendText("style ").appendValue(className);
-      }
-
-      @Override
-      protected void describeMismatchSafely(HasCss item, Description mismatchDescription) {
-        mismatchDescription.appendValue(item);
-        mismatchDescription.appendText(" does not have ");
-        mismatchDescription.appendValue(className);
+    return new FeatureMatcher<HasCss, List<String>>(hasItem(className), "style is", "style") {
+      protected List<String> featureValueOf(HasCss actual) {
+        return Arrays.asList(actual.getStyleName().split(" "));
       }
     };
   }
 
   /** A matcher to assert no validation errors. */
   public static Matcher<IsTextList> hasNoErrors() {
-    return new TypeSafeMatcher<IsTextList>() {
-      @Override
-      protected boolean matchesSafely(IsTextList item) {
-        return ((StubTextList) item).getList().size() == 0;
-      }
-
-      @Override
-      public void describeTo(Description description) {
-        description.appendText("has no errors");
-      }
-
-      @Override
-      protected void describeMismatchSafely(IsTextList item, Description mismatchDescription) {
-        mismatchDescription.appendValue(item);
-        mismatchDescription.appendText(" has errors ");
-        mismatchDescription.appendValueList("", ", ", "", ((StubTextList) item).getList());
+    return new FeatureMatcher<IsTextList, List<String>>(is(empty()), "errors", "errors had") {
+      protected List<String> featureValueOf(IsTextList actual) {
+        return ((StubTextList) actual).getList();
       }
     };
   }
 
   /** A matcher to assert validation errors. */
   public static Matcher<IsTextList> hasErrors(final String... errors) {
-    return new TypeSafeMatcher<IsTextList>() {
-      @Override
-      protected boolean matchesSafely(IsTextList item) {
-        String expected = join(errors, ", ");
-        String actual = join(((StubTextList) item).getList(), ", ");
-        return expected.equals(actual);
-      }
-
-      @Override
-      public void describeTo(Description description) {
-        description.appendText("errors ");
-        description.appendValueList("<", ", ", ">", errors);
-      }
-
-      @Override
-      protected void describeMismatchSafely(IsTextList item, Description mismatchDescription) {
-        mismatchDescription.appendText("errors ");
-        mismatchDescription.appendValueList("<", ", ", ">", ((StubTextList) item).getList());
+    return new FeatureMatcher<IsTextList, List<String>>(contains(errors), "errors is an", "errors had") {
+      protected List<String> featureValueOf(IsTextList actual) {
+        return ((StubTextList) actual).getList();
       }
     };
   }
