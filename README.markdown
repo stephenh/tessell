@@ -41,5 +41,5 @@ Binder DSL Ideas
       // or, for more unique static imports
       binder.on(blurOf(...), thenSet(textOf(...).to(asdf)));
 
-Test3.
+Test4.
 
