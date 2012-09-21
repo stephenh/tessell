@@ -73,7 +73,7 @@ public class TessellMatchers {
   }
 
   /** A matcher to assert an arbitrary CSS property. */
-  public static Matcher<HasCss> hasStyle(final String name, final String value) {
+  public static Matcher<HasCss> hasCssValue(final String name, final String value) {
     return new TypeSafeMatcher<HasCss>() {
       @Override
       protected boolean matchesSafely(HasCss item) {
