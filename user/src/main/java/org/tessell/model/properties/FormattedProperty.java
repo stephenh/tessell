@@ -103,6 +103,13 @@ public class FormattedProperty<DP, SP> implements Property<DP> {
     set(value);
   }
 
+  @Override
+  public void setIfNull(DP value) {
+    if (get() == null) {
+      set(value);
+    }
+  }
+
   /**
    * Changes the message shown when the formatter cannot parse input.
    *

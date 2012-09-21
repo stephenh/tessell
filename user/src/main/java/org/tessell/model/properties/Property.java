@@ -19,6 +19,8 @@ public interface Property<P> extends HasHandlers, HasRuleTriggers, Value<P>, Tak
 
   void setInitialValue(P value);
 
+  void setIfNull(P value);
+
   void reassess();
 
   void addRule(Rule rule);
