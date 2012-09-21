@@ -2,6 +2,7 @@ package org.tessell.model.dsl;
 
 import org.tessell.gwt.dom.client.IsElement;
 import org.tessell.gwt.user.client.ui.IsImage;
+import org.tessell.gwt.user.client.ui.IsWidget;
 
 import com.google.gwt.user.client.TakesValue;
 import com.google.gwt.user.client.ui.HasHTML;
@@ -80,6 +81,20 @@ public class TakesValues {
       @Override
       public void setValue(String value) {
         target.setUrl(value);
+      }
+    };
+  }
+
+  public static TakesValue<String> debugId(final IsWidget w) {
+    return new TakesValue<String>() {
+      @Override
+      public void setValue(String value) {
+        w.ensureDebugId(value);
+      }
+
+      @Override
+      public String getValue() {
+        return w.getIsElement().getAttribute("id");
       }
     };
   }

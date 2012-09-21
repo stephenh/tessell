@@ -13,7 +13,6 @@ import com.google.gwt.safehtml.shared.SafeHtml;
 
 public class StubElement implements IsElement {
 
-  private String id;
   private String innerText = "";
   private String innerHTML = "";
   private StubWidget widget;
@@ -83,7 +82,7 @@ public class StubElement implements IsElement {
 
   @Override
   public String toString() {
-    return id;
+    return getId();
   }
 
   @Override
@@ -129,12 +128,12 @@ public class StubElement implements IsElement {
 
   @Override
   public String getId() {
-    return id;
+    return getAttribute("id");
   }
 
   @Override
   public void setId(final String id) {
-    this.id = id;
+    setAttribute("id", id);
   }
 
   @Override
