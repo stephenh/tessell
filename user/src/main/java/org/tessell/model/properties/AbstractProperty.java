@@ -10,6 +10,7 @@ import java.util.logging.Logger;
 
 import org.tessell.model.events.PropertyChangedEvent;
 import org.tessell.model.events.PropertyChangedHandler;
+import org.tessell.model.properties.Upstream.Capture;
 import org.tessell.model.validation.Valid;
 import org.tessell.model.validation.events.RuleTriggeredEvent;
 import org.tessell.model.validation.events.RuleTriggeredHandler;
@@ -29,7 +30,6 @@ import com.google.gwt.event.shared.GwtEvent.Type;
 public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> implements Property<P> {
 
   private static final Logger log = Logger.getLogger("org.tessell.model");
-  private static List<Property<?>> implicitUpstream = null;
   // handlers
   private final EventBus handlers = new SimplerEventBus();
   // other properties that are validated off of our value
@@ -61,10 +61,7 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
 
   @Override
   public P get() {
-    if (implicitUpstream != null && !implicitUpstream.contains(this)) {
-      // Some other derived property is having it's get() called, so it depends on us now
-      implicitUpstream.add(this);
-    }
+    Upstream.addIfTracking(this);
     return getWithUpstreamTracking();
   }
 
@@ -303,14 +300,9 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
     // this logic should probably go in DerivedValue somehow, except that
     // it's only a value and does not know about it's parent property
     if (value instanceof DerivedValue) {
-      // Turn on implicitUpstream, which watches for properties called during value.get.
-      // Also, keep track if anyone was already tracking derived values so we can put it back.
-      List<Property<?>> tempUpstream = implicitUpstream;
-      implicitUpstream = new ArrayList<Property<?>>();
+      Capture c = Upstream.start();
       P tempValue = value.get();
-      List<Property<?>> newUpstream = new ArrayList<Property<?>>(implicitUpstream);
-      // Put back the previous upstream before we do anything else
-      implicitUpstream = tempUpstream;
+      List<Property<?>> newUpstream = c.finish();
       // Only update our upstream properties if they've changed
       if (lastUpstream == null || !lastUpstream.equals(newUpstream)) {
         ListDiff<Property<?>> diff = ListDiff.of(lastUpstream, newUpstream);
