@@ -5,6 +5,7 @@ import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.Matchers.contains;
 import static org.junit.Assert.assertThat;
 import static org.tessell.model.dsl.TakesValues.textOf;
 import static org.tessell.model.dsl.WhenConditions.notNull;
@@ -240,7 +241,7 @@ public class BinderTest {
     final BooleanProperty b = booleanProperty("b", true);
     final ArrayList<String> list = new ArrayList<String>();
     binder.when(b).is(true).add("foo").to(list);
-    assertThat(list, hasItem("foo"));
+    assertThat(list, contains("foo"));
   }
 
   @Test
@@ -254,12 +255,13 @@ public class BinderTest {
 
   @Test
   public void whenValueAddToListInitializesProperty() {
-    final EnumProperty<Color> color = enumProperty("color");
+    final EnumProperty<Color> color = enumProperty("color"); // null so we'll do the initial set
     final ArrayList<String> list = new ArrayList<String>();
     list.add("foo");
     binder.when(color).is(Color.Blue).add("foo").to(list);
     assertThat(color.get(), is(Color.Blue));
     assertThat(color.isTouched(), is(false));
+    assertThat(list, contains("foo"));
   }
 
   @Test

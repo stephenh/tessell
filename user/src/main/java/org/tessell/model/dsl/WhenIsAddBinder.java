@@ -52,7 +52,9 @@ public class WhenIsAddBinder<P, V> {
 
   private void update(List<V> values) {
     if (condition.evaluate(property)) {
-      values.add(newValue);
+      if (!values.contains(newValue)) {
+        values.add(newValue);
+      }
     } else if (values.contains(newValue)) {
       values.remove(newValue);
     }
@@ -60,7 +62,9 @@ public class WhenIsAddBinder<P, V> {
 
   private void update(ListProperty<V> values) {
     if (condition.evaluate(property)) {
-      values.add(newValue);
+      if (!values.get().contains(newValue)) {
+        values.add(newValue);
+      }
     } else if (values.get().contains(newValue)) {
       values.remove(newValue);
     }
