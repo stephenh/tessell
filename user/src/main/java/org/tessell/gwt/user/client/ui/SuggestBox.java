@@ -5,6 +5,7 @@ import org.tessell.gwt.dom.client.IsElement;
 import org.tessell.gwt.dom.client.IsStyle;
 
 import com.google.gwt.user.client.ui.SuggestOracle;
+import com.google.gwt.user.client.ui.TextBoxBase;
 
 public class SuggestBox extends com.google.gwt.user.client.ui.SuggestBox implements IsSuggestBox {
 
@@ -14,6 +15,14 @@ public class SuggestBox extends com.google.gwt.user.client.ui.SuggestBox impleme
 
   public SuggestBox(SuggestOracle oracle) {
     super(oracle);
+  }
+
+  public SuggestBox(SuggestOracle oracle, TextBoxBase base) {
+    super(oracle, base);
+  }
+
+  public SuggestBox(SuggestOracle oracle, TextBoxBase base, SuggestionDisplay display) {
+    super(oracle, base, display);
   }
 
   @Override

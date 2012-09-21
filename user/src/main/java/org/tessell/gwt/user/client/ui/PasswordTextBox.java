@@ -16,4 +16,8 @@ public class PasswordTextBox extends com.google.gwt.user.client.ui.PasswordTextB
     return new GwtElement(getElement());
   }
 
+  @Override
+  public com.google.gwt.user.client.ui.PasswordTextBox asWidget() {
+    return this;
+  }
 }

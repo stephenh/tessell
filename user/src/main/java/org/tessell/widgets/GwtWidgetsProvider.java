@@ -19,6 +19,7 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.cellview.client.CellTable.Resources;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.SuggestBox.SuggestionDisplay;
 import com.google.gwt.user.client.ui.SuggestOracle;
 
 /** A Widget factory. */
@@ -192,6 +193,16 @@ public class GwtWidgetsProvider implements WidgetsProvider {
   @Override
   public IsSuggestBox newSuggestBox(SuggestOracle oracle) {
     return new SuggestBox(oracle);
+  }
+
+  @Override
+  public IsSuggestBox newSuggestBox(SuggestOracle oracle, IsTextBoxBase box) {
+    return new SuggestBox(oracle, box.asWidget());
+  }
+
+  @Override
+  public IsSuggestBox newSuggestBox(SuggestOracle oracle, IsTextBoxBase box, SuggestionDisplay display) {
+    return new SuggestBox(oracle, box.asWidget(), display);
   }
 
   @Override

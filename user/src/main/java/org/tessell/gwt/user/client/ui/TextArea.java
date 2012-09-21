@@ -16,4 +16,9 @@ public class TextArea extends com.google.gwt.user.client.ui.TextArea implements 
     return getIsElement().getStyle();
   }
 
+  @Override
+  public com.google.gwt.user.client.ui.TextArea asWidget() {
+    return this;
+  }
+
 }

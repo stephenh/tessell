@@ -15,6 +15,7 @@ import com.google.gwt.cell.client.Cell;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.DataGrid;
+import com.google.gwt.user.client.ui.SuggestBox.SuggestionDisplay;
 import com.google.gwt.user.client.ui.SuggestOracle;
 
 public interface WidgetsProvider {
@@ -100,6 +101,10 @@ public interface WidgetsProvider {
   <T> IsCellList<T> newCellList(Cell<T> cell);
 
   IsSuggestBox newSuggestBox(SuggestOracle oracle);
+
+  IsSuggestBox newSuggestBox(SuggestOracle oracle, IsTextBoxBase box);
+
+  IsSuggestBox newSuggestBox(SuggestOracle oracle, IsTextBoxBase box, SuggestionDisplay display);
 
   IsResizeLayoutPanel newResizeLayoutPanel();
 

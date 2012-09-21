@@ -5,20 +5,14 @@ import java.util.List;
 
 import org.tessell.widgets.StubWidget;
 
-import com.google.gwt.event.dom.client.KeyDownEvent;
-import com.google.gwt.event.dom.client.KeyDownHandler;
-import com.google.gwt.event.dom.client.KeyPressEvent;
-import com.google.gwt.event.dom.client.KeyPressHandler;
-import com.google.gwt.event.dom.client.KeyUpEvent;
-import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.event.dom.client.*;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
+import com.google.gwt.user.client.ui.*;
 import com.google.gwt.user.client.ui.SuggestBox.SuggestionDisplay;
-import com.google.gwt.user.client.ui.SuggestOracle;
 import com.google.gwt.user.client.ui.SuggestOracle.Callback;
 import com.google.gwt.user.client.ui.SuggestOracle.Request;
 import com.google.gwt.user.client.ui.SuggestOracle.Response;
@@ -29,7 +23,7 @@ public class StubSuggestBox extends StubWidget implements IsSuggestBox {
   private String text;
   private int limit;
   private final SuggestOracle oracle;
-  private final SuggestionDisplay display = null;
+  private final SuggestionDisplay display;
   private final List<Suggestion> lastSuggestions = new ArrayList<Suggestion>();
 
   public StubSuggestBox() {
@@ -37,7 +31,12 @@ public class StubSuggestBox extends StubWidget implements IsSuggestBox {
   }
 
   public StubSuggestBox(SuggestOracle oracle) {
+    this(oracle, null);
+  }
+
+  public StubSuggestBox(SuggestOracle oracle, SuggestionDisplay display) {
     this.oracle = oracle;
+    this.display = display;
   }
 
   /** The user types some text, but focus doesn't leave the box. */
@@ -88,14 +87,11 @@ public class StubSuggestBox extends StubWidget implements IsSuggestBox {
 
   @Override
   public boolean isAnimationEnabled() {
-    // TODO Auto-generated method stub
     return false;
   }
 
   @Override
   public void setAnimationEnabled(boolean enable) {
-    // TODO Auto-generated method stub
-
   }
 
   @Override

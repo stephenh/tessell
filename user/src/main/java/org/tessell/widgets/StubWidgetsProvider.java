@@ -18,6 +18,7 @@ import org.tessell.widgets.cellview.StubCellTable;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.cellview.client.CellTable.Resources;
+import com.google.gwt.user.client.ui.SuggestBox.SuggestionDisplay;
 import com.google.gwt.user.client.ui.SuggestOracle;
 
 /** A Widget factory. */
@@ -197,6 +198,16 @@ public class StubWidgetsProvider implements WidgetsProvider {
   @Override
   public IsSuggestBox newSuggestBox(SuggestOracle oracle) {
     return new StubSuggestBox(oracle);
+  }
+
+  @Override
+  public IsSuggestBox newSuggestBox(SuggestOracle oracle, IsTextBoxBase box) {
+    return new StubSuggestBox(oracle);
+  }
+
+  @Override
+  public IsSuggestBox newSuggestBox(SuggestOracle oracle, IsTextBoxBase box, SuggestionDisplay display) {
+    return new StubSuggestBox(oracle, display);
   }
 
   @Override

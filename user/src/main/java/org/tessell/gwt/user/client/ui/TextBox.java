@@ -4,6 +4,8 @@ import org.tessell.gwt.dom.client.GwtElement;
 import org.tessell.gwt.dom.client.IsElement;
 import org.tessell.gwt.dom.client.IsStyle;
 
+import com.google.gwt.user.client.ui.TextBoxBase;
+
 public class TextBox extends com.google.gwt.user.client.ui.TextBox implements IsTextBox {
 
   @Override
@@ -14,6 +16,11 @@ public class TextBox extends com.google.gwt.user.client.ui.TextBox implements Is
   @Override
   public IsElement getIsElement() {
     return new GwtElement(getElement());
+  }
+
+  @Override
+  public TextBoxBase asWidget() {
+    return this;
   }
 
 }

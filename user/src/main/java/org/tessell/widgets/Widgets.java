@@ -18,6 +18,7 @@ import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.DataGrid;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
+import com.google.gwt.user.client.ui.SuggestBox.SuggestionDisplay;
 import com.google.gwt.user.client.ui.SuggestOracle;
 
 /** A Widget factory. */
@@ -221,6 +222,14 @@ public class Widgets {
 
   public static IsSuggestBox newSuggestBox(SuggestOracle oracle) {
     return provider.newSuggestBox(oracle);
+  }
+
+  public static IsSuggestBox newSuggestBox(SuggestOracle oracle, IsTextBoxBase box) {
+    return provider.newSuggestBox(oracle, box);
+  }
+
+  public static IsSuggestBox newSuggestBox(SuggestOracle oracle, IsTextBoxBase box, SuggestionDisplay display) {
+    return provider.newSuggestBox(oracle, box, display);
   }
 
   public static IsResizeLayoutPanel newResizeLayoutPanel() {

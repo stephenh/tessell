@@ -1,6 +1,7 @@
 package org.tessell.gwt.user.client.ui;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.user.client.ui.TextBoxBase;
 import com.google.gwt.user.client.ui.TextBoxBase.TextAlignConstant;
 
 @SuppressWarnings("deprecation")
@@ -53,6 +54,11 @@ public class StubTextBoxBase extends StubValueBoxBase<String> implements IsTextB
   @Override
   public String getText() {
     return getValue();
+  }
+
+  @Override
+  public TextBoxBase asWidget() {
+    throw new UnsupportedOperationException("This is a stub");
   }
 
 }
