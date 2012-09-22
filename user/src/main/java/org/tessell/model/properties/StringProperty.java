@@ -16,24 +16,24 @@ public class StringProperty extends AbstractProperty<String, StringProperty> {
   }
 
   public StringProperty len(int minLength, int maxLength) {
-    new Length(this, getName() + " must be between " + minLength + " and " + maxLength, minLength, maxLength);
+    addRule(new Length(getName() + " must be between " + minLength + " and " + maxLength, minLength, maxLength));
     this.maxLength = maxLength;
     return this;
   }
 
   public StringProperty max(final int maxLength) {
-    new Length(this, getName() + " must be less than " + maxLength, 0, maxLength);
+    addRule(new Length(getName() + " must be less than " + maxLength, 0, maxLength));
     this.maxLength = maxLength;
     return this;
   }
 
   public StringProperty regex(final String regex, final String message) {
-    new Regex(this, message, regex);
+    addRule(new Regex(message, regex));
     return this;
   }
 
   public StringProperty numeric() {
-    new Regex(this, getName() + " must be numeric", Regex.NUMERIC);
+    addRule(new Regex(getName() + " must be numeric", Regex.NUMERIC));
     return this;
   }
 

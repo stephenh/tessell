@@ -43,18 +43,27 @@ public class RulesTest extends AbstractRuleTest {
 
   @Test
   public void whenRuleIsValidatedTheStateIsRemembered() {
-    new Required(f.name, "name required");
-    new Length(f.name, "name length");
-
     assertThat(f.name.wasValid(), nullValue());
+
+    f.name.addRule(new Required("name required"));
+    f.name.addRule(new Length("name length"));
+    assertThat(f.name.wasValid(), is(Valid.NO));
+
     f.name.set(null);
     assertThat(f.name.wasValid(), is(Valid.NO));
   }
 
   @Test
+  public void ruleReassessAfterAdded() {
+    f.name.touch();
+    f.name.addRule(new Required("name required"));
+    assertMessages("name required");
+  }
+
+  @Test
   public void whenMultiplesRulesPerPropertyOnlyTheFirstFires() {
-    new Required(f.name, "name required");
-    new Length(f.name, "name length");
+    f.name.addRule(new Required("name required"));
+    f.name.addRule(new Length("name length"));
 
     f.name.set(null);
     assertMessages("name required");
@@ -62,8 +71,8 @@ public class RulesTest extends AbstractRuleTest {
 
   @Test
   public void whenMultipleRulesPerPropertyTheSecondCanFireNext() {
-    new Required(f.name, "name required");
-    new Length(f.name, "name length");
+    f.name.addRule(new Required("name required"));
+    f.name.addRule(new Length("name length"));
 
     f.name.set(StringUtils.repeat("a", 101));
     assertMessages("name length");
@@ -77,7 +86,7 @@ public class RulesTest extends AbstractRuleTest {
     final SetValue<Boolean> customLogic = new SetValue<Boolean>("customLogic");
     customLogic.set(true);
 
-    new Custom(f.name, "custom", customLogic);
+    f.name.addRule(new Custom("custom", customLogic));
     f.name.set("a name");
     assertMessages("");
 
@@ -92,11 +101,11 @@ public class RulesTest extends AbstractRuleTest {
 
   @Test
   public void customWithSupplier() {
-    new Custom(f.name, "name cannot be bob", new Supplier<Boolean>() {
+    f.name.addRule(new Custom("name cannot be bob", new Supplier<Boolean>() {
       public Boolean get() {
         return !eq(f.name.get(), "bob");
       }
-    });
+    }));
 
     f.name.set("bob");
     assertMessages("name cannot be bob");
@@ -107,7 +116,7 @@ public class RulesTest extends AbstractRuleTest {
 
   @Test
   public void untouchingUntriggersTheRule() {
-    new Required(f.name, "name required");
+    f.name.addRule(new Required("name required"));
 
     f.name.set(null);
     assertMessages("name required");
@@ -119,7 +128,9 @@ public class RulesTest extends AbstractRuleTest {
   @Test
   public void onlyIfDoesNotTouchDownstreamRules() {
     final BooleanProperty b = booleanProperty("b", false);
-    new Required(f.name, "name required").onlyIf(b);
+    Required required = new Required("name required");
+    required.onlyIf(b);
+    f.name.addRule(required);
     // touching b leaves f.name untouched
     b.set(true);
     assertMessages("");
@@ -134,7 +145,9 @@ public class RulesTest extends AbstractRuleTest {
   @Test
   public void onlyIfDoesUpstreamTracking() {
     final BooleanProperty b = booleanProperty("b", false);
-    new Required(f.name, "name required").onlyIf(b);
+    Required r = new Required("name required");
+    r.onlyIf(b);
+    f.name.addRule(r);
     f.name.touch();
     assertMessages("");
     b.set(true);
@@ -143,7 +156,8 @@ public class RulesTest extends AbstractRuleTest {
 
   @Test
   public void onlyIfAfterAlreadyInvalid() {
-    Required r = new Required(f.name, "name required");
+    Required r = new Required("name required");
+    f.name.addRule(r);
     f.name.touch();
     assertMessages("name required");
     // now add the only if
@@ -155,7 +169,8 @@ public class RulesTest extends AbstractRuleTest {
 
   @Test
   public void onlyIfUpgradesNonTouchDerivedProperties() {
-    Required r = new Required(f.name, "name required");
+    Required r = new Required("name required");
+    f.name.addRule(r);
     final BooleanProperty b = booleanProperty("b", true);
     r.onlyIf(b);
     // touching b at this point doesn't touch f.name
@@ -179,11 +194,11 @@ public class RulesTest extends AbstractRuleTest {
     });
     listenTo(c);
     // setup a rule that depends on A and B
-    new Custom(c, "c failed", new Supplier<Boolean>() {
+    c.addRule(new Custom("c failed", new Supplier<Boolean>() {
       public Boolean get() {
         return a.isTrue() && b.isTrue();
       }
-    });
+    }));
     // reassess so that c depends on a && b
     c.reassess();
     assertNoMessages();
@@ -198,7 +213,7 @@ public class RulesTest extends AbstractRuleTest {
 
   @Test
   public void rulesCanBeAddedTwice() {
-    Required r = new Required(f.name, "name required");
+    Required r = new Required("name required");
     f.name.addRule(r);
 
     f.name.set(null);
@@ -207,7 +222,8 @@ public class RulesTest extends AbstractRuleTest {
 
   @Test
   public void ruleHandlersAreFiredBeforeThePropertysHandlers() {
-    Required r = new Required(f.name, "name required");
+    Required r = new Required("name required");
+    f.name.addRule(r);
 
     final List<String> order = new ArrayList<String>();
     r.addRuleTriggeredHandler(new RuleTriggeredHandler() {
@@ -227,18 +243,18 @@ public class RulesTest extends AbstractRuleTest {
 
   @Test
   public void whenLengthOnlyThenEmptyIsOkay() {
-    new Length(f.name, "name length");
+    f.name.addRule(new Length("name length"));
     f.name.set(null);
     assertNoMessages();
   }
 
   @Test
   public void tracksUpstreamDependencies() {
-    new Custom(f.name, "cannot be the description", new Supplier<Boolean>() {
+    f.name.addRule(new Custom("cannot be the description", new Supplier<Boolean>() {
       public Boolean get() {
         return f.description.get() == null || f.name.get() == null || !f.name.get().equals(f.description.get());
       }
-    });
+    }));
     f.description.set("a");
     f.name.set("a");
     assertMessages("cannot be the description");
@@ -249,16 +265,16 @@ public class RulesTest extends AbstractRuleTest {
 
   @Test
   public void tracksTwoWayUpstreamDependencies() {
-    new Custom(f.name, "cannot be the description", new Supplier<Boolean>() {
+    f.name.addRule(new Custom("cannot be the description", new Supplier<Boolean>() {
       public Boolean get() {
         return f.description.get() == null || f.name.get() == null || !f.name.get().equals(f.description.get());
       }
-    });
-    new Custom(f.description, "cannot be the name", new Supplier<Boolean>() {
+    }));
+    f.description.addRule(new Custom("cannot be the name", new Supplier<Boolean>() {
       public Boolean get() {
         return f.description.get() == null || f.name.get() == null || !f.name.get().equals(f.description.get());
       }
-    });
+    }));
     f.description.set("a");
     f.name.set("a");
     assertMessages("cannot be the description", "cannot be the name");

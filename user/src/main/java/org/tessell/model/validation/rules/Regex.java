@@ -1,10 +1,9 @@
 package org.tessell.model.validation.rules;
 
-import org.tessell.model.properties.Property;
 import org.tessell.model.validation.Valid;
 
 /** Validates that a property matches a regex. */
-public class Regex extends AbstractRule<String, Regex> {
+public class Regex extends AbstractRule<String> {
 
   private static final String urlScheme = "(http[s]?):\\/\\/";
   private static final String urlDomain = "(([^:\\/\\s\"]+\\.)+([^:\\/\\s\"]{2,}))"; // foo.com, foo.bar.com
@@ -19,12 +18,10 @@ public class Regex extends AbstractRule<String, Regex> {
   // numeric
   public static final String NUMERIC = "^[0-9]+$";
 
-  private final Property<String> property;
   private final String regex;
 
-  public Regex(final Property<String> property, final String message, final String regex) {
-    super(property, message);
-    this.property = property;
+  public Regex(final String message, final String regex) {
+    super(message);
     this.regex = regex;
   }
 

@@ -26,7 +26,7 @@ public class PropertyGroup extends AbstractProperty<Boolean, PropertyGroup> {
   public PropertyGroup(final String name, final String message) {
     super(new SetValue<Boolean>(name, true));
     // add a rule that fires whenever we're false (and touched)
-    new Custom(this, message, this);
+    addRule(new Custom(message, this));
     // We always want to consider ourselves "touched", so that our
     // error message fires right away, and the UI/parent property
     // group can see it. However, we don't want to touch our children

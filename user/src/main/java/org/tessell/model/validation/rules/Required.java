@@ -6,20 +6,22 @@ import org.tessell.model.properties.Property;
 import org.tessell.model.validation.Valid;
 
 /** Validates that a property is not-null. */
-public class Required extends AbstractRule<Object, Required> {
+public class Required extends AbstractRule<Object> {
 
-  private final Property<?> property;
-
-  @SuppressWarnings("unchecked")
-  public Required(final Property<? extends Object> property, final String message) {
-    super((Property<Object>) property, message);
-    this.property = property;
+  public Required(final String message) {
+    super(message);
   }
 
-  @SuppressWarnings("unchecked")
-  public Required(final Property<? extends Object> property) {
-    super((Property<Object>) property, property.getName() + " is required");
-    this.property = property;
+  public Required() {
+    super(null); // will get by setProperty
+  }
+
+  @Override
+  public void setProperty(Property<Object> property) {
+    super.setProperty(property);
+    if (message == null) {
+      message = property.getName() + " is required";
+    }
   }
 
   @Override

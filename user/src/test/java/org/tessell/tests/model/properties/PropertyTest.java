@@ -17,40 +17,39 @@ public class PropertyTest extends AbstractRuleTest {
 
   @Test
   public void twoWayDerived() {
-    final IntegerProperty a = integerProperty("a", 1);
+    final IntegerProperty a = integerProperty("a", 3);
     final IntegerProperty b = integerProperty("b", 2);
     listenTo(a);
     listenTo(b);
+    a.touch();
+    b.touch();
 
-    new Custom(a, "a must be greater than b", new DerivedValue<Boolean>() {
+    a.addRule(new Custom("a must be greater than b", new DerivedValue<Boolean>() {
       public Boolean get() {
         return a.get() > b.get();
       }
-    });
-    a.addDerived(b);
+    }));
 
-    new Custom(b, "b must be within 5 of a", new DerivedValue<Boolean>() {
+    b.addRule(new Custom("b must be within 5 of a", new DerivedValue<Boolean>() {
       public Boolean get() {
         return Math.abs(a.get() - b.get()) <= 5;
       }
-    });
-    b.addDerived(a);
+    }));
 
-    a.reassess();
     assertMessages("");
 
     a.set(-10);
-    assertMessages("b must be within 5 of a", "a must be greater than b");
+    assertMessages("a must be greater than b", "b must be within 5 of a");
   }
 
   @Test
   public void validationHappensBeforeChange() {
     final IntegerProperty a = integerProperty("a", 10);
-    new Custom(a, "a must be greater than 5", new DerivedValue<Boolean>() {
+    a.addRule(new Custom("a must be greater than 5", new DerivedValue<Boolean>() {
       public Boolean get() {
         return a.get() != null && a.get() > 5;
       }
-    });
+    }));
 
     final Boolean[] wasInvalidOnChange = { null };
     a.addPropertyChangedHandler(new PropertyChangedHandler<Integer>() {
@@ -67,12 +66,11 @@ public class PropertyTest extends AbstractRuleTest {
   public void validationOfDerivedValuesHappensBeforeChange() {
     final IntegerProperty a = integerProperty("a");
     final IntegerProperty b = integerProperty("b");
-    new Custom(b, "b must be greater than a", new DerivedValue<Boolean>() {
+    b.addRule(new Custom("b must be greater than a", new DerivedValue<Boolean>() {
       public Boolean get() {
         return b.get() == null || a.get() == null || b.get() > a.get();
       }
-    });
-    b.depends(a);
+    }));
 
     // set with good values
     a.set(1);

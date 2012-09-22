@@ -76,7 +76,9 @@ public class RegexTest extends AbstractRuleTest {
 
   private void assertRegex(String regex, boolean valid, String... urls) {
     final StringProperty url = stringProperty("url");
-    listenTo(new Regex(url, "invalid", regex));
+    Regex r = new Regex("invalid", regex);
+    url.addRule(r);
+    listenTo(r);
     for (String u : urls) {
       url.set(u);
       if (valid) {

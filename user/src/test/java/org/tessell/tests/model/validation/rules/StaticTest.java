@@ -19,7 +19,8 @@ public class StaticTest extends AbstractRuleTest {
 
   @Test
   public void firesOnSet() {
-    Static rule = new Static(i, "is invalid");
+    Static rule = new Static("is invalid");
+    i.addRule(rule);
     rule.set(false);
     assertMessages("is invalid");
   }

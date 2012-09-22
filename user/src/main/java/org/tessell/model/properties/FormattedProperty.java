@@ -34,12 +34,13 @@ public class FormattedProperty<DP, SP> implements Property<DP> {
     this.formatter = formatter;
     // note, we currently fire the error against our source property, so that people listening for errors
     // to it will see them. it might make more sense to fire against us first, then our source property.
-    isValid = new Static(source, (message == null) ? source.getName() + " is invalid" : message) {
+    isValid = new Static((message == null) ? source.getName() + " is invalid" : message) {
       @Override
       public boolean isImportant() {
         return true;
       }
     };
+    source.addRule(isValid);
     source.addPropertyChangedHandler(new PropertyChangedHandler<SP>() {
       public void onPropertyChanged(PropertyChangedEvent<SP> event) {
         isValid.set(true); // any real (non-formatted) value being set makes our old attempt worthless
@@ -139,8 +140,9 @@ public class FormattedProperty<DP, SP> implements Property<DP> {
   }
 
   @Override
-  public void addRule(Rule rule) {
-    source.addRule(rule);
+  @SuppressWarnings("unchecked")
+  public void addRule(Rule<? super DP> rule) {
+    source.addRule((Rule<? super SP>) rule); // hm, doesn't look right
   }
 
   @Override

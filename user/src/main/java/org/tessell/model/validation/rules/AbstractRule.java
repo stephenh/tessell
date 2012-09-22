@@ -28,14 +28,15 @@ import com.google.gwt.event.shared.SimplerEventBus;
  * @param U
  *          the subclass for the {@link #getThis()} hack
  */
-public abstract class AbstractRule<T, U extends AbstractRule<T, U>> implements Rule {
+public abstract class AbstractRule<T> implements Rule<T> {
 
   private static final Logger log = Logger.getLogger("org.tessell.model");
-  protected final Property<T> property;
   // handlers
   protected final EventBus handlers = new SimplerEventBus();
   // List of properties that must be true for this rule to run.
   private final ArrayList<Value<Boolean>> onlyIf = new ArrayList<Value<Boolean>>();
+  // set by AbstractProperty.addRule
+  protected Property<T> property;
   // The error message to show the user
   protected String message;
   // Whether this rule has been invalid and fired a RuleTriggeredEvent
@@ -43,12 +44,8 @@ public abstract class AbstractRule<T, U extends AbstractRule<T, U>> implements R
   // only used if this is a derived value
   private UpstreamState lastUpstream;
 
-  protected AbstractRule(final Property<T> property, final String message) {
+  protected AbstractRule(String message) {
     this.message = message;
-    this.property = property;
-    if (property != null) {
-      property.addRule(this);
-    }
   }
 
   protected abstract Valid isValid();
@@ -69,6 +66,11 @@ public abstract class AbstractRule<T, U extends AbstractRule<T, U>> implements R
   }
 
   @Override
+  public void setProperty(Property<T> property) {
+    this.property = property;
+  }
+
+  @Override
   public HandlerRegistration addRuleTriggeredHandler(final RuleTriggeredHandler handler) {
     return handlers.addHandler(RuleTriggeredEvent.getType(), handler);
   }
@@ -82,7 +84,9 @@ public abstract class AbstractRule<T, U extends AbstractRule<T, U>> implements R
   @Override
   public void onlyIf(final Value<Boolean> other) {
     this.onlyIf.add(other);
-    property.reassess();
+    if (property != null) {
+      property.reassess();
+    }
   }
 
   public void triggerIfNeeded() {

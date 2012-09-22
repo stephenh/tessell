@@ -15,7 +15,6 @@ import org.tessell.gwt.user.client.ui.StubListBox;
 import org.tessell.model.dsl.ListBoxAdaptor;
 import org.tessell.model.dsl.ListBoxHumanizerAdaptor;
 import org.tessell.model.properties.EnumProperty;
-import org.tessell.model.validation.rules.Required;
 import org.tessell.widgets.StubTextList;
 import org.tessell.widgets.form.AbstractFormPresenterTest;
 import org.tessell.widgets.form.EmployeeModel;
@@ -53,7 +52,7 @@ public class ListBoxFormLineTest extends AbstractFormPresenterTest {
   @Test
   public void listBoxErrorsAreBound() {
     // give the user a null option
-    new Required(employee.employerId);
+    employee.employerId.req();
     employers.add(0, null);
     p.add(newListBoxFormLine(employee.employerId, employers, new EmployerDtoAdaptor()));
     assertThat(employee.employerId.isTouched(), is(false));
@@ -65,7 +64,7 @@ public class ListBoxFormLineTest extends AbstractFormPresenterTest {
 
   @Test
   public void listBoxDoesNotTouchIfNullIsAvailable() {
-    new Required(employee.employerId);
+    employee.employerId.req();
     employers.add(0, null);
     p.add(newListBoxFormLine(employee.employerId, employers, new EmployerDtoAdaptor()));
     assertThat(employee.employerId.get(), is(nullValue()));

@@ -34,8 +34,8 @@ public class Binder extends AbstractBound {
   }
 
   /** @return a fluent {@link RuleBinder} against {@code rule}. */
-  public RuleBinder bind(Rule rule) {
-    return new RuleBinder(this, rule);
+  public <P> RuleBinder<P> bind(Rule<P> rule) {
+    return new RuleBinder<P>(this, rule);
   }
 
   /** @return a fluent {@link StringPropertyBinder} against {@code property}. */

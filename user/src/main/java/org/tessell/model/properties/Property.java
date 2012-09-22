@@ -23,7 +23,7 @@ public interface Property<P> extends HasHandlers, HasRuleTriggers, Value<P>, Tak
 
   void reassess();
 
-  void addRule(Rule rule);
+  void addRule(Rule<? super P> rule);
 
   boolean isTouched();
 

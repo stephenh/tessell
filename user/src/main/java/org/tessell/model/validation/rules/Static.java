@@ -1,18 +1,14 @@
 package org.tessell.model.validation.rules;
 
-import org.tessell.model.properties.Property;
 import org.tessell.model.validation.Valid;
 
 /** A rule that you can explicitly set to valid or invalid as needed. */
-public class Static extends AbstractRule<Object, Static> {
+public class Static extends AbstractRule<Object> {
 
   private boolean valid = true;
-  private final Property<?> property;
 
-  @SuppressWarnings("unchecked")
-  public Static(final Property<?> property, final String message) {
-    super((Property<Object>) property, message);
-    this.property = property;
+  public Static(final String message) {
+    super(message);
   }
 
   @Override
@@ -22,7 +18,9 @@ public class Static extends AbstractRule<Object, Static> {
 
   public void set(final boolean valid) {
     this.valid = valid;
-    property.reassess();
+    if (property != null) {
+      property.reassess();
+    }
   }
 
   public void setMessage(final String message) {

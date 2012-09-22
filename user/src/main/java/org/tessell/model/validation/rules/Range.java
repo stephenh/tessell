@@ -1,20 +1,17 @@
 package org.tessell.model.validation.rules;
 
-import org.tessell.model.properties.Property;
 import org.tessell.model.validation.Valid;
 
 /** Validates that an int in range. */
-public class Range extends AbstractRule<Integer, Range> {
+public class Range extends AbstractRule<Integer> {
 
-  private final Property<Integer> property;
   private final Integer min;
   private final Integer max;
 
-  public Range(final Property<Integer> property, final String message, final Integer min, final Integer max) {
-    super(property, message);
+  public Range(final String message, final Integer min, final Integer max) {
+    super(message);
     this.min = min;
     this.max = max;
-    this.property = property;
   }
 
   @Override

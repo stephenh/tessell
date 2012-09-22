@@ -13,20 +13,20 @@ public class TransientTest extends AbstractRuleTest {
   @Test
   public void firesImmediatelyIfTouched() {
     p.touch();
-    new Transient<String>(p, "p is invalid");
+    p.addRule(new Transient<String>("p is invalid"));
     assertMessages("p is invalid");
   }
 
   @Test
   public void doesFireIfUntouched() {
-    new Transient<String>(p, "p is invalid");
+    p.addRule(new Transient<String>("p is invalid"));
     assertMessages("");
   }
 
   @Test
   public void unfiresOnChange() {
     p.touch();
-    new Transient<String>(p, "p is invalid");
+    p.addRule(new Transient<String>("p is invalid"));
 
     p.set("blah");
     assertMessages("");

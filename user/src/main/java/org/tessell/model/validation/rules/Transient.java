@@ -6,12 +6,17 @@ import org.tessell.model.properties.Property;
 import org.tessell.model.validation.Valid;
 
 /** A rule that fires immediately, until the source property changes. */
-public class Transient<T> extends AbstractRule<T, Transient<T>> {
+public class Transient<T> extends AbstractRule<T> {
 
   private boolean hasChanged;
 
-  public Transient(final Property<T> property, String message) {
-    super(property, message);
+  public Transient(String message) {
+    super(message);
+  }
+
+  @Override
+  public void setProperty(final Property<T> property) {
+    super.setProperty(property);
     property.reassess();
     property.addPropertyChangedHandler(new PropertyChangedHandler<T>() {
       public void onPropertyChanged(PropertyChangedEvent<T> event) {

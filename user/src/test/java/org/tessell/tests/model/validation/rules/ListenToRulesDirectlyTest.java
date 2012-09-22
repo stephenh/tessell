@@ -17,7 +17,8 @@ public class ListenToRulesDirectlyTest extends AbstractRuleTest {
 
   @Test
   public void listenToOne() {
-    final Required r = new Required(f.name, "name required");
+    final Required r = new Required("name required");
+    f.name.addRule(r);
     listenTo(r);
 
     f.name.set(null);

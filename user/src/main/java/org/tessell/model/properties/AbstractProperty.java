@@ -34,7 +34,7 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
   // other properties that are validated off of our value
   protected final ArrayList<Downstream> downstream = new ArrayList<Downstream>();
   // rules that validate against our value and fire against our handlers
-  private final ArrayList<Rule> rules = new ArrayList<Rule>();
+  private final ArrayList<Rule<? super P>> rules = new ArrayList<Rule<? super P>>();
   // outstanding errors
   private final Map<Object, String> errors = new LinkedHashMap<Object, String>();
   // our wrapped value
@@ -196,8 +196,9 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
     return wasValid();
   }
 
+  @SuppressWarnings("unchecked")
   @Override
-  public void addRule(final Rule rule) {
+  public void addRule(final Rule<? super P> rule) {
     if (rules.contains(rule)) {
       return;
     }
@@ -206,6 +207,8 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
     } else {
       rules.add(rule);
     }
+    ((Rule<P>) rule).setProperty(this);
+    reassess();
   }
 
   @Override
@@ -267,7 +270,7 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
   }
 
   public T req() {
-    new Required(this);
+    addRule(new Required());
     return getThis();
   }
 
@@ -310,7 +313,7 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
   /** Runs validation against our rules. */
   private void validate() {
     valid = Valid.YES; // start out valid
-    for (final Rule rule : rules) {
+    for (final Rule<? super P> rule : rules) {
       if (rule.validate() == Valid.YES) {
         rule.untriggerIfNeeded();
       } else {

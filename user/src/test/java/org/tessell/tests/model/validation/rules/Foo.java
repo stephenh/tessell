@@ -17,9 +17,9 @@ public class Foo {
   public BooleanProperty condition = booleanProperty("condition", true);
 
   public Foo() {
-    new Required(name, "name required");
-    new Length(name, "name length");
-    new Required(description, "description required");
+    name.addRule(new Required("name required"));
+    name.addRule(new Length("name length"));
+    description.addRule(new Required("description required"));
     all.add(name, description);
   }
 

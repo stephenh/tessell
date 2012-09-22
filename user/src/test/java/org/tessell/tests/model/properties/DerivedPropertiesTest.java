@@ -78,7 +78,7 @@ public class DerivedPropertiesTest extends AbstractRuleTest {
   public void derivedCanHaveRules() {
     // listen to the derived property
     final IntegerProperty length = f.name.length();
-    new Range(length, "invalid range", 0, 5);
+    length.addRule(new Range("invalid range", 0, 5));
     listenTo(length);
 
     f.name.set("123456");

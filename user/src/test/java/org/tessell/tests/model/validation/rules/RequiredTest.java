@@ -34,29 +34,24 @@ public class RequiredTest extends AbstractRuleTest {
   @Test
   public void ruleDoesNotFireIfPropertyUntouched() {
     assertThat(f.name.isTouched(), is(false));
-    final Required r = new Required(f.name, "name invalid");
-    r.validate();
-    assertMessages("");
-  }
-
-  @Test
-  public void ruleValidationAloneDoesNotFireTheProperty() {
-    f.name.touch();
-    final Required r = new Required(f.name, "name invalid");
+    final Required r = new Required("name invalid");
+    f.name.addRule(r);
     r.validate();
     assertMessages("");
   }
 
   @Test
   public void testTickedDoesFire() {
-    new Required(f.name, "name invalid");
+    Required r = new Required("name invalid");
+    f.name.addRule(r);
     f.name.set(null);
     assertMessages("name invalid");
   }
 
   @Test
   public void testTickedUnfiresAfterValid() {
-    new Required(f.name, "name invalid");
+    Required r = new Required("name invalid");
+    f.name.addRule(r);
     f.name.set(null);
     assertMessages("name invalid");
 
@@ -66,7 +61,9 @@ public class RequiredTest extends AbstractRuleTest {
 
   @Test
   public void testUnfireIfSkippedLaterIsNotDoneAutomatically() {
-    new Required(f.name, "name invalid").onlyIf(f.condition);
+    Required r = new Required("name invalid");
+    r.onlyIf(f.condition);
+    f.name.addRule(r);
     f.name.set(null);
     assertMessages("name invalid");
 
@@ -83,7 +80,7 @@ public class RequiredTest extends AbstractRuleTest {
 
   @Test
   public void requiredListsMustBeNonEmpty() {
-    new Required(f.colors, "colors required");
+    f.colors.addRule(new Required("colors required"));
     f.colors.touch();
     assertMessages("colors required");
 
