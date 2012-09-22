@@ -30,9 +30,4 @@ public class Custom extends AbstractRule<Object, Custom> {
     return TRUE.equals(value.get()) ? Valid.YES : Valid.NO;
   }
 
-  @Override
-  protected Custom getThis() {
-    return this;
-  }
-
 }

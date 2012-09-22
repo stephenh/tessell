@@ -28,17 +28,13 @@ public class Regex extends AbstractRule<String, Regex> {
     this.regex = regex;
   }
 
+  @Override
   protected Valid isValid() {
     final String value = property.get();
     if (value == null) {
       return Valid.YES; // defer to a Required rule
     }
     return value.matches(regex) ? Valid.YES : Valid.NO;
-  }
-
-  @Override
-  protected Regex getThis() {
-    return this;
   }
 
 }

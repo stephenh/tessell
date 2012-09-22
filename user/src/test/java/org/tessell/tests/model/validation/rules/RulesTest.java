@@ -22,6 +22,7 @@ import org.tessell.model.validation.events.RuleTriggeredHandler;
 import org.tessell.model.validation.rules.Custom;
 import org.tessell.model.validation.rules.Length;
 import org.tessell.model.validation.rules.Required;
+import org.tessell.model.values.DerivedValue;
 import org.tessell.model.values.SetValue;
 import org.tessell.util.Supplier;
 
@@ -119,12 +120,80 @@ public class RulesTest extends AbstractRuleTest {
   public void onlyIfDoesNotTouchDownstreamRules() {
     final BooleanProperty b = booleanProperty("b", false);
     new Required(f.name, "name required").onlyIf(b);
-
+    // touching b leaves f.name untouched
     b.set(true);
     assertMessages("");
-
+    // but once we explicitly touch it, the rule runs
     f.name.touch();
     assertMessages("name required");
+    // and toggling off b fixes it
+    b.set(false);
+    assertMessages("");
+  }
+
+  @Test
+  public void onlyIfDoesUpstreamTracking() {
+    final BooleanProperty b = booleanProperty("b", false);
+    new Required(f.name, "name required").onlyIf(b);
+    f.name.touch();
+    assertMessages("");
+    b.set(true);
+    assertMessages("name required");
+  }
+
+  @Test
+  public void onlyIfAfterAlreadyInvalid() {
+    Required r = new Required(f.name, "name required");
+    f.name.touch();
+    assertMessages("name required");
+    // now add the only if
+    final BooleanProperty b = booleanProperty("b", false);
+    r.onlyIf(b);
+    // which caused Required to be untriggered
+    assertMessages("");
+  }
+
+  @Test
+  public void onlyIfUpgradesNonTouchDerivedProperties() {
+    Required r = new Required(f.name, "name required");
+    final BooleanProperty b = booleanProperty("b", true);
+    r.onlyIf(b);
+    // touching b at this point doesn't touch f.name
+    b.touch();
+    assertMessages("");
+    // but after explicitly adding it
+    b.addDerived(f.name);
+    // now it is touched
+    assertMessages("name required");
+  }
+
+  @Test
+  public void removeDerivedHandlesMultipleDownstream() {
+    final BooleanProperty a = booleanProperty("a", true);
+    final BooleanProperty b = booleanProperty("b", true);
+    // setup c to depend on b
+    final BooleanProperty c = booleanProperty(new DerivedValue<Boolean>("c") {
+      public Boolean get() {
+        return b.isTrue();
+      }
+    });
+    listenTo(c);
+    // setup a rule that depends on A and B
+    new Custom(c, "c failed", new Supplier<Boolean>() {
+      public Boolean get() {
+        return a.isTrue() && b.isTrue();
+      }
+    });
+    // reassess so that c depends on a && b
+    c.reassess();
+    assertNoMessages();
+    // at this point, c is downstream of b because of it's value and the rule
+    // so, change a to false, which will remove 1 of the downstream tokens from c's upstream
+    a.set(false);
+    // so and now if we change b to false
+    b.set(false);
+    // c will still have been re-evaled and marked as failing
+    assertMessages("c failed");
   }
 
   @Test

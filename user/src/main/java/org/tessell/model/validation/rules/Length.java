@@ -30,9 +30,4 @@ public class Length extends AbstractRule<String, Length> {
     return value.length() >= min && value.length() <= max ? Valid.YES : Valid.NO;
   }
 
-  @Override
-  protected Length getThis() {
-    return this;
-  }
-
 }

@@ -86,8 +86,10 @@ public class PropertyGroup extends AbstractProperty<Boolean, PropertyGroup> {
     // So don't call super, but copy/paste some of it's logic
     // here to be at least somewhat consistent.
     // super.setTouched(touched);
-    for (final Property<?> other : downstream) {
-      other.setTouched(touched);
+    for (final Downstream other : downstream) {
+      if (other.touch) {
+        other.property.setTouched(touched);
+      }
     }
     reassess();
   }

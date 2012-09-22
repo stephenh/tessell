@@ -72,9 +72,6 @@ public class RequiredTest extends AbstractRuleTest {
 
     // Just setting the onlyIf percolates down to our Required rule
     f.condition.set(false);
-    assertMessages("name invalid");
-    // reassessing f.name is required for now
-    f.name.reassess();
     assertMessages("");
 
     // was left touched, e.g. even if onlyIf=true, requires Force.YES

@@ -4,6 +4,7 @@ import static org.tessell.util.ObjectUtils.eq;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -31,7 +32,7 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
   // handlers
   private final EventBus handlers = new SimplerEventBus();
   // other properties that are validated off of our value
-  protected final ArrayList<Property<?>> downstream = new ArrayList<Property<?>>();
+  protected final ArrayList<Downstream> downstream = new ArrayList<Downstream>();
   // rules that validate against our value and fire against our handlers
   private final ArrayList<Rule> rules = new ArrayList<Rule>();
   // outstanding errors
@@ -107,8 +108,8 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
       // that if someone listening to us is also going to check a downstream
       // property's state, it would be good for them to be up to date
       if (valueChanged || validChanged) {
-        for (final Property<?> other : new ArrayList<Property<?>>(downstream)) {
-          other.reassess();
+        for (final Downstream other : new ArrayList<Downstream>(downstream)) {
+          other.property.reassess();
         }
       }
 
@@ -131,9 +132,28 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
   }
 
   /** Track {@code other} as derived on us, so we'll forward changed/changing events to it. */
+  @Override
   public <P1 extends Property<?>> P1 addDerived(final P1 other) {
-    if (!downstream.contains(other)) {
-      downstream.add(other);
+    return addDerived(other, this, true);
+  }
+
+  /** Track {@code other} as derived on us, so we'll forward changed/changing events to it. */
+  @Override
+  public <P1 extends Property<?>> P1 addDerived(P1 other, Object token, boolean touch) {
+    Downstream d = findDownstreamOrNull(other);
+    if (d != null) {
+      d.tokens.add(token);
+      // upgrade an existing non-touch to touch
+      if (!d.touch && touch) {
+        d.touch = true;
+        if (touched) {
+          other.setTouched(touched);
+        }
+      }
+    } else {
+      d = new Downstream(other, touch);
+      d.tokens.add(token);
+      downstream.add(d);
       if (touched) {
         other.setTouched(touched);
       }
@@ -142,8 +162,20 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
   }
 
   /** Remove {@code other} as derived on us. */
+  @Override
   public <P1 extends Property<?>> P1 removeDerived(final P1 other) {
-    downstream.remove(other);
+    return removeDerived(other, this);
+  }
+
+  @Override
+  public <P1 extends Property<?>> P1 removeDerived(final P1 other, final Object token) {
+    Downstream d = findDownstreamOrNull(other);
+    if (d != null) {
+      d.tokens.remove(token);
+      if (d.tokens.size() == 0) {
+        downstream.remove(d);
+      }
+    }
     return other;
   }
 
@@ -211,8 +243,10 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
       return;
     }
     this.touched = touched;
-    for (final Property<?> other : downstream) {
-      other.setTouched(touched);
+    for (final Downstream other : downstream) {
+      if (other.touch) {
+        other.property.setTouched(touched);
+      }
     }
     reassess();
   }
@@ -300,7 +334,7 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
     // it's only a value and does not know about it's parent property
     if (value instanceof DerivedValue) {
       if (lastUpstream == null) {
-        lastUpstream = new UpstreamState(this);
+        lastUpstream = new UpstreamState(this, true);
       }
       Capture c = Upstream.start();
       P tempValue = value.get();
@@ -311,6 +345,15 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
     }
   }
 
+  private Downstream findDownstreamOrNull(Property<?> other) {
+    for (Downstream downstream : this.downstream) {
+      if (downstream.property == other) {
+        return downstream;
+      }
+    }
+    return null;
+  }
+
   /** Remembers rules fired against us. */
   private class RuleHandler implements RuleTriggeredHandler, RuleUntriggeredHandler {
     public void onUntrigger(RuleUntriggeredEvent event) {
@@ -319,6 +362,19 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
 
     public void onTrigger(RuleTriggeredEvent event) {
       errors.put(event.getKey(), event.getMessage());
+    }
+  }
+
+  /** Wrapper for tracking downstream properties, plus whether we should touch them. */
+  static class Downstream {
+    final Property<?> property;
+    // list of what objects (e.g. UpstreamState) requested this downstream
+    final List<Object> tokens = new ArrayList<Object>();
+    boolean touch;
+
+    private Downstream(Property<?> property, boolean touch) {
+      this.property = property;
+      this.touch = touch;
     }
   }
 

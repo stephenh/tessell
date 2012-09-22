@@ -32,9 +32,4 @@ public class Range extends AbstractRule<Integer, Range> {
     return Valid.YES;
   }
 
-  @Override
-  protected Range getThis() {
-    return this;
-  }
-
 }

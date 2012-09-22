@@ -174,8 +174,18 @@ public class FormattedProperty<DP, SP> implements Property<DP> {
   }
 
   @Override
+  public <T extends Property<?>> T addDerived(T downstream, Object token, boolean touch) {
+    return source.addDerived(downstream, token, touch);
+  }
+
+  @Override
   public <T extends Property<?>> T removeDerived(T downstream) {
     return source.removeDerived(downstream);
+  }
+
+  @Override
+  public <T extends Property<?>> T removeDerived(T downstream, Object token) {
+    return source.removeDerived(downstream, token);
   }
 
   @Override

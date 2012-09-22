@@ -37,8 +37,13 @@ public interface Property<P> extends HasHandlers, HasRuleTriggers, Value<P>, Tak
   /** Adds {@code downstream} as a derivative of us. */
   <T extends Property<?>> T addDerived(final T downstream);
 
+  /** Adds {@code downstream} as a derivative of us. */
+  <T extends Property<?>> T addDerived(final T downstream, Object token, boolean touch);
+
   /** Removes {@code downstream} as a derivative of us. */
   <T extends Property<?>> T removeDerived(final T downstream);
+
+  <T extends Property<?>> T removeDerived(final T downstream, Object token);
 
   /** Adds us as a derivative of {@code upstream} properties. */
   Property<P> depends(Property<?>... upstream);

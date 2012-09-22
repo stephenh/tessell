@@ -3,6 +3,7 @@ package org.tessell.model.validation.rules;
 import org.tessell.model.properties.FormattedProperty;
 import org.tessell.model.properties.HasRuleTriggers;
 import org.tessell.model.validation.Valid;
+import org.tessell.model.values.Value;
 
 /** A validation rule. */
 public interface Rule extends HasRuleTriggers {
@@ -17,4 +18,5 @@ public interface Rule extends HasRuleTriggers {
 
   void triggerIfNeeded();
 
+  void onlyIf(final Value<Boolean> value);
 }

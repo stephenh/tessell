@@ -20,11 +20,6 @@ public class Static extends AbstractRule<Object, Static> {
     return valid ? Valid.YES : Valid.NO;
   }
 
-  @Override
-  protected Static getThis() {
-    return this;
-  }
-
   public void set(final boolean valid) {
     this.valid = valid;
     property.reassess();

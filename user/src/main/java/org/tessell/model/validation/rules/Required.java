@@ -22,6 +22,7 @@ public class Required extends AbstractRule<Object, Required> {
     this.property = property;
   }
 
+  @Override
   protected Valid isValid() {
     final Object value = property.get();
     if (value instanceof String) {
@@ -33,11 +34,6 @@ public class Required extends AbstractRule<Object, Required> {
     } else {
       return value != null ? Valid.YES : Valid.NO;
     }
-  }
-
-  @Override
-  protected Required getThis() {
-    return this;
   }
 
 }

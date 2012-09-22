@@ -53,23 +53,18 @@ public abstract class AbstractRule<T, U extends AbstractRule<T, U>> implements R
 
   protected abstract Valid isValid();
 
-  protected abstract U getThis();
-
   @Override
   public final Valid validate() {
-    if (onlyIfSaysToSkip()) {
-      return Valid.YES;
-    }
-    if (this instanceof Custom) {
+    if (this instanceof Custom || onlyIf.size() > 0) {
       if (lastUpstream == null) {
-        lastUpstream = new UpstreamState(property);
+        lastUpstream = new UpstreamState(property, false);
       }
       Capture c = Upstream.start();
-      Valid v = this.isValid();
+      Valid v = doValidate();
       lastUpstream.update(c.finish());
       return v;
     } else {
-      return this.isValid();
+      return doValidate();
     }
   }
 
@@ -84,9 +79,10 @@ public abstract class AbstractRule<T, U extends AbstractRule<T, U>> implements R
   }
 
   /** Only run this rule if {@code other} is true */
-  public U onlyIf(final Value<Boolean> other) {
+  @Override
+  public void onlyIf(final Value<Boolean> other) {
     this.onlyIf.add(other);
-    return getThis();
+    property.reassess();
   }
 
   public void triggerIfNeeded() {
@@ -128,6 +124,13 @@ public abstract class AbstractRule<T, U extends AbstractRule<T, U>> implements R
       }
     }
     return false;
+  }
+
+  private Valid doValidate() {
+    if (onlyIfSaysToSkip()) {
+      return Valid.YES;
+    }
+    return this.isValid();
   }
 
 }

@@ -26,9 +26,4 @@ public class Transient<T> extends AbstractRule<T, Transient<T>> {
     return hasChanged ? Valid.YES : Valid.NO;
   }
 
-  @Override
-  protected Transient<T> getThis() {
-    return this;
-  }
-
 }
