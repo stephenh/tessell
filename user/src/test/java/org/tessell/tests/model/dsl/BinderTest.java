@@ -363,6 +363,20 @@ public class BinderTest {
   }
 
   @Test
+  public void whenValueRun() {
+    final boolean[] ran = { false };
+    final BooleanProperty b = booleanProperty("b", true);
+    binder.when(b).is(false).run(new Runnable() {
+      public void run() {
+        ran[0] = true;
+      }
+    });
+    assertThat(ran[0], is(false));
+    b.set(false);
+    assertThat(ran[0], is(true));
+  }
+
+  @Test
   public void bindEnumCreatesItems() {
     final SetValue<Color> v = new SetValue<Color>("v", Color.Blue);
     final EnumProperty<Color> e = enumProperty(v);

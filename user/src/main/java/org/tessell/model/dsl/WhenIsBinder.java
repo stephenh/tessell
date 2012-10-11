@@ -46,6 +46,15 @@ public class WhenIsBinder<P> {
     return new WhenIsAddBinder<P, V>(b, property, condition, newValue);
   }
 
+  public void run(final Runnable... runnables) {
+    b.add(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
+      public void onPropertyChanged(PropertyChangedEvent<P> event) {
+        runIfCondition(runnables);
+      }
+    }));
+    runIfCondition(runnables); // run initial
+  }
+
   public void show(final HasCss... csses) {
     b.add(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
       public void onPropertyChanged(final PropertyChangedEvent<P> event) {
@@ -107,6 +116,14 @@ public class WhenIsBinder<P> {
     }
   }
 
+  private void runIfCondition(Runnable... runnables) {
+    if (condition.evaluate(property)) {
+      for (Runnable runnable : runnables) {
+        runnable.run();
+      }
+    }
+  }
+
   private void errorIfCondition(final String message) {
     if (condition.evaluate(property)) {
       property.fireEvent(new RuleTriggeredEvent(this, message, new Boolean[] { false }));
@@ -118,36 +135,30 @@ public class WhenIsBinder<P> {
   }
 
   private void showIfCondition(final HasCss... csses) {
-    if (condition.evaluate(property)) {
-      for (final HasCss css : csses) {
+    for (final HasCss css : csses) {
+      if (condition.evaluate(property)) {
         css.getStyle().clearDisplay();
-      }
-    } else {
-      for (final HasCss css : csses) {
+      } else {
         css.getStyle().setDisplay(Display.NONE);
       }
     }
   }
 
   private void hideIfCondition(final HasCss... csses) {
-    if (condition.evaluate(property)) {
-      for (final HasCss css : csses) {
+    for (final HasCss css : csses) {
+      if (condition.evaluate(property)) {
         css.getStyle().setDisplay(Display.NONE);
-      }
-    } else {
-      for (final HasCss css : csses) {
+      } else {
         css.getStyle().clearDisplay();
       }
     }
   }
 
   private void visibleIfCondition(final HasCss... csses) {
-    if (condition.evaluate(property)) {
-      for (final HasCss css : csses) {
+    for (final HasCss css : csses) {
+      if (condition.evaluate(property)) {
         css.getStyle().clearVisibility();
-      }
-    } else {
-      for (final HasCss css : csses) {
+      } else {
         css.getStyle().setVisibility(Visibility.HIDDEN);
       }
     }
