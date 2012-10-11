@@ -41,5 +41,10 @@ Binder DSL Ideas
       // or, for more unique static imports
       binder.on(blurOf(...), thenSet(textOf(...).to(asdf)));
 
+      // string actions
+      binder.when(condition, action1, action2);
+      // e.g.
+      binder.when(value, is(true), show(this), hide(that));
+
 Test5.
 
