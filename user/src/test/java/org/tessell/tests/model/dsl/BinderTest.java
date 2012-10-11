@@ -657,6 +657,17 @@ public class BinderTest {
   }
 
   @Test
+  public void booleanToCheckAndView() {
+    final StubCheckBox c1 = new StubCheckBox();
+    final StubWidget v1 = new StubWidget();
+    final BooleanProperty b = booleanProperty("b", false);
+    binder.bind(b).to(c1, v1);
+    assertThat(v1, is(hidden()));
+    b.set(true);
+    assertThat(v1, is(shown()));
+  }
+
+  @Test
   public void stringToKeyUpSetsInitialValue() {
     s.set("a");
     binder.bind(s).toKeyUp(box);

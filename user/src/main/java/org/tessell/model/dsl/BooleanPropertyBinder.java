@@ -4,6 +4,7 @@ import static java.lang.Boolean.TRUE;
 
 import java.util.List;
 
+import org.tessell.gwt.user.client.ui.HasCss;
 import org.tessell.gwt.user.client.ui.IsRadioButton;
 import org.tessell.model.events.PropertyChangedEvent;
 import org.tessell.model.events.PropertyChangedHandler;
@@ -12,6 +13,7 @@ import org.tessell.model.properties.ListProperty;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.ui.HasValue;
 
 /** Binds BooleanProperties to widgets. */
 public class BooleanPropertyBinder extends PropertyBinder<Boolean> {
@@ -21,6 +23,12 @@ public class BooleanPropertyBinder extends PropertyBinder<Boolean> {
   public BooleanPropertyBinder(final Binder b, final BooleanProperty bp) {
     super(b, bp);
     this.bp = bp;
+  }
+
+  /** Bind our property to source, two-way, and shows view when our property is true. */
+  public void to(final HasValue<Boolean> source, HasCss view) {
+    super.to(source);
+    b.when(bp).is(true).show(view);
   }
 
   public <V> BooleanPropertyToListBinder<V> to(final List<V> values) {
