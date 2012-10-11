@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.tessell.gwt.user.client.ui.HasCss;
 import org.tessell.gwt.user.client.ui.IsListBox;
 import org.tessell.gwt.user.client.ui.IsRadioButton;
 import org.tessell.gwt.user.client.ui.IsSimpleRadioButton;
@@ -136,9 +137,19 @@ public class PropertyBinder<P> {
     return new MoreRadioButtons().and(button, value);
   }
 
+  /** Binds our property to a list of radio buttons, and a view. */
+  public MoreRadioButtons to(IsRadioButton button, P value, HasCss view) {
+    return new MoreRadioButtons().and(button, value, view);
+  }
+
   /** Binds our property to a list of radio buttons. */
   public MoreRadioButtons to(IsSimpleRadioButton button, P value) {
     return new MoreRadioButtons().and(button, value);
+  }
+
+  /** Binds our property to a list of radio buttons, and a view. */
+  public MoreRadioButtons to(IsSimpleRadioButton button, P value, HasCss view) {
+    return new MoreRadioButtons().and(button, value, view);
   }
 
   public class MoreRadioButtons {
@@ -159,14 +170,22 @@ public class PropertyBinder<P> {
     }
 
     public MoreRadioButtons and(final IsSimpleRadioButton button, final P value) {
-      return add(button, value);
+      return add(button, value, null);
+    }
+
+    public MoreRadioButtons and(final IsSimpleRadioButton button, final P value, HasCss view) {
+      return add(button, value, view);
     }
 
     public MoreRadioButtons and(final IsRadioButton button, final P value) {
-      return add(button, value);
+      return add(button, value, null);
     }
 
-    private MoreRadioButtons add(final HasValue<Boolean> button, final P value) {
+    public MoreRadioButtons and(final IsRadioButton button, final P value, HasCss view) {
+      return add(button, value, view);
+    }
+
+    private MoreRadioButtons add(final HasValue<Boolean> button, final P value, final HasCss view) {
       buttons.put(button, value);
       b.add(button.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
         public void onValueChange(ValueChangeEvent<Boolean> event) {
@@ -176,6 +195,9 @@ public class PropertyBinder<P> {
         }
       }));
       button.setValue(eq(p.get(), value), true); // set initial
+      if (view != null) {
+        b.when(p).is(value).show(view);
+      }
       return this;
     }
   }

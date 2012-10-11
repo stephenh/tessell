@@ -1031,4 +1031,35 @@ public class BinderTest {
     b2.click();
     assertThat(s.get(), is("b2"));
   }
+
+  @Test
+  public void toRadioButtonsAndView() {
+    final StubRadioButton b1 = new StubRadioButton();
+    final StubWidget v1 = new StubWidget();
+    final StubRadioButton b2 = new StubRadioButton();
+    final StubWidget v2 = new StubWidget();
+    EnumProperty<Color> color = enumProperty("color", Color.Blue);
+    binder.bind(color).to(b1, Color.Blue, v1).and(b2, Color.Green, v2);
+    assertThat(v1, is(shown()));
+    assertThat(v2, is(hidden()));
+    b2.check();
+    assertThat(v1, is(hidden()));
+    assertThat(v2, is(shown()));
+  }
+
+  @Test
+  public void toRadioButtonAndView() {
+    final StubRadioButton b1 = new StubRadioButton();
+    final StubWidget v1 = new StubWidget();
+    final StubRadioButton b2 = new StubRadioButton();
+    final StubWidget v2 = new StubWidget();
+    EnumProperty<Color> color = enumProperty("color", Color.Blue);
+    binder.bind(color).to(b1, Color.Blue, v1).and(b2, Color.Green, v2);
+    assertThat(v1, is(shown()));
+    assertThat(v2, is(hidden()));
+    b2.check();
+    assertThat(v1, is(hidden()));
+    assertThat(v2, is(shown()));
+  }
+
 }
