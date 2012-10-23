@@ -46,5 +46,33 @@ Binder DSL Ideas
       // e.g.
       binder.when(value, is(true), show(this), hide(that));
 
-Test5.
+* Non-trivial omponents, e.g.
+
+      <foo:Form>
+        <fields>
+          <foo:TextLine />
+        </fields>
+        <blah>
+          <foo:Bar />
+        </blah>
+      </foo:Form>
+
+  Goes to:
+
+      form.addField(textLine1);
+      form.setBlah(...);
+
+  Any HTML implicitly becomes an HTMLPanel, e.g.:
+
+      <foo:Form>
+        <blah>
+          <p>
+            <foo:Bar />
+          </p>
+        </blah>
+      </foo:Form>
+
+  Goes to:
+
+      form.setBlah(htmlPanel, List<Bar> bars);
 
