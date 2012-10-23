@@ -13,7 +13,7 @@ import com.google.gwt.dom.client.Element;
 /** A SAX handler for ui.xml files. */
 class UiXmlHandler extends DefaultHandler {
 
-  final List<UiFieldDeclaration> withFields = new ArrayList<UiFieldDeclaration>();
+  final List<UiWithDeclaration> withFields = new ArrayList<UiWithDeclaration>();
   final List<UiFieldDeclaration> uiFields = new ArrayList<UiFieldDeclaration>();
   final List<UiStyleDeclaration> styleFields = new ArrayList<UiStyleDeclaration>();
   String firstTagType;
@@ -29,7 +29,7 @@ class UiXmlHandler extends DefaultHandler {
     if (uri.equals("urn:ui:com.google.gwt.uibinder") && localName.equals("with")) {
       final String type = attributes.getValue(attributes.getIndex("type"));
       final String name = attributes.getValue(attributes.getIndex("field"));
-      withFields.add(new UiFieldDeclaration(type, name));
+      withFields.add(new UiWithDeclaration(type, name));
     }
 
     // ui:style

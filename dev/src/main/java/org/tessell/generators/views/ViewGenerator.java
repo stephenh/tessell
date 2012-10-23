@@ -116,7 +116,7 @@ public class ViewGenerator {
     for (final UiXmlFile uiXml : uiXmlFiles) {
       final GMethod m = gwtViews.getMethod("new" + uiXml.baseName).returnType(uiXml.isView.getFullName());
       final List<String> withFieldNames = new ArrayList<String>();
-      for (final UiFieldDeclaration with : uiXml.getPossiblyCachedWiths(cache)) {
+      for (final UiWithDeclaration with : uiXml.getPossiblyCachedWiths(cache)) {
         withFieldNames.add("this." + simpleName(with.type));
       }
       m.addAnnotation("@Override");
@@ -158,7 +158,7 @@ public class ViewGenerator {
       for (String type : uiXml.getPossiblyCachedStubDependencies(cache)) {
         stubArgs.add(simpleName(type));
       }
-      for (UiFieldDeclaration uiWith : uiXml.getPossiblyCachedWiths(cache)) {
+      for (UiWithDeclaration uiWith : uiXml.getPossiblyCachedWiths(cache)) {
         stubArgs.add(simpleName(uiWith.type));
       }
       m.body.line("return new {}({});", uiXml.stubView.getFullName(), Join.commaSpace(stubArgs));
@@ -174,7 +174,7 @@ public class ViewGenerator {
   private Set<String> getUniqueWithTypes() {
     final Set<String> all = new TreeSet<String>();
     for (final UiXmlFile uiXml : uiXmlFiles) {
-      for (final UiFieldDeclaration field : uiXml.getPossiblyCachedWiths(cache)) {
+      for (final UiWithDeclaration field : uiXml.getPossiblyCachedWiths(cache)) {
         all.add(field.type);
       }
     }

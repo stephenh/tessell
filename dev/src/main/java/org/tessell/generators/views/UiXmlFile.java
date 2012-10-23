@@ -87,7 +87,7 @@ class UiXmlFile {
     isView.setInterface();
 
     // methods for each ui:with
-    for (final UiFieldDeclaration uiField : handler.withFields) {
+    for (final UiWithDeclaration uiField : handler.withFields) {
       isView.getMethod(uiField.name).returnType(uiField.type);
     }
     // methods for each ui:field
@@ -134,7 +134,7 @@ class UiXmlFile {
     }
 
     // for each ui:with, add a @UiField(provided=true) field, getter method, and a constructor arg
-    for (final UiFieldDeclaration field : handler.withFields) {
+    for (final UiWithDeclaration field : handler.withFields) {
       gwtView.getField(field.name).type(field.type).setAccess(Access.PACKAGE).addAnnotation("@UiField(provided = true)");
       gwtView.getMethod(field.name).returnType(field.type).body.line("return {};", field.name);
       cstr.argument(field.type, field.name);
@@ -196,7 +196,7 @@ class UiXmlFile {
     }
     // and any ui:withs, also using simple name for the arg name, so we use
     // the same namespace as the stub dependencies
-    for (UiFieldDeclaration with : handler.withFields) {
+    for (UiWithDeclaration with : handler.withFields) {
       String simpleName = ViewGenerator.simpleName(with.type);
       cstrArguments.put(simpleName, arg(with.type, simpleName));
     }
@@ -224,7 +224,7 @@ class UiXmlFile {
     }
 
     // for each ui:with, add a field, field assignment, and getter
-    for (UiFieldDeclaration with : handler.withFields) {
+    for (UiWithDeclaration with : handler.withFields) {
       stubView.getField(with.name).type(with.type).setFinal();
       stubView.getMethod(with.name).addAnnotation("@Override").returnType(with.type).body.line("return {};", with.name);
       cstr.body.line("this.{} = {};", with.name, ViewGenerator.simpleName(with.type));
@@ -254,11 +254,11 @@ class UiXmlFile {
   }
 
   /** @return the ui:with fields, if we parsed the file. */
-  List<UiFieldDeclaration> getFreshWiths() {
+  List<UiWithDeclaration> getFreshWiths() {
     return handler.withFields;
   }
 
-  List<UiFieldDeclaration> getPossiblyCachedWiths(UiXmlCache cache) {
+  List<UiWithDeclaration> getPossiblyCachedWiths(UiXmlCache cache) {
     return handler == null ? cache.getCachedWiths(this) : getFreshWiths();
   }
 

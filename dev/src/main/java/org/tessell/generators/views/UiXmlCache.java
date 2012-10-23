@@ -61,7 +61,7 @@ public class UiXmlCache {
   }
 
   /** @return the {@code ui:with} declarations for {@code uiXml}. */
-  public List<UiFieldDeclaration> getCachedWiths(UiXmlFile uiXml) {
+  public List<UiWithDeclaration> getCachedWiths(UiXmlFile uiXml) {
     return entries.get(uiXml.getPath()).withs;
   }
 
@@ -97,7 +97,7 @@ public class UiXmlCache {
   private static class Entry {
     // each entry is serialized to 1 line in the cache file, comma separated into a String[]
     private final String uiXmlFileName;
-    private final ArrayList<UiFieldDeclaration> withs = new ArrayList<UiFieldDeclaration>();
+    private final ArrayList<UiWithDeclaration> withs = new ArrayList<UiWithDeclaration>();
     private final ArrayList<UiStyleDeclaration> styles = new ArrayList<UiStyleDeclaration>();
     private final ArrayList<String> stubDependencies = new ArrayList<String>();
 
@@ -109,7 +109,7 @@ public class UiXmlCache {
       if (parts[1].length() > 0) {
         for (String with : parts[1].split(",")) {
           String[] wp = with.split(" ");
-          withs.add(new UiFieldDeclaration(wp[0], wp[1]));
+          withs.add(new UiWithDeclaration(wp[0], wp[1]));
         }
       }
       // parse out ui:styles
@@ -126,7 +126,7 @@ public class UiXmlCache {
     }
 
     /** Make a new entry from a new {@code ui.xml} file with its {@code ui:with} types. */
-    private Entry(String uiXmlFileName, List<UiFieldDeclaration> withs, List<UiStyleDeclaration> styles, List<String> stubDependencies) {
+    private Entry(String uiXmlFileName, List<UiWithDeclaration> withs, List<UiStyleDeclaration> styles, List<String> stubDependencies) {
       this.uiXmlFileName = uiXmlFileName;
       this.withs.addAll(withs);
       this.styles.addAll(styles);
@@ -135,7 +135,7 @@ public class UiXmlCache {
 
     private String toLine() {
       final List<String> withStrings = new ArrayList<String>();
-      for (final UiFieldDeclaration with : withs) {
+      for (final UiWithDeclaration with : withs) {
         withStrings.add(with.type + " " + with.name);
       }
       final List<String> styleStrings = new ArrayList<String>();

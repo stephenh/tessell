@@ -1,7 +1,6 @@
 package org.tessell.generators.views;
 
-
-/** A DTO for {@code ui:with} or {@code ui:field} declarations. */
+/** A DTO for {@code ui:field} declarations. */
 class UiFieldDeclaration implements Comparable<UiFieldDeclaration> {
 
   final String type;
