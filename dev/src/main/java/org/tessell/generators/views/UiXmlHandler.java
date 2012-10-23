@@ -29,7 +29,7 @@ class UiXmlHandler extends DefaultHandler {
     if (uri.equals("urn:ui:com.google.gwt.uibinder") && localName.equals("with")) {
       final String type = attributes.getValue(attributes.getIndex("type"));
       final String name = attributes.getValue(attributes.getIndex("field"));
-      withFields.add(new UiFieldDeclaration(type, name, attributes));
+      withFields.add(new UiFieldDeclaration(type, name));
     }
 
     // ui:style
@@ -55,7 +55,7 @@ class UiXmlHandler extends DefaultHandler {
           .replace("com.google.gwt.user.client.ui", "org.tessell.gwt.user.client.ui"); // use the subclasses
       }
       final String name = attributes.getValue(indexOfUiField);
-      uiFields.add(new UiFieldDeclaration(type, name, attributes));
+      uiFields.add(new UiFieldDeclaration(type, name));
     }
   }
 

@@ -109,7 +109,7 @@ public class UiXmlCache {
       if (parts[1].length() > 0) {
         for (String with : parts[1].split(",")) {
           String[] wp = with.split(" ");
-          withs.add(new UiFieldDeclaration(wp[0], wp[1], null));
+          withs.add(new UiFieldDeclaration(wp[0], wp[1]));
         }
       }
       // parse out ui:styles
