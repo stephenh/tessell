@@ -5,11 +5,13 @@ class UiFieldDeclaration implements Comparable<UiFieldDeclaration> {
 
   final String type;
   final String name;
+  final String parentName;
   final boolean isElement;
 
-  UiFieldDeclaration(final String type, final String name) {
+  UiFieldDeclaration(final String type, final String name, final String parentName) {
     this.type = type;
     this.name = name;
+    this.parentName = parentName;
     isElement = type.contains("dom");
   }
 
@@ -17,4 +19,9 @@ class UiFieldDeclaration implements Comparable<UiFieldDeclaration> {
   public int compareTo(final UiFieldDeclaration o) {
     return type.compareTo(o.type);
   }
+
+  public boolean isAnonymous() {
+    return name.startsWith("_anonymous");
+  }
+
 }

@@ -45,6 +45,9 @@ public class CompositeIsWidget implements IsWidget {
 
   /** Sets our composite widgets, and returns it for fluent/inline assignments. */
   protected <W extends IsWidget> W setWidget(final W widget) {
+    if (this.widget != null) {
+      throw new IllegalStateException("CompositeIsWidget.setWidget was already called");
+    }
     this.widget = widget;
     return widget;
   }

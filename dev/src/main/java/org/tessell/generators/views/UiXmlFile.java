@@ -92,7 +92,9 @@ class UiXmlFile {
     }
     // methods for each ui:field
     for (final UiFieldDeclaration uiField : handler.uiFields) {
-      isView.getMethod(uiField.name).returnType(viewGenerator.config.getInterface(uiField.type));
+      if (!uiField.isAnonymous()) {
+        isView.getMethod(uiField.name).returnType(viewGenerator.config.getInterface(uiField.type));
+      }
     }
     // methods for each ui:style
     for (final UiStyleDeclaration style : handler.styleFields) {
@@ -150,6 +152,9 @@ class UiXmlFile {
 
     // for each ui:field, make @UiField (usually provided=true) and getter methods
     for (final UiFieldDeclaration field : handler.uiFields) {
+      if (field.isAnonymous()) {
+        continue;
+      }
       final String interfaceType = viewGenerator.config.getInterface(field.type);
       final GField f = gwtView.getField(field.name);
       final GMethod m = gwtView.getMethod(field.name).returnType(interfaceType);
@@ -217,7 +222,9 @@ class UiXmlFile {
         stubConstructorNames.add(ViewGenerator.simpleName(cstrType));
       }
       stubView.getField(field.name).type(stubType).setFinal();
-      stubView.getMethod(field.name).returnType(stubType).body.line("return {};", field.name);
+      if (!field.isAnonymous()) {
+        stubView.getMethod(field.name).addOverride().returnType(stubType).body.line("return {};", field.name);
+      }
       debugId.body.line("{}.ensureDebugId(baseDebugId + \"-{}\");", field.name, field.name);
       // now use cstrNames in the call to new
       cstr.body.line("this.{} = new {}({});", field.name, stubType, Join.commaSpace(stubConstructorNames));
@@ -230,9 +237,14 @@ class UiXmlFile {
       cstr.body.line("this.{} = {};", with.name, ViewGenerator.simpleName(with.type));
     }
 
-    for (final UiFieldDeclaration field : handler.uiFields) {
-      if (!field.isElement) {
-        cstr.body.line("widgets.add({});", field.name);
+    List<UiFieldDeclaration> uiFieldWidgets = handler.uiFieldWidgets();
+    if (uiFieldWidgets.size() > 0) {
+      UiFieldDeclaration first = uiFieldWidgets.get(0);
+      cstr.body.line("setWidget({});", first.name);
+    }
+    for (final UiFieldDeclaration field : uiFieldWidgets) {
+      if (field.parentName != null) {
+        cstr.body.line("{}.add({});", field.parentName, field.name);
       }
     }
 
