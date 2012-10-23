@@ -171,7 +171,7 @@ class UiXmlFile {
       }
     }
 
-    cstr.body.line("initWidget(binder.createAndBindUi(this));");
+    cstr.body.line("initWidget(binder.createAndBindUi(this).asWidget());");
     cstr.body.line("ensureDebugId(\"{}\");", gwtView.getSimpleName().replaceAll("View$", "").replaceAll("^Gwt", ""));
 
     // add implements of getStyle and getIsElement
