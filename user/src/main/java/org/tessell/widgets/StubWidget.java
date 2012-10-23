@@ -148,12 +148,8 @@ public class StubWidget implements IsWidget {
       IsWidget next = widgets.next();
       final StubWidget stub;
       if (next instanceof CompositeIsWidget) {
-        // this is kind of odd, but given tests the change to grab
-        // the CompositeIsWidget and not just it's wrapped element
-        stub = (StubWidget) ((CompositeIsWidget) next).widget;
-        if (id.equals(stub.getIsElement().getId())) {
-          return next;
-        }
+        // assume the CompositeIsWidget is wrapping a stub widget
+        stub = (StubWidget) ((CompositeIsWidget) next).getIsWidget();
       } else {
         stub = (StubWidget) next;
       }
