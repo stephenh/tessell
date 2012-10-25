@@ -184,6 +184,10 @@ public class Widgets {
     return provider.newHTMLPanel(html);
   }
 
+  public static IsHTMLPanel newHTMLPanel(String tag, String html) {
+    return provider.newHTMLPanel(tag, html);
+  }
+
   public static <T> IsCellTable<T> newCellTable() {
     return provider.newCellTable();
   }

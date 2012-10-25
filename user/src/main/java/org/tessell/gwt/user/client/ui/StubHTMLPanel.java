@@ -9,20 +9,30 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 public class StubHTMLPanel extends StubComplexPanel implements IsHTMLPanel {
 
+  private final String tag;
   private final String html;
   private final Map<String, IsWidget> replaced = new HashMap<String, IsWidget>();
 
   public StubHTMLPanel() {
-    html = null;
+    this("div", null);
   }
 
   public StubHTMLPanel(String html) {
+    this("div", html);
+  }
+
+  public StubHTMLPanel(String tag, String html) {
+    this.tag = tag;
     this.html = html;
   }
 
   @Override
   public void add(IsWidget widget, IsElement elem) {
     super.add(widget);
+  }
+
+  public String getTag() {
+    return tag;
   }
 
   public String getHtml() {

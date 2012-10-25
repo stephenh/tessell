@@ -126,6 +126,11 @@ public class StubWidgetsProvider implements WidgetsProvider {
   }
 
   @Override
+  public IsHTMLPanel newHTMLPanel(String tag, String html) {
+    return new StubHTMLPanel(tag, html);
+  }
+
+  @Override
   public <T> IsCellTable<T> newCellTable() {
     return new StubCellTable<T>();
   }

@@ -116,6 +116,11 @@ public class GwtWidgetsProvider implements WidgetsProvider {
   }
 
   @Override
+  public IsHTMLPanel newHTMLPanel(String tag, String html) {
+    return new HTMLPanel(tag, html);
+  }
+
+  @Override
   public <T> IsCellTable<T> newCellTable() {
     return new GwtCellTable<T>();
   }

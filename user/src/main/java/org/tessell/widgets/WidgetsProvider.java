@@ -90,6 +90,8 @@ public interface WidgetsProvider {
 
   IsHTMLPanel newHTMLPanel(String html);
 
+  IsHTMLPanel newHTMLPanel(String tag, String html);
+
   <T> IsCellTable<T> newCellTable();
 
   <T> IsCellTable<T> newCellTable(int pageSize, CellTable.Resources resources);
