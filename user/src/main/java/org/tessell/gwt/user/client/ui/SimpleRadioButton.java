@@ -9,11 +9,13 @@ import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.uibinder.client.UiConstructor;
 
 public class SimpleRadioButton extends com.google.gwt.user.client.ui.SimpleRadioButton implements IsSimpleRadioButton {
 
   private boolean valueChangeHandlerInitialized;
 
+  @UiConstructor
   public SimpleRadioButton(String name) {
     super(name);
   }
