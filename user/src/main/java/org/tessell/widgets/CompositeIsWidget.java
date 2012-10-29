@@ -63,6 +63,15 @@ public class CompositeIsWidget implements IsWidget {
   @Override
   public void ensureDebugId(final String id) {
     widget.ensureDebugId(id);
+    // This is hacky way as it won't get compiled out like regular
+    // widget's onEnsureDebugId (which is called by GWT's DebugImpl)
+    onEnsureDebugId(id);
+  }
+
+  /** Method for subclasses to override to set debug ids on their children. */
+  protected void onEnsureDebugId(String id) {
+    // We're not actually called by GWT's DebugImpl, as it calls the
+    // widget's onEnsureDebugId, so we don't have to do anything.
   }
 
   @Override
