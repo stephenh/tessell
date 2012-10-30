@@ -18,7 +18,7 @@ class UiXmlHandler extends DefaultHandler {
   // ui:field elements + ui:field widgets + anonymous widgets
   final List<UiFieldDeclaration> uiFields = new ArrayList<UiFieldDeclaration>();
   final List<UiStyleDeclaration> styleFields = new ArrayList<UiStyleDeclaration>();
-  final Stack<String> parentUiFieldName = new Stack<String>();
+  final Stack<String> parentUiFieldOperation = new Stack<String>();
   final Stack<Boolean> popParentUiFieldName = new Stack<Boolean>();
   String firstTagType;
   private UiStyleDeclaration lastStyle;
@@ -32,15 +32,16 @@ class UiXmlHandler extends DefaultHandler {
       firstTagType = StringUtils.substringAfterLast(uri, ":") + "." + localName;
     }
 
-    // ui:with
+    final int indexOfUiField = attributes.getIndex("urn:ui:com.google.gwt.uibinder", "field");
+    boolean hasUpperCase = !localName.toLowerCase().equals(localName);
+
     if (uri.equals("urn:ui:com.google.gwt.uibinder") && localName.equals("with")) {
+      // ui:with
       final String type = attributes.getValue(attributes.getIndex("type"));
       final String name = attributes.getValue(attributes.getIndex("field"));
       withFields.add(new UiWithDeclaration(type, name));
-    }
-
-    // ui:style
-    if (uri.equals("urn:ui:com.google.gwt.uibinder") && localName.equals("style")) {
+    } else if (uri.equals("urn:ui:com.google.gwt.uibinder") && localName.equals("style")) {
+      // ui:style
       int fieldIndex = attributes.getIndex("field");
       int typeIndex = attributes.getIndex("type");
       if (typeIndex > -1) {
@@ -49,32 +50,32 @@ class UiXmlHandler extends DefaultHandler {
         lastStyle = new UiStyleDeclaration(type, name);
         styleFields.add(lastStyle);
       }
-    }
-
-    final int indexOfUiField = attributes.getIndex("urn:ui:com.google.gwt.uibinder", "field");
-    // elements
-    if (uri.equals("")) {
-      // only pick up elements with ui:fields
+    } else if (uri.equals("")) {
+      // elements, only pick up elements with ui:fields
       if (indexOfUiField > -1) {
         final String name = attributes.getValue(indexOfUiField);
         uiFields.add(new UiFieldDeclaration(Element.class.getName(), name, null));
       }
-    }
-
-    // all other widgets
-    boolean hasUpperCase = !localName.toLowerCase().equals(localName);
-    if (!uri.equals("") && !uri.equals("urn:ui:com.google.gwt.uibinder") && hasUpperCase) {
-      final boolean anonymous = indexOfUiField == -1;
+    } else if (!uri.equals("") && !uri.equals("urn:ui:com.google.gwt.uibinder") && !hasUpperCase) {
+      // probably (hopefully) a UiChild. Unfortunately, this is wild, random guess because
+      // we a) we have to reinvent UiBinder's lookup strategy, and b) even worse, because Tessell's
+      // codegen runs at buildtime, we can't rely on .class files or reflection being available for
+      // every single type mentioned in a ui.xml file. So, instead we just hope the convention holds.
+      String operation = "add" + localName.substring(0, 1).toUpperCase() + localName.substring(1);
+      parentUiFieldOperation.push(getParentOperationOrNull().split("\\.")[0] + "." + operation);
+      doParentPop = true;
+    } else if (!uri.equals("") && !uri.equals("urn:ui:com.google.gwt.uibinder") && hasUpperCase) {
+      // all other widgets
       final String name;
-      if (anonymous) {
+      if (indexOfUiField == -1) {
         name = "_anonymous" + (anonymousIndex++);
       } else {
         name = attributes.getValue(indexOfUiField);
       }
       final String type = (StringUtils.substringAfterLast(uri, ":") + "." + localName) //
         .replace("com.google.gwt.user.client.ui", "org.tessell.gwt.user.client.ui"); // use the subclasses
-      uiFields.add(new UiFieldDeclaration(type, name, getParentNameOrNull()));
-      parentUiFieldName.push(name);
+      uiFields.add(new UiFieldDeclaration(type, name, getParentOperationOrNull()));
+      parentUiFieldOperation.push(name + ".add");
       doParentPop = true;
     }
 
@@ -93,15 +94,15 @@ class UiXmlHandler extends DefaultHandler {
     lastStyle = null;
     boolean doParentPop = popParentUiFieldName.pop();
     if (doParentPop) {
-      parentUiFieldName.pop();
+      parentUiFieldOperation.pop();
     }
   }
 
-  private String getParentNameOrNull() {
-    if (parentUiFieldName.isEmpty()) {
+  private String getParentOperationOrNull() {
+    if (parentUiFieldOperation.isEmpty()) {
       return null;
     } else {
-      return parentUiFieldName.peek();
+      return parentUiFieldOperation.peek();
     }
   }
 

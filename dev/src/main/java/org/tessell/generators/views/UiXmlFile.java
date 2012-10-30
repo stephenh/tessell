@@ -243,8 +243,8 @@ class UiXmlFile {
       cstr.body.line("setWidget({});", first.name);
     }
     for (final UiFieldDeclaration field : uiFieldWidgets) {
-      if (field.parentName != null) {
-        cstr.body.line("{}.add({});", field.parentName, field.name);
+      if (field.parentOperation != null) {
+        cstr.body.line("{}({});", field.parentOperation, field.name);
       }
     }
 

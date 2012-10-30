@@ -5,13 +5,13 @@ class UiFieldDeclaration implements Comparable<UiFieldDeclaration> {
 
   final String type;
   final String name;
-  final String parentName;
+  final String parentOperation;
   final boolean isElement;
 
-  UiFieldDeclaration(final String type, final String name, final String parentName) {
+  UiFieldDeclaration(final String type, final String name, final String parentOperation) {
     this.type = type;
     this.name = name;
-    this.parentName = parentName;
+    this.parentOperation = parentOperation;
     isElement = type.contains("dom");
   }
 
