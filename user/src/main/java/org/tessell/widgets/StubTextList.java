@@ -17,9 +17,7 @@ public class StubTextList extends StubWidget implements IsTextList {
 
   @Override
   public void remove(final String text) {
-    while (list.contains(text)) {
-      list.remove(text);
-    }
+    list.remove(text);
   }
 
   @Override

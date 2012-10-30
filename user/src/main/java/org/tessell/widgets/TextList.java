@@ -35,10 +35,11 @@ public class TextList extends Widget implements IsTextList {
     final NodeList<Node> nodes = getElement().getChildNodes();
     for (int i = 0; i < nodes.getLength(); i++) {
       final Node node = nodes.getItem(i);
-      if (node.getNodeType() == Node.ELEMENT_NODE) {
-        final Element element = (Element) node;
+      if (Element.is(node)) {
+        final Element element = Element.as(node);
         if (element.getInnerText().equals(text)) {
           getElement().removeChild(node);
+          break;
         }
       }
     }
@@ -49,7 +50,7 @@ public class TextList extends Widget implements IsTextList {
     final NodeList<Node> nodes = getElement().getChildNodes();
     for (int i = 0; i < nodes.getLength(); i++) {
       final Node node = nodes.getItem(i);
-      if (node.getNodeType() == Node.ELEMENT_NODE) {
+      if (Element.is(node)) {
         getElement().removeChild(node);
       }
     }
