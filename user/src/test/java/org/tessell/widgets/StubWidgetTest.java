@@ -5,8 +5,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 import org.junit.Test;
+import org.tessell.gwt.dom.client.StubClickEvent;
 import org.tessell.gwt.user.client.ui.IsWidget;
 import org.tessell.gwt.user.client.ui.StubFlowPanel;
+
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 
 public class StubWidgetTest {
 
@@ -44,4 +48,18 @@ public class StubWidgetTest {
     assertThat(parent.findById("uiXmlContent"), is(sameInstance((IsWidget) uiXmlContent)));
   }
 
+  @Test
+  public void testDomHandler() {
+    StubWidget w = new StubWidget();
+
+    final boolean[] clicked = { false };
+    w.addDomHandler(new ClickHandler() {
+      public void onClick(ClickEvent event) {
+        clicked[0] = true;
+      }
+    }, ClickEvent.getType());
+
+    w.fireEvent(new StubClickEvent());
+    assertThat(clicked[0], is(true));
+  }
 }

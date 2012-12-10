@@ -2,7 +2,10 @@ package org.tessell.gwt.user.client.ui;
 
 import org.tessell.gwt.dom.client.IsElement;
 
+import com.google.gwt.event.dom.client.DomEvent;
 import com.google.gwt.event.logical.shared.HasAttachHandlers;
+import com.google.gwt.event.shared.EventHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.event.shared.HasHandlers;
 import com.google.gwt.user.client.EventListener;
 
@@ -31,5 +34,7 @@ public interface IsWidget extends EventListener, HasHandlers, HasCss, HasAttachH
   boolean isAttached();
 
   IsElement getIsElement();
+
+  <H extends EventHandler> HandlerRegistration addDomHandler(final H handler, DomEvent.Type<H> type);
 
 }

@@ -6,12 +6,10 @@ import org.tessell.gwt.dom.client.StubElement;
 import org.tessell.gwt.dom.client.StubStyle;
 import org.tessell.gwt.user.client.ui.IsWidget;
 
+import com.google.gwt.event.dom.client.DomEvent;
 import com.google.gwt.event.logical.shared.AttachEvent;
 import com.google.gwt.event.logical.shared.AttachEvent.Handler;
-import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.event.shared.GwtEvent;
-import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.event.shared.SimplerEventBus;
+import com.google.gwt.event.shared.*;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -131,6 +129,11 @@ public class StubWidget implements IsWidget {
   @Override
   public boolean isAttached() {
     return attached;
+  }
+
+  @Override
+  public <H extends EventHandler> HandlerRegistration addDomHandler(final H handler, DomEvent.Type<H> type) {
+    return handlers.addHandler(type, handler);
   }
 
   // for subclasses to override

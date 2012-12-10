@@ -4,7 +4,9 @@ import org.tessell.gwt.dom.client.GwtElement;
 import org.tessell.gwt.dom.client.IsElement;
 import org.tessell.gwt.dom.client.IsStyle;
 
+import com.google.gwt.event.dom.client.DomEvent.Type;
 import com.google.gwt.event.logical.shared.AttachEvent.Handler;
+import com.google.gwt.event.shared.EventHandler;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Event;
@@ -96,6 +98,11 @@ public class GwtWidgetDelegate implements IsWidget {
   @Override
   public boolean isAttached() {
     return delegate.isAttached();
+  }
+
+  @Override
+  public <H extends EventHandler> HandlerRegistration addDomHandler(H handler, Type<H> type) {
+    return delegate.addDomHandler(handler, type);
   }
 
 }

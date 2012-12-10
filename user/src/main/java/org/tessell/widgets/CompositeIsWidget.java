@@ -4,7 +4,9 @@ import org.tessell.gwt.dom.client.IsElement;
 import org.tessell.gwt.dom.client.IsStyle;
 import org.tessell.gwt.user.client.ui.IsWidget;
 
+import com.google.gwt.event.dom.client.DomEvent.Type;
 import com.google.gwt.event.logical.shared.AttachEvent.Handler;
+import com.google.gwt.event.shared.EventHandler;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Event;
@@ -140,6 +142,11 @@ public class CompositeIsWidget implements IsWidget {
   }
 
   @Override
+  public <H extends EventHandler> HandlerRegistration addDomHandler(H handler, Type<H> type) {
+    return widget.addDomHandler(handler, type);
+  }
+
+  @Override
   public boolean isAttached() {
     return widget.isAttached();
   }
@@ -147,5 +154,4 @@ public class CompositeIsWidget implements IsWidget {
   public IsWidget getIsWidget() {
     return widget;
   }
-
 }
