@@ -157,6 +157,22 @@ public class BinderTest {
   }
 
   @Test
+  public void propertyToProperty() {
+    StringProperty s2 = stringProperty("s2");
+    binder.bind(s).to(s2);
+    assertThat(s2.get(), is(nullValue()));
+    // s -> s2
+    s.set("foo");
+    assertThat(s2.get(), is("foo"));
+    // s2 -> s
+    s2.set("bar");
+    assertThat(s.get(), is("bar"));
+    // manually setting s doesn't cause a loop
+    s.set(s2.get());
+    assertThat(s.get(), is("bar"));
+  }
+
+  @Test
   public void errorsThatAlreadyFiredGetAddedToAnErrorList() {
     s.req().touch();
     assertThat(s.wasValid(), is(Valid.NO));

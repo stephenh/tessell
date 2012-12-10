@@ -10,6 +10,8 @@ import org.tessell.model.validation.events.RuleUntriggeredHandler;
 import org.tessell.model.validation.rules.Rule;
 import org.tessell.model.validation.rules.Static;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 
@@ -101,6 +103,11 @@ public class FormattedProperty<DP, SP> implements Property<DP> {
 
   @Override
   public void setValue(DP value) {
+    set(value);
+  }
+
+  @Override
+  public void setValue(DP value, boolean fire) {
     set(value);
   }
 
@@ -203,6 +210,18 @@ public class FormattedProperty<DP, SP> implements Property<DP> {
         DP oldValue = event.getOldValue() == null ? null : formatter.format(event.getOldValue());
         DP newValue = event.getNewValue() == null ? null : formatter.format(event.getNewValue());
         handler.onPropertyChanged(new PropertyChangedEvent<DP>(FormattedProperty.this, oldValue, newValue));
+      }
+    });
+  }
+
+  @Override
+  public HandlerRegistration addValueChangeHandler(final ValueChangeHandler<DP> handler) {
+    return source.addValueChangeHandler(new ValueChangeHandler<SP>() {
+      public void onValueChange(ValueChangeEvent<SP> event) {
+        DP newValue = event.getValue() == null ? null : formatter.format(event.getValue());
+        // need an inner class because ValueChangedEvent's cstr is protected
+        handler.onValueChange(new ValueChangeEvent<DP>(newValue) {
+        });
       }
     });
   }

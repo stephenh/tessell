@@ -22,6 +22,8 @@ import org.tessell.model.values.DerivedValue;
 import org.tessell.model.values.Value;
 import org.tessell.util.Inflector;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.*;
 import com.google.gwt.event.shared.GwtEvent.Type;
 
@@ -226,6 +228,18 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
   }
 
   @Override
+  public HandlerRegistration addValueChangeHandler(final ValueChangeHandler<P> handler) {
+    // translate PropertyChangedEvents to ValueChangedEvents
+    return addPropertyChangedHandler(new PropertyChangedHandler<P>() {
+      public void onPropertyChanged(PropertyChangedEvent<P> event) {
+        // need an inner class because ValueChangedEvent's cstr is protected
+        handler.onValueChange(new ValueChangeEvent<P>(event.getNewValue()) {
+        });
+      }
+    });
+  }
+
+  @Override
   public HandlerRegistration addRuleTriggeredHandler(final RuleTriggeredHandler handler) {
     return addHandler(RuleTriggeredEvent.getType(), handler);
   }
@@ -266,6 +280,12 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
 
   @Override
   public void setValue(P value) {
+    set(value);
+  }
+
+  @Override
+  public void setValue(P value, boolean fire) {
+    // we always fire
     set(value);
   }
 
