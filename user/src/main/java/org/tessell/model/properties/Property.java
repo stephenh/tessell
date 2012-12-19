@@ -56,4 +56,6 @@ public interface Property<P> extends HasHandlers, HasRuleTriggers, Value<P>, Has
 
   <T1> Property<T1> formatted(final PropertyFormatter<P, T1> formatter);
 
+  <T1> Property<T1> formatted(String invalidMessage, final PropertyFormatter<P, T1> formatter);
+
 }

@@ -14,7 +14,11 @@ public class IntegerProperty extends AbstractProperty<Integer, IntegerProperty> 
   }
 
   public Property<String> asString() {
-    return formatted(new PropertyFormatter<Integer, String>() {
+    return asString(getName() + " must be an integer");
+  }
+
+  public Property<String> asString(String invalidMessage) {
+    return formatted(invalidMessage, new PropertyFormatter<Integer, String>() {
       public String format(Integer a) {
         return Integer.toString(a);
       }

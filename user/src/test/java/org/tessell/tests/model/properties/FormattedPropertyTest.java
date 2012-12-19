@@ -96,7 +96,7 @@ public class FormattedPropertyTest extends AbstractRuleTest {
     listenTo(i);
 
     i.asString().set("asdf");
-    assertMessages("I is invalid");
+    assertMessages("I must be an integer");
   }
 
   @Test

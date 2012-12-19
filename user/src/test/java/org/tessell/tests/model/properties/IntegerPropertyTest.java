@@ -35,7 +35,7 @@ public class IntegerPropertyTest extends AbstractRuleTest {
     listenTo(p);
     p.asString().set("2"); // good
     p.asString().set("asdf"); // bad
-    assertMessages("P is invalid");
+    assertMessages("P must be an integer");
   }
 
 }
