@@ -3,6 +3,8 @@ package org.tessell.model.dsl;
 import java.util.Arrays;
 
 import org.tessell.gwt.user.client.ui.IsListBox;
+import org.tessell.model.events.PropertyChangedEvent;
+import org.tessell.model.events.PropertyChangedHandler;
 import org.tessell.model.properties.EnumProperty;
 
 import com.google.gwt.event.dom.client.ChangeEvent;
@@ -38,6 +40,11 @@ public class EnumPropertyBinder<E extends Enum<E>> extends PropertyBinder<E> {
         }
       }
     }));
+    ep.addPropertyChangedHandler(new PropertyChangedHandler<E>() {
+      public void onPropertyChanged(PropertyChangedEvent<E> event) {
+        source.setSelectedIndex(Arrays.asList(values).indexOf(ep.get()));
+      }
+    });
   }
 
 }

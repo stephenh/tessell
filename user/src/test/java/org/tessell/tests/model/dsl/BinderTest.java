@@ -447,6 +447,18 @@ public class BinderTest {
   }
 
   @Test
+  public void bindEnumUpdatesListBoxOnPropertyChange() {
+    final SetValue<Color> v = new SetValue<Color>("v", Color.Green);
+    final EnumProperty<Color> e = enumProperty(v);
+
+    final StubListBox box = new StubListBox();
+    binder.bind(e).to(box, Color.values());
+    assertThat(box.getSelectedIndex(), is(1));
+    e.set(Color.Blue);
+    assertThat(box.getSelectedIndex(), is(0));
+  }
+
+  @Test
   public void emptyStringIsTreatedAsNull() {
     s.set("a");
     binder.bind(s).to(box);
