@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
+import org.tessell.bus.StubEventBus;
 import org.tessell.gwt.dom.client.StubClickEvent;
 import org.tessell.gwt.dom.client.StubElement;
 import org.tessell.gwt.user.client.StubCookies;
@@ -25,6 +26,8 @@ import org.tessell.model.properties.*;
 import org.tessell.model.validation.Valid;
 import org.tessell.model.values.DerivedValue;
 import org.tessell.model.values.SetValue;
+import org.tessell.place.PlaceRequest;
+import org.tessell.place.events.PlaceRequestEvent;
 import org.tessell.tests.model.commands.DummyActiveCommand;
 import org.tessell.tests.model.commands.DummyUiCommand;
 import org.tessell.tests.model.properties.DummyModel;
@@ -832,6 +835,14 @@ public class BinderTest {
     binder.onClick(box).execute(c);
     box.click();
     assertThat(c.getExecutions(), is(1));
+  }
+
+  @Test
+  public void onClickGoTo() {
+    final StubEventBus bus = new StubEventBus();
+    binder.onClick(box).goTo(bus, new PlaceRequest("dummy"));
+    box.click();
+    assertThat(bus.getEvent(PlaceRequestEvent.class, 0).getRequest().getName(), is("dummy"));
   }
 
   @Test

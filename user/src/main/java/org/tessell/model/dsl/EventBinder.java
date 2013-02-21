@@ -6,10 +6,13 @@ import org.tessell.model.commands.UiCommand;
 import org.tessell.model.properties.BooleanProperty;
 import org.tessell.model.properties.ListProperty;
 import org.tessell.model.properties.Property;
+import org.tessell.place.PlaceRequest;
+import org.tessell.place.events.PlaceRequestEvent;
 
 import com.google.gwt.event.dom.client.DomEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Focusable;
+import com.google.web.bindery.event.shared.EventBus;
 
 public abstract class EventBinder {
 
@@ -66,6 +69,15 @@ public abstract class EventBinder {
     b.add(hookUpRunnable(new Runnable() {
       public void run() {
         command.execute();
+      }
+    }));
+  }
+
+  /** Fires a {@link PlaceRequestEvent} for {@code request} when triggered. */
+  public void goTo(final EventBus bus, final PlaceRequest request) {
+    b.add(hookUpRunnable(new Runnable() {
+      public void run() {
+        bus.fireEvent(request.asEvent());
       }
     }));
   }
