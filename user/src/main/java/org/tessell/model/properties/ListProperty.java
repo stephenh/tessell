@@ -1,5 +1,6 @@
 package org.tessell.model.properties;
 
+import static org.tessell.model.properties.NewProperty.booleanProperty;
 import static org.tessell.model.properties.NewProperty.integerProperty;
 import static org.tessell.model.properties.NewProperty.listProperty;
 
@@ -94,6 +95,16 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
     getDirect().clear();
     // will fire removes+change if needed
     reassess();
+  }
+
+  /** @return a derived property of whether {@code item} is in this list. */
+  public BooleanProperty contains(final E item) {
+    return addDerived(booleanProperty(new DerivedValue<Boolean>("contains " + item) {
+      public Boolean get() {
+        final List<E> current = ListProperty.this.get();
+        return (current == null) ? false : current.contains(item);
+      }
+    }));
   }
 
   /** @return a derived property that reflects this list's size. */
