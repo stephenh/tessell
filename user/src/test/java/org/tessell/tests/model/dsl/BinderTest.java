@@ -838,6 +838,18 @@ public class BinderTest {
   }
 
   @Test
+  public void onClickRun() {
+    final Boolean[] ran = { false };
+    binder.onClick(box).execute(new Runnable() {
+      public void run() {
+        ran[0] = true;
+      }
+    });
+    box.click();
+    assertThat(ran[0], is(true));
+  }
+
+  @Test
   public void onClickGoTo() {
     final StubEventBus bus = new StubEventBus();
     binder.onClick(box).goTo(bus, new PlaceRequest("dummy"));

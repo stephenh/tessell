@@ -73,6 +73,11 @@ public abstract class EventBinder {
     }));
   }
 
+  /** Executes {@code runnable} when triggered. */
+  public void execute(final Runnable runnable) {
+    b.add(hookUpRunnable(runnable));
+  }
+
   /** Fires a {@link PlaceRequestEvent} for {@code request} when triggered. */
   public void goTo(final EventBus bus, final PlaceRequest request) {
     b.add(hookUpRunnable(new Runnable() {
