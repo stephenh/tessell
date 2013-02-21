@@ -53,7 +53,7 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
   }
 
   /** @return a copy of our list as an {@link ArrayList}, e.g. for GWT-RPC calls. */
-  public ArrayList<E> getArrayList() {
+  public ArrayList<E> toArrayList() {
     return new ArrayList<E>(getDirect());
   }
 
