@@ -27,6 +27,17 @@ public abstract class CompositeHasIsWidgets extends CompositeIsWidget implements
     addIsWidget((IsWidget) w);
   }
 
+  // for Tessell-generated GwtXxxView classes, CompositeIsWidget is a
+  // common way to in Tessell to build Widget-less/MVP components.
+  // But that means they won't match the add(Widget) method of
+  // HasWidgets, and we can't add add(IsWidget) (see class javadoc),
+  // so just add this here.
+  public void add(CompositeIsWidget w) {
+    addIsWidget(w);
+  }
+
+  // for Tessell-generated StubXxxView classes, because we can't have
+  // an add(IsWidget) (see class javadoc)
   public void add(IsStubWidget w) {
     addIsWidget((IsWidget) w);
   }
