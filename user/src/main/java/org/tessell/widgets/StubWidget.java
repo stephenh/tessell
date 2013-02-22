@@ -13,7 +13,7 @@ import com.google.gwt.event.shared.*;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Widget;
 
-public class StubWidget implements IsWidget {
+public class StubWidget implements IsWidget, IsStubWidget {
 
   protected final EventBus handlers = new SimplerEventBus();
   private final StubElement element = new StubElement();
