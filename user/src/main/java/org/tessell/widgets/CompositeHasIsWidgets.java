@@ -19,7 +19,7 @@ import com.google.gwt.user.client.ui.Widget;
  */
 public abstract class CompositeHasIsWidgets extends CompositeIsWidget implements HasWidgets {
 
-  public abstract void addIsWidget(IsWidget w);
+  protected abstract void addIsWidget(IsWidget w);
 
   @Override
   public void add(Widget w) {
