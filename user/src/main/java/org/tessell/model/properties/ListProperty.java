@@ -99,10 +99,33 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
 
   /** @return a derived property of whether {@code item} is in this list. */
   public BooleanProperty contains(final E item) {
-    return addDerived(booleanProperty(new DerivedValue<Boolean>("contains " + item) {
+    return addDerived(booleanProperty(new Value<Boolean>() {
+      @Override
       public Boolean get() {
         final List<E> current = ListProperty.this.get();
         return (current == null) ? false : current.contains(item);
+      }
+
+      @Override
+      public void set(Boolean value) {
+        final List<E> current = ListProperty.this.get();
+        if (current != null) {
+          if (Boolean.TRUE.equals(value) && !current.contains(item)) {
+            add(item);
+          } else if (!Boolean.TRUE.equals(value) && current.contains(item)) {
+            remove(item);
+          }
+        }
+      }
+
+      @Override
+      public String getName() {
+        return "contains " + item;
+      }
+
+      @Override
+      public boolean isReadOnly() {
+        return false;
       }
     }));
   }

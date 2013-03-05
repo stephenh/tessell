@@ -14,6 +14,8 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.tessell.gwt.user.client.ui.StubCheckBox;
+import org.tessell.model.dsl.Binder;
 import org.tessell.model.events.*;
 import org.tessell.model.properties.*;
 import org.tessell.model.properties.ListProperty.ElementConverter;
@@ -413,6 +415,47 @@ public class ListPropertyTest {
     p.remove("s");
     assertThat(c.count, is(2));
     assertThat(b.get(), is(false));
+  }
+
+  @Test
+  public void testContainsBound() {
+    Binder b = new Binder();
+    StubCheckBox c = new StubCheckBox();
+    BooleanProperty s = p.contains("s");
+    b.bind(s).to(c);
+    assertThat(c.getValue(), is(false));
+  }
+
+  @Test
+  public void testContainsBoundWhenAlreadyTrue() {
+    Binder b = new Binder();
+    StubCheckBox c = new StubCheckBox();
+    p.add("s");
+    BooleanProperty s = p.contains("s");
+    b.bind(s).to(c);
+    assertThat(c.getValue(), is(true));
+  }
+
+  @Test
+  public void testContainsBoundWhenModelChanges() {
+    Binder b = new Binder();
+    StubCheckBox c = new StubCheckBox();
+    BooleanProperty s = p.contains("s");
+    b.bind(s).to(c);
+    p.add("s");
+    assertThat(c.getValue(), is(true));
+  }
+
+  @Test
+  public void testContainsBoundWhenUiChanges() {
+    Binder b = new Binder();
+    StubCheckBox c = new StubCheckBox();
+    BooleanProperty s = p.contains("s");
+    b.bind(s).to(c);
+    c.check();
+    assertThat(p.get(), contains("s"));
+    c.uncheck();
+    assertThat(p.get().isEmpty(), is(true));
   }
 
   public static class CountingChanges<P> implements PropertyChangedHandler<P> {
