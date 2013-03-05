@@ -104,6 +104,34 @@ public class PropertyTest extends AbstractRuleTest {
   }
 
   @Test
+  public void derivedWatchesWasValid() {
+    final IntegerProperty a = integerProperty("a");
+    final BooleanProperty b = booleanProperty(new DerivedValue<Boolean>("was valid") {
+      public Boolean get() {
+        return a.wasValid() == Valid.YES;
+      }
+    });
+    CountChanges c = new CountChanges();
+    b.addPropertyChangedHandler(c);
+    a.set(1);
+    assertThat(c.changes, is(1));
+  }
+
+  @Test
+  public void derivedWatchesIsTouched() {
+    final IntegerProperty a = integerProperty("a");
+    final BooleanProperty b = booleanProperty(new DerivedValue<Boolean>("not null") {
+      public Boolean get() {
+        return a.isTouched();
+      }
+    });
+    CountChanges c = new CountChanges();
+    b.addPropertyChangedHandler(c);
+    a.set(1);
+    assertThat(c.changes, is(1));
+  }
+
+  @Test
   public void setInitialLeavesPropertiesUnTouched() {
     final IntegerProperty a = integerProperty("a");
     a.setInitialValue(1);

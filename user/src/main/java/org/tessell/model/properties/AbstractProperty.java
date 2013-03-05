@@ -257,6 +257,7 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
 
   @Override
   public boolean isTouched() {
+    Upstream.addIfTracking(this);
     return touched;
   }
 
@@ -276,6 +277,7 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
 
   @Override
   public Valid wasValid() {
+    Upstream.addIfTracking(this);
     return valid;
   }
 
