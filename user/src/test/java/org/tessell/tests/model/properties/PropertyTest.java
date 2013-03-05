@@ -2,11 +2,13 @@ package org.tessell.tests.model.properties;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.tessell.model.properties.NewProperty.booleanProperty;
 import static org.tessell.model.properties.NewProperty.integerProperty;
 
 import org.junit.Test;
 import org.tessell.model.events.PropertyChangedEvent;
 import org.tessell.model.events.PropertyChangedHandler;
+import org.tessell.model.properties.BooleanProperty;
 import org.tessell.model.properties.IntegerProperty;
 import org.tessell.model.validation.Valid;
 import org.tessell.model.validation.rules.Custom;
@@ -88,10 +90,32 @@ public class PropertyTest extends AbstractRuleTest {
   }
 
   @Test
+  public void derivedWatchesGetValueMethod() {
+    final IntegerProperty a = integerProperty("a");
+    final BooleanProperty b = booleanProperty(new DerivedValue<Boolean>("not null") {
+      public Boolean get() {
+        return a.getValue() != null;
+      }
+    });
+    CountChanges c = new CountChanges();
+    b.addPropertyChangedHandler(c);
+    a.set(1);
+    assertThat(c.changes, is(1));
+  }
+
+  @Test
   public void setInitialLeavesPropertiesUnTouched() {
     final IntegerProperty a = integerProperty("a");
     a.setInitialValue(1);
     assertThat(a.isTouched(), is(false));
+  }
+
+  private class CountChanges implements PropertyChangedHandler<Boolean> {
+    private int changes;
+
+    public void onPropertyChanged(PropertyChangedEvent<Boolean> event) {
+      changes++;
+    }
   }
 
 }

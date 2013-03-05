@@ -281,7 +281,7 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
 
   @Override
   public P getValue() {
-    return value.get();
+    return get();
   }
 
   @Override
