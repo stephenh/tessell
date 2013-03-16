@@ -22,14 +22,6 @@ public class StringPropertyBinder extends PropertyBinder<String> {
     this.sp = sp;
   }
 
-  @Override
-  public void to(final HasValue<String> source) {
-    if (sp.getMaxLength() != null && source instanceof IsTextBox) {
-      ((IsTextBox) source).setMaxLength(sp.getMaxLength());
-    }
-    super.to(source);
-  }
-
   public <V extends HasValue<String> & HasKeyUpHandlers> void toKeyUp(final V source) {
     if (sp.getMaxLength() != null && source instanceof IsTextBox) {
       ((IsTextBox) source).setMaxLength(sp.getMaxLength());

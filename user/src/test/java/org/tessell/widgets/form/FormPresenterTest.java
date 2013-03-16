@@ -38,9 +38,9 @@ public class FormPresenterTest extends AbstractFormPresenterTest {
 
   @Test
   public void allValid() {
-    final StringProperty name = stringProperty("name").max(10);
+    final StringProperty name = stringProperty("name").regex("\\d+", "Must be digits");
     p.add(new TextBoxFormLine(name));
-    name.set("0123456789a");
+    name.set("a");
     assertThat(p.allValid().wasValid(), is(Valid.NO));
 
     name.set("1");

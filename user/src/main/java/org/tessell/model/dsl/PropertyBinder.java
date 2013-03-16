@@ -8,8 +8,10 @@ import java.util.Map;
 
 import org.tessell.gwt.user.client.ui.HasCss;
 import org.tessell.gwt.user.client.ui.IsListBox;
+import org.tessell.gwt.user.client.ui.IsTextBox;
 import org.tessell.model.events.PropertyChangedEvent;
 import org.tessell.model.events.PropertyChangedHandler;
+import org.tessell.model.properties.HasMaxLength;
 import org.tessell.model.properties.Property;
 import org.tessell.util.ObjectUtils;
 import org.tessell.widgets.IsTextList;
@@ -68,6 +70,12 @@ public class PropertyBinder<P> {
         source.setValue(event.getProperty().get(), true);
       }
     }));
+    if (p instanceof HasMaxLength && source instanceof IsTextBox) {
+      final Integer length = ((HasMaxLength) p).getMaxLength();
+      if (length != null) {
+        ((IsTextBox) source).setMaxLength(length.intValue());
+      }
+    }
   }
 
   /** Binds our {@code p} to the selection in {@code source}, given the {@code options}. */

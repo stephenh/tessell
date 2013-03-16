@@ -199,6 +199,16 @@ public class BinderTest {
   }
 
   @Test
+  public void stringPropertyToWidgetSetsMaxLengthViaGenericPropertyBinder() {
+    s.max(100);
+    // use a Property<String>, so overloading returns the regular
+    // PropertyBinder instead of StringPropertyBinder
+    Property<String> p = s;
+    binder.bind(p).to(box);
+    assertThat(box.getMaxLength(), is(100));
+  }
+
+  @Test
   public void clickableWidgetToProperty() {
     binder.onClick(box).set(s).to("gotclicked");
     box.click();

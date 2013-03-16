@@ -7,7 +7,7 @@ import org.tessell.model.validation.rules.Regex;
 import org.tessell.model.values.DerivedValue;
 import org.tessell.model.values.Value;
 
-public class StringProperty extends AbstractProperty<String, StringProperty> {
+public class StringProperty extends AbstractProperty<String, StringProperty> implements HasMaxLength {
 
   private Integer maxLength;
 
