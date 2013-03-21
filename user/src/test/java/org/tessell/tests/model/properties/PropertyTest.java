@@ -138,6 +138,13 @@ public class PropertyTest extends AbstractRuleTest {
     assertThat(a.isTouched(), is(false));
   }
 
+  @Test
+  public void setIfNullLeavesPropertiesUnTouched() {
+    final IntegerProperty a = integerProperty("a");
+    a.setIfNull(1);
+    assertThat(a.isTouched(), is(false));
+  }
+
   private class CountChanges implements PropertyChangedHandler<Boolean> {
     private int changes;
 

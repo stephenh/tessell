@@ -320,7 +320,7 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
   @Override
   public void setIfNull(P value) {
     if (get() == null) {
-      set(value);
+      setInitialValue(value);
     }
   }
 
