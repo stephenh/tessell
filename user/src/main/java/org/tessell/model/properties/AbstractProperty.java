@@ -43,6 +43,8 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
   private final Value<P> value;
   // snapshot of the value for diff purposes (e.g. derived values)
   private P lastValue;
+  // what we should use for null
+  private P defaultValue;
   // whether the user has touched this field on the screen yet
   private boolean touched;
   // the result of the last validate()
@@ -73,7 +75,7 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
 
   @Override
   public void set(final P value) {
-    this.value.set(copyLastValue(value));
+    this.value.set(defaultIfNull(copyLastValue(value)));
     if (!touched && !reassessing) {
       // even if unchanged, treat this as touching
       setTouched(true);
@@ -84,8 +86,14 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
 
   @Override
   public void setInitialValue(final P value) {
-    this.value.set(copyLastValue(value));
+    this.value.set(defaultIfNull(copyLastValue(value)));
     reassess();
+  }
+
+  @Override
+  public void setDefaultValue(final P value) {
+    this.defaultValue = value;
+    setIfNull(value);
   }
 
   @Override
@@ -383,6 +391,10 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
       }
     }
     return null;
+  }
+
+  private P defaultIfNull(P value) {
+    return (value == null) ? defaultValue : value;
   }
 
   /** Remembers rules fired against us. */

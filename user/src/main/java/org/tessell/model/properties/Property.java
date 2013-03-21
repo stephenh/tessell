@@ -15,10 +15,16 @@ public interface Property<P> extends HasHandlers, HasRuleTriggers, Value<P>, Has
 
   P get();
 
+  /** Sets {@code value}, with marking touched, and firing events. */
   void set(P value);
 
+  /** Sets {@code value} and fires events, without marking touched. */
   void setInitialValue(P value);
 
+  /** Sets {@code value} whenever the property's value becomes {@code null}. */
+  void setDefaultValue(P value);
+
+  /** Sets {@code value} only if we're current null, without marking touched. */
   void setIfNull(P value);
 
   void reassess();

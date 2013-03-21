@@ -97,6 +97,15 @@ public class FormattedProperty<DP, SP> implements Property<DP> {
   }
 
   @Override
+  public void setDefaultValue(DP value) {
+    try {
+      source.setDefaultValue(formatter.parse(value));
+    } catch (Exception e) {
+      throw new RuntimeException("Default value cannot be parsed: " + value, e);
+    }
+  }
+
+  @Override
   public DP getValue() {
     return get();
   }

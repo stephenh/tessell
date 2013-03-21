@@ -145,6 +145,38 @@ public class PropertyTest extends AbstractRuleTest {
     assertThat(a.isTouched(), is(false));
   }
 
+  @Test
+  public void setDefaultValueChangesValueRightAwayIfNull() {
+    final IntegerProperty a = integerProperty("a");
+    a.setDefaultValue(1);
+    assertThat(a.get(), is(1));
+    assertThat(a.isTouched(), is(false));
+  }
+
+  @Test
+  public void setDefaultValueDoesNotChangeValueRightAwayIfNotNull() {
+    final IntegerProperty a = integerProperty("a", 0);
+    a.setDefaultValue(1);
+    assertThat(a.get(), is(0));
+    assertThat(a.isTouched(), is(false));
+  }
+
+  @Test
+  public void setDefaultValueChangesNullWhenSetLater() {
+    final IntegerProperty a = integerProperty("a", 0);
+    a.setDefaultValue(1);
+    a.set(null);
+    assertThat(a.get(), is(1));
+  }
+
+  @Test
+  public void setDefaultValueChangesNullWhenSetInitialLater() {
+    final IntegerProperty a = integerProperty("a");
+    a.setDefaultValue(1);
+    a.setInitialValue(null);
+    assertThat(a.get(), is(1));
+  }
+
   private class CountChanges implements PropertyChangedHandler<Boolean> {
     private int changes;
 
