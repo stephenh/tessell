@@ -108,9 +108,6 @@ class UiXmlFile {
     gwtView.baseClass(Composite.class).implementsInterface(isView.getSimpleName());
     final GMethod cstr = gwtView.getConstructor();
     gwtView.addImports(GWT.class);
-    if (handler.withFields.size() > 0 || handler.uiFields.size() > 0) {
-      gwtView.addImports(UiField.class);
-    }
 
     final GMethod debugId = gwtView.getMethod("onEnsureDebugId").argument("String", "baseDebugId");
     debugId.addAnnotation("@Override").setProtected();
@@ -139,6 +136,7 @@ class UiXmlFile {
     for (final UiWithDeclaration field : handler.withFields) {
       gwtView.getField(field.name).type(field.type).setAccess(Access.PACKAGE).addAnnotation("@UiField(provided = true)");
       gwtView.getMethod(field.name).returnType(field.type).body.line("return {};", field.name);
+      gwtView.addImports(UiField.class);
       cstr.argument(field.type, field.name);
       cstr.body.line("this.{} = {};", field.name, field.name);
     }
@@ -147,6 +145,7 @@ class UiXmlFile {
     for (final UiStyleDeclaration style : handler.styleFields) {
       gwtView.getField(style.name).type(style.type).setAccess(Access.PACKAGE).addAnnotation("@UiField");
       gwtView.getMethod(style.name).returnType(style.type).body.line("return {};", style.name);
+      gwtView.addImports(UiField.class);
       new CssGenerator(style.getCssInFile(), viewGenerator.cleanup, style.type, viewGenerator.output).run();
     }
 
@@ -167,6 +166,7 @@ class UiXmlFile {
         f.type(field.type).setAccess(Access.PACKAGE).addAnnotation("@UiField");
         m.body.line("return {};", field.name);
       }
+      gwtView.addImports(UiField.class);
 
       if (field.isElement) {
         debugId.body.line("UIObject.ensureDebugId({}, baseDebugId + \"-{}\");", field.name, field.name);
