@@ -19,6 +19,7 @@ public class Required extends AbstractRule<Object> {
   @Override
   public void setProperty(Property<Object> property) {
     super.setProperty(property);
+    property.setRequired(true);
     if (message == null) {
       message = property.getName() + " is required";
     }

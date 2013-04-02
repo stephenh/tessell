@@ -262,4 +262,14 @@ public class FormattedProperty<DP, SP> implements Property<DP> {
     throw new UnsupportedOperationException("Not implemented");
   }
 
+  @Override
+  public boolean isRequired() {
+    return source.isRequired();
+  }
+
+  @Override
+  public void setRequired(boolean required) {
+    source.setRequired(required);
+  }
+
 }

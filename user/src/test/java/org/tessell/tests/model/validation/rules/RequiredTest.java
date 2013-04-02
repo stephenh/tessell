@@ -88,4 +88,10 @@ public class RequiredTest extends AbstractRuleTest {
     assertNoMessages();
   }
 
+  @Test
+  public void requiredMarksPropertyRequired() {
+    f.colors.addRule(new Required("colors required"));
+    assertThat(f.colors.isRequired(), is(true));
+  }
+
 }

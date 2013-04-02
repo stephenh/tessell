@@ -35,6 +35,10 @@ public interface Property<P> extends HasHandlers, HasRuleTriggers, Value<P>, Has
 
   void setTouched(boolean touched);
 
+  boolean isRequired();
+
+  void setRequired(boolean required);
+
   Valid touch();
 
   /** @return whether this property was invalid, does not rerun validation. */

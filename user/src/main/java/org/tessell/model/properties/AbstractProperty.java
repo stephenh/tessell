@@ -47,6 +47,8 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
   private P defaultValue;
   // whether the user has touched this field on the screen yet
   private boolean touched;
+  // whether this property is required
+  private boolean required;
   // the result of the last validate()
   private Valid valid;
   // whether we're currently reassessing
@@ -281,6 +283,16 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
       }
     }
     reassess();
+  }
+
+  @Override
+  public boolean isRequired() {
+    return required;
+  }
+
+  @Override
+  public void setRequired(final boolean required) {
+    this.required = required;
   }
 
   @Override
