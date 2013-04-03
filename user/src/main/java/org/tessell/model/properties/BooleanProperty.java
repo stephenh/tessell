@@ -3,7 +3,6 @@ package org.tessell.model.properties;
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 
-import org.tessell.model.values.DerivedValue;
 import org.tessell.model.values.Value;
 
 public class BooleanProperty extends AbstractProperty<Boolean, BooleanProperty> {
@@ -21,16 +20,27 @@ public class BooleanProperty extends AbstractProperty<Boolean, BooleanProperty> 
     set(isTrue() ? false : true);
   }
 
+  /** @return whether this property is true (null-safe). */
   public boolean isTrue() {
     return TRUE.equals(get());
   }
 
-  public BooleanProperty not() {
+  /** @return whether this property is false (null-safe). */
+  public boolean isFalse() {
+    return FALSE.equals(get());
+  }
+
+  /** @return the inverse of this property. */
+  public Property<Boolean> not() {
     final BooleanProperty parent = this;
-    return addDerived(new BooleanProperty(new DerivedValue<Boolean>() {
-      public Boolean get() {
-        return FALSE.equals(parent.get());
+    return formatted(new PropertyFormatter<Boolean, Boolean>() {
+      public Boolean format(Boolean a) {
+        return !parent.get();
       }
-    }));
+
+      public Boolean parse(Boolean b) throws Exception {
+        return !b;
+      }
+    });
   }
 }
