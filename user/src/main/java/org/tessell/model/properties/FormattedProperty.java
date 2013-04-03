@@ -28,7 +28,7 @@ public class FormattedProperty<DP, SP> implements Property<DP> {
   private final Static isValid;
 
   public FormattedProperty(final Property<SP> source, final PropertyFormatter<SP, DP> formatter) {
-    this(source, formatter, null);
+    this(source, formatter, source.getName() + " is invalid");
   }
 
   public FormattedProperty(final Property<SP> source, final PropertyFormatter<SP, DP> formatter, final String message) {
@@ -36,7 +36,7 @@ public class FormattedProperty<DP, SP> implements Property<DP> {
     this.formatter = formatter;
     // note, we currently fire the error against our source property, so that people listening for errors
     // to it will see them. it might make more sense to fire against us first, then our source property.
-    isValid = new Static((message == null) ? source.getName() + " is invalid" : message) {
+    isValid = new Static(message) {
       @Override
       public boolean isImportant() {
         return true;
