@@ -199,6 +199,7 @@ public class PropertyTest extends AbstractRuleTest {
     b.set(null);
     p.reassess();
     assertThat(p.get(), is(true));
+    assertThat(b.get(), is(true));
   }
 
   private class CountChanges implements PropertyChangedHandler<Boolean> {
