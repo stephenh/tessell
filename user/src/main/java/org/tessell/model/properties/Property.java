@@ -13,6 +13,7 @@ import com.google.gwt.user.client.ui.HasValue;
 
 public interface Property<P> extends HasHandlers, HasRuleTriggers, Value<P>, HasValue<P> {
 
+  /** @return the current property value. */
   P get();
 
   /** Sets {@code value}, with marking touched, and firing events. */
@@ -27,18 +28,29 @@ public interface Property<P> extends HasHandlers, HasRuleTriggers, Value<P>, Has
   /** Sets {@code value} only if we're current null, without marking touched. */
   void setIfNull(P value);
 
+  /**
+   * Re-examines the value to see if it's changed/invalid.
+   *
+   * This shouldn't need to be called directly unless there have been out-of-band
+   * changes (e.g. the underlying value changed without Tessell knowing about it).
+   */
   void reassess();
 
   void addRule(Rule<? super P> rule);
 
+  /** @return whether the user has tried to set this property yet. */
   boolean isTouched();
 
+  /** Sets whether this property has been touched by the user. */
   void setTouched(boolean touched);
 
+  /** @return whether this property is required. */
   boolean isRequired();
 
+  /** Sets whether this property is required. */
   void setRequired(boolean required);
 
+  /** Fluent method for marking a property as touched. */
   Valid touch();
 
   /** @return whether this property was invalid, does not rerun validation. */
@@ -58,14 +70,19 @@ public interface Property<P> extends HasHandlers, HasRuleTriggers, Value<P>, Has
   /** Adds us as a derivative of {@code upstream} properties. */
   Property<P> depends(Property<?>... upstream);
 
+  /** Adds {@code handler} to be called on property change. */
   HandlerRegistration addPropertyChangedHandler(PropertyChangedHandler<P> handler);
 
+  /** @return the name of the property. */
   String getName();
 
+  /** @return a map of outstanding validation errors. */
   Map<Object, String> getErrors();
 
+  /** @return a derived property that is formatted/parsed with {@code formatter}. */
   <T1> Property<T1> formatted(PropertyFormatter<P, T1> formatter);
 
+  /** @return a derived property that is formatted/parsed with {@code formatter}. */
   <T1> Property<T1> formatted(String invalidMessage, PropertyFormatter<P, T1> formatter);
 
 }
