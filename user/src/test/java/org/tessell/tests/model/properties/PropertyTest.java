@@ -13,6 +13,7 @@ import org.tessell.model.properties.IntegerProperty;
 import org.tessell.model.validation.Valid;
 import org.tessell.model.validation.rules.Custom;
 import org.tessell.model.values.DerivedValue;
+import org.tessell.model.values.SetValue;
 import org.tessell.tests.model.validation.rules.AbstractRuleTest;
 
 public class PropertyTest extends AbstractRuleTest {
@@ -175,6 +176,29 @@ public class PropertyTest extends AbstractRuleTest {
     a.setDefaultValue(1);
     a.setInitialValue(null);
     assertThat(a.get(), is(1));
+  }
+
+  @Test
+  public void setDefaultValueFiresChange() {
+    final BooleanProperty a = booleanProperty("a");
+    CountChanges c = new CountChanges();
+    a.addPropertyChangedHandler(c);
+    a.setDefaultValue(true);
+    assertThat(c.changes, is(1));
+    a.set(null);
+    assertThat(c.changes, is(1));
+  }
+
+  @Test
+  public void setDefaultValueWatchesForOutOfBandSets() {
+    final SetValue<Boolean> b = new SetValue<Boolean>("b");
+    final BooleanProperty p = booleanProperty(b);
+    p.setDefaultValue(true);
+    assertThat(b.get(), is(true));
+    // now have b get changed out of band
+    b.set(null);
+    p.reassess();
+    assertThat(p.get(), is(true));
   }
 
   private class CountChanges implements PropertyChangedHandler<Boolean> {

@@ -103,7 +103,12 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
     try {
       reassessing = true;
 
-      final P newValue = get();
+      P newValue = get();
+      // watch for out-of-band changes, e.g. model.merge(newDto);
+      if (newValue == null && defaultValue != null) {
+        value.set(defaultValue);
+        newValue = defaultValue;
+      }
       final P oldValue = lastValue;
       final boolean valueChanged = !eq(lastValue, newValue);
       if (valueChanged) {
