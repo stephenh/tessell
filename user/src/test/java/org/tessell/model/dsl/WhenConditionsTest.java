@@ -4,6 +4,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.tessell.model.dsl.WhenConditions.greaterThan;
 import static org.tessell.model.dsl.WhenConditions.lessThan;
+import static org.tessell.model.dsl.WhenConditions.or;
 import static org.tessell.model.properties.NewProperty.integerProperty;
 
 import org.junit.Test;
@@ -25,5 +26,12 @@ public class WhenConditionsTest {
     assertThat(lessThan(0).evaluate(i), is(false));
     assertThat(lessThan(1).evaluate(i), is(false));
     assertThat(lessThan(2).evaluate(i), is(true));
+  }
+
+  @Test
+  public void testOr() {
+    IntegerProperty i = integerProperty("i", 1);
+    assertThat(or(0, 1).evaluate(i), is(true));
+    assertThat(or(2, 3).evaluate(i), is(false));
   }
 }

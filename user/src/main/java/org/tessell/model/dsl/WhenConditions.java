@@ -1,5 +1,7 @@
 package org.tessell.model.dsl;
 
+import static org.tessell.util.ObjectUtils.eq;
+
 import org.tessell.model.properties.Property;
 
 public class WhenConditions {
@@ -48,6 +50,22 @@ public class WhenConditions {
       }
 
       public void setInitialValue(Property<Integer> property) {
+      }
+    };
+  }
+
+  public static <P> WhenCondition<P> or(final P... values) {
+    return new WhenCondition<P>() {
+      public boolean evaluate(Property<P> property) {
+        for (P value : values) {
+          if (eq(property.get(), value)) {
+            return true;
+          }
+        }
+        return false;
+      }
+
+      public void setInitialValue(Property<P> property) {
       }
     };
   }
