@@ -208,6 +208,12 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
     return new FormattedProperty<T1, P>(this, formatter, invalidMessage);
   }
 
+  /** @return a new derived property by applying {@code converter} to our value */
+  @Override
+  public <T1> Property<T1> as(final PropertyConverter<P, T1> converter) {
+    return new ConvertedProperty<T1, P>(this, converter);
+  }
+
   @Override
   public String toString() {
     return value.toString();

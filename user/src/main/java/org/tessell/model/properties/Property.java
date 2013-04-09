@@ -85,4 +85,7 @@ public interface Property<P> extends HasHandlers, HasRuleTriggers, Value<P>, Has
   /** @return a derived property that is formatted/parsed with {@code formatter}. */
   <T1> Property<T1> formatted(String invalidMessage, PropertyFormatter<P, T1> formatter);
 
+  /** @return a derived property that is converted with {@code converter}. */
+  <T1> Property<T1> as(PropertyConverter<P, T1> converter);
+
 }
