@@ -1,5 +1,6 @@
 package org.tessell.model.properties;
 
+import static org.tessell.model.properties.NewProperty.booleanProperty;
 import static org.tessell.util.ObjectUtils.eq;
 
 import java.util.ArrayList;
@@ -353,6 +354,34 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
     if (get() == null) {
       setInitialValue(value);
     }
+  }
+
+  @Override
+  public Property<Boolean> is(final P value) {
+    return is(value, null);
+  }
+
+  @Override
+  public Property<Boolean> is(final P value, final P whenUnsetValue) {
+    final BooleanProperty is = booleanProperty(getName() + "Is" + value);
+    is.set(eq(get(), value));
+    // is -> this
+    is.addPropertyChangedHandler(new PropertyChangedHandler<Boolean>() {
+      public void onPropertyChanged(PropertyChangedEvent<Boolean> event) {
+        if (event.getNewValue() != null && event.getNewValue()) {
+          AbstractProperty.this.set(value);
+        } else {
+          AbstractProperty.this.set(whenUnsetValue);
+        }
+      }
+    });
+    // this -> is
+    addPropertyChangedHandler(new PropertyChangedHandler<P>() {
+      public void onPropertyChanged(PropertyChangedEvent<P> event) {
+        is.set(eq(get(), value));
+      }
+    });
+    return is;
   }
 
   protected Value<P> getValueObject() {

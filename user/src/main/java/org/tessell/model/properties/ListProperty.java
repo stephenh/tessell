@@ -53,6 +53,11 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
     return readOnly;
   }
 
+  @Override
+  public Property<Boolean> is(final List<E> value) {
+    return is(value, new ArrayList<E>());
+  }
+
   /** @return a copy of our list as an {@link ArrayList}, e.g. for GWT-RPC calls. */
   public ArrayList<E> toArrayList() {
     return new ArrayList<E>(getDirect());

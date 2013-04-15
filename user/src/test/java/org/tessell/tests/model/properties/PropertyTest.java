@@ -1,15 +1,19 @@
 package org.tessell.tests.model.properties;
 
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.tessell.model.properties.NewProperty.booleanProperty;
 import static org.tessell.model.properties.NewProperty.integerProperty;
+import static org.tessell.model.properties.NewProperty.stringProperty;
 
 import org.junit.Test;
 import org.tessell.model.events.PropertyChangedEvent;
 import org.tessell.model.events.PropertyChangedHandler;
 import org.tessell.model.properties.BooleanProperty;
 import org.tessell.model.properties.IntegerProperty;
+import org.tessell.model.properties.Property;
+import org.tessell.model.properties.StringProperty;
 import org.tessell.model.validation.Valid;
 import org.tessell.model.validation.rules.Custom;
 import org.tessell.model.values.DerivedValue;
@@ -200,6 +204,32 @@ public class PropertyTest extends AbstractRuleTest {
     p.reassess();
     assertThat(p.get(), is(true));
     assertThat(b.get(), is(true));
+  }
+
+  @Test
+  public void testIsValue() {
+    final StringProperty s = stringProperty("s");
+    final Property<Boolean> b = s.is("foo");
+    CountChanges c = new CountChanges();
+    b.addPropertyChangedHandler(c);
+
+    assertThat(b.getValue(), is(false));
+
+    s.set("foo");
+    assertThat(b.getValue(), is(true));
+    assertThat(c.changes, is(1));
+
+    s.set("bar");
+    assertThat(b.getValue(), is(false));
+    assertThat(c.changes, is(2));
+
+    b.setValue(true);
+    assertThat(s.get(), is("foo"));
+    assertThat(c.changes, is(3));
+
+    b.setValue(false);
+    assertThat(s.get(), is(nullValue()));
+    assertThat(c.changes, is(4));
   }
 
   private class CountChanges implements PropertyChangedHandler<Boolean> {

@@ -458,6 +458,26 @@ public class ListPropertyTest {
     assertThat(p.get().isEmpty(), is(true));
   }
 
+  @Test
+  public void testIsValue() {
+    final ListProperty<String> s = listProperty("s");
+    final Property<Boolean> b = s.is(list("a", "b"));
+
+    assertThat(b.getValue(), is(false));
+
+    s.set(list("a", "b"));
+    assertThat(b.getValue(), is(true));
+
+    s.set(list("a"));
+    assertThat(b.getValue(), is(false));
+
+    b.setValue(true);
+    assertThat(s.get(), contains("a", "b"));
+
+    b.setValue(false);
+    assertThat(s.get().size(), is(0));
+  }
+
   public static class CountingChanges<P> implements PropertyChangedHandler<P> {
     public int count;
 
