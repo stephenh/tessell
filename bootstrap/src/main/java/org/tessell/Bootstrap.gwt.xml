@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.5.0//EN" "http://google-web-toolkit.googlecode.com/svn/tags/2.5.0/distro-source/core/src/gwt-module.dtd">
+<module>
+  <inherits name="com.google.gwt.user.User" />                   <!-- standard gwt components -->
+  <inherits name="com.google.gwt.uibinder.UiBinder" />           <!-- UIBinder Declarative UI -->
+  <inherits name="com.google.gwt.resources.Resources" />         <!-- Client Bundles -->
+  <inherits name="org.tessell.Tessell" />                        <!-- Tessell -->
+
+  <source path="bootstrap">
+    <exclude name="**/Stub*"/>
+  </source>
+
+</module>
+    

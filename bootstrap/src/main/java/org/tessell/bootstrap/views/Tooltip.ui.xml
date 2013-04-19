@@ -1,0 +1,10 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:gwt="urn:import:com.google.gwt.user.client.ui">
+  <ui:with field="b" type="org.tessell.bootstrap.resources.BootstrapStyle" />
+  <gwt:HTMLPanel>
+    <div ui:field="tooltip" class="{b.tooltip} {b.top} {b.fade}">
+      <div class="{b.tooltipArrow}"></div>
+      <div ui:field="tooltipText" class="{b.tooltipInner}"></div>
+    </div>
+  </gwt:HTMLPanel>
+</ui:UiBinder>

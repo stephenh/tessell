@@ -1,0 +1,21 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:gwt="urn:import:com.google.gwt.user.client.ui"
+  xmlns:b="urn:import:org.tessell.bootstrap">
+  <ui:with field="b" type="org.tessell.bootstrap.resources.BootstrapStyle" />
+  <gwt:HTMLPanel tag="form" styleName="{b.formHorizontal}">
+    <h2 ui:field="title" />
+    <!-- where the form lines go -->
+    <gwt:HTMLPanel tag="fieldset" ui:field="lines" />
+    <!-- where the buttons go -->
+    <div ui:field="actions" class="{b.formActions}">
+      <div class="{b.rowFluid}">
+        <div class="{b.span6}">
+          <gwt:FlowPanel ui:field="leftActions" />
+        </div>
+        <div class="{b.span6}">
+          <gwt:FlowPanel ui:field="rightActions" styleName="{b.pullRight}" />
+        </div>
+      </div>
+    </div>
+  </gwt:HTMLPanel>
+</ui:UiBinder>

@@ -1,0 +1,7 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:gwt="urn:import:com.google.gwt.user.client.ui">
+  <ui:with field="b" type="org.tessell.bootstrap.resources.BootstrapStyle" />
+  <gwt:HTMLPanel tag="span">
+    <span class="{b.addOn}">$</span><gwt:TextBox ui:field="textBox" styleName="{b.inputSmall}" />
+  </gwt:HTMLPanel>
+</ui:UiBinder>

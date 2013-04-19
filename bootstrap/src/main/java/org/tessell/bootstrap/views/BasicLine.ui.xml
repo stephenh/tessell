@@ -1,0 +1,14 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:gwt="urn:import:com.google.gwt.user.client.ui"
+  xmlns:b="urn:import:org.tessell.bootstrap">
+  <ui:with field="b" type="org.tessell.bootstrap.resources.BootstrapStyle" />
+  <gwt:HTMLPanel ui:field="controlGroup" styleName="{b.controlGroup}">
+    <label ui:field="label" class="{b.controlLabel}" />
+    <div ui:field="controls" class="{b.controls}">
+      <!-- We use a span so the input & error list render on the same line -->
+      <gwt:HTMLPanel tag="span" ui:field="placeholder"/>
+      <b:TextCommaList ui:field="errorList" styleName="{b.helpInline}" />
+      <p class="{b.helpInline}" ui:field="optional"><small>(optional)</small></p>
+    </div>
+  </gwt:HTMLPanel>
+</ui:UiBinder>
