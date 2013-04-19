@@ -1,8 +1,7 @@
-#Mon Mar 21 23:23:18 CDT 2011
 eclipse.preferences.version=1
 editor_save_participant_org.eclipse.jdt.ui.postsavelistener.cleanup=true
-formatter_profile=_gwt-mpv-formatting
-formatter_settings_version=11
+formatter_profile=_tessell-formatting
+formatter_settings_version=12
 org.eclipse.jdt.ui.ignorelowercasenames=true
 org.eclipse.jdt.ui.importorder=java;javax;org;com;
 org.eclipse.jdt.ui.ondemandthreshold=15
