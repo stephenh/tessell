@@ -5,25 +5,25 @@
 	<property file="build.properties"/>
 
 	<target name="clean">
-		<delete dir="bin"/>
+		<delete dir="target"/>
 	</target>
 
 	<target name="compile" depends="ivy-retrieve" description="compiles the project">
-		<mkdir dir="bin/main"/>
-		<javac srcdir="src/main/java" destdir="bin/main" debug="true" nowarn="yes" source="1.6" target="1.6" encoding="utf8">
+		<mkdir dir="target/main"/>
+		<javac srcdir="src/main/java" destdir="target/main" debug="true" nowarn="yes" source="1.6" target="1.6" encoding="utf8">
 			<classpath>
-				<fileset dir="bin/lib/default/jars" includes="*.jar"/>
+				<fileset dir="target/lib/default/jars" includes="*.jar"/>
 			</classpath>
 		</javac>
 	</target>
 
 	<target name="jar" depends="compile" description="jars the project">
-		<mkdir dir="bin/jars"/>
-		<jar destfile="bin/jars/${ant.project.name}.jar">
-			<fileset dir="bin/main" includes="**/*.class"/>
+		<mkdir dir="target/jars"/>
+		<jar destfile="target/jars/${ant.project.name}.jar">
+			<fileset dir="target/main" includes="**/*.class"/>
 		</jar>
-		<mkdir dir="bin/sources"/>
-		<zip destfile="bin/sources/${ant.project.name}.jar">
+		<mkdir dir="target/sources"/>
+		<zip destfile="target/sources/${ant.project.name}.jar">
 			<fileset dir="src/main/java" includes="**/*.java"/>
 		</zip>
 	</target>
@@ -45,18 +45,18 @@
 	</target>
 
 	<target name="ivy-retrieve" depends="ivy-init" description="downloads jars for the project">
-		<ivy:retrieve pattern="bin/lib/[conf]/[type]s/[artifact].[ext]" conf="*" type="*"/>
+		<ivy:retrieve pattern="target/lib/[conf]/[type]s/[artifact].[ext]" conf="*" type="*"/>
 	</target>
 
 	<target name="gen-pom" depends="ivy-init">
-		<ivy:makepom ivyfile="ivy.xml" pomfile="bin/poms/${ant.project.name}.pom">
+		<ivy:makepom ivyfile="ivy.xml" pomfile="target/poms/${ant.project.name}.pom">
 			<mapping conf="default" scope="compile"/>
 		</ivy:makepom>
 	</target>
 
 	<target name="ivy-publish-local" depends="jar,ivy-init,gen-pom" description="publish jar/source to maven repo mounted at ~/.m2/repository">
 		<ivy:publish resolver="maven-local-publish" forcedeliver="true" overwrite="true" publishivy="false">
-			<artifacts pattern="bin/[type]s/[artifact].[ext]"/>
+			<artifacts pattern="target/[type]s/[artifact].[ext]"/>
 		</ivy:publish>
 		<!-- snapshots only exist locally, so kick the cache. -->
 		<delete>
@@ -66,7 +66,7 @@
 
 	<target name="ivy-publish-share" depends="jar,ivy-init,gen-pom" description="publish jar/source to maven repo mounted at ~/repo">
 		<ivy:publish resolver="maven-share" forcedeliver="true" overwrite="true" publishivy="false">
-			<artifacts pattern="bin/[type]s/[artifact].[ext]" />
+			<artifacts pattern="target/[type]s/[artifact].[ext]" />
 		</ivy:publish>
 	</target>
 	<!-- end ivy targets -->
