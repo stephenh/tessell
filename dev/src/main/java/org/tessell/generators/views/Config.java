@@ -8,8 +8,10 @@ import static org.apache.commons.lang.StringUtils.substringBetween;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,35 +65,36 @@ public class Config {
 
   private void loadViewGenDotProperties() {
     try {
-      for (String file : new String[] { "/viewgen.properties", "/viewgen-root.properties" }) {
-        InputStream in = null;
-        try {
-          in = Config.class.getResourceAsStream(file);
-          if (in == null) {
-            continue;
-          }
-          final Properties p = new Properties();
-          p.load(in);
-          for (final Entry<Object, Object> e : p.entrySet()) {
-            final String type = e.getKey().toString();
-            final String packageName = substringBeforeLast(type, ".");
+      for (String file : new String[] { "viewgen.properties", "viewgen-root.properties" }) {
+        Enumeration<URL> urls = Config.class.getClassLoader().getResources(file);
+        while (urls.hasMoreElements()) {
+          URL url = urls.nextElement();
+          // System.out.println("Loading " + url);
+          InputStream in = url.openStream();
+          try {
+            final Properties p = new Properties();
+            p.load(url.openStream());
+            for (final Entry<Object, Object> e : p.entrySet()) {
+              final String type = e.getKey().toString();
+              final String packageName = substringBeforeLast(type, ".");
 
-            String line = e.getValue().toString();
-            typeToInterface.put(type, prependPackageIfNeeded(packageName, substringBefore(line, ",")));
+              String line = e.getValue().toString();
+              typeToInterface.put(type, prependPackageIfNeeded(packageName, substringBefore(line, ",")));
 
-            // watch for stub with cstr params, e.g. TextLine(AppRegistry)
-            String stub = substringAfter(line, ",");
-            String[] params = new String[] {};
-            if (stub.contains("(")) {
-              params = splitPreserveAllTokens(substringBetween(stub, "(", ")"), ",");
-              stub = substringBefore(stub, "(");
+              // watch for stub with cstr params, e.g. TextLine(AppRegistry)
+              String stub = substringAfter(line, ",");
+              String[] params = new String[] {};
+              if (stub.contains("(")) {
+                params = splitPreserveAllTokens(substringBetween(stub, "(", ")"), ",");
+                stub = substringBefore(stub, "(");
+              }
+              stub = prependPackageIfNeeded(packageName, stub);
+              typeToStub.put(type, stub);
+              stubToCstrParams.put(stub, Arrays.asList(params));
             }
-            stub = prependPackageIfNeeded(packageName, stub);
-            typeToStub.put(type, stub);
-            stubToCstrParams.put(stub, Arrays.asList(params));
+          } finally {
+            IOUtils.closeQuietly(in);
           }
-        } finally {
-          IOUtils.closeQuietly(in);
         }
       }
     } catch (IOException io) {
