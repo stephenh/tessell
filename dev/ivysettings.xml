@@ -1,25 +1,3 @@
 <ivysettings>
-	<property name="revision" value="SNAPSHOT" override="false"/>
-	<property name="gwt.version" value="2.5.0" />
-	<settings defaultResolver="default"/>
-	<include url="${ivy.default.settings.dir}/ivysettings-public.xml"/>
-	<resolvers>
-		<!-- for joist-util and jarjar 1.0 -->
-		<ibiblio name="joist" m2compatible="true" root="http://repo.joist.ws"/>
-		<!-- for local integration builds -->
-		<ibiblio name="maven-local" m2compatible="true" root="file://${user.home}/.m2/repository"/>
-		<!-- for publishing to local m2 since ibiblio doesn't support it -->
-		<filesystem name="maven-local-publish" m2compatible="true">
-			<artifact pattern="${user.home}/.m2/repository/[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]"/>
-		</filesystem>
-		<!-- for publishing via an sshfs share -->
-		<filesystem name="maven-share" m2compatible="true">
-			<artifact pattern="${user.home}/repo/[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]"/>
-		</filesystem>
-		<chain name="default">
-			<resolver ref="maven-local"/>
-			<resolver ref="joist"/>
-			<resolver ref="public"/>
-		</chain>
-	</resolvers>
+	<include file="../ivysettings.xml"/>
 </ivysettings>
