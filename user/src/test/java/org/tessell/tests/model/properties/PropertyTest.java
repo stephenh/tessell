@@ -214,6 +214,7 @@ public class PropertyTest extends AbstractRuleTest {
     b.addPropertyChangedHandler(c);
 
     assertThat(b.getValue(), is(false));
+    assertThat(b.isTouched(), is(false));
 
     s.set("foo");
     assertThat(b.getValue(), is(true));

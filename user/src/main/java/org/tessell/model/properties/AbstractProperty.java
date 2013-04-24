@@ -364,7 +364,7 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
   @Override
   public Property<Boolean> is(final P value, final P whenUnsetValue) {
     final BooleanProperty is = booleanProperty(getName() + "Is" + value);
-    is.set(eq(get(), value));
+    is.setInitialValue(eq(get(), value));
     // is -> this
     is.addPropertyChangedHandler(new PropertyChangedHandler<Boolean>() {
       public void onPropertyChanged(PropertyChangedEvent<Boolean> event) {
