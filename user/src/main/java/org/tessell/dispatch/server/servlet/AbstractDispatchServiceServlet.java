@@ -1,7 +1,5 @@
 package org.tessell.dispatch.server.servlet;
 
-import static org.tessell.util.ObjectUtils.eq;
-
 import javax.servlet.GenericServlet;
 
 import org.tessell.dispatch.server.ActionDispatch;
@@ -26,8 +24,11 @@ public abstract class AbstractDispatchServiceServlet extends RemoteServiceServle
   public Result execute(final String sessionId, final Action<?> action) throws ActionException {
     try {
       final ExecutionContext context = new ExecutionContext(getThreadLocalRequest(), getThreadLocalResponse());
-      if (getSessionValidator() != null && !eq(sessionId, getSessionValidator().get(context))) {
-        throw invalidSession(context);
+      if (getSessionValidator() != null) {
+        String secureSessionId = getSessionValidator().get(context);
+        if (secureSessionId == null || !secureSessionId.equals(sessionId)) {
+          throw invalidSession(context);
+        }
       }
       ActionDispatch d = getActionDispatch();
       if (d == null) {
@@ -58,8 +59,10 @@ public abstract class AbstractDispatchServiceServlet extends RemoteServiceServle
     return new IllegalStateException("Invalid session");
   }
 
+  /** Method for subclasses to provide an optional {@link SessionIdValidator} for CSRF protection (or {@code null} to skip CSRF checking). */
   protected abstract SessionIdValidator getSessionValidator();
 
+  /** Method for subclasses to return their {@link ActionDispatch} class. */
   protected abstract ActionDispatch getActionDispatch();
 
 }
