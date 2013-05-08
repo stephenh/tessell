@@ -22,17 +22,17 @@ public abstract class AbstractDispatchServiceServlet extends RemoteServiceServle
 
   @Override
   public Result execute(final String sessionId, final Action<?> action) throws ActionException {
+    ActionDispatch d = getActionDispatch();
+    if (d == null) {
+      throw new IllegalStateException("Null ActionDispatch, ensure the server started correctly");
+    }
     try {
       final ExecutionContext context = new ExecutionContext(getThreadLocalRequest(), getThreadLocalResponse());
-      if (getSessionValidator() != null) {
+      if (getSessionValidator() != null && !d.skipCSRFCheck(action)) {
         String secureSessionId = getSessionValidator().get(context);
         if (secureSessionId == null || !secureSessionId.equals(sessionId)) {
           throw invalidSession(context);
         }
-      }
-      ActionDispatch d = getActionDispatch();
-      if (d == null) {
-        throw new IllegalStateException("Null ActionDispatch, ensure the server started correctly");
       }
       return d.execute(action, context);
     } catch (final ActionException ae) {

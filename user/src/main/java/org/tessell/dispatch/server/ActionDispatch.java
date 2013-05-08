@@ -18,4 +18,6 @@ public interface ActionDispatch {
    */
   <A extends Action<R>, R extends Result> R execute(A action, ExecutionContext context) throws ActionException;
 
+  /** @return whether we should skip the CSRF check for the given action. */
+  boolean skipCSRFCheck(Action<?> action);
 }

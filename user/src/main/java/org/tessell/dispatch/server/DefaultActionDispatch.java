@@ -21,6 +21,11 @@ public class DefaultActionDispatch implements ActionDispatch {
     handlers.addHandler(handler);
   }
 
+  @Override
+  public boolean skipCSRFCheck(Action<?> action) {
+    return findHandler(action).skipCSRFCheck();
+  }
+
   /** @return the handler for {@code action} or throws {@code IllegalStateException} */
   protected <A extends Action<R>, R extends Result> ActionHandler<A, R> findHandler(final A action) {
     final ActionHandler<A, R> handler = getHandlerRegistry().findHandler(action);

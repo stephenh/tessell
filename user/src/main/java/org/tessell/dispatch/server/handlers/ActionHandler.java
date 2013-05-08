@@ -17,4 +17,7 @@ public interface ActionHandler<A extends Action<R>, R extends Result> {
   /** Handles the specified action. */
   R execute(A action, ExecutionContext context);
 
+  /** Allows certain handlers to opt-in to skipping for CSRF (e.g. for login handlers before a token is available). */
+  boolean skipCSRFCheck();
+
 }
