@@ -100,6 +100,8 @@ class UiXmlFile {
     for (final UiStyleDeclaration style : handler.styleFields) {
       isView.getMethod(style.name).returnType(style.type);
     }
+    // extra ensureDebugIdSuffix
+    isView.getMethod("ensureDebugIdSuffix", arg("String", "suffix"));
 
     viewGenerator.markAndSave(isView);
   }
@@ -177,7 +179,11 @@ class UiXmlFile {
     }
 
     cstr.body.line("initWidget(binder.createAndBindUi(this).asWidget());");
-    cstr.body.line("ensureDebugId(\"{}\");", gwtView.getSimpleName().replaceAll("View$", "").replaceAll("^Gwt", ""));
+
+    String viewDebugId = gwtView.getSimpleName().replaceAll("View$", "").replaceAll("^Gwt", "");
+    cstr.body.line("ensureDebugId(\"{}\");", viewDebugId);
+    gwtView.getMethod("ensureDebugIdSuffix", arg("String", "suffix")).addAnnotation("@Override").body //
+      .line("ensureDebugId(\"{}-\" + suffix);", viewDebugId);
 
     // add implements of getStyle and getIsElement
     GMethod getStyle = gwtView.getMethod("getStyle").returnType(IsStyle.class).addAnnotation("@Override");
@@ -256,7 +262,10 @@ class UiXmlFile {
       stubView.getMethod(style.name).returnType(style.type).body.line("return {};", style.name);
     }
 
-    cstr.body.line("ensureDebugId(\"{}\");", stubView.getSimpleName().replaceAll("View$", "").replaceAll("^Stub", ""));
+    final String viewDebugId = stubView.getSimpleName().replaceAll("View$", "").replaceAll("^Stub", "");
+    cstr.body.line("ensureDebugId(\"{}\");", viewDebugId);
+    stubView.getMethod("ensureDebugIdSuffix", arg("String", "suffix")).addAnnotation("@Override").body //
+      .line("ensureDebugId(\"{}-\" + suffix);", viewDebugId);
 
     viewGenerator.markAndSave(stubView);
   }
