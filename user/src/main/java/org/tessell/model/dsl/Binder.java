@@ -11,6 +11,7 @@ import org.tessell.model.properties.*;
 import org.tessell.model.validation.rules.Rule;
 
 import com.google.gwt.event.dom.client.*;
+import com.google.gwt.event.logical.shared.HasAttachHandlers;
 import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -76,6 +77,16 @@ public class Binder extends AbstractBound {
   /** @return a fluent {@link EventBinder} against {@code blurable}. */
   public EventBinder onBlur(HasBlurHandlers blurable) {
     return new BlurBinder(this, blurable);
+  }
+
+  /** @return a fluent {@link EventBinder} against {@code attachable}. */
+  public EventBinder onAttach(HasAttachHandlers attachable) {
+    return new AttachBinder(this, attachable, true);
+  }
+
+  /** @return a fluent {@link EventBinder} against {@code attachable}. */
+  public EventBinder onDetach(HasAttachHandlers attachable) {
+    return new AttachBinder(this, attachable, false);
   }
 
   /** @return a fluent {@link EventBinder} against {@code changable}. */
