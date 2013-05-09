@@ -55,7 +55,11 @@ public class PropertyBinder<P> {
   /** Binds our property to {@code source} (two-way). */
   public void to(final HasValue<P> source) {
     // set initial value
-    source.setValue(p.get(), true);
+    if (b.canSetInitialValue(p) && sanitizeIfString(source.getValue()) != null) {
+      p.setInitialValue(sanitizeIfString(source.getValue()));
+    } else {
+      source.setValue(p.get(), true);
+    }
     // after we've set the initial value (which fired ValueChangeEvent and
     // would have messed up our 'touched' state), listen for others changes
     if (!p.isReadOnly()) {

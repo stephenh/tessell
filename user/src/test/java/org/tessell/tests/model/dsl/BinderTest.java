@@ -71,6 +71,20 @@ public class BinderTest {
   }
 
   @Test
+  public void propertyToWidgetWithBothUnsetIsANoop() {
+    binder.bind(s).to(box);
+    assertThat(box.getValue(), is(""));
+    assertThat(s.get(), is(nullValue()));
+  }
+
+  @Test
+  public void propertyToWidgetUsesWidgetValueIfPropertyIsUninitalized() {
+    box.setValue("test");
+    binder.bind(s).to(box);
+    assertThat(s.get(), is("test"));
+  }
+
+  @Test
   public void propertyToWidgetFiresWidgetChange() {
     binder.bind(s).to(box);
     final boolean[] changed = { false };
