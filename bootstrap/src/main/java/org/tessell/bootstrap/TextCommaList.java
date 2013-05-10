@@ -10,7 +10,6 @@ import org.tessell.gwt.dom.client.IsStyle;
 import org.tessell.widgets.IsTextList;
 
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
-import com.google.gwt.thirdparty.guava.common.base.Joiner;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Widget;
 
