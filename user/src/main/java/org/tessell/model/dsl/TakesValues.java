@@ -43,6 +43,20 @@ public class TakesValues {
     };
   }
 
+  public static TakesValue<String> innerTextOf(final IsWidget target) {
+    return new TakesValue<String>() {
+      @Override
+      public String getValue() {
+        return target.getIsElement().getInnerText();
+      }
+
+      @Override
+      public void setValue(String value) {
+        target.getIsElement().setInnerText(value);
+      }
+    };
+  }
+
   public static TakesValue<String> htmlOf(final HasHTML target) {
     return new TakesValue<String>() {
       @Override
