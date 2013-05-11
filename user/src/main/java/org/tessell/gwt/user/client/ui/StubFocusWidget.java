@@ -101,6 +101,12 @@ public class StubFocusWidget extends StubWidget implements IsFocusWidget {
     press((char) c);
   }
 
+  public void press(String chars) {
+    for (int i = 0; i < chars.length(); i++) {
+      press(chars.charAt(i));
+    }
+  }
+
   public void press(char c) {
     keyDown(c);
     keyPress(c);
