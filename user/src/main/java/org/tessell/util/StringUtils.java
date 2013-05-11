@@ -5,7 +5,7 @@ import java.util.List;
 
 public class StringUtils {
 
-  public static String string(Object o) {
+  public static String toString(Object o) {
     return o == null ? "" : o.toString();
   }
 
