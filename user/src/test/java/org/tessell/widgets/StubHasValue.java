@@ -13,6 +13,13 @@ public class StubHasValue<T> implements HasValue<T> {
   private final EventBus handlers = new SimplerEventBus();
   private T value;
 
+  public StubHasValue() {
+  }
+
+  public StubHasValue(T initialValue) {
+    this.value = initialValue;
+  }
+
   // By default we should fire events, so encourage tests to call this one
   public void set(final T value) {
     this.setValue(value, true);

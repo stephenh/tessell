@@ -582,6 +582,16 @@ public class BinderTest {
   }
 
   @Test
+  public void whenSetToHasValue() {
+    final BooleanProperty b = booleanProperty("b", false);
+    binder.when(b).is(true).set(box).to(s);
+    s.set("some new value");
+    assertThat(box.getValue(), is(""));
+    b.set(true);
+    assertThat(box.getValue(), is("some new value"));
+  }
+
+  @Test
   public void propertyToHasText() {
     final StubLabel label = new StubLabel();
     final StringProperty b = stringProperty("b", "foo");

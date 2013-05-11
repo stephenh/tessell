@@ -2,6 +2,7 @@ package org.tessell.model.dsl;
 
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.TakesValue;
+import com.google.gwt.user.client.ui.HasValue;
 
 public class SetPropertyBinder<P> {
 
@@ -24,6 +25,14 @@ public class SetPropertyBinder<P> {
     b.add(setup.setup(new Runnable() {
       public void run() {
         value.setValue(newValue);
+      }
+    }));
+  }
+
+  public void to(final HasValue<P> hasValue) {
+    b.add(setup.setup(new Runnable() {
+      public void run() {
+        value.setValue(hasValue.getValue());
       }
     }));
   }

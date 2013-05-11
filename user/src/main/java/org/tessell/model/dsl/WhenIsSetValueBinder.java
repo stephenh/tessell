@@ -5,6 +5,7 @@ import org.tessell.model.events.PropertyChangedHandler;
 import org.tessell.model.properties.Property;
 
 import com.google.gwt.user.client.TakesValue;
+import com.google.gwt.user.client.ui.HasValue;
 
 public class WhenIsSetValueBinder<P, Q> {
 
@@ -29,8 +30,20 @@ public class WhenIsSetValueBinder<P, Q> {
       }
     }));
     if (condition.evaluate(property)) {
-      // set initial
-      value.setValue(newValue);
+      value.setValue(newValue); // set initial
+    }
+  }
+
+  public void to(final HasValue<Q> newValue) {
+    b.add(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
+      public void onPropertyChanged(final PropertyChangedEvent<P> event) {
+        if (condition.evaluate(property)) {
+          value.setValue(newValue.getValue());
+        }
+      }
+    }));
+    if (condition.evaluate(property)) {
+      value.setValue(newValue.getValue()); // set initial
     }
   }
 
