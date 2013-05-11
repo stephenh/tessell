@@ -274,6 +274,16 @@ public class FormattedProperty<DP, SP> implements Property<DP> {
   }
 
   @Override
+  public Property<Boolean> is(Property<DP> value) {
+    throw new UnsupportedOperationException("Not implemented");
+  }
+
+  @Override
+  public Property<Boolean> is(Property<DP> value, DP whenUnsetValue) {
+    throw new UnsupportedOperationException("Not implemented");
+  }
+
+  @Override
   public boolean isRequired() {
     return source.isRequired();
   }

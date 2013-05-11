@@ -93,4 +93,10 @@ public interface Property<P> extends HasHandlers, HasRuleTriggers, Value<P>, Has
 
   /** @return a two-way property that is true/value when {@code this} equals {@code value}. */
   Property<Boolean> is(P value, P whenUnsetValue);
+
+  /** @return a two-way property that is true/value when {@code this} equals {@code other}. */
+  Property<Boolean> is(Property<P> other);
+
+  /** @return a two-way property that is true/value when {@code this} equals {@code other}. */
+  Property<Boolean> is(Property<P> other, P whenUnsetValue);
 }

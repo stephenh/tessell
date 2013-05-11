@@ -365,12 +365,13 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
   public Property<Boolean> is(final P value, final P whenUnsetValue) {
     final BooleanProperty is = booleanProperty(getName() + "Is" + value);
     is.setInitialValue(eq(get(), value));
+    final boolean[] changing = { false };
     // is -> this
     is.addPropertyChangedHandler(new PropertyChangedHandler<Boolean>() {
       public void onPropertyChanged(PropertyChangedEvent<Boolean> event) {
         if (event.getNewValue() != null && event.getNewValue()) {
           AbstractProperty.this.set(value);
-        } else {
+        } else if (!changing[0]) {
           AbstractProperty.this.set(whenUnsetValue);
         }
       }
@@ -378,7 +379,48 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
     // this -> is
     addPropertyChangedHandler(new PropertyChangedHandler<P>() {
       public void onPropertyChanged(PropertyChangedEvent<P> event) {
+        changing[0] = true;
         is.set(eq(get(), value));
+        changing[0] = false;
+      }
+    });
+    return is;
+  }
+
+  @Override
+  public Property<Boolean> is(final Property<P> other) {
+    return is(other, null);
+  }
+
+  @Override
+  public Property<Boolean> is(final Property<P> other, final P whenUnsetValue) {
+    final BooleanProperty is = booleanProperty(getName() + "Is" + value);
+    is.setInitialValue(eq(get(), other.get()));
+    final boolean[] changing = { false };
+    // is -> this
+    is.addPropertyChangedHandler(new PropertyChangedHandler<Boolean>() {
+      public void onPropertyChanged(PropertyChangedEvent<Boolean> event) {
+        if (event.getNewValue() != null && event.getNewValue()) {
+          AbstractProperty.this.set(other.get());
+        } else if (!changing[0]) {
+          AbstractProperty.this.set(whenUnsetValue);
+        }
+      }
+    });
+    // this -> is
+    addPropertyChangedHandler(new PropertyChangedHandler<P>() {
+      public void onPropertyChanged(PropertyChangedEvent<P> event) {
+        changing[0] = true;
+        is.set(eq(get(), other.get()));
+        changing[0] = false;
+      }
+    });
+    // other -> is
+    other.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
+      public void onPropertyChanged(PropertyChangedEvent<P> event) {
+        changing[0] = true;
+        is.set(eq(get(), other.get()));
+        changing[0] = false;
       }
     });
     return is;

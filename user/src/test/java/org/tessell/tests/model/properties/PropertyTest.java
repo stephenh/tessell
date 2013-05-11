@@ -218,10 +218,12 @@ public class PropertyTest extends AbstractRuleTest {
 
     s.set("foo");
     assertThat(b.getValue(), is(true));
+    assertThat(s.get(), is("foo"));
     assertThat(c.changes, is(1));
 
     s.set("bar");
     assertThat(b.getValue(), is(false));
+    assertThat(s.get(), is("bar"));
     assertThat(c.changes, is(2));
 
     b.setValue(true);
@@ -231,6 +233,47 @@ public class PropertyTest extends AbstractRuleTest {
     b.setValue(false);
     assertThat(s.get(), is(nullValue()));
     assertThat(c.changes, is(4));
+  }
+
+  @Test
+  public void testIsOther() {
+    final StringProperty s1 = stringProperty("s1", "foo");
+    final StringProperty s2 = stringProperty("s2", "bar");
+    final Property<Boolean> b = s1.is(s2);
+    CountChanges c = new CountChanges();
+    b.addPropertyChangedHandler(c);
+
+    assertThat(b.getValue(), is(false));
+    assertThat(b.isTouched(), is(false));
+
+    s1.set("bar");
+    assertThat(b.getValue(), is(true));
+    assertThat(c.changes, is(1));
+    assertThat(s1.get(), is("bar"));
+    assertThat(s2.get(), is("bar"));
+
+    s1.set("foo");
+    assertThat(b.getValue(), is(false));
+    assertThat(c.changes, is(2));
+    assertThat(s1.get(), is("foo"));
+    assertThat(s2.get(), is("bar"));
+
+    s2.set("foo");
+    assertThat(b.getValue(), is(true));
+    assertThat(c.changes, is(3));
+    assertThat(s1.get(), is("foo"));
+    assertThat(s2.get(), is("foo"));
+
+    b.setValue(false);
+    assertThat(c.changes, is(4));
+    assertThat(s1.get(), is(nullValue()));
+    assertThat(s2.get(), is("foo"));
+
+    b.setValue(true);
+    assertThat(c.changes, is(5));
+    assertThat(s1.get(), is("foo"));
+    assertThat(s2.get(), is("foo"));
+
   }
 
   private class CountChanges implements PropertyChangedHandler<Boolean> {

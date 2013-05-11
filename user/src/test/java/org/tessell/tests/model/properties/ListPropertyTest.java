@@ -478,6 +478,27 @@ public class ListPropertyTest {
     assertThat(s.get().size(), is(0));
   }
 
+  @Test
+  public void testIsOther() {
+    final ListProperty<String> s1 = listProperty("s1", list("a", "b"));
+    final ListProperty<String> s2 = listProperty("s2", list("a", "a"));
+    final Property<Boolean> b = s1.is(s2);
+
+    assertThat(b.getValue(), is(false));
+
+    s1.set(list("a", "a"));
+    assertThat(b.getValue(), is(true));
+
+    s1.set(list("a"));
+    assertThat(b.getValue(), is(false));
+
+    b.setValue(true);
+    assertThat(s1.get(), contains("a", "a"));
+
+    b.setValue(false);
+    assertThat(s1.get().size(), is(0));
+  }
+
   public static class CountingChanges<P> implements PropertyChangedHandler<P> {
     public int count;
 
