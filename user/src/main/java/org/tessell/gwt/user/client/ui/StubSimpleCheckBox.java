@@ -1,5 +1,7 @@
 package org.tessell.gwt.user.client.ui;
 
+import static java.lang.Boolean.TRUE;
+
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -22,6 +24,10 @@ public class StubSimpleCheckBox extends StubFocusWidget implements IsSimpleCheck
       throw new RuntimeException(name + " is not checked");
     }
     click();
+  }
+
+  public boolean isChecked() {
+    return TRUE.equals(getValue());
   }
 
   @Override
