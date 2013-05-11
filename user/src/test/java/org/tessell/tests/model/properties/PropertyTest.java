@@ -273,7 +273,36 @@ public class PropertyTest extends AbstractRuleTest {
     assertThat(c.changes, is(5));
     assertThat(s1.get(), is("foo"));
     assertThat(s2.get(), is("foo"));
+  }
 
+  @Test
+  public void testIsReadOnlyValue() {
+    final StringProperty s = stringProperty(new DerivedValue<String>("s") {
+      public String get() {
+        return "s";
+      }
+    });
+    final Property<Boolean> b = s.is("foo");
+    assertThat(b.getValue(), is(false));
+    // s is read-only, so this is a no-op
+    b.setValue(true);
+    assertThat(s.get(), is("s"));
+    assertThat(b.getValue(), is(false));
+  }
+
+  @Test
+  public void testIsReadOnlyProperty() {
+    final StringProperty s = stringProperty(new DerivedValue<String>("s") {
+      public String get() {
+        return "s";
+      }
+    });
+    final Property<Boolean> b = s.is(stringProperty("s2", "t"));
+    assertThat(b.getValue(), is(false));
+    // s is read-only, so this is a no-op
+    b.setValue(true);
+    assertThat(s.get(), is("s"));
+    assertThat(b.getValue(), is(false));
   }
 
   private class CountChanges implements PropertyChangedHandler<Boolean> {

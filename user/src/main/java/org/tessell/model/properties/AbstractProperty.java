@@ -369,7 +369,11 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
     // is -> this
     is.addPropertyChangedHandler(new PropertyChangedHandler<Boolean>() {
       public void onPropertyChanged(PropertyChangedEvent<Boolean> event) {
-        if (event.getNewValue() != null && event.getNewValue()) {
+        if (isReadOnly()) {
+          changing[0] = true;
+          is.set(eq(get(), value));
+          changing[0] = false;
+        } else if (event.getNewValue() != null && event.getNewValue()) {
           AbstractProperty.this.set(value);
         } else if (!changing[0]) {
           AbstractProperty.this.set(whenUnsetValue);
@@ -400,7 +404,11 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
     // is -> this
     is.addPropertyChangedHandler(new PropertyChangedHandler<Boolean>() {
       public void onPropertyChanged(PropertyChangedEvent<Boolean> event) {
-        if (event.getNewValue() != null && event.getNewValue()) {
+        if (isReadOnly()) {
+          changing[0] = true;
+          is.set(eq(get(), other.get()));
+          changing[0] = false;
+        } else if (event.getNewValue() != null && event.getNewValue()) {
           AbstractProperty.this.set(other.get());
         } else if (!changing[0]) {
           AbstractProperty.this.set(whenUnsetValue);
