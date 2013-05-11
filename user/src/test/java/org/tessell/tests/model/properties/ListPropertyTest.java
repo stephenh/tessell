@@ -33,7 +33,7 @@ public class ListPropertyTest {
 
   @Before
   public void initialValue() {
-    p.set(new ArrayList<String>());
+    p.setInitialValue(new ArrayList<String>());
     p.addValueAddedHandler(adds);
     p.addValueRemovedHandler(removes);
     p.addPropertyChangedHandler(changes);
@@ -72,6 +72,7 @@ public class ListPropertyTest {
 
   @Test
   public void derivedPropertiesAreTouchedOnCreationIfNeeded() {
+    p.setTouched(true);
     final IntegerProperty size = p.size();
     assertThat(p.isTouched(), is(true));
     assertThat(size.isTouched(), is(true));
@@ -94,6 +95,23 @@ public class ListPropertyTest {
     assertThat(changes.count, is(1));
     p.remove("foo");
     assertThat(removes.count, is(1));
+    assertThat(changes.count, is(2));
+  }
+
+  @Test
+  public void removeTouches() {
+    assertThat(p.isTouched(), is(false));
+    p.remove("a");
+    assertThat(p.isTouched(), is(true));
+  }
+
+  @Test
+  public void removeAll() {
+    p.setInitialValue(list("a", "b", "c"));
+    assertThat(changes.count, is(1));
+    p.removeAll(list("a", "b"));
+    assertThat(p.get(), contains("c"));
+    assertThat(p.isTouched(), is(true));
     assertThat(changes.count, is(2));
   }
 

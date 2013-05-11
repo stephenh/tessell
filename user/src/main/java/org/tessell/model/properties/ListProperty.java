@@ -80,10 +80,10 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
   /** Adds each item in {@code items}, firing a {@link ValueAddedEvent} for each. */
   public void addAll(Collection<? extends E> items) {
     if (items.size() == 0) {
-      return; // this makes sense, right?
+      return;
     }
-    setTouched(true); // move this to be after the addAll to match add?
     getDirect().addAll(items);
+    setTouched(true);
     for (E item : items) {
       listenForMemberChanged(item);
     }
@@ -93,11 +93,21 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
 
   /** Removes {@code item}, firing a {@link ValueRemovedEvent}. */
   public void remove(final E item) {
-    // should be considered touched?
-    if (getDirect().remove(item)) {
-      // will fire remove+change if needed
-      reassess();
+    getDirect().remove(item);
+    setTouched(true);
+    // will fire remove+change if needed
+    reassess();
+  }
+
+  /** Removes each item in {@code items}, firing a {@link ValueRemovedEvent} for each. */
+  public void removeAll(Collection<? extends E> items) {
+    if (items.size() == 0) {
+      return;
     }
+    getDirect().removeAll(items);
+    setTouched(true);
+    // will fire adds+change if needed
+    reassess();
   }
 
   /** Removes all entries, firing a {@link ValueRemovedEvent} for each. */
