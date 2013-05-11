@@ -1,6 +1,7 @@
 package org.tessell.model.dsl;
 
 import static org.tessell.util.ObjectUtils.eq;
+import static org.tessell.util.StringUtils.sanitizeIfString;
 
 import java.util.HashMap;
 import java.util.List;
@@ -188,17 +189,6 @@ public class PropertyBinder<P> {
       }
       return this;
     }
-  }
-
-  @SuppressWarnings("unchecked")
-  protected static <P> P sanitizeIfString(P value) {
-    if (value instanceof String) {
-      value = (P) ((String) value).trim();
-      if ("".equals(value)) {
-        value = null;
-      }
-    }
-    return value;
   }
 
 }

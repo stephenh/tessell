@@ -1,5 +1,7 @@
 package org.tessell.model.dsl;
 
+import static org.tessell.util.StringUtils.sanitizeIfString;
+
 import org.tessell.gwt.user.client.ui.IsTextBox;
 import org.tessell.model.events.PropertyChangedEvent;
 import org.tessell.model.events.PropertyChangedHandler;

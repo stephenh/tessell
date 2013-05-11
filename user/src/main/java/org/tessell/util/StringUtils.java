@@ -68,4 +68,15 @@ public class StringUtils {
     return str.substring(0, 1).toLowerCase() + str.substring(1);
   }
 
+  @SuppressWarnings("unchecked")
+  public static <P> P sanitizeIfString(P value) {
+    if (value instanceof String) {
+      value = (P) ((String) value).trim();
+      if ("".equals(value)) {
+        value = null;
+      }
+    }
+    return value;
+  }
+
 }
