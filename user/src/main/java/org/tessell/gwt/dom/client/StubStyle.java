@@ -188,6 +188,11 @@ public class StubStyle implements IsStyle {
   }
 
   @Override
+  public String getFontWeight() {
+    return style.get("font-weight");
+  }
+
+  @Override
   public String getHeight() {
     return style.get("height");
   }

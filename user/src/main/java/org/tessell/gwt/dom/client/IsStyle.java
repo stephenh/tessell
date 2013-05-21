@@ -30,6 +30,8 @@ public interface IsStyle {
 
   void clearHeight();
 
+  String getFontWeight();
+
   void setFontWeight(FontWeight value);
 
   void clearFontWeight();
