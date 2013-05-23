@@ -289,7 +289,7 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
       return;
     }
     this.touched = touched;
-    for (final Downstream other : downstream) {
+    for (final Downstream other : new ArrayList<Downstream>(downstream)) {
       if (other.touch) {
         other.property.setTouched(touched);
       }
