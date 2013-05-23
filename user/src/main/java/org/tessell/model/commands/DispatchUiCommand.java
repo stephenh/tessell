@@ -48,10 +48,10 @@ public abstract class DispatchUiCommand<A extends Action<R>, R extends Result> e
           highestResultIndex = Math.max(highestResultIndex, thisActionIndex);
           currentActionIndex = thisActionIndex;
           result = r;
-          onResult();
           if (thisActionIndex == highestActionIndex) {
             active.set(false);
           }
+          onResult();
         }
 
         public void onFailure(Throwable caught) {

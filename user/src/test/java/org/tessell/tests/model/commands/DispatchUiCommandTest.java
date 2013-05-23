@@ -105,12 +105,21 @@ public class DispatchUiCommandTest extends AbstractRuleTest {
     assertThat(command.hasNewerResult, is(true));
   }
 
+  @Test
+  public void activeIsSetFalseBeforeOnResultIsRan() {
+    DummyUiCommand command = new DummyUiCommand(async);
+    command.execute();
+    async.getCalls().get(0).onSuccess(null);
+    assertThat(command.wasActiveInOnResult, is(false));
+  }
+
   /** Fails depending on the instance variable {@code fail}. */
   private final class DummyUiCommand extends DispatchUiCommand<Action<Result>, Result> {
     private int createActionCalls = 0;
     private int onResultCalls = 0;
     private boolean hasNewerAction = false;
     private boolean hasNewerResult = false;
+    private boolean wasActiveInOnResult;
 
     public DummyUiCommand(OutstandingDispatchAsync async) {
       super(async);
@@ -127,6 +136,7 @@ public class DispatchUiCommandTest extends AbstractRuleTest {
     protected void onResult() {
       hasNewerAction = hasNewerActionBeenSent();
       hasNewerResult = hasNewerResultBeenReceived();
+      wasActiveInOnResult = active().get();
       onResultCalls++;
     }
   }
