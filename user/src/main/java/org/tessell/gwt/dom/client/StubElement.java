@@ -30,6 +30,7 @@ public class StubElement implements IsElement {
   public int scrollHeight;
   public int scrollWidth;
   public boolean wasRemovedFromParent;
+  public boolean wasScrolledIntoView;
 
   @Override
   public String getInnerText() {
@@ -211,6 +212,11 @@ public class StubElement implements IsElement {
   @Override
   public void setInnerSafeHtml(SafeHtml html) {
     setInnerHTML(html.asString());
+  }
+
+  @Override
+  public void scrollIntoView() {
+    wasScrolledIntoView = true;
   }
 
 }

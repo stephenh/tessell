@@ -169,4 +169,9 @@ public class GwtElement implements IsElement {
     element.setInnerHTML(html.asString());
   }
 
+  @Override
+  public void scrollIntoView() {
+    element.scrollIntoView();
+  }
+
 }

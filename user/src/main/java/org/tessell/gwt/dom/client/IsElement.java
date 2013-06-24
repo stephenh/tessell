@@ -57,4 +57,6 @@ public interface IsElement extends HasCss, HasText {
 
   Element asElement();
 
+  void scrollIntoView();
+
 }
