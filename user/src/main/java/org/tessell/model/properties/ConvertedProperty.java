@@ -33,7 +33,7 @@ public class ConvertedProperty<DP, SP> extends AbstractAbstractProperty<DP> {
   @Override
   public DP get() {
     SP value = source.get();
-    return (value == null) ? null : converter.to(value);
+    return (value == null) ? converter.nullValue() : converter.to(value);
   }
 
   @Override

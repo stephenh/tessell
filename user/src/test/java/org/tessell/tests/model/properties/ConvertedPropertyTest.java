@@ -74,6 +74,23 @@ public class ConvertedPropertyTest extends AbstractRuleTest {
     assertThat(p2.get(), is("1-1-1-1"));
   }
 
+  @Test
+  public void testCustomNullValue() {
+    IntegerProperty i = integerProperty("i", 1);
+    Property<String> p = i.as(new PropertyConverter<Integer, String>() {
+      public String to(Integer a) {
+        return a.toString();
+      }
+
+      public String nullValue() {
+        return "NULL";
+      }
+    });
+    assertThat(p.get(), is("1"));
+    i.set(null);
+    assertThat(p.get(), is("NULL"));
+  }
+
   private final PropertyConverter<Integer, String> c = new PropertyConverter<Integer, String>() {
     public String to(Integer a) {
       return a + "-" + a;
