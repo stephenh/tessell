@@ -1,6 +1,7 @@
 package org.tessell.model.dsl;
 
 import org.tessell.gwt.dom.client.IsElement;
+import org.tessell.gwt.user.client.ui.HasCss;
 import org.tessell.gwt.user.client.ui.IsImage;
 import org.tessell.gwt.user.client.ui.IsWidget;
 
@@ -109,6 +110,26 @@ public class TakesValues {
       @Override
       public String getValue() {
         return w.getIsElement().getAttribute("id");
+      }
+    };
+  }
+
+  public static TakesValue<String> styleOf(final HasCss target) {
+    return new TakesValue<String>() {
+      private String lastAddedStyle;
+
+      @Override
+      public String getValue() {
+        return lastAddedStyle;
+      }
+
+      @Override
+      public void setValue(String value) {
+        if (lastAddedStyle != null) {
+          target.removeStyleName(lastAddedStyle);
+        }
+        target.addStyleName(value);
+        lastAddedStyle = value;
       }
     };
   }
