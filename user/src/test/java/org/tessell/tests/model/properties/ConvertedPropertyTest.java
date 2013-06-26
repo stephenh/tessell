@@ -61,6 +61,19 @@ public class ConvertedPropertyTest extends AbstractRuleTest {
     assertThat(i.isTouched(), is(false));
   }
 
+  @Test
+  public void testRecursion() {
+    IntegerProperty i = integerProperty("i", 1);
+    Property<String> p1 = i.as(c);
+    Property<String> p2 = p1.as(new PropertyConverter<String, String>() {
+      public String to(String a) {
+        return a + "-" + a;
+      }
+    });
+    assertThat(p1.get(), is("1-1"));
+    assertThat(p2.get(), is("1-1-1-1"));
+  }
+
   private final PropertyConverter<Integer, String> c = new PropertyConverter<Integer, String>() {
     public String to(Integer a) {
       return a + "-" + a;

@@ -22,14 +22,14 @@ public class FormattedPropertyTest extends AbstractRuleTest {
 
   @Test
   public void get() {
-    Property<String> p = integerProperty("i", 1).formatted(f);
-    assertThat(p.get(), is("1-1"));
+    Property<String> p = integerProperty("i", 1).formatted(intToString);
+    assertThat(p.get(), is("1"));
   }
 
   @Test
   public void setStringToInt() {
     IntegerProperty i = integerProperty("i", 1);
-    Property<String> p = i.formatted(f);
+    Property<String> p = i.formatted(intToString);
     p.set("2");
     assertThat(i.get(), is(2));
   }
@@ -39,7 +39,7 @@ public class FormattedPropertyTest extends AbstractRuleTest {
     IntegerProperty i = integerProperty("i", 1);
     listenTo(i);
 
-    Property<String> p = i.formatted(f);
+    Property<String> p = i.formatted(intToString);
     p.set("a");
     assertMessages("I is invalid");
   }
@@ -69,7 +69,7 @@ public class FormattedPropertyTest extends AbstractRuleTest {
     IntegerProperty i = integerProperty("i", 1);
     listenTo(i);
 
-    Property<String> p = i.formatted(f);
+    Property<String> p = i.formatted(intToString);
     p.set("a");
     assertMessages("I is invalid");
 
@@ -82,7 +82,7 @@ public class FormattedPropertyTest extends AbstractRuleTest {
     IntegerProperty i = integerProperty("i", 1);
     listenTo(i);
 
-    Property<String> p = i.formatted(f);
+    Property<String> p = i.formatted(intToString);
     p.set("a");
     assertMessages("I is invalid");
 
@@ -102,19 +102,19 @@ public class FormattedPropertyTest extends AbstractRuleTest {
   @Test
   public void sourceChangingMakesTheFormattedValueChange() {
     IntegerProperty i = integerProperty("i", 1);
-    Property<String> p = i.formatted(f);
+    Property<String> p = i.formatted(intToString);
 
     ChangeTracker tracker = new ChangeTracker();
     p.addPropertyChangedHandler(tracker);
 
     i.set(2);
-    assertThat(tracker.values, contains("2-2"));
+    assertThat(tracker.values, contains("2"));
   }
 
   @Test
   public void setInitialLeavesSourcePropertyUntouched() {
     IntegerProperty i = integerProperty("i", 1);
-    Property<String> p = i.formatted(f);
+    Property<String> p = i.formatted(intToString);
     p.setInitialValue("2");
     assertThat(i.getValue(), is(2));
     assertThat(i.isTouched(), is(false));
@@ -125,21 +125,47 @@ public class FormattedPropertyTest extends AbstractRuleTest {
     // note that this behavior seems right; but it's not
     // driven from real world usage
     IntegerProperty i = integerProperty("i", 1);
-    Property<String> p = i.formatted(f);
+    Property<String> p = i.formatted(intToString);
     p.setInitialValue("blah");
     assertThat(i.getValue(), is(1));
     assertThat(i.isTouched(), is(false));
   }
 
-  private final PropertyFormatter<Integer, String> f = new PropertyFormatter<Integer, String>() {
+  @Test
+  public void testRecursion() {
+    IntegerProperty i = integerProperty("i", 1);
+    Property<String> p1 = i.formatted(intToString);
+    Property<Integer> p2 = p1.formatted(stringToInt);
+
+    assertThat(p1.get(), is("1"));
+    assertThat(p2.get().intValue(), is(1));
+
+    p2.set(2);
+    assertThat(p1.get(), is("2"));
+    assertThat(i.get().intValue(), is(2));
+  }
+
+  private final PropertyFormatter<Integer, String> intToString = new PropertyFormatter<Integer, String>() {
     @Override
     public String format(Integer a) {
-      return a + "-" + a;
+      return a.toString();
     }
 
     @Override
     public Integer parse(String b) {
       return Integer.parseInt(b);
+    }
+  };
+
+  private final PropertyFormatter<String, Integer> stringToInt = new PropertyFormatter<String, Integer>() {
+    @Override
+    public Integer format(String a) {
+      return new Integer(a);
+    }
+
+    @Override
+    public String parse(Integer i) {
+      return i.toString();
     }
   };
 

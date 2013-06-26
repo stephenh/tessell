@@ -1,6 +1,5 @@
 package org.tessell.model.properties;
 
-import static org.tessell.model.properties.NewProperty.booleanProperty;
 import static org.tessell.util.ObjectUtils.eq;
 
 import java.util.ArrayList;
@@ -29,7 +28,7 @@ import com.google.gwt.event.shared.*;
 import com.google.gwt.event.shared.GwtEvent.Type;
 
 /** Provides most of the validation/derived/etc. implementation guts of {@link Property}. */
-public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> implements Property<P> {
+abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> extends AbstractAbstractProperty<P> {
 
   private static final Logger log = Logger.getLogger("org.tessell.model");
   // handlers
@@ -63,6 +62,21 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
     RuleHandler ruleHandler = new RuleHandler();
     addRuleTriggeredHandler(ruleHandler);
     addRuleUntriggeredHandler(ruleHandler);
+  }
+
+  @Override
+  public HandlerRegistration addPropertyChangedHandler(final PropertyChangedHandler<P> handler) {
+    return addHandler(PropertyChangedEvent.getType(), handler);
+  }
+
+  @Override
+  public HandlerRegistration addRuleTriggeredHandler(final RuleTriggeredHandler handler) {
+    return addHandler(RuleTriggeredEvent.getType(), handler);
+  }
+
+  @Override
+  public HandlerRegistration addRuleUntriggeredHandler(final RuleUntriggeredHandler handler) {
+    return addHandler(RuleUntriggeredEvent.getType(), handler);
   }
 
   @Override
@@ -144,17 +158,6 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
     return newValue;
   }
 
-  @Override
-  public HandlerRegistration addPropertyChangedHandler(final PropertyChangedHandler<P> handler) {
-    return addHandler(PropertyChangedEvent.getType(), handler);
-  }
-
-  /** Track {@code other} as derived on us, so we'll forward changed/changing events to it. */
-  @Override
-  public <P1 extends Property<?>> P1 addDerived(final P1 other) {
-    return addDerived(other, this, true);
-  }
-
   /** Track {@code other} as derived on us, so we'll forward changed/changing events to it. */
   @Override
   public <P1 extends Property<?>> P1 addDerived(P1 other, Object token, boolean touch) {
@@ -179,12 +182,6 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
     return other;
   }
 
-  /** Remove {@code other} as derived on us. */
-  @Override
-  public <P1 extends Property<?>> P1 removeDerived(final P1 other) {
-    return removeDerived(other, this);
-  }
-
   @Override
   public <P1 extends Property<?>> P1 removeDerived(final P1 other, final Object token) {
     Downstream d = findDownstreamOrNull(other);
@@ -195,33 +192,6 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
       }
     }
     return other;
-  }
-
-  /** @return a new derived property by applying {@code formatter} to our value */
-  @Override
-  public <T1> FormattedProperty<T1, P> formatted(final PropertyFormatter<P, T1> formatter) {
-    return new FormattedProperty<T1, P>(this, formatter);
-  }
-
-  /** @return a new derived property by applying {@code formatter} to our value */
-  @Override
-  public <T1> FormattedProperty<T1, P> formatted(final String invalidMessage, final PropertyFormatter<P, T1> formatter) {
-    return new FormattedProperty<T1, P>(this, formatter, invalidMessage);
-  }
-
-  /** @return a new derived property by applying {@code converter} to our value */
-  @Override
-  public <T1> Property<T1> as(final PropertyConverter<P, T1> converter) {
-    return new ConvertedProperty<T1, P>(this, converter);
-  }
-
-  @Override
-  public Property<String> asString() {
-    return as(new PropertyConverter<P, String>() {
-      public String to(P a) {
-        return a.toString();
-      }
-    });
   }
 
   @Override
@@ -274,16 +244,6 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
         });
       }
     });
-  }
-
-  @Override
-  public HandlerRegistration addRuleTriggeredHandler(final RuleTriggeredHandler handler) {
-    return addHandler(RuleTriggeredEvent.getType(), handler);
-  }
-
-  @Override
-  public HandlerRegistration addRuleUntriggeredHandler(final RuleUntriggeredHandler handler) {
-    return addHandler(RuleUntriggeredEvent.getType(), handler);
   }
 
   @Override
@@ -363,84 +323,6 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
     if (get() == null) {
       setInitialValue(value);
     }
-  }
-
-  @Override
-  public Property<Boolean> is(final P value) {
-    return is(value, null);
-  }
-
-  @Override
-  public Property<Boolean> is(final P value, final P whenUnsetValue) {
-    final BooleanProperty is = booleanProperty(getName() + "Is" + value);
-    is.setInitialValue(eq(get(), value));
-    final boolean[] changing = { false };
-    // is -> this
-    is.addPropertyChangedHandler(new PropertyChangedHandler<Boolean>() {
-      public void onPropertyChanged(PropertyChangedEvent<Boolean> event) {
-        if (isReadOnly()) {
-          changing[0] = true;
-          is.set(eq(get(), value));
-          changing[0] = false;
-        } else if (event.getNewValue() != null && event.getNewValue()) {
-          AbstractProperty.this.set(value);
-        } else if (!changing[0]) {
-          AbstractProperty.this.set(whenUnsetValue);
-        }
-      }
-    });
-    // this -> is
-    addPropertyChangedHandler(new PropertyChangedHandler<P>() {
-      public void onPropertyChanged(PropertyChangedEvent<P> event) {
-        changing[0] = true;
-        is.set(eq(get(), value));
-        changing[0] = false;
-      }
-    });
-    return is;
-  }
-
-  @Override
-  public Property<Boolean> is(final Property<P> other) {
-    return is(other, null);
-  }
-
-  @Override
-  public Property<Boolean> is(final Property<P> other, final P whenUnsetValue) {
-    final BooleanProperty is = booleanProperty(getName() + "Is" + value);
-    is.setInitialValue(eq(get(), other.get()));
-    final boolean[] changing = { false };
-    // is -> this
-    is.addPropertyChangedHandler(new PropertyChangedHandler<Boolean>() {
-      public void onPropertyChanged(PropertyChangedEvent<Boolean> event) {
-        if (isReadOnly()) {
-          changing[0] = true;
-          is.set(eq(get(), other.get()));
-          changing[0] = false;
-        } else if (event.getNewValue() != null && event.getNewValue()) {
-          AbstractProperty.this.set(other.get());
-        } else if (!changing[0]) {
-          AbstractProperty.this.set(whenUnsetValue);
-        }
-      }
-    });
-    // this -> is
-    addPropertyChangedHandler(new PropertyChangedHandler<P>() {
-      public void onPropertyChanged(PropertyChangedEvent<P> event) {
-        changing[0] = true;
-        is.set(eq(get(), other.get()));
-        changing[0] = false;
-      }
-    });
-    // other -> is
-    other.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
-      public void onPropertyChanged(PropertyChangedEvent<P> event) {
-        changing[0] = true;
-        is.set(eq(get(), other.get()));
-        changing[0] = false;
-      }
-    });
-    return is;
   }
 
   protected Value<P> getValueObject() {

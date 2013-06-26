@@ -20,7 +20,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
  * @param <SP> the source property type
  * @param <DP> the destination property type
  */
-public class ConvertedProperty<DP, SP> implements Property<DP> {
+public class ConvertedProperty<DP, SP> extends AbstractAbstractProperty<DP> {
 
   private final Property<SP> source;
   private final PropertyConverter<SP, DP> converter;
@@ -118,18 +118,8 @@ public class ConvertedProperty<DP, SP> implements Property<DP> {
   }
 
   @Override
-  public <T extends Property<?>> T addDerived(T downstream) {
-    return source.addDerived(downstream);
-  }
-
-  @Override
   public <T extends Property<?>> T addDerived(T downstream, Object token, boolean touch) {
     return source.addDerived(downstream, token, touch);
-  }
-
-  @Override
-  public <T extends Property<?>> T removeDerived(T downstream) {
-    return source.removeDerived(downstream);
   }
 
   @Override
@@ -179,46 +169,6 @@ public class ConvertedProperty<DP, SP> implements Property<DP> {
   @Override
   public boolean isReadOnly() {
     return true;
-  }
-
-  @Override
-  public <T1> Property<T1> formatted(PropertyFormatter<DP, T1> formatter) {
-    throw new UnsupportedOperationException("Not implemented");
-  }
-
-  @Override
-  public <T1> Property<T1> formatted(String invalidMessage, PropertyFormatter<DP, T1> formatter) {
-    throw new UnsupportedOperationException("Not implemented");
-  }
-
-  @Override
-  public <T1> Property<T1> as(PropertyConverter<DP, T1> formatter) {
-    throw new UnsupportedOperationException("Not implemented");
-  }
-
-  @Override
-  public Property<String> asString() {
-    throw new UnsupportedOperationException("Not implemented");
-  }
-
-  @Override
-  public Property<Boolean> is(DP value) {
-    throw new UnsupportedOperationException("Not implemented");
-  }
-
-  @Override
-  public Property<Boolean> is(DP value, DP whenUnsetValue) {
-    throw new UnsupportedOperationException("Not implemented");
-  }
-
-  @Override
-  public Property<Boolean> is(Property<DP> value) {
-    throw new UnsupportedOperationException("Not implemented");
-  }
-
-  @Override
-  public Property<Boolean> is(Property<DP> value, DP whenUnsetValue) {
-    throw new UnsupportedOperationException("Not implemented");
   }
 
   @Override

@@ -21,7 +21,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
  * @param <SP> the source property type
  * @param <DP> the destination property type
  */
-public class FormattedProperty<DP, SP> implements Property<DP> {
+public class FormattedProperty<DP, SP> extends AbstractAbstractProperty<DP> {
 
   private final Property<SP> source;
   private final PropertyFormatter<SP, DP> formatter;
@@ -137,16 +137,6 @@ public class FormattedProperty<DP, SP> implements Property<DP> {
   }
 
   @Override
-  public HandlerRegistration addRuleTriggeredHandler(RuleTriggeredHandler handler) {
-    return source.addRuleTriggeredHandler(handler);
-  }
-
-  @Override
-  public HandlerRegistration addRuleUntriggeredHandler(RuleUntriggeredHandler handler) {
-    return source.addRuleUntriggeredHandler(handler);
-  }
-
-  @Override
   public void reassess() {
     source.reassess();
   }
@@ -183,18 +173,8 @@ public class FormattedProperty<DP, SP> implements Property<DP> {
   }
 
   @Override
-  public <T extends Property<?>> T addDerived(T downstream) {
-    return source.addDerived(downstream);
-  }
-
-  @Override
   public <T extends Property<?>> T addDerived(T downstream, Object token, boolean touch) {
     return source.addDerived(downstream, token, touch);
-  }
-
-  @Override
-  public <T extends Property<?>> T removeDerived(T downstream) {
-    return source.removeDerived(downstream);
   }
 
   @Override
@@ -232,6 +212,16 @@ public class FormattedProperty<DP, SP> implements Property<DP> {
   }
 
   @Override
+  public HandlerRegistration addRuleTriggeredHandler(final RuleTriggeredHandler handler) {
+    return source.addRuleTriggeredHandler(handler);
+  }
+
+  @Override
+  public HandlerRegistration addRuleUntriggeredHandler(final RuleUntriggeredHandler handler) {
+    return source.addRuleUntriggeredHandler(handler);
+  }
+
+  @Override
   public String getName() {
     // keep the same name for when formatted properties are put into
     // a FormPresenter, they keep the same name
@@ -246,26 +236,6 @@ public class FormattedProperty<DP, SP> implements Property<DP> {
   @Override
   public boolean isReadOnly() {
     return false;
-  }
-
-  @Override
-  public <T1> Property<T1> formatted(PropertyFormatter<DP, T1> formatter) {
-    throw new UnsupportedOperationException("Not implemented");
-  }
-
-  @Override
-  public <T1> Property<T1> formatted(String invalidMessage, PropertyFormatter<DP, T1> formatter) {
-    throw new UnsupportedOperationException("Not implemented");
-  }
-
-  @Override
-  public <T1> Property<T1> as(PropertyConverter<DP, T1> formatter) {
-    throw new UnsupportedOperationException("Not implemented");
-  }
-
-  @Override
-  public Property<String> asString() {
-    throw new UnsupportedOperationException("Not implemented");
   }
 
   @Override
