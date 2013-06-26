@@ -37,5 +37,12 @@ public class TakesValuesTest {
     assertThat(p, hasStyle("bar"));
     assertThat(p, not(hasStyle("foo")));
     assertThat(style.getValue(), is("bar"));
+
+    style.setValue(null);
+    assertThat(p, not(hasStyle("bar")));
+    assertThat(style.getValue(), is(nullValue()));
+
+    style.setValue("");
+    assertThat(style.getValue(), is(nullValue()));
   }
 }

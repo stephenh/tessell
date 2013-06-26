@@ -127,9 +127,12 @@ public class TakesValues {
       public void setValue(String value) {
         if (lastAddedStyle != null) {
           target.removeStyleName(lastAddedStyle);
+          lastAddedStyle = null;
         }
-        target.addStyleName(value);
-        lastAddedStyle = value;
+        if (value != null && !"".equals(value)) {
+          target.addStyleName(value);
+          lastAddedStyle = value;
+        }
       }
     };
   }

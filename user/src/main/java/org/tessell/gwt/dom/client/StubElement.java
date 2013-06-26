@@ -45,6 +45,9 @@ public class StubElement implements IsElement {
 
   @Override
   public void addStyleName(final String styleName) {
+    if (styleName == null || "".equals(styleName)) {
+      throw new RuntimeException("styleName must not be empty");
+    }
     if (!styleNames.contains(styleName)) {
       styleNames.add(styleName);
     }
