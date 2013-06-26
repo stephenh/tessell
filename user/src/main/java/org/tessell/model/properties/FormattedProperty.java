@@ -53,7 +53,7 @@ public class FormattedProperty<DP, SP> extends AbstractAbstractProperty<DP> {
   @Override
   public DP get() {
     SP value = source.get();
-    return (value == null) ? null : formatter.format(value);
+    return (value == null) ? formatter.nullValue() : formatter.format(value);
   }
 
   @Override

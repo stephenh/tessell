@@ -1,6 +1,6 @@
 package org.tessell.model.properties;
 
-public abstract class AbstractPropertyFormatter<A, B> implements PropertyFormatter<A, B> {
+public abstract class AbstractPropertyFormatter<A, B> extends PropertyFormatter<A, B> {
 
   @Override
   public B format(A a) {

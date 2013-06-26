@@ -8,8 +8,12 @@ package org.tessell.model.properties;
  * @param <A> the source type
  * @param <B> the destination type
  */
-public interface PropertyFormatter<A, B> {
-  B format(A a);
+public abstract class PropertyFormatter<A, B> {
+  public abstract B format(A a);
 
-  A parse(B b) throws Exception;
+  public abstract A parse(B b) throws Exception;
+
+  public B nullValue() {
+    return null;
+  }
 }

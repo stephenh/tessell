@@ -145,6 +145,27 @@ public class FormattedPropertyTest extends AbstractRuleTest {
     assertThat(i.get().intValue(), is(2));
   }
 
+  @Test
+  public void testCustomNullValue() {
+    IntegerProperty i = integerProperty("i", 1);
+    Property<String> s = i.formatted(new PropertyFormatter<Integer, String>() {
+      public String format(Integer a) {
+        return a.toString();
+      }
+
+      public Integer parse(String b) throws Exception {
+        return new Integer(b);
+      }
+
+      public String nullValue() {
+        return "NULL";
+      }
+    });
+
+    i.set(null);
+    assertThat(s.get(), is("NULL"));
+  }
+
   private final PropertyFormatter<Integer, String> intToString = new PropertyFormatter<Integer, String>() {
     @Override
     public String format(Integer a) {
