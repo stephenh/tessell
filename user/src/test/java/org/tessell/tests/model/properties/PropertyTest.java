@@ -15,6 +15,8 @@ import org.tessell.model.properties.IntegerProperty;
 import org.tessell.model.properties.Property;
 import org.tessell.model.properties.StringProperty;
 import org.tessell.model.validation.Valid;
+import org.tessell.model.validation.events.RuleTriggeredEvent;
+import org.tessell.model.validation.events.RuleTriggeredHandler;
 import org.tessell.model.validation.rules.Custom;
 import org.tessell.model.values.DerivedValue;
 import org.tessell.model.values.SetValue;
@@ -92,6 +94,19 @@ public class PropertyTest extends AbstractRuleTest {
 
     a.set(3);
     assertThat(asWasInvalid[0], is(true));
+  }
+
+  @Test
+  public void wasValidIsSetBeforeRulesAreTriggered() {
+    final IntegerProperty a = integerProperty("a").req();
+    final Boolean[] wasValid = { null };
+    a.addRuleTriggeredHandler(new RuleTriggeredHandler() {
+      public void onTrigger(RuleTriggeredEvent event) {
+        wasValid[0] = a.wasValid() == Valid.YES;
+      }
+    });
+    a.touch();
+    assertThat(wasValid[0], is(false));
   }
 
   @Test

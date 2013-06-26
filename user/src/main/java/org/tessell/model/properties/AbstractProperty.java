@@ -457,12 +457,12 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
       } else {
         // only trigger the first invalid rule
         if (valid == Valid.YES) {
+          valid = Valid.NO;
           if (isTouched()) {
             rule.triggerIfNeeded();
           } else {
             rule.untriggerIfNeeded();
           }
-          valid = Valid.NO;
         } else {
           rule.untriggerIfNeeded();
         }
