@@ -264,6 +264,11 @@ public class FormattedProperty<DP, SP> implements Property<DP> {
   }
 
   @Override
+  public Property<String> asString() {
+    throw new UnsupportedOperationException("Not implemented");
+  }
+
+  @Override
   public Property<Boolean> is(DP value) {
     throw new UnsupportedOperationException("Not implemented");
   }

@@ -3,6 +3,7 @@ package org.tessell.tests.model.properties;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.tessell.model.properties.NewProperty.basicProperty;
 import static org.tessell.model.properties.NewProperty.booleanProperty;
 import static org.tessell.model.properties.NewProperty.integerProperty;
 import static org.tessell.model.properties.NewProperty.stringProperty;
@@ -10,10 +11,7 @@ import static org.tessell.model.properties.NewProperty.stringProperty;
 import org.junit.Test;
 import org.tessell.model.events.PropertyChangedEvent;
 import org.tessell.model.events.PropertyChangedHandler;
-import org.tessell.model.properties.BooleanProperty;
-import org.tessell.model.properties.IntegerProperty;
-import org.tessell.model.properties.Property;
-import org.tessell.model.properties.StringProperty;
+import org.tessell.model.properties.*;
 import org.tessell.model.validation.Valid;
 import org.tessell.model.validation.events.RuleTriggeredEvent;
 import org.tessell.model.validation.events.RuleTriggeredHandler;
@@ -117,8 +115,7 @@ public class PropertyTest extends AbstractRuleTest {
         return a.getValue() != null;
       }
     });
-    CountChanges c = new CountChanges();
-    b.addPropertyChangedHandler(c);
+    CountChanges c = CountChanges.on(b);
     a.set(1);
     assertThat(c.changes, is(1));
   }
@@ -131,8 +128,7 @@ public class PropertyTest extends AbstractRuleTest {
         return a.wasValid() == Valid.YES;
       }
     });
-    CountChanges c = new CountChanges();
-    b.addPropertyChangedHandler(c);
+    CountChanges c = CountChanges.on(b);
     a.set(1);
     assertThat(c.changes, is(1));
   }
@@ -145,8 +141,7 @@ public class PropertyTest extends AbstractRuleTest {
         return a.isTouched();
       }
     });
-    CountChanges c = new CountChanges();
-    b.addPropertyChangedHandler(c);
+    CountChanges c = CountChanges.on(b);
     a.set(1);
     assertThat(c.changes, is(1));
   }
@@ -200,8 +195,7 @@ public class PropertyTest extends AbstractRuleTest {
   @Test
   public void setDefaultValueFiresChange() {
     final BooleanProperty a = booleanProperty("a");
-    CountChanges c = new CountChanges();
-    a.addPropertyChangedHandler(c);
+    CountChanges c = CountChanges.on(a);
     a.setDefaultValue(true);
     assertThat(c.changes, is(1));
     a.set(null);
@@ -225,8 +219,7 @@ public class PropertyTest extends AbstractRuleTest {
   public void testIsValue() {
     final StringProperty s = stringProperty("s");
     final Property<Boolean> b = s.is("foo");
-    CountChanges c = new CountChanges();
-    b.addPropertyChangedHandler(c);
+    CountChanges c = CountChanges.on(b);
 
     assertThat(b.getValue(), is(false));
     assertThat(b.isTouched(), is(false));
@@ -255,8 +248,7 @@ public class PropertyTest extends AbstractRuleTest {
     final StringProperty s1 = stringProperty("s1", "foo");
     final StringProperty s2 = stringProperty("s2", "bar");
     final Property<Boolean> b = s1.is(s2);
-    CountChanges c = new CountChanges();
-    b.addPropertyChangedHandler(c);
+    CountChanges c = CountChanges.on(b);
 
     assertThat(b.getValue(), is(false));
     assertThat(b.isTouched(), is(false));
@@ -320,12 +312,44 @@ public class PropertyTest extends AbstractRuleTest {
     assertThat(b.getValue(), is(false));
   }
 
-  private class CountChanges implements PropertyChangedHandler<Boolean> {
-    private int changes;
+  @Test
+  public void testAsString() {
+    // a simple class that overrides toString
+    class Foo {
+      private final String value;
 
-    public void onPropertyChanged(PropertyChangedEvent<Boolean> event) {
-      changes++;
+      public Foo(String value) {
+        this.value = value;
+      }
+
+      @Override
+      public String toString() {
+        return value;
+      }
     }
+
+    final BasicProperty<Foo> foo = basicProperty("foo");
+    final Property<String> s = foo.asString();
+    final CountChanges count = CountChanges.on(s);
+
+    assertThat(s.get(), is(nullValue()));
+    foo.set(new Foo("bar"));
+    assertThat(s.get(), is("bar"));
+    assertThat(count.changes, is(1));
+  }
+
+  private static class CountChanges {
+    private static <T> CountChanges on(Property<T> source) {
+      final CountChanges c = new CountChanges();
+      source.addPropertyChangedHandler(new PropertyChangedHandler<T>() {
+        public void onPropertyChanged(PropertyChangedEvent<T> event) {
+          c.changes++;
+        }
+      });
+      return c;
+    }
+
+    private int changes;
   }
 
 }

@@ -88,6 +88,8 @@ public interface Property<P> extends HasHandlers, HasRuleTriggers, Value<P>, Has
   /** @return a derived property that is converted with {@code converter}. */
   <T1> Property<T1> as(PropertyConverter<P, T1> converter);
 
+  Property<String> asString();
+
   /** @return a two-way property that is true/value when {@code this} equals {@code value}. */
   Property<Boolean> is(P value);
 

@@ -216,6 +216,15 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> impl
   }
 
   @Override
+  public Property<String> asString() {
+    return as(new PropertyConverter<P, String>() {
+      public String to(P a) {
+        return a.toString();
+      }
+    });
+  }
+
+  @Override
   public String toString() {
     return value.toString();
   }

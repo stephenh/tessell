@@ -13,6 +13,7 @@ public class IntegerProperty extends AbstractProperty<Integer, IntegerProperty> 
     return this;
   }
 
+  @Override
   public Property<String> asString() {
     return asString(getName() + " must be an integer");
   }
