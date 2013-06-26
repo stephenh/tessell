@@ -28,7 +28,7 @@ import com.google.gwt.event.shared.*;
 import com.google.gwt.event.shared.GwtEvent.Type;
 
 /** Provides most of the validation/derived/etc. implementation guts of {@link Property}. */
-abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> extends AbstractAbstractProperty<P> {
+public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> extends AbstractAbstractProperty<P> {
 
   private static final Logger log = Logger.getLogger("org.tessell.model");
   // handlers
