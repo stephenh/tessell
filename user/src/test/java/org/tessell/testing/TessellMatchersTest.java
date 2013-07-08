@@ -15,6 +15,24 @@ import com.google.gwt.dom.client.Style.Visibility;
 public class TessellMatchersTest {
 
   @Test
+  public void hasNoStylesSuccess() {
+    StubTextBox t = new StubTextBox();
+    assertThat(t, hasNoStyles());
+  }
+
+  @Test
+  public void hasNoStylesFailure() {
+    StubTextBox t = new StubTextBox();
+    t.addStyleName("a");
+    try {
+      assertThat(t, hasNoStyles());
+      fail();
+    } catch (AssertionError ae) {
+      assertThat(ae.getMessage(), is("\nExpected: style is an empty collection\n     but: style was <[a]>"));
+    }
+  }
+
+  @Test
   public void hasStyleSuccess() {
     StubTextBox t = new StubTextBox();
     t.addStyleName("a");

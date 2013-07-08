@@ -62,6 +62,18 @@ public class TessellMatchers {
     };
   }
 
+  /** A matcher to assert no CSS class names are presenter. */
+  public static Matcher<HasCss> hasNoStyles() {
+    return new FeatureMatcher<HasCss, List<String>>(empty(), "style is", "style was") {
+      protected List<String> featureValueOf(HasCss actual) {
+        if (actual.getStyleName().equals("")) {
+          return new ArrayList<String>();
+        }
+        return Arrays.asList(actual.getStyleName().split(" "));
+      }
+    };
+  }
+
   /** A matcher to assert no validation errors. */
   public static Matcher<IsTextList> hasNoErrors() {
     return new FeatureMatcher<IsTextList, List<String>>(is(empty()), "errors", "errors had") {
