@@ -153,7 +153,7 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
   /** @return a derived property that reflects this list's size. */
   public IntegerProperty size() {
     if (size == null) {
-      size = addDerived(integerProperty(new DerivedValue<Integer>() {
+      size = addDerived(integerProperty(new DerivedValue<Integer>(getValueObject().getName() + "Size") {
         public Integer get() {
           final List<E> current = ListProperty.this.get();
           return (current == null) ? null : current.size();
@@ -257,7 +257,7 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
   }
 
   public ListProperty<E> filter(final ElementFilter<E> filter) {
-    return listProperty(new DerivedValue<List<E>>() {
+    return listProperty(new DerivedValue<List<E>>(getValueObject().getName() + "Filtered") {
       public List<E> get() {
         List<E> filtered = new ArrayList<E>();
         if (ListProperty.this.get() != null) {

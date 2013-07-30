@@ -416,6 +416,23 @@ public class ListPropertyTest {
   }
 
   @Test
+  public void filteredToString() {
+    final ListProperty<DummyModel> models = listProperty("models");
+    final ListProperty<DummyModel> foos = models.filter(new ElementFilter<DummyModel>() {
+      public boolean matches(DummyModel element) {
+        return element.name.get() != null && element.name.get().startsWith("foo");
+      }
+    });
+    assertThat(foos.toString(), is("modelsFiltered []"));
+  }
+
+  @Test
+  public void sizeToString() {
+    final ListProperty<DummyModel> models = listProperty("models");
+    assertThat(models.size().toString(), is("modelsSize 0"));
+  }
+
+  @Test
   public void testContains() {
     BooleanProperty b = p.contains("s");
     assertThat(b.get(), is(false));

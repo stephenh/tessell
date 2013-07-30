@@ -27,6 +27,11 @@ public class FormattedPropertyTest extends AbstractRuleTest {
   }
 
   @Test
+  public void testToString() {
+    assertThat(integerProperty("i", 1).formatted(intToString).toString(), is("i 1"));
+  }
+
+  @Test
   public void setStringToInt() {
     IntegerProperty i = integerProperty("i", 1);
     Property<String> p = i.formatted(intToString);

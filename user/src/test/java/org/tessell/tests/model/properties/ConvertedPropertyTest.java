@@ -25,6 +25,11 @@ public class ConvertedPropertyTest extends AbstractRuleTest {
   }
 
   @Test
+  public void testToString() {
+    assertThat(integerProperty("i", 1).as(c).toString(), is("i 1"));
+  }
+
+  @Test
   public void sourceChangingMakesTheAsValueChange() {
     IntegerProperty i = integerProperty("i", 1);
     Property<String> p = i.as(c);

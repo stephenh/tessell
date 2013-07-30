@@ -31,6 +31,11 @@ public class ConvertedProperty<DP, SP> extends AbstractAbstractProperty<DP> {
   }
 
   @Override
+  public String toString() {
+    return source.toString();
+  }
+
+  @Override
   public DP get() {
     SP value = source.get();
     return (value == null) ? converter.nullValue() : converter.to(value);
