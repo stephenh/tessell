@@ -260,4 +260,14 @@ public class StubWidgetsProvider implements WidgetsProvider {
     return new StubSimpleRadioButton();
   }
 
+  @Override
+  public IsElementWidget newElementWidget(String tag) {
+    return new StubElementWidget(new StubElement());
+  }
+
+  @Override
+  public IsElementWidget newElementWidget(IsElement element) {
+    return new StubElementWidget((StubElement) element);
+  }
+
 }

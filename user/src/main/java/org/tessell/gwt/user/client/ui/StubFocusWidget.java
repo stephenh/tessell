@@ -11,6 +11,13 @@ import com.google.gwt.user.client.ui.KeyboardListener;
 @SuppressWarnings("deprecation")
 public class StubFocusWidget extends StubWidget implements IsFocusWidget {
 
+  public StubFocusWidget() {
+  }
+
+  public StubFocusWidget(StubElement element) {
+    super(element);
+  }
+
   private static StubFocusWidget lastFocus;
   private boolean enabled = true;
   private boolean focus;

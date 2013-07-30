@@ -16,7 +16,7 @@ import com.google.gwt.user.client.ui.Widget;
 public class StubWidget implements IsWidget, IsStubWidget {
 
   protected final EventBus handlers = new SimplerEventBus();
-  private final StubElement element = new StubElement();
+  private final StubElement element;
   private boolean attached = false;
   public int absoluteTop;
   public int absoluteLeft;
@@ -24,6 +24,11 @@ public class StubWidget implements IsWidget, IsStubWidget {
   public int offsetHeight;
 
   public StubWidget() {
+    this(new StubElement());
+  }
+
+  public StubWidget(StubElement element) {
+    this.element = element;
     element.setWidget(this);
   }
 

@@ -42,6 +42,10 @@ public interface WidgetsProvider {
 
   IsElement newElement(String tag);
 
+  IsElementWidget newElementWidget(String tag);
+
+  IsElementWidget newElementWidget(IsElement element);
+
   IsTextArea newTextArea();
 
   IsTextBox newTextBox();

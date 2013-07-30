@@ -72,6 +72,14 @@ public class Widgets {
     return provider.newElement(tag);
   }
 
+  public static IsElementWidget newElementWidget(String tag) {
+    return provider.newElementWidget(tag);
+  }
+
+  public static IsElementWidget newElementWidget(IsElement element) {
+    return provider.newElementWidget(element);
+  }
+
   public static IsCheckBox newCheckBox() {
     return provider.newCheckBox();
   }

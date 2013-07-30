@@ -255,4 +255,14 @@ public class GwtWidgetsProvider implements WidgetsProvider {
     return new SimpleRadioButton(name);
   }
 
+  @Override
+  public IsElementWidget newElementWidget(String tag) {
+    return new GwtElementWidget(DOM.createElement(tag));
+  }
+
+  @Override
+  public IsElementWidget newElementWidget(IsElement element) {
+    return new GwtElementWidget(element.asElement());
+  }
+
 }
