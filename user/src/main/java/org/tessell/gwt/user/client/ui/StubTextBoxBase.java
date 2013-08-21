@@ -1,5 +1,6 @@
 package org.tessell.gwt.user.client.ui;
 
+import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.user.client.ui.TextBoxBase;
 import com.google.gwt.user.client.ui.TextBoxBase.TextAlignConstant;
@@ -32,7 +33,13 @@ public class StubTextBoxBase extends StubValueBoxBase<String> implements IsTextB
   @Override
   public void press(char c) {
     keyDown(c);
-    setValue(getValue() + c, false);
+    if (c == KeyCodes.KEY_DELETE) {
+      if (getValue().length() > 0) {
+        setValue(getValue().substring(0, getValue().length() - 1));
+      }
+    } else {
+      setValue(getValue() + c, false);
+    }
     keyPress(c);
     keyUp(c);
   }
