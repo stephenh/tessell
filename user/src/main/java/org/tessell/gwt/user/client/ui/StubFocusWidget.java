@@ -69,31 +69,19 @@ public class StubFocusWidget extends StubWidget implements IsFocusWidget {
   }
 
   public void keyUp(int keyCode) {
-    keyUp((char) keyCode, new StubKeyModifiers());
-  }
-
-  public void keyUp(char keyCode) {
     keyUp(keyCode, new StubKeyModifiers());
   }
 
-  public void keyUp(char keyCode, StubKeyModifiers mods) {
+  public void keyUp(int keyCode, StubKeyModifiers mods) {
     fireEvent(new StubKeyUpEvent(keyCode, mods));
   }
 
   public void keyDown(int keyCode) {
-    keyDown((char) keyCode, new StubKeyModifiers());
-  }
-
-  public void keyDown(char keyCode) {
     keyDown(keyCode, new StubKeyModifiers());
   }
 
-  public void keyDown(char keyCode, StubKeyModifiers mods) {
+  public void keyDown(int keyCode, StubKeyModifiers mods) {
     fireEvent(new StubKeyDownEvent(keyCode, mods));
-  }
-
-  public void keyPress(int c) {
-    keyPress((char) c, new StubKeyModifiers());
   }
 
   public void keyPress(char c) {
@@ -104,20 +92,21 @@ public class StubFocusWidget extends StubWidget implements IsFocusWidget {
     fireEvent(new StubKeyPressEvent(c, mods));
   }
 
-  public void press(int c) {
-    press((char) c);
-  }
-
+  /** Fires down/press/up events for each char. */
   public void press(String chars) {
     for (int i = 0; i < chars.length(); i++) {
-      press(chars.charAt(i));
+      downPressUp(chars.charAt(i));
     }
   }
 
-  public void press(char c) {
-    keyDown(c);
-    keyPress(c);
-    keyUp(c);
+  /** Fires down/press/up events for each charCode. */
+  public void press(char charCode) {
+    downPressUp(charCode);
+  }
+
+  /** Fires down/up events for keyCode. */
+  public void press(int keyCode) {
+    downUp(keyCode);
   }
 
   @Override
@@ -227,6 +216,23 @@ public class StubFocusWidget extends StubWidget implements IsFocusWidget {
   @Override
   public void removeKeyboardListener(KeyboardListener listener) {
     throw new UnsupportedOperationException();
+  }
+
+  // Internal method to do down/press/up, so that StubTextBoxBase can
+  // override press to also do change events.
+  protected void downPressUp(char charCode) {
+    int keyCode = StubKeyCodeMapping.map(charCode);
+    keyDown(keyCode);
+    keyPress(charCode);
+    keyUp(keyCode);
+  }
+
+  // Internal method to do down/up, so that StubTextBoxBase can override
+  // press to also do change events.
+  protected void downUp(int keyCode) {
+    keyDown(keyCode);
+    // keyPress is not useful with key codes anyway
+    keyUp(keyCode);
   }
 
 }

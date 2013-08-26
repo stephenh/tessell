@@ -763,8 +763,9 @@ public class BinderTest {
   @Test
   public void stringToKeyUpDoesNotTrimOnPress() {
     binder.bind(s).toKeyUp(box);
-    box.press('a');
-    box.press(' ');
+    box.keyPress('a');
+    box.keyPress(' ');
+    box.keyUp(0); // should have a keyUp('a')
     assertThat(s.get(), is("a "));
   }
 
