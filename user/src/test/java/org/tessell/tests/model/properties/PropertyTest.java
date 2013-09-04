@@ -338,6 +338,69 @@ public class PropertyTest extends AbstractRuleTest {
     assertThat(count.changes, is(1));
   }
 
+  @Test
+  public void canAddTemporaryErrors() {
+    final BasicProperty<String> s = basicProperty("s");
+    s.setTouched(true);
+    listenTo(s);
+    s.setTemporaryError("Something bad");
+    assertMessages("Something bad");
+  }
+
+  @Test
+  public void canClearTemporary() {
+    final BasicProperty<String> s = basicProperty("s");
+    s.setTouched(true);
+    listenTo(s);
+    s.setTemporaryError("Something bad");
+    s.clearTemporaryError();
+    assertNoMessages();
+  }
+
+  @Test
+  public void canChangeTemporaryError() {
+    final BasicProperty<String> s = basicProperty("s");
+    s.setTouched(true);
+    listenTo(s);
+    s.setTemporaryError("Something bad 1");
+    s.setTemporaryError("Something bad 2");
+    assertMessages("Something bad 2");
+  }
+
+  @Test
+  public void temporaryErrorTakesPrecedenceOverOtherRules() {
+    final BasicProperty<String> s = basicProperty("s");
+    s.req();
+    listenTo(s);
+    s.setTouched(true);
+    assertMessages("S is required");
+    s.setTemporaryError("Something bad");
+    assertMessages("Something bad");
+  }
+
+  @Test
+  public void otherRulesComeBackWhenTemporaryErrorIsCleared() {
+    final BasicProperty<String> s = basicProperty("s");
+    s.req();
+    listenTo(s);
+    s.setTouched(true);
+    assertMessages("S is required");
+    s.setTemporaryError("Something bad");
+    s.clearTemporaryError();
+    assertMessages("S is required");
+  }
+
+  @Test
+  public void temporaryErrorIsClearedByTouching() {
+    final BasicProperty<String> s = basicProperty("s");
+    listenTo(s);
+    s.setTouched(true);
+    s.setTemporaryError("Something bad");
+    assertMessages("Something bad");
+    s.setTouched(true);
+    assertNoMessages();
+  }
+
   private static class CountChanges {
     private static <T> CountChanges on(Property<T> source) {
       final CountChanges c = new CountChanges();

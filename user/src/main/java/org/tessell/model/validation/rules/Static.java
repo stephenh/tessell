@@ -11,8 +11,9 @@ public class Static extends AbstractRule<Object> {
     super(message);
   }
 
+  // promoted to public access for AbstractRule.clearTemporaryError
   @Override
-  protected Valid isValid() {
+  public Valid isValid() {
     return valid ? Valid.YES : Valid.NO;
   }
 

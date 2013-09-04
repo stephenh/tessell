@@ -18,6 +18,7 @@ import org.tessell.model.validation.events.RuleUntriggeredEvent;
 import org.tessell.model.validation.events.RuleUntriggeredHandler;
 import org.tessell.model.validation.rules.Required;
 import org.tessell.model.validation.rules.Rule;
+import org.tessell.model.validation.rules.Static;
 import org.tessell.model.values.DerivedValue;
 import org.tessell.model.values.Value;
 import org.tessell.util.Inflector;
@@ -55,6 +56,8 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> exte
   private boolean reassessing = false;
   // only used if this is a derived value
   private UpstreamState lastUpstream;
+  // only used if showing a temporary error
+  private Static temporaryRule = null;
 
   public AbstractProperty(final Value<P> value) {
     this.value = value;
@@ -62,6 +65,28 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> exte
     RuleHandler ruleHandler = new RuleHandler();
     addRuleTriggeredHandler(ruleHandler);
     addRuleUntriggeredHandler(ruleHandler);
+  }
+
+  @SuppressWarnings("unchecked")
+  public void setTemporaryError(String temporaryErrorMessage) {
+    if (temporaryRule == null) {
+      temporaryRule = new Static(temporaryErrorMessage);
+      temporaryRule.setProperty((Property<Object>) this);
+      rules.add(0, temporaryRule);
+      temporaryRule.set(false);
+    } else {
+      // bounce the rule to retrigger it with the new message
+      temporaryRule.set(true);
+      temporaryRule.setMessage(temporaryErrorMessage);
+      temporaryRule.set(false);
+    }
+  }
+
+  public void clearTemporaryError() {
+    if (temporaryRule != null && temporaryRule.isValid() == Valid.NO) {
+      temporaryRule.set(true);
+      validate();
+    }
   }
 
   @Override
@@ -254,6 +279,9 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> exte
 
   @Override
   public void setTouched(final boolean touched) {
+    // For now, assume touching should reset the temporary error and let
+    // the regular rules take over.
+    clearTemporaryError();
     if (this.touched == touched) {
       return;
     }
