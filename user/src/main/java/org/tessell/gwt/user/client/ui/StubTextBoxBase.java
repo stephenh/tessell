@@ -10,6 +10,8 @@ import com.google.gwt.user.client.ui.TextBoxBase.TextAlignConstant;
 @SuppressWarnings("deprecation")
 public class StubTextBoxBase extends StubValueBoxBase<String> implements IsTextBoxBase {
 
+  private int maxLength;
+
   public StubTextBoxBase() {
     super("");
   }
@@ -23,6 +25,16 @@ public class StubTextBoxBase extends StubValueBoxBase<String> implements IsTextB
   /** Simulates the user typing {@code value}, with a key down/press/up for each char, then a final change. */
   public void typeEach(String value) {
     press(value);
+  }
+
+  @Override
+  public int getMaxLength() {
+    return maxLength;
+  }
+
+  @Override
+  public void setMaxLength(final int length) {
+    maxLength = length;
   }
 
   @Override
@@ -72,8 +84,10 @@ public class StubTextBoxBase extends StubValueBoxBase<String> implements IsTextB
   }
 
   @Override
-  public void setValue(final String value, final boolean fireEvents) {
-    super.setValue(value == null ? "" : value, fireEvents);
+  public void setValue(String value, final boolean fireEvents) {
+    value = value == null ? "" : value;
+    value = maxLength > 0 && value.length() > maxLength ? value.substring(0, maxLength) : value;
+    super.setValue(value, fireEvents);
   }
 
   @Override

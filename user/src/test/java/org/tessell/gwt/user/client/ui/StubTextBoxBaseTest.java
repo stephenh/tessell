@@ -91,4 +91,13 @@ public class StubTextBoxBaseTest {
     box.press("B");
     assertThat(keyCode[0], is(66));
   }
+
+  @Test
+  public void testMaxLength() {
+    box.setMaxLength(3);
+    box.type("asdf");
+    assertThat(box.getValue(), is("asd"));
+    box.press("f");
+    assertThat(box.getValue(), is("asd"));
+  }
 }

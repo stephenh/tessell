@@ -21,4 +21,15 @@ public class TextArea extends com.google.gwt.user.client.ui.TextArea implements 
     return this;
   }
 
+  @Override
+  public int getMaxLength() {
+    String value = getElement().getAttribute("maxlength"); // only in HTML5
+    return value == null ? 0 : Integer.parseInt(value);
+  }
+
+  @Override
+  public void setMaxLength(int length) {
+    getElement().setAttribute("maxlength", Integer.toString(length));
+  }
+
 }
