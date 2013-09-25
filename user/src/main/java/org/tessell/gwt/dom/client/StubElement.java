@@ -5,7 +5,6 @@ import static org.tessell.util.StringUtils.join;
 
 import java.util.*;
 
-import org.tessell.gwt.user.client.ui.IsWidget;
 import org.tessell.widgets.StubWidget;
 
 import com.google.gwt.dom.client.Element;
@@ -152,11 +151,6 @@ public class StubElement implements IsElement {
 
   public ArrayList<StubElement> getChildren() {
     return children;
-  }
-
-  @Override
-  public void appendChild(IsWidget widget) {
-    children.add((StubElement) widget.getIsElement());
   }
 
   public StubWidget getWidget() {

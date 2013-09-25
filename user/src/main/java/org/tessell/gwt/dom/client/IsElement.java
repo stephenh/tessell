@@ -1,7 +1,6 @@
 package org.tessell.gwt.dom.client;
 
 import org.tessell.gwt.user.client.ui.HasCss;
-import org.tessell.gwt.user.client.ui.IsWidget;
 
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.safehtml.shared.SafeHtml;
@@ -50,8 +49,6 @@ public interface IsElement extends HasCss, HasText {
   void ensureDebugId(String id);
 
   void appendChild(IsElement element);
-
-  void appendChild(IsWidget widget);
 
   void removeFromParent();
 

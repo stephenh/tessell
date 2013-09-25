@@ -1,7 +1,5 @@
 package org.tessell.gwt.dom.client;
 
-import org.tessell.gwt.user.client.ui.IsWidget;
-
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.user.client.ui.UIObject;
@@ -112,11 +110,6 @@ public class GwtElement implements IsElement {
   @Override
   public void appendChild(IsElement element) {
     this.element.appendChild(element.asElement());
-  }
-
-  @Override
-  public void appendChild(IsWidget widget) {
-    element.appendChild(widget.asWidget().getElement());
   }
 
   @Override
