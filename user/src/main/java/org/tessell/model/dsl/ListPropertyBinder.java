@@ -18,19 +18,13 @@ import org.tessell.presenter.Presenter;
 public class ListPropertyBinder<P> extends PropertyBinder<List<P>> {
 
   /** Factory for creating {@link IsWidget}s for each item in a list. */
-  public static abstract class ListViewFactory<P> {
-    public abstract IsWidget create(P value);
-
-    public void remove(P value) {
-    }
+  public interface ListViewFactory<P> {
+    IsWidget create(P value);
   }
 
   /** Factory for creating {@link Presenter}s for each item in a list. */
-  public static abstract class ListPresenterFactory<P> {
-    public abstract Presenter create(P value);
-
-    public void remove(P value) {
-    }
+  public interface ListPresenterFactory<P> {
+    Presenter create(P value);
   }
 
   private final ListProperty<P> p;
