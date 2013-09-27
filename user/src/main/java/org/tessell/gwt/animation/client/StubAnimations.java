@@ -21,21 +21,21 @@ public class StubAnimations {
   }
 
   public static void doAnimation() {
-    StubAnimation a = captured.remove(0);
+    StubAnimation a = currentAnimation();
     a.tick(0);
     a.tick(1);
   }
 
   public static void tickAnimation(double progress) {
-    captured.get(0).tick(progress);
+    currentAnimation().tick(progress);
   }
 
   public static void finishAnimation() {
-    captured.remove(0).tick(1);
+    currentAnimation().tick(1);
   }
 
-  public static int getAnimationDuration() {
-    return captured.get(0).getRequestedDuration();
+  public static StubAnimation currentAnimation() {
+    return captured.get(captured.size() - 1);
   }
 
   public static void clearCapture() {

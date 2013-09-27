@@ -1,6 +1,5 @@
 package org.tessell.gwt.animation.client;
 
-
 /**
  * Implements {@link IsAnimation} for unit tests.
  *
@@ -16,6 +15,7 @@ public class StubAnimation implements IsAnimation {
 
   private AnimationLogic logic;
   private boolean autoFinish = true;
+  // starts out -1, moved to 0-1 when in progress, or -2 when cancelled. Yes, janky.
   private double currentProgress = -1;
   private int requestedDuration = -1;
 
@@ -25,15 +25,24 @@ public class StubAnimation implements IsAnimation {
 
   /** For tests to manually tick the animation through its progress. */
   public void tick(final double progress) {
-    if (currentProgress == -1.0 || currentProgress == 1.0) {
+    if (progress < 0 || progress > 1.0) {
+      throw new IllegalStateException("New progress must be between 0 and 1");
+    }
+    if (isCancelled()) {
+      throw new IllegalStateException("Animation is cancelled");
+    }
+    if (!isRunning()) {
       throw new IllegalStateException("Animation is not currently in progress");
+    }
+    if (isFinished()) {
+      throw new IllegalStateException("Animation is already finished");
     }
     if (progress == 0.0) {
       logic.onStart();
-    } else if (progress == 1.0) {
+    }
+    logic.onUpdate(logic.interpolate(progress));
+    if (progress == 1.0) {
       logic.onComplete();
-    } else {
-      logic.onUpdate(logic.interpolate(progress));
     }
     currentProgress = progress;
   }
@@ -67,7 +76,7 @@ public class StubAnimation implements IsAnimation {
 
   @Override
   public void cancel() {
-    currentProgress = -1;
+    currentProgress = -2;
   }
 
   @Override
@@ -76,7 +85,15 @@ public class StubAnimation implements IsAnimation {
   }
 
   public boolean isRunning() {
-    return currentProgress > -1;
+    return currentProgress > -1 && currentProgress < 1;
+  }
+
+  public boolean isCancelled() {
+    return currentProgress == -2;
+  }
+
+  public boolean isFinished() {
+    return currentProgress == 1;
   }
 
 }

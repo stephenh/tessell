@@ -46,6 +46,45 @@ public class StubAnimationTest {
   }
 
   @Test
+  public void cannotTickAfterCancel() {
+    StubAnimation a = new StubAnimation(l);
+    a.doNotAutoFinish();
+    a.run(100);
+    a.cancel();
+    assertThat(a.isCancelled(), is(true));
+    try {
+      a.tick(1.0);
+      fail();
+    } catch (IllegalStateException ise) {
+      assertThat(ise.getMessage(), is("Animation is cancelled"));
+    }
+  }
+
+  @Test
+  public void runningTwiceWorks() {
+    StubAnimation a = new StubAnimation(l);
+    a.doNotAutoFinish();
+    a.run(100);
+    a.tick(0.1);
+    a.run(100);
+    a.tick(0.2);
+    assertThat(l.progresses, contains(0.1, 0.2));
+  }
+
+  @Test
+  public void runningAfterCancelWorks() {
+    StubAnimation a = new StubAnimation(l);
+    a.doNotAutoFinish();
+    a.run(100);
+    a.cancel();
+    assertThat(a.isCancelled(), is(true));
+    a.run(100);
+    assertThat(a.isCancelled(), is(false));
+    a.tick(0.2);
+    assertThat(l.progresses, contains(0.2));
+  }
+
+  @Test
   public void manualTicking() {
     StubAnimation a = new StubAnimation(l);
     a.doNotAutoFinish();
@@ -56,6 +95,7 @@ public class StubAnimationTest {
     assertThat(l.complete, is(false));
     a.tick(1.0);
     assertThat(l.complete, is(true));
+    assertThat(a.isFinished(), is(true));
     assertThat(l.progresses, contains(0.0, 0.5, 1.0));
   }
 
@@ -72,13 +112,11 @@ public class StubAnimationTest {
     @Override
     public void onStart() {
       started = true;
-      super.onStart();
     }
 
     @Override
     public void onComplete() {
       complete = true;
-      super.onComplete();
     }
 
     @Override
