@@ -1,10 +1,7 @@
 package org.tessell.tests.model.dsl;
 
 import static com.google.gwt.event.dom.client.KeyCodes.KEY_TAB;
-import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.Matchers.contains;
 import static org.junit.Assert.assertThat;
 import static org.tessell.model.dsl.TakesValues.textOf;
@@ -15,8 +12,11 @@ import static org.tessell.testing.TessellMatchers.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.After;
 import org.junit.Test;
 import org.tessell.bus.StubEventBus;
+import org.tessell.gwt.animation.client.StubAnimation;
+import org.tessell.gwt.animation.client.StubAnimations;
 import org.tessell.gwt.dom.client.StubClickEvent;
 import org.tessell.gwt.dom.client.StubElement;
 import org.tessell.gwt.user.client.StubCookies;
@@ -34,12 +34,17 @@ import org.tessell.tests.model.properties.DummyModel;
 import org.tessell.util.cookies.StringCookie;
 import org.tessell.widgets.StubTextList;
 import org.tessell.widgets.StubWidget;
+import org.tessell.widgets.StubWidgetsProvider;
 
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
 public class BinderTest {
+
+  static {
+    StubWidgetsProvider.install();
+  }
 
   final Binder binder = new Binder();
   final StringProperty s = stringProperty("s");
@@ -49,6 +54,11 @@ public class BinderTest {
   public static enum Color {
     Blue, Green
   };
+
+  @After
+  public void tearDown() {
+    StubAnimations.clearCapture();
+  }
 
   @Test
   public void propertyToWidget() {
@@ -1091,7 +1101,7 @@ public class BinderTest {
   }
 
   @Test
-  public void withIsAttach() {
+  public void whenIsAttach() {
     final BooleanProperty b = booleanProperty("b", false);
     final StubWidget w = new StubWidget();
     final StubFlowPanel p = new StubFlowPanel();
@@ -1104,6 +1114,54 @@ public class BinderTest {
 
     b.set(false);
     assertThat(p.getWidgetCount(), is(0));
+  }
+
+  @Test
+  public void whenIsFadeInStartsFalse() {
+    final BooleanProperty b = booleanProperty("b", false);
+    final StubWidget w = new StubWidget();
+    binder.when(b).is(true).fadeIn(w);
+    // if condition is false, jump right to display none
+    assertThat(w, is(hidden()));
+    assertThat(w.getStyle().getOpacity(), is(nullValue()));
+  }
+
+  @Test
+  public void whenIsFadeInStartsTrue() {
+    StubAnimations.captureAnimations();
+    final BooleanProperty b = booleanProperty("b", true);
+    final StubWidget w = new StubWidget();
+    binder.when(b).is(true).fadeIn(w);
+    // if condition is true, jump right to fading in
+    assertThat(w, is(shown()));
+    StubAnimations.tickAnimation(0);
+    assertThat(w.getStyle().getOpacity(), is("0.0"));
+    StubAnimations.tickAnimation(1.0);
+    assertThat(w.getStyle().getOpacity(), is("1.0"));
+  }
+
+  @Test
+  public void whenIsFadeInGoesInAndOut() {
+    StubAnimations.captureAnimations();
+    final BooleanProperty b = booleanProperty("b", false);
+    final StubWidget w = new StubWidget();
+    binder.when(b).is(true).fadeIn(w);
+    // start fading in
+    b.set(true);
+    StubAnimation a1 = StubAnimations.currentAnimation();
+    a1.tick(0.0);
+    assertThat(w.getStyle().getOpacity(), is("0.0"));
+    a1.tick(0.5);
+    assertThat(w.getStyle().getOpacity(), startsWith("0.4"));
+    // when we go to false, then we start fading out
+    b.set(false);
+    assertThat(a1.isCancelled(), is(true));
+    StubAnimation a2 = StubAnimations.currentAnimation();
+    a2.tick(0.0);
+    assertThat(w.getStyle().getOpacity(), is("1.0"));
+    a2.tick(1.0);
+    assertThat(w.getStyle().getOpacity(), is("0.0"));
+    assertThat(w, is(hidden()));
   }
 
   @Test

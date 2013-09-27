@@ -1,5 +1,6 @@
 package org.tessell.model.dsl;
 
+import org.tessell.gwt.animation.client.IsAnimation;
 import org.tessell.gwt.user.client.ui.HasCss;
 import org.tessell.gwt.user.client.ui.IsWidget;
 import org.tessell.model.events.PropertyChangedEvent;
@@ -7,6 +8,7 @@ import org.tessell.model.events.PropertyChangedHandler;
 import org.tessell.model.properties.Property;
 import org.tessell.model.validation.events.RuleTriggeredEvent;
 import org.tessell.model.validation.events.RuleUntriggeredEvent;
+import org.tessell.util.WidgetUtils;
 
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Visibility;
@@ -112,6 +114,29 @@ public class WhenIsBinder<P> {
       }
     }));
     updateEnabled(enabled, false); // set initial value
+  }
+
+  public void fadeIn(final IsWidget widget) {
+    final IsAnimation[] lastAnimation = { null };
+    b.add(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
+      public void onPropertyChanged(final PropertyChangedEvent<P> event) {
+        if (lastAnimation[0] != null) {
+          lastAnimation[0].cancel();
+        }
+        if (condition.evaluate(property)) {
+          lastAnimation[0] = WidgetUtils.fadeIn(widget);
+        } else {
+          lastAnimation[0] = WidgetUtils.fadeOut(widget);
+        }
+      }
+    }));
+    // set initial value
+    if (condition.evaluate(property)) {
+      lastAnimation[0] = WidgetUtils.fadeIn(widget);
+    } else {
+      // assume we want to hide right away
+      WidgetUtils.hide(widget);
+    }
   }
 
   private void updateEnabled(final HasEnabled[] enabled, final boolean valueIfTrue) {
