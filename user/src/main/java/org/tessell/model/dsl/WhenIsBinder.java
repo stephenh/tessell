@@ -1,6 +1,7 @@
 package org.tessell.model.dsl;
 
 import org.tessell.gwt.user.client.ui.HasCss;
+import org.tessell.gwt.user.client.ui.IsWidget;
 import org.tessell.model.events.PropertyChangedEvent;
 import org.tessell.model.events.PropertyChangedHandler;
 import org.tessell.model.properties.Property;
@@ -44,6 +45,10 @@ public class WhenIsBinder<P> {
 
   public <V> WhenIsAddBinder<P, V> add(final V newValue) {
     return new WhenIsAddBinder<P, V>(b, property, condition, newValue);
+  }
+
+  public WhenIsAttachBinder<P> attach(final IsWidget widget) {
+    return new WhenIsAttachBinder<P>(b, property, condition, widget);
   }
 
   public void run(final Runnable... runnables) {

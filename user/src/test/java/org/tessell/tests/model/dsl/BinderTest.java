@@ -1091,6 +1091,22 @@ public class BinderTest {
   }
 
   @Test
+  public void withIsAttach() {
+    final BooleanProperty b = booleanProperty("b", false);
+    final StubWidget w = new StubWidget();
+    final StubFlowPanel p = new StubFlowPanel();
+
+    binder.when(b).is(true).attach(w).to(p);
+    assertThat(p.getWidgetCount(), is(0));
+
+    b.set(true);
+    assertThat(p.getWidgetCount(), is(1));
+
+    b.set(false);
+    assertThat(p.getWidgetCount(), is(0));
+  }
+
+  @Test
   public void toRadioButtons() {
     final StubRadioButton b1 = new StubRadioButton();
     final StubRadioButton b2 = new StubRadioButton();
