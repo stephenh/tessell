@@ -3,6 +3,7 @@ package org.tessell.util;
 import static org.tessell.widgets.Widgets.newAnimation;
 
 import org.tessell.gwt.animation.client.AnimationLogic;
+import org.tessell.gwt.animation.client.IsAnimation;
 import org.tessell.gwt.user.client.ui.HasCss;
 import org.tessell.gwt.user.client.ui.IsFocusWidget;
 
@@ -13,12 +14,12 @@ import com.google.gwt.event.shared.HandlerRegistration;
 
 public class WidgetUtils {
 
-  public static void fadeOut(final HasCss css) {
-    fadeOut(css, 300);
+  public static IsAnimation fadeOut(final HasCss css) {
+    return fadeOut(css, 300);
   }
 
-  public static void fadeOut(final HasCss css, int duration) {
-    newAnimation(new AnimationLogic() {
+  public static IsAnimation fadeOut(final HasCss css, int duration) {
+    IsAnimation a = newAnimation(new AnimationLogic() {
       @Override
       public void onUpdate(double progress) {
         css.getStyle().setOpacity(1 - progress);
@@ -28,15 +29,17 @@ public class WidgetUtils {
       public void onComplete() {
         css.getStyle().setDisplay(Display.NONE);
       }
-    }).run(duration);
+    });
+    a.run(duration);
+    return a;
   }
 
-  public static void fadeIn(final HasCss css) {
-    fadeIn(css, 300);
+  public static IsAnimation fadeIn(final HasCss css) {
+    return fadeIn(css, 300);
   }
 
-  public static void fadeIn(final HasCss css, int duration) {
-    newAnimation(new AnimationLogic() {
+  public static IsAnimation fadeIn(final HasCss css, int duration) {
+    IsAnimation a = newAnimation(new AnimationLogic() {
       @Override
       public void onStart() {
         css.getStyle().clearDisplay();
@@ -47,7 +50,9 @@ public class WidgetUtils {
       public void onUpdate(double progress) {
         css.getStyle().setOpacity(progress);
       }
-    }).run(duration);
+    });
+    a.run(duration);
+    return a;
   }
 
   /** Sets {@code display=none} on each element. */
