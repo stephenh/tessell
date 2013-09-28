@@ -21,7 +21,7 @@ public class WhenIsSetStyleBinder<P> {
   }
 
   /** Sets/removes our {@code style} when our property is {@code true}. */
-  public void on(final HasCss css) {
+  public void on(final HasCss... css) {
     b.add(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
       public void onPropertyChanged(PropertyChangedEvent<P> event) {
         update(css);
@@ -30,11 +30,15 @@ public class WhenIsSetStyleBinder<P> {
     update(css); // set initial value
   }
 
-  private void update(HasCss css) {
+  private void update(HasCss... csses) {
     if (condition.evaluate(property)) {
-      css.addStyleName(style);
+      for (HasCss css : csses) {
+        css.addStyleName(style);
+      }
     } else {
-      css.removeStyleName(style);
+      for (HasCss css : csses) {
+        css.removeStyleName(style);
+      }
     }
   }
 }
