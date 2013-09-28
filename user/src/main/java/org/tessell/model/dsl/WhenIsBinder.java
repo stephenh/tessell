@@ -116,7 +116,7 @@ public class WhenIsBinder<P> {
     updateEnabled(enabled, false); // set initial value
   }
 
-  public void fadeIn(final IsWidget widget) {
+  public void fadeIn(final HasCss widget) {
     final IsAnimation[] lastAnimation = { null };
     b.add(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
       public void onPropertyChanged(final PropertyChangedEvent<P> event) {
