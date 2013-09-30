@@ -22,7 +22,7 @@ import org.apache.commons.io.IOUtils;
 import org.tessell.gwt.dom.client.IsElement;
 import org.tessell.gwt.dom.client.StubElement;
 
-import com.google.gwt.dom.client.Element;
+import com.google.gwt.user.client.Element;
 
 /** Holds mappings of ui.xml type -> interface type, stub type, and subclass type. */
 public class Config {
