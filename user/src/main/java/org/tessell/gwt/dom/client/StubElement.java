@@ -7,8 +7,8 @@ import java.util.*;
 
 import org.tessell.widgets.StubWidget;
 
-import com.google.gwt.dom.client.Element;
 import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.user.client.Element;
 
 public class StubElement implements IsElement {
 

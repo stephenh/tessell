@@ -1,7 +1,7 @@
 package org.tessell.gwt.dom.client;
 
-import com.google.gwt.dom.client.Element;
 import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.UIObject;
 
 public class GwtElement implements IsElement {
