@@ -58,4 +58,9 @@ public class StubHTMLPanel extends StubComplexPanel implements IsHTMLPanel {
     return w;
   }
 
+  @Override
+  public void insert(IsWidget widget, IsElement parent, int beforeIndex, boolean domInsert) {
+    super.add(widget);
+  }
+
 }

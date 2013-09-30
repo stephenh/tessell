@@ -52,4 +52,9 @@ public class HTMLPanel extends com.google.gwt.user.client.ui.HTMLPanel implement
     addAndReplaceElement(widget.asWidget(), elem.asElement());
   }
 
+  @Override
+  public void insert(com.google.gwt.user.client.ui.IsWidget widget, IsElement parent, int beforeIndex, boolean domInsert) {
+    insert(widget.asWidget(), parent.asElement(), beforeIndex, domInsert);
+  }
+
 }
