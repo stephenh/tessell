@@ -12,7 +12,7 @@ class UiFieldDeclaration implements Comparable<UiFieldDeclaration> {
     this.type = type;
     this.name = name;
     this.parentOperation = parentOperation;
-    isElement = type.contains("dom");
+    isElement = type.endsWith("user.client.Element");
   }
 
   @Override
