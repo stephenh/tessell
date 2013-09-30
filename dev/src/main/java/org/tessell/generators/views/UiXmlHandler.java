@@ -9,7 +9,7 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import com.google.gwt.user.client.Element;
+import com.google.gwt.dom.client.Element;
 
 /** A SAX handler for ui.xml files. */
 class UiXmlHandler extends DefaultHandler {
