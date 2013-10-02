@@ -123,6 +123,11 @@ public class StubStyle implements IsStyle {
   }
 
   @Override
+  public void clearProperty(final String name) {
+    style.remove(name);
+  }
+
+  @Override
   public String getProperty(final String name) {
     return style.get(name);
   }

@@ -120,6 +120,11 @@ public class ElementHasStyle implements IsStyle {
   }
 
   @Override
+  public void clearProperty(final String name) {
+    element.getStyle().clearProperty(name);
+  }
+
+  @Override
   public String getProperty(final String name) {
     return element.getStyle().getProperty(name);
   }

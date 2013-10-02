@@ -90,6 +90,8 @@ public interface IsStyle {
 
   void clearDisplay();
 
+  void clearProperty(String name);
+
   String getProperty(String name);
 
   void setProperty(String name, String value);
