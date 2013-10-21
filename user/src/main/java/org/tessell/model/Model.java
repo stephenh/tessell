@@ -8,4 +8,6 @@ public interface Model extends HasMemberChangedHandlers {
 
   Property<Boolean> allValid();
 
+  Property<Boolean> isTouched();
+
 }

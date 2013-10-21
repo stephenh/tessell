@@ -9,6 +9,8 @@ import org.junit.Test;
 import org.tessell.model.AbstractModel;
 import org.tessell.model.events.MemberChangedEvent;
 import org.tessell.model.events.MemberChangedHandler;
+import org.tessell.model.events.PropertyChangedEvent;
+import org.tessell.model.events.PropertyChangedHandler;
 import org.tessell.model.properties.IntegerProperty;
 import org.tessell.model.properties.ListProperty;
 import org.tessell.model.properties.NewProperty;
@@ -97,6 +99,43 @@ public class AbstractModelTest {
     assertThat(fires[0], is(1));
     a.name.set("asdf");
     assertThat(fires[0], is(2));
+  }
+
+  @Test
+  public void isTouchedIsInitiallyFalse() {
+    EmployeeModel m = new EmployeeModel();
+    assertThat(m.isTouched().get(), is(false));
+  }
+
+  @Test
+  public void isTouchedChangesToTrueAfterNameIsTouched() {
+    EmployeeModel m = new EmployeeModel();
+    m.name.setTouched(true);
+    assertThat(m.isTouched().get(), is(true));
+  }
+
+  @Test
+  public void isTouchedChangesBackToFalseWhenNameIsUnTouched() {
+    EmployeeModel m = new EmployeeModel();
+    m.name.setTouched(true);
+    assertThat(m.isTouched().get(), is(true));
+    m.name.setTouched(false);
+    assertThat(m.isTouched().get(), is(false));
+  }
+
+  @Test
+  public void isTouchedFiresChangeEvents() {
+    final int[] fires = { 0 };
+    EmployeeModel m = new EmployeeModel();
+    m.isTouched().addPropertyChangedHandler(new PropertyChangedHandler<Boolean>() {
+      public void onPropertyChanged(PropertyChangedEvent<Boolean> event) {
+        fires[0]++;
+      }
+    });
+    assertThat(m.isTouched().get(), is(false));
+    m.name.setTouched(true);
+    assertThat(fires[0], is(1));
+    assertThat(m.isTouched().get(), is(true));
   }
 
   public static class EmployeeModel extends AbstractModel {
