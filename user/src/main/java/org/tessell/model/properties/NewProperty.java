@@ -1,5 +1,7 @@
 package org.tessell.model.properties;
 
+import static java.lang.Boolean.TRUE;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,6 +52,34 @@ public class NewProperty {
 
   public static BooleanProperty booleanProperty(final Binding<Boolean> binding) {
     return new BooleanProperty(new BoundValue<Boolean>(binding));
+  }
+
+  @SafeVarargs
+  public static BooleanProperty or(final Property<Boolean>... properties) {
+    return booleanProperty(new DerivedValue<Boolean>() {
+      public Boolean get() {
+        for (Property<Boolean> property : properties) {
+          if (TRUE.equals(property.get())) {
+            return true;
+          }
+        }
+        return false;
+      }
+    });
+  }
+
+  @SafeVarargs
+  public static BooleanProperty and(final Property<Boolean>... properties) {
+    return booleanProperty(new DerivedValue<Boolean>() {
+      public Boolean get() {
+        for (Property<Boolean> property : properties) {
+          if (!TRUE.equals(property.get())) {
+            return false;
+          }
+        }
+        return true;
+      }
+    });
   }
 
   public static IntegerProperty integerProperty(final String name) {

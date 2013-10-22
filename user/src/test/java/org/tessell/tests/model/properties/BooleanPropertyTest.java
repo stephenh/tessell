@@ -5,7 +5,9 @@ import static java.lang.Boolean.TRUE;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.tessell.model.properties.NewProperty.and;
 import static org.tessell.model.properties.NewProperty.booleanProperty;
+import static org.tessell.model.properties.NewProperty.or;
 
 import org.junit.Test;
 import org.tessell.model.properties.BooleanProperty;
@@ -55,6 +57,33 @@ public class BooleanPropertyTest extends AbstractRuleTest {
 
     b.set(null);
     assertThat(a.get(), is(nullValue()));
+  }
+
+  @Test
+  @SuppressWarnings("unchecked")
+  public void testOr() {
+    BooleanProperty a = booleanProperty("a");
+    BooleanProperty b = booleanProperty("b");
+    BooleanProperty o = or(a, b);
+    assertThat(o.get(), is(false));
+
+    a.set(true);
+    assertThat(o.get(), is(true));
+  }
+
+  @Test
+  @SuppressWarnings("unchecked")
+  public void testAnd() {
+    BooleanProperty a = booleanProperty("a");
+    BooleanProperty b = booleanProperty("b");
+    BooleanProperty o = and(a, b);
+    assertThat(o.get(), is(false));
+
+    a.set(true);
+    assertThat(o.get(), is(false));
+
+    b.set(true);
+    assertThat(o.get(), is(true));
   }
 
 }
