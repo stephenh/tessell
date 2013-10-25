@@ -114,12 +114,13 @@ public abstract class UiCommand implements HasRuleTriggers {
 
   /** @return {@code true} if each onlyIf property, after touching, is valid. */
   private boolean canExecute() {
+    boolean allValid = true;
     for (Property<Boolean> p : onlyIf) {
       if (p.touch() == Valid.NO || FALSE.equals(p.get())) {
-        return false;
+        allValid = false; // purposefully do not early return
       }
     }
-    return true;
+    return allValid;
   }
 
 }

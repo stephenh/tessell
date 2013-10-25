@@ -73,6 +73,8 @@ public class UiCommandTest extends AbstractRuleTest {
 
     c.execute();
     assertThat(c.getExecutions(), is(0));
+    assertThat(p1.isTouched(), is(true));
+    assertThat(p2.isTouched(), is(true));
 
     p1.set(true);
     c.execute();
