@@ -86,6 +86,20 @@ public class UiCommandTest extends AbstractRuleTest {
   }
 
   @Test
+  public void onlyIfsCanBeRemoved() {
+    BooleanProperty p1 = booleanProperty("p1", false);
+
+    DummyUiCommand c = new DummyUiCommand();
+    c.addOnlyIf(p1);
+    c.execute();
+    assertThat(c.getExecutions(), is(0));
+
+    c.getOnlyIf().remove(p1);
+    c.execute();
+    assertThat(c.getExecutions(), is(1));
+  }
+
+  @Test
   public void executeFailsIfDisabled() {
     DummyUiCommand c = new DummyUiCommand();
     c.enabled().set(false);

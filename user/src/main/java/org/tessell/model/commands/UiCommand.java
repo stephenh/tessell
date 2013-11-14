@@ -5,6 +5,7 @@ import static org.tessell.model.properties.NewProperty.booleanProperty;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.tessell.model.properties.BooleanProperty;
@@ -34,7 +35,7 @@ public abstract class UiCommand implements HasRuleTriggers {
   private final BooleanProperty enabled = booleanProperty("enabled", true);
   private final EventBus handlers = new SimplerEventBus();
   private final Map<String, HasHandlers> errors = new HashMap<String, HasHandlers>();
-  private final ArrayList<Property<Boolean>> onlyIf = new ArrayList<Property<Boolean>>();
+  private final List<Property<Boolean>> onlyIf = new ArrayList<Property<Boolean>>();
 
   /**
    * Executes the UI command, first triggering any "only if" validation,
@@ -61,6 +62,10 @@ public abstract class UiCommand implements HasRuleTriggers {
   public void addOnlyIf(Property<Boolean> onlyIf) {
     this.onlyIf.add(onlyIf);
     // TODO onlyIf.addDerived()
+  }
+
+  public void removeOnlyIf(Property<Boolean> onlyIf) {
+    this.onlyIf.remove(onlyIf);
   }
 
   /** Fires an error message against this command's handlers. */
@@ -105,6 +110,13 @@ public abstract class UiCommand implements HasRuleTriggers {
   @Override
   public HandlerRegistration addRuleUntriggeredHandler(RuleUntriggeredHandler handler) {
     return handlers.addHandler(RuleUntriggeredEvent.getType(), handler);
+  }
+
+  /**
+   * @return the list of only if conditions; purposefully modifiable so it can be bound against
+   */
+  public List<Property<Boolean>> getOnlyIf() {
+    return onlyIf;
   }
 
   /**
