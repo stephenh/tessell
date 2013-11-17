@@ -6,7 +6,6 @@ import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteEvent;
 import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteHandler;
 import com.google.gwt.user.client.ui.FormPanel.SubmitEvent;
 import com.google.gwt.user.client.ui.FormPanel.SubmitHandler;
-import com.google.gwt.user.client.ui.Leaker;
 
 public class StubFormPanel extends StubSimplePanel implements IsFormPanel {
 
@@ -46,12 +45,12 @@ public class StubFormPanel extends StubSimplePanel implements IsFormPanel {
 
   @Override
   public HandlerRegistration addSubmitCompleteHandler(SubmitCompleteHandler handler) {
-    return handlers.addHandler(Leaker.getSubmitCompleteEventType(), handler);
+    return handlers.addHandler(SubmitCompleteEvent.getType(), handler);
   }
 
   @Override
   public HandlerRegistration addSubmitHandler(SubmitHandler handler) {
-    return handlers.addHandler(Leaker.getSubmitEventType(), handler);
+    return handlers.addHandler(SubmitEvent.getType(), handler);
   }
 
   @Override
