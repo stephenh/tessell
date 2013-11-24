@@ -401,6 +401,17 @@ public class PropertyTest extends AbstractRuleTest {
     assertNoMessages();
   }
 
+  @Test
+  public void orIfNull() {
+    final Property<String> a = basicProperty("s");
+    final Property<String> b = a.orIfNull("unset");
+    assertThat(b.get(), is("unset"));
+    a.set("foo");
+    assertThat(b.get(), is("foo"));
+    a.set(null);
+    assertThat(b.get(), is("unset"));
+  }
+
   private static class CountChanges {
     private static <T> CountChanges on(Property<T> source) {
       final CountChanges c = new CountChanges();

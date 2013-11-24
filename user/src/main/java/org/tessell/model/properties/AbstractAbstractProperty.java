@@ -1,10 +1,12 @@
 package org.tessell.model.properties;
 
+import static org.tessell.model.properties.NewProperty.basicProperty;
 import static org.tessell.model.properties.NewProperty.booleanProperty;
 import static org.tessell.util.ObjectUtils.eq;
 
 import org.tessell.model.events.PropertyChangedEvent;
 import org.tessell.model.events.PropertyChangedHandler;
+import org.tessell.model.values.DerivedValue;
 
 /** Methods that can be used cross the value-based {@link AbstractProperty} and also derived properties like {@link FormattedProperty} and {@link ConvertedProperty}. */
 abstract class AbstractAbstractProperty<P> implements Property<P> {
@@ -124,6 +126,16 @@ abstract class AbstractAbstractProperty<P> implements Property<P> {
       }
     });
     return is;
+  }
+
+  @Override
+  public Property<P> orIfNull(final P ifNullValue) {
+    return basicProperty(new DerivedValue<P>(getName()) {
+      public P get() {
+        P thisValue = AbstractAbstractProperty.this.get();
+        return thisValue == null ? ifNullValue : thisValue;
+      }
+    });
   }
 
 }
