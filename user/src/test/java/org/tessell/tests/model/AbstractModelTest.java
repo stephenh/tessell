@@ -18,6 +18,7 @@ import org.tessell.model.properties.StringProperty;
 import org.tessell.model.validation.Valid;
 import org.tessell.model.validation.events.RuleTriggeredEvent;
 import org.tessell.model.validation.events.RuleTriggeredHandler;
+import org.tessell.util.PropertyUtils;
 
 public class AbstractModelTest {
 
@@ -102,6 +103,25 @@ public class AbstractModelTest {
   }
 
   @Test
+  public void touchWillTouchAllChildModels() {
+    EmployeeModel m = new EmployeeModel();
+    AccountModel a = new AccountModel();
+    m.accounts.add(a);
+    m.allValid().setTouched(true);
+    assertThat(a.isTouched().get(), is(true));
+  }
+
+  @Test
+  public void touchWillTouchAllChildModelsEvenIfModelIsAlreadyTouched() {
+    EmployeeModel m = new EmployeeModel();
+    m.allValid().setTouched(true);
+    AccountModel a = new AccountModel();
+    m.accounts.add(a);
+    m.allValid().setTouched(true);
+    assertThat(a.isTouched().get(), is(true));
+  }
+
+  @Test
   public void isTouchedIsInitiallyFalse() {
     EmployeeModel m = new EmployeeModel();
     assertThat(m.isTouched().get(), is(false));
@@ -143,6 +163,10 @@ public class AbstractModelTest {
     public final StringProperty name = add(stringProperty("name").req());
     public final StringProperty address = add(stringProperty("address"));
     public final ListProperty<AccountModel> accounts = add(NewProperty.<AccountModel> listProperty("accounts"));
+
+    public EmployeeModel() {
+      PropertyUtils.syncModelsToGroup(all, accounts);
+    }
   }
 
   public static class AccountModel extends AbstractModel {
