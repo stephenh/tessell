@@ -315,28 +315,6 @@ public class ListPropertyTest {
   }
 
   @Test
-  public void modelThatIsOnlyAddedIsNotTouched() {
-    ListProperty<DummyModel> models = listProperty("models");
-    DummyModel m1 = new DummyModel();
-    models.add(m1);
-    // the property can be touched
-    assertThat(models.isTouched(), is(true));
-    // without the item itself being touched
-    assertThat(m1.isTouched().get(), is(false));
-  }
-
-  @Test
-  public void modelIsTouchedWhenListIsExplicitlyTouched() {
-    ListProperty<DummyModel> models = listProperty("models");
-    DummyModel m1 = new DummyModel();
-    models.add(m1);
-    assertThat(m1.isTouched().get(), is(false));
-    // we treat an explicit setTouched different, and do percolate that to m1
-    models.setTouched(true);
-    assertThat(m1.isTouched().get(), is(true));
-  }
-
-  @Test
   public void derivedValueOfMembers() {
     final ListProperty<DummyModel> models = listProperty("models");
     Property<Integer> startsWithFoo = integerProperty(new DerivedValue<Integer>("startsWithFoo") {
