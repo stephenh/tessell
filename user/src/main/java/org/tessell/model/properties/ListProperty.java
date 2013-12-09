@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import org.tessell.model.Model;
 import org.tessell.model.events.*;
 import org.tessell.model.values.DerivedValue;
 import org.tessell.model.values.Value;
@@ -63,6 +64,25 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
     return is(other, new ArrayList<E>());
   }
 
+  /**
+   * Sets {@code touched} on both this list property itself, and also
+   * any entries in this list that are also models themselves.
+   *
+   * See {@link #setTouchedForListOnly(boolean) if you want to changed
+   * touched only for the list property itself.
+   */
+  @Override
+  public void setTouched(boolean touched) {
+    super.setTouched(touched);
+    if (getDirect() != null) {
+      for (E item : getDirect()) {
+        if (item instanceof Model) {
+          ((Model) item).allValid().setTouched(touched);
+        }
+      }
+    }
+  }
+
   /** @return a copy of our list as an {@link ArrayList}, e.g. for GWT-RPC calls. */
   public ArrayList<E> toArrayList() {
     return new ArrayList<E>(getDirect());
@@ -71,7 +91,7 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
   /** Adds {@code item}, firing a {@link ValueAddedEvent}. */
   public void add(final E item) {
     getDirect().add(item);
-    setTouched(true);
+    setTouchedForListOnly(true);
     listenForMemberChanged(item);
     // will fire add+change if needed
     reassess();
@@ -83,7 +103,7 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
       return;
     }
     getDirect().addAll(items);
-    setTouched(true);
+    setTouchedForListOnly(true);
     for (E item : items) {
       listenForMemberChanged(item);
     }
@@ -94,7 +114,7 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
   /** Removes {@code item}, firing a {@link ValueRemovedEvent}. */
   public void remove(final E item) {
     getDirect().remove(item);
-    setTouched(true);
+    setTouchedForListOnly(true);
     // will fire remove+change if needed
     reassess();
   }
@@ -105,7 +125,7 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
       return;
     }
     getDirect().removeAll(items);
-    setTouched(true);
+    setTouchedForListOnly(true);
     // will fire adds+change if needed
     reassess();
   }
@@ -313,6 +333,17 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
         }
       });
     }
+  }
+
+  /**
+   * Sets touched only for this list, and not for any models that
+   * may be contained in the list.
+   *
+   * (This is different behavior from the default {@link #setTouched(boolean)} method,
+   * which does percolate the touched setting into any entries that are themselves models.)
+   */
+  public void setTouchedForListOnly(boolean touched) {
+    super.setTouched(touched);
   }
 
 }
