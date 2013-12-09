@@ -114,12 +114,6 @@ public class PropertyGroup extends AbstractProperty<Boolean, PropertyGroup> {
     }
   }
 
-  public void setTouchedOnAll(boolean touched) {
-    for (Property<?> p : getProperties()) {
-      p.setTouched(touched);
-    }
-  }
-
   @Override
   protected PropertyGroup getThis() {
     return this;
