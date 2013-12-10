@@ -780,6 +780,14 @@ public class BinderTest {
   }
 
   @Test
+  public void stringToKeyUpDoesTrimEntirelyEmptySpaces() {
+    binder.bind(s).toKeyUp(box);
+    box.keyUp('a');
+    box.keyUp(KeyCodes.KEY_BACKSPACE);
+    assertThat(s.get(), is(nullValue()));
+  }
+
+  @Test
   public void stringToKeyUpDoestTrimOnChange() {
     binder.bind(s).toKeyUp(box);
     box.type("a ");

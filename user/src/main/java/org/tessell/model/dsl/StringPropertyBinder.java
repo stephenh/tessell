@@ -40,7 +40,13 @@ public class StringPropertyBinder extends PropertyBinder<String> {
     if (!p.isReadOnly()) {
       b.add(source.addKeyUpHandler(new KeyUpHandler() {
         public void onKeyUp(final KeyUpEvent event) {
-          p.set(source.getValue());
+          // We don't want to entirely sanitize (e.g. 'the ' => 'the'), but we
+          // always want to do "" => null
+          if ("".equals(source.getValue())) {
+            p.set(null);
+          } else {
+            p.set(source.getValue());
+          }
         }
       }));
       b.add(source.addValueChangeHandler(new ValueChangeHandler<String>() {
