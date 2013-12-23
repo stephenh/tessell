@@ -99,7 +99,7 @@ public class PropertyBinder<P> {
         p.set(adaptor.toValue(options.get(0)));
       }
     }
-    source.setSelectedIndex(options.indexOf(p.get()));
+    source.setSelectedIndex(indexInOptions(adaptor, options));
     b.add(source.addChangeHandler(new ChangeHandler() {
       public void onChange(final ChangeEvent event) {
         final int i = source.getSelectedIndex();
@@ -112,19 +112,7 @@ public class PropertyBinder<P> {
     }));
     b.add(p.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
       public void onPropertyChanged(final PropertyChangedEvent<P> event) {
-        source.setSelectedIndex(indexInOptions());
-      }
-
-      // can't use indexOf because we can't map value -> option, only option -> value
-      private int indexInOptions() {
-        int i = 0;
-        for (final O option : options) {
-          if (ObjectUtils.eq(adaptor.toValue(option), p.get())) {
-            return i;
-          }
-          i++;
-        }
-        return -1;
+        source.setSelectedIndex(indexInOptions(adaptor, options));
       }
     }));
   }
@@ -189,6 +177,18 @@ public class PropertyBinder<P> {
       }
       return this;
     }
+  }
+
+  // can't use indexOf because we can't map value -> option, only option -> value
+  private <O> int indexInOptions(ListBoxAdaptor<P, O> adaptor, List<O> options) {
+    int i = 0;
+    for (final O option : options) {
+      if (ObjectUtils.eq(adaptor.toValue(option), p.get())) {
+        return i;
+      }
+      i++;
+    }
+    return -1;
   }
 
 }

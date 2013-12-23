@@ -22,6 +22,7 @@ import org.tessell.gwt.dom.client.StubElement;
 import org.tessell.gwt.user.client.StubCookies;
 import org.tessell.gwt.user.client.ui.*;
 import org.tessell.model.dsl.Binder;
+import org.tessell.model.dsl.ListBoxAdaptor;
 import org.tessell.model.properties.*;
 import org.tessell.model.validation.Valid;
 import org.tessell.model.values.DerivedValue;
@@ -135,6 +136,30 @@ public class BinderTest {
     assertThat(listBox.getSelectedIndex(), is(2));
 
     s.set(null);
+    assertThat(listBox.getSelectedIndex(), is(0));
+  }
+
+  @Test
+  public void propertyToListBoxUpdatesListBoxWhenPropertyIsAdaptedAndInitiallySet() {
+    final StubListBox listBox = new StubListBox();
+    final ArrayList<Integer> values = new ArrayList<Integer>();
+    values.add(1);
+    values.add(2);
+    // s starts out null
+    assertThat(s.get(), is(nullValue()));
+    binder.bind(s).to(listBox, values, new ListBoxAdaptor<String, Integer>() {
+      public String toDisplay(Integer option) {
+        return option.toString();
+      }
+
+      @Override
+      public String toValue(Integer option) {
+        return option.toString();
+      }
+    });
+    // but is coerced to be a when we bind
+    assertThat(s.get(), is("1"));
+    // and we made sure to set the listBox to the right value
     assertThat(listBox.getSelectedIndex(), is(0));
   }
 
