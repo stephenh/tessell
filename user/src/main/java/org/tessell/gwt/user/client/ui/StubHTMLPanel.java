@@ -11,7 +11,8 @@ public class StubHTMLPanel extends StubComplexPanel implements IsHTMLPanel {
 
   private final String tag;
   private final String html;
-  private final Map<String, IsWidget> replaced = new HashMap<String, IsWidget>();
+  private final Map<String, IsWidget> replacedById = new HashMap<String, IsWidget>();
+  private final Map<IsElement, IsWidget> replacedByElement = new HashMap<IsElement, IsWidget>();
 
   public StubHTMLPanel() {
     this("div", null);
@@ -42,18 +43,27 @@ public class StubHTMLPanel extends StubComplexPanel implements IsHTMLPanel {
   @Override
   public void addAndReplaceElement(IsWidget widget, IsElement elem) {
     super.add(widget);
+    replacedByElement.put(elem, widget);
   }
 
   @Override
   public void addAndReplaceElement(IsWidget widget, String id) {
     super.add(widget);
-    replaced.put(id, widget);
+    replacedById.put(id, widget);
   }
 
   public IsWidget getReplaced(String id) {
-    IsWidget w = replaced.get(id);
+    IsWidget w = replacedById.get(id);
     if (w == null) {
-      throw new IllegalArgumentException("Could not find " + id);
+      throw new IllegalArgumentException("Could not find widget for " + id);
+    }
+    return w;
+  }
+
+  public IsWidget getReplaced(IsElement elem) {
+    IsWidget w = replacedByElement.get(elem);
+    if (w == null) {
+      throw new IllegalArgumentException("Could not find widget for " + elem);
     }
     return w;
   }
