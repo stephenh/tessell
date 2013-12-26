@@ -5,6 +5,7 @@ import static com.google.gwt.event.dom.client.KeyCodes.KEY_TAB;
 import java.util.Arrays;
 
 import org.tessell.bus.AbstractBound;
+import org.tessell.gwt.user.client.ui.IsWidget;
 import org.tessell.model.commands.UiCommand;
 import org.tessell.model.events.HasMemberChangedHandlers;
 import org.tessell.model.properties.*;
@@ -65,7 +66,7 @@ public class Binder extends AbstractBound {
   }
 
   /** @return a fluent {@link EventBinder} against {@code clickable}. */
-  public EventBinder onClick(HasClickHandlers clickable) {
+  public EventBinder onClick(IsWidget clickable) {
     return new ClickBinder(this, clickable);
   }
 
