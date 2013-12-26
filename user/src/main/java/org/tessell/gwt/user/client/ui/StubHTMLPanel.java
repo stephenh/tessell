@@ -42,12 +42,18 @@ public class StubHTMLPanel extends StubComplexPanel implements IsHTMLPanel {
 
   @Override
   public void addAndReplaceElement(IsWidget widget, IsElement elem) {
+    if (replacedByElement.containsKey(elem)) {
+      throw new IllegalStateException(elem + " has already been replaced");
+    }
     super.add(widget);
     replacedByElement.put(elem, widget);
   }
 
   @Override
   public void addAndReplaceElement(IsWidget widget, String id) {
+    if (replacedById.containsKey(id)) {
+      throw new IllegalStateException(id + " has already been replaced");
+    }
     super.add(widget);
     replacedById.put(id, widget);
   }
