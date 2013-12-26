@@ -330,9 +330,11 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
     } else if (a != null && b != null && a.size() == b.size()) {
       List<E> b2 = new ArrayList<E>(b);
       for (E e : a) {
-        b2.remove(e);
+        if (!b2.remove(e)) {
+          return false;
+        }
       }
-      return b2.isEmpty();
+      return true;
     } else {
       return false;
     }
