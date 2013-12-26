@@ -58,14 +58,14 @@ abstract class AbstractAbstractProperty<P> implements Property<P> {
   @Override
   public Property<Boolean> is(final P value, final P whenUnsetValue) {
     final BooleanProperty is = booleanProperty(getName() + "Is" + value);
-    is.setInitialValue(eq(get(), value));
+    is.setInitialValue(isEqual(get(), value));
     final boolean[] changing = { false };
     // is -> this
     is.addPropertyChangedHandler(new PropertyChangedHandler<Boolean>() {
       public void onPropertyChanged(PropertyChangedEvent<Boolean> event) {
         if (isReadOnly()) {
           changing[0] = true;
-          is.set(eq(get(), value));
+          is.set(isEqual(get(), value));
           changing[0] = false;
         } else if (event.getNewValue() != null && event.getNewValue()) {
           AbstractAbstractProperty.this.set(value);
@@ -78,7 +78,7 @@ abstract class AbstractAbstractProperty<P> implements Property<P> {
     addPropertyChangedHandler(new PropertyChangedHandler<P>() {
       public void onPropertyChanged(PropertyChangedEvent<P> event) {
         changing[0] = true;
-        is.set(eq(get(), value));
+        is.set(isEqual(get(), value));
         changing[0] = false;
       }
     });
@@ -93,14 +93,14 @@ abstract class AbstractAbstractProperty<P> implements Property<P> {
   @Override
   public Property<Boolean> is(final Property<P> other, final P whenUnsetValue) {
     final BooleanProperty is = booleanProperty(getName() + "Is" + other.getName());
-    is.setInitialValue(eq(get(), other.get()));
+    is.setInitialValue(isEqual(get(), other.get()));
     final boolean[] changing = { false };
     // is -> this
     is.addPropertyChangedHandler(new PropertyChangedHandler<Boolean>() {
       public void onPropertyChanged(PropertyChangedEvent<Boolean> event) {
         if (isReadOnly()) {
           changing[0] = true;
-          is.set(eq(get(), other.get()));
+          is.set(isEqual(get(), other.get()));
           changing[0] = false;
         } else if (event.getNewValue() != null && event.getNewValue()) {
           AbstractAbstractProperty.this.set(other.get());
@@ -113,7 +113,7 @@ abstract class AbstractAbstractProperty<P> implements Property<P> {
     addPropertyChangedHandler(new PropertyChangedHandler<P>() {
       public void onPropertyChanged(PropertyChangedEvent<P> event) {
         changing[0] = true;
-        is.set(eq(get(), other.get()));
+        is.set(isEqual(get(), other.get()));
         changing[0] = false;
       }
     });
@@ -121,7 +121,7 @@ abstract class AbstractAbstractProperty<P> implements Property<P> {
     other.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
       public void onPropertyChanged(PropertyChangedEvent<P> event) {
         changing[0] = true;
-        is.set(eq(get(), other.get()));
+        is.set(isEqual(get(), other.get()));
         changing[0] = false;
       }
     });
@@ -136,6 +136,11 @@ abstract class AbstractAbstractProperty<P> implements Property<P> {
         return thisValue == null ? ifNullValue : thisValue;
       }
     });
+  }
+
+  /** Checks equality between a and b for the {@link #is} methods. Overrideable by subclasses. */
+  protected boolean isEqual(P a, P b) {
+    return eq(a, b);
   }
 
 }

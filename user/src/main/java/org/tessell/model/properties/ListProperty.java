@@ -14,6 +14,7 @@ import org.tessell.model.values.DerivedValue;
 import org.tessell.model.values.Value;
 import org.tessell.util.ListDiff;
 import org.tessell.util.MapToList;
+import org.tessell.util.ObjectUtils;
 
 import com.google.gwt.event.shared.HandlerRegistration;
 
@@ -312,6 +313,28 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
           }
         }
       });
+    }
+  }
+
+  /**
+   * Checks equality between a and b by ignoring list order.
+   *
+   * This is because a frequent use case of "listA.is(listB)" is for "Select All"
+   * functionality, and if a user selects items in a different order, we still want
+   * to consider listA equal to listB.
+   */
+  @Override
+  protected boolean isEqual(List<E> a, List<E> b) {
+    if (ObjectUtils.eq(a, b)) {
+      return true;
+    } else if (a != null && b != null && a.size() == b.size()) {
+      List<E> b2 = new ArrayList<E>(b);
+      for (E e : a) {
+        b2.remove(e);
+      }
+      return b2.isEmpty();
+    } else {
+      return false;
     }
   }
 
