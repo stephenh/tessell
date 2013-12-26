@@ -1,9 +1,10 @@
 package org.tessell.model.dsl;
 
+import static java.lang.Boolean.TRUE;
+
 import java.util.List;
 
 import org.tessell.model.commands.UiCommand;
-import org.tessell.model.properties.BooleanProperty;
 import org.tessell.model.properties.ListProperty;
 import org.tessell.model.properties.Property;
 import org.tessell.place.PlaceRequest;
@@ -32,10 +33,10 @@ public abstract class EventBinder {
   }
 
   /** Toggles {@code property} each time the event is triggered. */
-  public void toggle(final BooleanProperty property) {
+  public void toggle(final Property<Boolean> property) {
     b.add(hookUpEventRunnable(new DomEventRunnable() {
       public void run(DomEvent<?> event) {
-        property.toggle();
+        property.set(TRUE.equals(property.get()) ? false : true);
         if (event != null) {
           event.preventDefault();
         }
