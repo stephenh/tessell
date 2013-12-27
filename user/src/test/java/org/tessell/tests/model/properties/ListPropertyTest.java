@@ -496,6 +496,30 @@ public class ListPropertyTest {
   }
 
   @Test
+  public void testContainsAll() {
+    p.add("p");
+    List<String> some = list("a", "b");
+    BooleanProperty b = p.containsAll(some);
+    assertThat(b.get(), is(false));
+
+    b.set(true);
+    assertThat(p.get(), contains("p", "a", "b"));
+
+    b.set(false);
+    assertThat(p.get(), contains("p"));
+
+    p.add("a");
+    p.add("b");
+    assertThat(b.get(), is(true));
+
+    p.remove("a");
+    assertThat(b.get(), is(false));
+
+    b.set(true);
+    assertThat(p.get(), contains("p", "b", "a"));
+  }
+
+  @Test
   public void testIsValue() {
     final ListProperty<String> s = listProperty("s");
     final Property<Boolean> b = s.is(list("a", "b"));

@@ -151,6 +151,41 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
     }));
   }
 
+  /** @return a two-way property of whether {@code items} are a subset of this list. */
+  public BooleanProperty containsAll(final List<E> items) {
+    final BooleanProperty b = booleanProperty(getName() + "ContainsAll", false);
+    final boolean[] firing = { false };
+    // conditionally update us when b goes true->false/false->true
+    b.addPropertyChangedHandler(new PropertyChangedHandler<Boolean>() {
+      public void onPropertyChanged(final PropertyChangedEvent<Boolean> event) {
+        if (!firing[0]) {
+          firing[0] = true;
+          if (event.getNewValue()) {
+            for (final E item : items) {
+              if (!get().contains(item)) {
+                add(item);
+              }
+            }
+          } else {
+            removeAll(items);
+          }
+          firing[0] = false;
+        }
+      }
+    });
+    // conditionally update b when we change
+    addPropertyChangedHandler(new PropertyChangedHandler<List<E>>() {
+      public void onPropertyChanged(final PropertyChangedEvent<List<E>> event) {
+        if (!firing[0]) {
+          firing[0] = true;
+          b.set(get().containsAll(items));
+          firing[0] = false;
+        }
+      }
+    });
+    return b;
+  }
+
   /** @return a derived property that reflects this list's size. */
   public IntegerProperty size() {
     if (size == null) {
