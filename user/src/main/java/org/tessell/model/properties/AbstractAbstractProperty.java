@@ -129,6 +129,15 @@ abstract class AbstractAbstractProperty<P> implements Property<P> {
   }
 
   @Override
+  public Property<Boolean> is(final Condition<P> condition) {
+    return booleanProperty(new DerivedValue<Boolean>() {
+      public Boolean get() {
+        return condition.evaluate(AbstractAbstractProperty.this.get());
+      }
+    });
+  }
+
+  @Override
   public Property<P> orIfNull(final P ifNullValue) {
     return basicProperty(new DerivedValue<P>(getName()) {
       public P get() {

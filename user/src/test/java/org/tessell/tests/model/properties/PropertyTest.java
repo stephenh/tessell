@@ -283,6 +283,59 @@ public class PropertyTest extends AbstractRuleTest {
   }
 
   @Test
+  public void testIsCondition() {
+    final StringProperty s = stringProperty("s");
+    final Property<Boolean> b = s.is(new Condition<String>() {
+      public boolean evaluate(String value) {
+        return value != null && value.length() > 3;
+      }
+    });
+    CountChanges c = CountChanges.on(b);
+
+    assertThat(b.getValue(), is(false));
+    assertThat(b.isTouched(), is(false));
+
+    s.set("food");
+    assertThat(b.getValue(), is(true));
+    assertThat(b.isTouched(), is(true));
+    assertThat(c.changes, is(1));
+
+    s.set("bar");
+    assertThat(b.getValue(), is(false));
+    assertThat(b.isTouched(), is(true));
+    assertThat(c.changes, is(2));
+
+    assertThat(b.isReadOnly(), is(true));
+  }
+
+  @Test
+  public void testIsConditionWithMultipleUpstreamValues() {
+    final StringProperty s1 = stringProperty("s1", "a");
+    final StringProperty s2 = stringProperty("s2", "b");
+    final Property<Boolean> oneIsBigger = s1.is(new Condition<String>() {
+      public boolean evaluate(String value) {
+        return value.length() > s2.get().length();
+      }
+    });
+    CountChanges c = CountChanges.on(oneIsBigger);
+
+    assertThat(oneIsBigger.getValue(), is(false));
+    assertThat(oneIsBigger.isTouched(), is(false));
+
+    // changing s1 updates the value
+    s1.set("foo");
+    assertThat(oneIsBigger.getValue(), is(true));
+    assertThat(oneIsBigger.isTouched(), is(true));
+    assertThat(c.changes, is(1));
+
+    // changing s2 also updates the value
+    s2.set("food");
+    assertThat(oneIsBigger.getValue(), is(false));
+    assertThat(oneIsBigger.isTouched(), is(true));
+    assertThat(c.changes, is(2));
+  }
+
+  @Test
   public void testIsReadOnlyValue() {
     final StringProperty s = stringProperty(new DerivedValue<String>("s") {
       public String get() {
