@@ -529,6 +529,9 @@ public class ListPropertyTest {
     s.set(list("a", "b"));
     assertThat(b.getValue(), is(true));
 
+    s.set(list("a", "b", "b"));
+    assertThat(b.getValue(), is(false));
+
     s.set(list("a", "c"));
     assertThat(b.getValue(), is(false));
 
