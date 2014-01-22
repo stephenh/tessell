@@ -43,7 +43,7 @@ public abstract class UiCommand implements HasRuleTriggers {
    *
    * @throws IllegalStateException if the command is disabled
    */
-  public void execute() {
+  public final void execute() {
     if (!enabled.isTrue()) {
       throw new IllegalStateException("Command is disabled");
     }

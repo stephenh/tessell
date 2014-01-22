@@ -1,12 +1,9 @@
 package org.tessell.model.commands;
 
-import static org.tessell.model.properties.NewProperty.booleanProperty;
-
 import org.tessell.dispatch.client.events.DispatchUnhandledFailureEvent;
 import org.tessell.dispatch.client.util.OutstandingDispatchAsync;
 import org.tessell.dispatch.shared.Action;
 import org.tessell.dispatch.shared.Result;
-import org.tessell.model.properties.BooleanProperty;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -19,10 +16,9 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  *
  * This allows conditional action on the command's activeness, e.g. disabling buttons.
  */
-public abstract class DispatchUiCommand<A extends Action<R>, R extends Result> extends UiCommand implements HasActive {
+public abstract class DispatchUiCommand<A extends Action<R>, R extends Result> extends AsyncUiCommand {
 
   private final OutstandingDispatchAsync async;
-  private final BooleanProperty active = booleanProperty("active", false);
   private int highestActionIndex;
   private int highestResultIndex;
   private int currentActionIndex;
@@ -65,11 +61,6 @@ public abstract class DispatchUiCommand<A extends Action<R>, R extends Result> e
         }
       });
     }
-  }
-
-  /** @return whether the command is currently active */
-  public BooleanProperty active() {
-    return active;
   }
 
   /** Implemented by subclasses to create the action object. */
