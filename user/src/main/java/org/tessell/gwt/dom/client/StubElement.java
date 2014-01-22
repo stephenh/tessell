@@ -145,6 +145,11 @@ public class StubElement implements IsElement {
   }
 
   @Override
+  public void insertFirst(IsElement element) {
+    children.add(0, (StubElement) element);
+  }
+
+  @Override
   public void appendChild(IsElement element) {
     children.add((StubElement) element);
   }

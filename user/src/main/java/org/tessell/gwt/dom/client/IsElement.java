@@ -48,6 +48,8 @@ public interface IsElement extends HasCss, HasText {
 
   void ensureDebugId(String id);
 
+  void insertFirst(IsElement element);
+
   void appendChild(IsElement element);
 
   void removeFromParent();

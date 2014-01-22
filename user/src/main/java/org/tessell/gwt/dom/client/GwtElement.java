@@ -167,4 +167,9 @@ public class GwtElement implements IsElement {
     element.scrollIntoView();
   }
 
+  @Override
+  public void insertFirst(IsElement element) {
+    this.element.insertFirst(element.asElement());
+  }
+
 }
