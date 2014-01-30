@@ -9,7 +9,6 @@ import org.junit.Test;
 import org.tessell.gwt.user.client.ui.StubButton;
 import org.tessell.gwt.user.client.ui.StubTextBox;
 import org.tessell.model.properties.StringProperty;
-import org.tessell.model.validation.Valid;
 import org.tessell.tests.model.commands.DummyUiCommand;
 import org.tessell.util.HTMLPanelBuilder;
 import org.tessell.widgets.form.actions.ButtonFormAction;
@@ -41,10 +40,10 @@ public class FormPresenterTest extends AbstractFormPresenterTest {
     final StringProperty name = stringProperty("name").regex("\\d+", "Must be digits");
     p.add(new TextBoxFormLine(name));
     name.set("a");
-    assertThat(p.allValid().wasValid(), is(Valid.NO));
+    assertThat(p.allValid().isValid(), is(false));
 
     name.set("1");
-    assertThat(p.allValid().wasValid(), is(Valid.YES));
+    assertThat(p.allValid().isValid(), is(true));
   }
 
   @Test

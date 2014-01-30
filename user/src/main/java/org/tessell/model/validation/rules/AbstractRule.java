@@ -8,7 +8,6 @@ import org.tessell.model.properties.Property;
 import org.tessell.model.properties.Upstream;
 import org.tessell.model.properties.Upstream.Capture;
 import org.tessell.model.properties.UpstreamState;
-import org.tessell.model.validation.Valid;
 import org.tessell.model.validation.events.RuleTriggeredEvent;
 import org.tessell.model.validation.events.RuleTriggeredHandler;
 import org.tessell.model.validation.events.RuleUntriggeredEvent;
@@ -48,16 +47,16 @@ public abstract class AbstractRule<T> implements Rule<T> {
     this.message = message;
   }
 
-  protected abstract Valid isValid();
+  protected abstract boolean isValid();
 
   @Override
-  public final Valid validate() {
+  public final boolean validate() {
     if (this instanceof Custom || onlyIf.size() > 0) {
       if (lastUpstream == null) {
         lastUpstream = new UpstreamState(property, false);
       }
       Capture c = Upstream.start();
-      Valid v = doValidate();
+      boolean v = doValidate();
       lastUpstream.update(c.finish());
       return v;
     } else {
@@ -130,9 +129,9 @@ public abstract class AbstractRule<T> implements Rule<T> {
     return false;
   }
 
-  private Valid doValidate() {
+  private boolean doValidate() {
     if (onlyIfSaysToSkip()) {
-      return Valid.YES;
+      return true;
     }
     return this.isValid();
   }

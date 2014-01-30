@@ -1,6 +1,5 @@
 package org.tessell.model.validation.rules;
 
-import org.tessell.model.validation.Valid;
 
 /** Validates that an int in range. */
 public class Range extends AbstractRule<Integer> {
@@ -15,18 +14,18 @@ public class Range extends AbstractRule<Integer> {
   }
 
   @Override
-  protected Valid isValid() {
+  protected boolean isValid() {
     final Integer value = property.get();
     if (value == null) {
-      return Valid.NO;
+      return false;
     }
     if (min != null && value < min) {
-      return Valid.NO;
+      return false;
     }
     if (max != null && value > max) {
-      return Valid.NO;
+      return false;
     }
-    return Valid.YES;
+    return true;
   }
 
 }

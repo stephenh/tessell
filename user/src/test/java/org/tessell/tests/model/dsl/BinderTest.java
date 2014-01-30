@@ -24,7 +24,6 @@ import org.tessell.gwt.user.client.ui.*;
 import org.tessell.model.dsl.Binder;
 import org.tessell.model.dsl.ListBoxAdaptor;
 import org.tessell.model.properties.*;
-import org.tessell.model.validation.Valid;
 import org.tessell.model.values.DerivedValue;
 import org.tessell.model.values.SetValue;
 import org.tessell.place.PlaceRequest;
@@ -227,7 +226,7 @@ public class BinderTest {
   @Test
   public void errorsThatAlreadyFiredGetAddedToAnErrorList() {
     s.req().touch();
-    assertThat(s.wasValid(), is(Valid.NO));
+    assertThat(s.isValid(), is(false));
 
     binder.bind(s).errorsTo(errors);
     assertThat(errors.getList().size(), is(1));

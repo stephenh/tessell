@@ -11,7 +11,6 @@ import java.util.Map;
 import org.tessell.model.properties.BooleanProperty;
 import org.tessell.model.properties.HasRuleTriggers;
 import org.tessell.model.properties.Property;
-import org.tessell.model.validation.Valid;
 import org.tessell.model.validation.events.RuleTriggeredEvent;
 import org.tessell.model.validation.events.RuleTriggeredHandler;
 import org.tessell.model.validation.events.RuleUntriggeredEvent;
@@ -128,7 +127,7 @@ public abstract class UiCommand implements HasRuleTriggers {
   private boolean canExecute() {
     boolean allValid = true;
     for (Property<Boolean> p : onlyIf) {
-      if (p.touch() == Valid.NO || FALSE.equals(p.get())) {
+      if (!p.touch() || FALSE.equals(p.get())) {
         allValid = false; // purposefully do not early return
       }
     }

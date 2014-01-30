@@ -1,7 +1,6 @@
 package org.tessell.tests.model.validation.rules;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.contains;
 import static org.junit.Assert.assertThat;
 import static org.tessell.model.properties.NewProperty.booleanProperty;
@@ -16,7 +15,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.tessell.model.properties.BooleanProperty;
 import org.tessell.model.properties.StringProperty;
-import org.tessell.model.validation.Valid;
 import org.tessell.model.validation.events.RuleTriggeredEvent;
 import org.tessell.model.validation.events.RuleTriggeredHandler;
 import org.tessell.model.validation.rules.Custom;
@@ -43,14 +41,14 @@ public class RulesTest extends AbstractRuleTest {
 
   @Test
   public void whenRuleIsValidatedTheStateIsRemembered() {
-    assertThat(f.name.wasValid(), nullValue());
+    assertThat(f.name.isValid(), is(true));
 
     f.name.addRule(new Required("name required"));
     f.name.addRule(new Length("name length"));
-    assertThat(f.name.wasValid(), is(Valid.NO));
+    assertThat(f.name.isValid(), is(false));
 
     f.name.set(null);
-    assertThat(f.name.wasValid(), is(Valid.NO));
+    assertThat(f.name.isValid(), is(false));
   }
 
   @Test

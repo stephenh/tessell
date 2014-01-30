@@ -1,7 +1,5 @@
 package org.tessell.model.validation.rules;
 
-import org.tessell.model.validation.Valid;
-
 /** Validates that a string. */
 public class Length extends AbstractRule<String> {
 
@@ -19,12 +17,12 @@ public class Length extends AbstractRule<String> {
   }
 
   @Override
-  protected Valid isValid() {
+  protected boolean isValid() {
     final String value = property.get();
     if (value == null) {
-      return Valid.YES; // defer to Required, if it's around
+      return true; // defer to Required, if it's around
     }
-    return value.length() >= min && value.length() <= max ? Valid.YES : Valid.NO;
+    return value.length() >= min && value.length() <= max;
   }
 
 }

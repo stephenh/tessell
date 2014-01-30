@@ -7,7 +7,6 @@ import static org.tessell.model.properties.NewProperty.stringProperty;
 import org.junit.Test;
 import org.tessell.model.properties.PropertyGroup;
 import org.tessell.model.properties.StringProperty;
-import org.tessell.model.validation.Valid;
 import org.tessell.tests.model.validation.rules.AbstractRuleTest;
 
 public class PropertyGroupTest extends AbstractRuleTest {
@@ -31,7 +30,7 @@ public class PropertyGroupTest extends AbstractRuleTest {
     StringProperty p1 = stringProperty("p1").in(all).max(5);
 
     p1.set("123456");
-    assertThat(all.wasValid(), is(Valid.NO));
+    assertThat(all.isValid(), is(false));
   }
 
   @Test
@@ -40,10 +39,10 @@ public class PropertyGroupTest extends AbstractRuleTest {
     StringProperty p1 = stringProperty("p1").in(all).max(5);
 
     p1.set("123456");
-    assertThat(all.wasValid(), is(Valid.NO));
+    assertThat(all.isValid(), is(false));
 
     p1.set("1234");
-    assertThat(all.wasValid(), is(Valid.YES));
+    assertThat(all.isValid(), is(true));
   }
 
   @Test
@@ -52,15 +51,15 @@ public class PropertyGroupTest extends AbstractRuleTest {
     StringProperty p1 = stringProperty("p1").in(all).max(5);
 
     p1.set("123456");
-    assertThat(all.wasValid(), is(Valid.NO));
+    assertThat(all.isValid(), is(false));
 
     all.remove(p1);
-    assertThat(all.wasValid(), is(Valid.YES));
+    assertThat(all.isValid(), is(true));
 
     // flipping p1 valid/invalid doesn't change all
     p1.set("1234");
     p1.set("123456");
-    assertThat(all.wasValid(), is(Valid.YES));
+    assertThat(all.isValid(), is(true));
   }
 
   @Test
@@ -84,10 +83,10 @@ public class PropertyGroupTest extends AbstractRuleTest {
     p1.set("123456");
 
     all.add(p1);
-    assertThat(all.wasValid(), is(Valid.NO));
+    assertThat(all.isValid(), is(false));
 
     p1.set("1234");
-    assertThat(all.wasValid(), is(Valid.YES));
+    assertThat(all.isValid(), is(true));
   }
 
 }

@@ -12,7 +12,6 @@ import org.junit.Test;
 import org.tessell.model.events.PropertyChangedEvent;
 import org.tessell.model.events.PropertyChangedHandler;
 import org.tessell.model.properties.*;
-import org.tessell.model.validation.Valid;
 import org.tessell.model.validation.events.RuleTriggeredEvent;
 import org.tessell.model.validation.events.RuleTriggeredHandler;
 import org.tessell.model.validation.rules.Custom;
@@ -61,7 +60,7 @@ public class PropertyTest extends AbstractRuleTest {
     final Boolean[] wasInvalidOnChange = { null };
     a.addPropertyChangedHandler(new PropertyChangedHandler<Integer>() {
       public void onPropertyChanged(PropertyChangedEvent<Integer> event) {
-        wasInvalidOnChange[0] = a.wasValid() == Valid.NO;
+        wasInvalidOnChange[0] = a.isValid() == false;
       }
     });
 
@@ -86,7 +85,7 @@ public class PropertyTest extends AbstractRuleTest {
     final Boolean[] asWasInvalid = { null };
     a.addPropertyChangedHandler(new PropertyChangedHandler<Integer>() {
       public void onPropertyChanged(PropertyChangedEvent<Integer> event) {
-        asWasInvalid[0] = b.wasValid() == Valid.NO;
+        asWasInvalid[0] = b.isValid() == false;
       }
     });
 
@@ -100,7 +99,7 @@ public class PropertyTest extends AbstractRuleTest {
     final Boolean[] wasValid = { null };
     a.addRuleTriggeredHandler(new RuleTriggeredHandler() {
       public void onTrigger(RuleTriggeredEvent event) {
-        wasValid[0] = a.wasValid() == Valid.YES;
+        wasValid[0] = a.isValid() == true;
       }
     });
     a.touch();
@@ -121,11 +120,24 @@ public class PropertyTest extends AbstractRuleTest {
   }
 
   @Test
-  public void derivedWatchesWasValid() {
-    final IntegerProperty a = integerProperty("a");
+  public void derivedWatchesIsValid() {
+    final IntegerProperty a = integerProperty("a").req();
     final BooleanProperty b = booleanProperty(new DerivedValue<Boolean>("was valid") {
       public Boolean get() {
-        return a.wasValid() == Valid.YES;
+        return a.isValid() == true;
+      }
+    });
+    CountChanges c = CountChanges.on(b);
+    a.set(1);
+    assertThat(c.changes, is(1));
+  }
+
+  @Test
+  public void derivedWatchesValid() {
+    final IntegerProperty a = integerProperty("a").req();
+    final BooleanProperty b = booleanProperty(new DerivedValue<Boolean>("was valid") {
+      public Boolean get() {
+        return a.valid().get() == true;
       }
     });
     CountChanges c = CountChanges.on(b);
@@ -463,6 +475,17 @@ public class PropertyTest extends AbstractRuleTest {
     assertThat(b.get(), is("foo"));
     a.set(null);
     assertThat(b.get(), is("unset"));
+  }
+
+  @Test
+  public void validFiresChangeEvents() {
+    final BasicProperty<String> s = basicProperty("s");
+    CountChanges c = CountChanges.on(s.valid());
+    assertThat(c.changes, is(0));
+    s.req();
+    assertThat(c.changes, is(1));
+    s.set("asdf");
+    assertThat(c.changes, is(2));
   }
 
   private static class CountChanges {

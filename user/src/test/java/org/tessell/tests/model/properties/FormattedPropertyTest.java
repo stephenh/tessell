@@ -15,7 +15,6 @@ import org.tessell.model.events.PropertyChangedHandler;
 import org.tessell.model.properties.IntegerProperty;
 import org.tessell.model.properties.Property;
 import org.tessell.model.properties.PropertyFormatter;
-import org.tessell.model.validation.Valid;
 import org.tessell.tests.model.validation.rules.AbstractRuleTest;
 
 public class FormattedPropertyTest extends AbstractRuleTest {
@@ -56,7 +55,7 @@ public class FormattedPropertyTest extends AbstractRuleTest {
 
     i.asString().set(null);
     assertThat(i.get(), is(nullValue()));
-    assertThat(i.wasValid(), is(Valid.YES));
+    assertThat(i.isValid(), is(true));
   }
 
   @Test
@@ -66,7 +65,7 @@ public class FormattedPropertyTest extends AbstractRuleTest {
 
     i.asString().set("");
     assertThat(i.get(), is(nullValue()));
-    assertThat(i.wasValid(), is(Valid.YES));
+    assertThat(i.isValid(), is(true));
   }
 
   @Test

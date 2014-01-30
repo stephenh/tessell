@@ -2,8 +2,6 @@ package org.tessell.model.validation.rules;
 
 import java.util.List;
 
-import org.tessell.model.validation.Valid;
-
 public class Size<E> extends AbstractRule<List<E>> {
 
   private final Integer min;
@@ -16,18 +14,18 @@ public class Size<E> extends AbstractRule<List<E>> {
   }
 
   @Override
-  protected Valid isValid() {
+  protected boolean isValid() {
     final Integer value = property.get().size();
     if (value == null) {
-      return Valid.NO;
+      return false;
     }
     if (min != null && value < min) {
-      return Valid.NO;
+      return false;
     }
     if (max != null && value > max) {
-      return Valid.NO;
+      return false;
     }
-    return Valid.YES;
+    return true;
   }
 
 }

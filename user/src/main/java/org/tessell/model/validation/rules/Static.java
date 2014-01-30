@@ -1,6 +1,5 @@
 package org.tessell.model.validation.rules;
 
-import org.tessell.model.validation.Valid;
 
 /** A rule that you can explicitly set to valid or invalid as needed. */
 public class Static extends AbstractRule<Object> {
@@ -13,8 +12,8 @@ public class Static extends AbstractRule<Object> {
 
   // promoted to public access for AbstractRule.clearTemporaryError
   @Override
-  public Valid isValid() {
-    return valid ? Valid.YES : Valid.NO;
+  public boolean isValid() {
+    return valid;
   }
 
   public void set(final boolean valid) {

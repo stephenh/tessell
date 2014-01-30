@@ -1,5 +1,6 @@
 package org.tessell.model.properties;
 
+import static org.tessell.model.properties.NewProperty.booleanProperty;
 import static org.tessell.util.ObjectUtils.eq;
 
 import java.util.ArrayList;
@@ -11,7 +12,6 @@ import java.util.logging.Logger;
 import org.tessell.model.events.PropertyChangedEvent;
 import org.tessell.model.events.PropertyChangedHandler;
 import org.tessell.model.properties.Upstream.Capture;
-import org.tessell.model.validation.Valid;
 import org.tessell.model.validation.events.RuleTriggeredEvent;
 import org.tessell.model.validation.events.RuleTriggeredHandler;
 import org.tessell.model.validation.events.RuleUntriggeredEvent;
@@ -51,13 +51,15 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> exte
   // whether this property is required
   private boolean required;
   // the result of the last validate()
-  private Valid valid;
+  private boolean valid = true;
   // whether we're currently reassessing
   private boolean reassessing = false;
   // only used if this is a derived value
   private UpstreamState lastUpstream;
   // only used if showing a temporary error
   private Static temporaryRule = null;
+  // only used if someone calls .valid()
+  private Property<Boolean> validProperty;
 
   public AbstractProperty(final Value<P> value) {
     this.value = value;
@@ -83,7 +85,7 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> exte
   }
 
   public void clearTemporaryError() {
-    if (temporaryRule != null && temporaryRule.isValid() == Valid.NO) {
+    if (temporaryRule != null && !temporaryRule.isValid()) {
       temporaryRule.set(true);
     }
   }
@@ -155,9 +157,12 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> exte
       }
 
       // run validation before firing change so handlers see latest wasValid
-      final Valid oldValid = valid;
+      final boolean oldValid = valid;
       validate();
       final boolean validChanged = oldValid != valid;
+      if (validProperty != null) {
+        validProperty.set(valid);
+      }
 
       // only reassess downstream if needed. this is somewhat odd, but we reassess
       // our downstream properties before firing our own change event. this is so
@@ -224,9 +229,9 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> exte
   }
 
   // fluent method of touch + valid
-  public Valid touch() {
+  public boolean touch() {
     setTouched(true);
-    return wasValid();
+    return isValid();
   }
 
   @SuppressWarnings("unchecked")
@@ -304,9 +309,17 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> exte
   }
 
   @Override
-  public Valid wasValid() {
+  public boolean isValid() {
     Upstream.addIfTracking(this);
     return valid;
+  }
+
+  @Override
+  public Property<Boolean> valid() {
+    if (validProperty == null) {
+      validProperty = booleanProperty(value.getName() + ".valid", valid);
+    }
+    return validProperty;
   }
 
   @Override
@@ -368,14 +381,14 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> exte
 
   /** Runs validation against our rules. */
   private void validate() {
-    valid = Valid.YES; // start out valid
+    valid = true; // start out valid
     for (final Rule<? super P> rule : rules) {
-      if (rule.validate() == Valid.YES) {
+      if (rule.validate()) {
         rule.untriggerIfNeeded();
       } else {
         // only trigger the first invalid rule
-        if (valid == Valid.YES) {
-          valid = Valid.NO;
+        if (valid) {
+          valid = false;
           if (isTouched()) {
             rule.triggerIfNeeded();
           } else {

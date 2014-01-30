@@ -4,7 +4,6 @@ import java.util.Map;
 
 import org.tessell.model.events.PropertyChangedEvent;
 import org.tessell.model.events.PropertyChangedHandler;
-import org.tessell.model.validation.Valid;
 import org.tessell.model.validation.events.RuleTriggeredHandler;
 import org.tessell.model.validation.events.RuleUntriggeredHandler;
 import org.tessell.model.validation.rules.Rule;
@@ -163,13 +162,18 @@ public class FormattedProperty<DP, SP> extends AbstractAbstractProperty<DP> {
   }
 
   @Override
-  public Valid touch() {
+  public boolean touch() {
     return source.touch();
   }
 
   @Override
-  public Valid wasValid() {
-    return source.wasValid();
+  public boolean isValid() {
+    return source.isValid();
+  }
+
+  @Override
+  public Property<Boolean> valid() {
+    return source.valid();
   }
 
   @Override

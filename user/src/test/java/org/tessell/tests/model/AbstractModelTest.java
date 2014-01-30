@@ -15,7 +15,6 @@ import org.tessell.model.properties.IntegerProperty;
 import org.tessell.model.properties.ListProperty;
 import org.tessell.model.properties.NewProperty;
 import org.tessell.model.properties.StringProperty;
-import org.tessell.model.validation.Valid;
 import org.tessell.model.validation.events.RuleTriggeredEvent;
 import org.tessell.model.validation.events.RuleTriggeredHandler;
 import org.tessell.util.PropertyUtils;
@@ -34,7 +33,7 @@ public class AbstractModelTest {
   @Test
   public void allValidIsFalseIfPropertiesAreInvalid() {
     e.allValid().touch();
-    assertThat(e.allValid().wasValid(), is(Valid.NO));
+    assertThat(e.allValid().isValid(), is(false));
   }
 
   @Test
@@ -42,7 +41,7 @@ public class AbstractModelTest {
     e.id.set(1);
     e.name.set("f");
     e.allValid().touch();
-    assertThat(e.allValid().wasValid(), is(Valid.YES));
+    assertThat(e.allValid().isValid(), is(true));
   }
 
   @Test
@@ -50,13 +49,13 @@ public class AbstractModelTest {
     e.id.set(1);
     e.name.set("f");
     e.allValid().touch();
-    assertThat(e.allValid().wasValid(), is(Valid.YES));
+    assertThat(e.allValid().isValid(), is(true));
 
     e.name.set("");
-    assertThat(e.allValid().wasValid(), is(Valid.NO));
+    assertThat(e.allValid().isValid(), is(false));
 
     e.name.set("a");
-    assertThat(e.allValid().wasValid(), is(Valid.YES));
+    assertThat(e.allValid().isValid(), is(true));
   }
 
   @Test

@@ -7,7 +7,6 @@ import static org.tessell.model.properties.NewProperty.integerProperty;
 
 import org.junit.Test;
 import org.tessell.model.properties.IntegerProperty;
-import org.tessell.model.validation.Valid;
 import org.tessell.tests.model.validation.rules.AbstractRuleTest;
 
 public class IntegerPropertyTest extends AbstractRuleTest {
@@ -16,9 +15,9 @@ public class IntegerPropertyTest extends AbstractRuleTest {
   public void fromStringIsResetWhenGood() {
     final IntegerProperty p = integerProperty("p");
     p.asString().set("blah");
-    assertThat(p.wasValid(), is(Valid.NO));
+    assertThat(p.isValid(), is(false));
     p.set(1);
-    assertThat(p.wasValid(), is(Valid.YES));
+    assertThat(p.isValid(), is(true));
   }
 
   @Test
@@ -26,7 +25,7 @@ public class IntegerPropertyTest extends AbstractRuleTest {
     final IntegerProperty p = integerProperty("p", 1);
     p.asString().set(null);
     assertThat(p.get(), is(nullValue()));
-    assertThat(p.wasValid(), is(Valid.YES));
+    assertThat(p.isValid(), is(true));
   }
 
   @Test

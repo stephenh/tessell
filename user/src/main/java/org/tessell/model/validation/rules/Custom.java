@@ -3,7 +3,6 @@ package org.tessell.model.validation.rules;
 import static java.lang.Boolean.TRUE;
 
 import org.bindgen.Binding;
-import org.tessell.model.validation.Valid;
 import org.tessell.model.values.BoundValue;
 import org.tessell.util.Supplier;
 
@@ -24,8 +23,8 @@ public class Custom extends AbstractRule<Object> {
   }
 
   @Override
-  protected Valid isValid() {
-    return TRUE.equals(value.get()) ? Valid.YES : Valid.NO;
+  protected boolean isValid() {
+    return TRUE.equals(value.get());
   }
 
 }

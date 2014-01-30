@@ -20,7 +20,6 @@ import org.tessell.model.events.*;
 import org.tessell.model.properties.*;
 import org.tessell.model.properties.ListProperty.ElementConverter;
 import org.tessell.model.properties.ListProperty.ElementFilter;
-import org.tessell.model.validation.Valid;
 import org.tessell.model.validation.rules.Size;
 import org.tessell.model.values.DerivedValue;
 import org.tessell.model.values.SetValue;
@@ -570,13 +569,13 @@ public class ListPropertyTest {
   public void testSizeRule() {
     final ListProperty<String> s1 = listProperty("s1", list("a"));
     s1.addRule(new Size<String>("s1 is not the right size", 2, 2));
-    assertThat(s1.wasValid(), is(Valid.NO));
+    assertThat(s1.isValid(), is(false));
 
     s1.add("b");
-    assertThat(s1.wasValid(), is(Valid.YES));
+    assertThat(s1.isValid(), is(true));
 
     s1.add("c");
-    assertThat(s1.wasValid(), is(Valid.NO));
+    assertThat(s1.isValid(), is(false));
   }
 
   public static class CountingChanges<P> implements PropertyChangedHandler<P> {

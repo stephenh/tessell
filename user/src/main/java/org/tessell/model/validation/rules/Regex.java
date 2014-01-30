@@ -1,6 +1,5 @@
 package org.tessell.model.validation.rules;
 
-import org.tessell.model.validation.Valid;
 
 /** Validates that a property matches a regex. */
 public class Regex extends AbstractRule<String> {
@@ -26,12 +25,12 @@ public class Regex extends AbstractRule<String> {
   }
 
   @Override
-  protected Valid isValid() {
+  protected boolean isValid() {
     final String value = property.get();
     if (value == null) {
-      return Valid.YES; // defer to a Required rule
+      return true; // defer to a Required rule
     }
-    return value.matches(regex) ? Valid.YES : Valid.NO;
+    return value.matches(regex);
   }
 
 }

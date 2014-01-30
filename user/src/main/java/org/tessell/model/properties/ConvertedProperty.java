@@ -4,7 +4,6 @@ import java.util.Map;
 
 import org.tessell.model.events.PropertyChangedEvent;
 import org.tessell.model.events.PropertyChangedHandler;
-import org.tessell.model.validation.Valid;
 import org.tessell.model.validation.events.RuleTriggeredHandler;
 import org.tessell.model.validation.events.RuleUntriggeredHandler;
 import org.tessell.model.validation.rules.Rule;
@@ -16,6 +15,9 @@ import com.google.gwt.event.shared.HandlerRegistration;
 
 /**
  * Converts a source property from another type, using a {@link PropertyConverter}. 
+ *
+ * Although technically a separate property instance, all validation rules/errors/etc.
+ * are deferred to our source property.
  *
  * @param <SP> the source property type
  * @param <DP> the destination property type
@@ -108,13 +110,18 @@ public class ConvertedProperty<DP, SP> extends AbstractAbstractProperty<DP> {
   }
 
   @Override
-  public Valid touch() {
+  public boolean touch() {
     return source.touch();
   }
 
   @Override
-  public Valid wasValid() {
-    return source.wasValid();
+  public boolean isValid() {
+    return source.isValid();
+  }
+
+  @Override
+  public Property<Boolean> valid() {
+    return source.valid();
   }
 
   @Override

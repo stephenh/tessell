@@ -3,7 +3,6 @@ package org.tessell.model.properties;
 import java.util.Map;
 
 import org.tessell.model.events.PropertyChangedHandler;
-import org.tessell.model.validation.Valid;
 import org.tessell.model.validation.rules.Rule;
 import org.tessell.model.values.Value;
 
@@ -51,10 +50,13 @@ public interface Property<P> extends HasHandlers, HasRuleTriggers, Value<P>, Has
   void setRequired(boolean required);
 
   /** Fluent method for marking a property as touched. */
-  Valid touch();
+  boolean touch();
 
-  /** @return whether this property was invalid, does not rerun validation. */
-  Valid wasValid();
+  /** @return whether this property is valid. */
+  boolean isValid();
+
+  /** @return whether this property is valid, as a property. */
+  Property<Boolean> valid();
 
   /** Adds {@code downstream} as a derivative of us. */
   <T extends Property<?>> T addDerived(T downstream);
