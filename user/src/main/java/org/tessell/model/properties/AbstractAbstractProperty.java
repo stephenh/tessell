@@ -147,6 +147,21 @@ abstract class AbstractAbstractProperty<P> implements Property<P> {
     });
   }
 
+  @Override
+  public Property<Boolean> isSet() {
+    return as(new PropertyConverter<P, Boolean>() {
+      @Override
+      public Boolean nullValue() {
+        return false;
+      }
+
+      @Override
+      public Boolean to(P a) {
+        return a != null;
+      }
+    });
+  }
+
   /** Checks equality between a and b for the {@link #is} methods. Overrideable by subclasses. */
   protected boolean isEqual(P a, P b) {
     return eq(a, b);

@@ -488,6 +488,23 @@ public class PropertyTest extends AbstractRuleTest {
     assertThat(c.changes, is(2));
   }
 
+  @Test
+  public void isSet() {
+    final BasicProperty<String> s = basicProperty("s");
+    final Property<Boolean> set = s.isSet();
+    CountChanges c = CountChanges.on(set);
+
+    s.set("asdf");
+    assertThat(c.changes, is(1));
+    assertThat(set.get(), is(true));
+
+    s.set(null);
+    assertThat(c.changes, is(2));
+    assertThat(set.get(), is(false));
+
+    assertThat(set.isReadOnly(), is(true));
+  }
+
   private static class CountChanges {
     private static <T> CountChanges on(Property<T> source) {
       final CountChanges c = new CountChanges();

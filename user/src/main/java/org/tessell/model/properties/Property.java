@@ -109,4 +109,7 @@ public interface Property<P> extends HasHandlers, HasRuleTriggers, Value<P>, Has
 
   /** @return a derived property will be {@code value} if this property is {@code null}. */
   Property<P> orIfNull(P value);
+
+  /** @return a read-only property that is true/false when {@code this} is set. */
+  Property<Boolean> isSet();
 }
