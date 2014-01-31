@@ -7,7 +7,6 @@ import org.tessell.gwt.dom.client.IsElement;
 import org.tessell.gwt.dom.client.IsStyle;
 
 import com.google.gwt.safehtml.shared.SafeHtml;
-import com.google.gwt.user.client.Element;
 
 public class HTMLPanel extends com.google.gwt.user.client.ui.HTMLPanel implements IsHTMLPanel {
 
@@ -55,7 +54,7 @@ public class HTMLPanel extends com.google.gwt.user.client.ui.HTMLPanel implement
 
   @Override
   public void insert(com.google.gwt.user.client.ui.IsWidget widget, IsElement parent, int beforeIndex, boolean domInsert) {
-    insert(widget.asWidget(), (Element) parent.asElement(), beforeIndex, domInsert);
+    insert(widget.asWidget(), parent.asElement(), beforeIndex, domInsert);
   }
 
 }

@@ -4,6 +4,7 @@ import org.tessell.gwt.dom.client.GwtElement;
 import org.tessell.gwt.dom.client.IsElement;
 import org.tessell.gwt.dom.client.IsStyle;
 
+import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
 import com.google.gwt.dom.client.NodeList;
@@ -17,7 +18,7 @@ public class TextList extends Widget implements IsTextList {
   private boolean enabled = true;
 
   public TextList() {
-    setElement(DOM.createDiv());
+    setElement(Document.get().createDivElement());
   }
 
   @Override

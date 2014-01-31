@@ -54,9 +54,4 @@ public class StubImageResource implements ImageResource {
     return false;
   }
 
-  @Override
-  public boolean isStandalone() {
-    return false;
-  }
-
 }
