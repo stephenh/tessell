@@ -1,6 +1,5 @@
 package org.tessell.gwt.dom.client;
 
-import static org.apache.commons.lang.StringUtils.split;
 import static org.tessell.util.StringUtils.join;
 
 import java.util.*;
@@ -96,7 +95,7 @@ public class StubElement implements IsElement {
   @Override
   public void setStyleName(String styleName) {
     styleNames.clear();
-    styleNames.addAll(Arrays.asList(split(styleName, " ")));
+    styleNames.addAll(Arrays.asList(styleName.split(" ")));
   }
 
   @Override

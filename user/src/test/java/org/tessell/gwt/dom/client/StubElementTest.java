@@ -45,4 +45,10 @@ public class StubElementTest {
     assertThat(s.getInnerText(), is(""));
   }
 
+  @Test
+  public void setStyleName() {
+    s.setStyleName("one two");
+    assertThat(s.getStyleNames().toString(), is("[one, two]"));
+  }
+
 }
