@@ -27,6 +27,7 @@ public abstract class AbstractDispatchServiceServlet extends RemoteServiceServle
       throw new IllegalStateException("Null ActionDispatch, ensure the server started correctly");
     }
     try {
+      beginAction(action);
       final ExecutionContext context = new ExecutionContext(getThreadLocalRequest(), getThreadLocalResponse());
       if (getSessionValidator() != null && !d.skipCSRFCheck(action)) {
         String secureSessionId = getSessionValidator().get(context);
@@ -41,12 +42,22 @@ public abstract class AbstractDispatchServiceServlet extends RemoteServiceServle
     } catch (final Exception e) {
       logActionFailure(e);
       throw wrapInActionException(e);
+    } finally {
+      endAction(action);
     }
   }
 
   /** Allows subclasses to override exception logging. By default uses {@link GenericServlet#log}. */
   protected void logActionFailure(Exception e) {
     log(e.getMessage(), e);
+  }
+
+  /** Allows subclasses to log/MDC at the start of action handling. */
+  protected void beginAction(Action<?> action) {
+  }
+
+  /** Allows subclasses to log/MDC at the end of action handling. */
+  protected void endAction(Action<?> action) {
   }
 
   /** Allows subclasses to create their own "runtime exception" subclass of {@link ActionException}. */
