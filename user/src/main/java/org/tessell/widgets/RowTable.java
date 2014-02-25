@@ -53,6 +53,11 @@ public class RowTable extends Panel implements IsRowTable {
   }
 
   @Override
+  public void add(final IsWidget isWidget) {
+    addRow(isWidget); // assume they meant row, e.g. for using in bind logic
+  }
+
+  @Override
   public void addRow(final IsWidget isWidget) {
     addRow(isWidget.asWidget());
   }
