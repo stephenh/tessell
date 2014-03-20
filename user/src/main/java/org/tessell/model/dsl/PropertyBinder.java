@@ -95,7 +95,7 @@ public class PropertyBinder<P> {
       source.addItem(adaptor.toDisplay(option), Integer.toString(i++));
     }
     if (p.get() == null) {
-      if (!options.contains(null)) {
+      if (!options.contains(null) && !options.isEmpty()) {
         p.set(adaptor.toValue(options.get(0)));
       }
     }

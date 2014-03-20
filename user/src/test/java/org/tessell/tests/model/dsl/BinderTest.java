@@ -163,6 +163,28 @@ public class BinderTest {
   }
 
   @Test
+  public void propertyToListBoxDoesNotFailWhenThereAreNoOptions() {
+    final StubListBox listBox = new StubListBox();
+    final ArrayList<Integer> values = new ArrayList<Integer>();
+    // s starts out null
+    assertThat(s.get(), is(nullValue()));
+    binder.bind(s).to(listBox, values, new ListBoxAdaptor<String, Integer>() {
+      public String toDisplay(Integer option) {
+        return option.toString();
+      }
+
+      @Override
+      public String toValue(Integer option) {
+        return option.toString();
+      }
+    });
+    // and s is still null
+    assertThat(s.get(), is(nullValue()));
+    // and so we were unable to select anything
+    assertThat(listBox.getSelectedIndex(), is(-1));
+  }
+
+  @Test
   public void propertyToListBoxUpdatesPropertyWhenListBoxChange() {
     final StubListBox listBox = new StubListBox();
     final ArrayList<String> values = new ArrayList<String>();
