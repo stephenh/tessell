@@ -78,6 +78,15 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
     reassess();
   }
 
+  /** Adds {@code item}, firing a {@link ValueAddedEvent}. */
+  public void add(final int index, final E item) {
+    getDirect().add(index, item);
+    setTouched(true);
+    listenForMemberChanged(item);
+    // will fire add+change if needed
+    reassess();
+  }
+
   /** Adds each item in {@code items}, firing a {@link ValueAddedEvent} for each. */
   public void addAll(Collection<? extends E> items) {
     if (items.size() == 0) {

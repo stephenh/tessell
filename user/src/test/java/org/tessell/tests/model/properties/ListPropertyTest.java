@@ -72,6 +72,19 @@ public class ListPropertyTest {
   }
 
   @Test
+  public void addAtIndexFiresValueAddedAndChanged() {
+    p.add("foo");
+    assertThat(adds.count, is(1));
+    assertThat(changes.count, is(1));
+
+    p.add(0, "bar");
+    assertThat(adds.count, is(2));
+    assertThat(changes.count, is(2));
+
+    assertThat(p.toArrayList(), contains("bar", "foo"));
+  }
+
+  @Test
   public void derivedPropertiesAreTouchedOnCreationIfNeeded() {
     p.setTouched(true);
     final IntegerProperty size = p.size();
