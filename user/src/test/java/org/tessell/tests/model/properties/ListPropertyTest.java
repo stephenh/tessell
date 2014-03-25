@@ -168,6 +168,25 @@ public class ListPropertyTest {
   }
 
   @Test
+  public void setFiresChangeWhenOrderIsDifferent() {
+    ArrayList<String> l1 = new ArrayList<String>();
+    l1.add("foo");
+    l1.add("bar");
+    p.set(l1);
+    assertThat(adds.count, is(2));
+    assertThat(changes.count, is(1));
+
+    // reorder foo/bar
+    ArrayList<String> l2 = new ArrayList<String>();
+    l2.add("bar");
+    l2.add("foo");
+    p.set(l2);
+    assertThat(adds.count, is(2));
+    assertThat(removes.count, is(0));
+    assertThat(changes.count, is(2));
+  }
+
+  @Test
   public void reassessFiresWhenValueWasNull() {
     SetValue<List<String>> qValue = new SetValue<List<String>>("q", null); // start out null
     ListProperty<String> q = listProperty(qValue);
