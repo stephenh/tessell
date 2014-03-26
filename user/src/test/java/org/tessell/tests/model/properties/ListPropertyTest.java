@@ -336,6 +336,38 @@ public class ListPropertyTest {
     assertThat(ints.get(), contains(3));
   }
 
+  @Test
+  public void asIntsUpdatesOrderInOriginalList() {
+    // given strings 2 and 3
+    p.setValue(list("2", "3"));
+    assertThat(adds.count, is(2));
+    assertThat(changes.count, is(1));
+    // that we convert to ints
+    ListProperty<Integer> ints = p.as(new StringToElementConverter());
+    assertThat(ints.toArrayList(), contains(2, 3));
+    // when we change the order of the ints
+    ints.set(list(3, 2));
+    // then the order change is reflected in the original list of strings
+    assertThat(p.toArrayList(), contains("3", "2"));
+    assertThat(adds.count, is(2));
+    assertThat(changes.count, is(2));
+  }
+
+  @Test
+  public void asIntsUpdatesOrderInDerivedList() {
+    // given strings 2 and 3
+    p.setValue(list("2", "3"));
+    assertThat(adds.count, is(2));
+    assertThat(changes.count, is(1));
+    // that we convert to ints
+    ListProperty<Integer> ints = p.as(new StringToElementConverter());
+    assertThat(ints.toArrayList(), contains(2, 3));
+    // when we change the order of the strings
+    p.set(list("3", "2"));
+    // then the order change is reflected in the derivedlist of ints
+    assertThat(ints.toArrayList(), contains(3, 2));
+  }
+
   @Test(expected = UnsupportedOperationException.class)
   public void getReturnsUnmodifiableList() {
     p.get().add("1");

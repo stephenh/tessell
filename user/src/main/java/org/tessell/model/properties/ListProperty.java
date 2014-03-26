@@ -253,6 +253,7 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
           F f = converter.to(e);
           eToF.add(e, f);
           fToE.add(f, e);
+          // TODO use add(f, newIndex)
           as.add(f);
           active[0] = false;
         }
@@ -271,6 +272,23 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
         }
       }
     });
+    // keep the F order inline with Es
+    addPropertyChangedHandler(new PropertyChangedHandler<List<E>>() {
+      public void onPropertyChanged(PropertyChangedEvent<List<E>> event) {
+        if (!active[0] && event.getNewValue() != null) {
+          active[0] = true;
+          // We're cheating here and assuming the previous add/remove handlers
+          // have kept E/F in sync and all we need to do here is look at the order
+          MapToList<E, F> eToFCopy = new MapToList<E, F>(eToF);
+          List<F> newOrder = new ArrayList<F>();
+          for (E e : get()) {
+            newOrder.add(eToFCopy.removeOne(e));
+          }
+          as.set(newOrder);
+          active[0] = false;
+        }
+      }
+    });
     // also convert new Fs back into Es
     as.addValueAddedHandler(new ValueAddedHandler<F>() {
       public void onValueAdded(ValueAddedEvent<F> event) {
@@ -280,6 +298,7 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
           E e = converter.from(f);
           fToE.add(f, e);
           eToF.add(e, f);
+          // TODO use add(f, newIndex)
           add(e);
           active[0] = false;
         }
@@ -294,6 +313,23 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
           E e = fToE.removeOne(f);
           eToF.removeOne(e);
           remove(e);
+          active[0] = false;
+        }
+      }
+    });
+    // keep the E order inline with Fs
+    as.addPropertyChangedHandler(new PropertyChangedHandler<List<F>>() {
+      public void onPropertyChanged(PropertyChangedEvent<List<F>> event) {
+        if (!active[0] && event.getNewValue() != null) {
+          active[0] = true;
+          // We're cheating here and assuming the previous add/remove handlers
+          // have kept F/E in sync and all we need to do here is look at the order
+          MapToList<F, E> fToECopy = new MapToList<F, E>(fToE);
+          List<E> newOrder = new ArrayList<E>();
+          for (F f : as.get()) {
+            newOrder.add(fToECopy.removeOne(f));
+          }
+          set(newOrder);
           active[0] = false;
         }
       }

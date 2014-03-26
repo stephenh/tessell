@@ -3,10 +3,20 @@ package org.tessell.util;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MapToList<K, V> extends LinkedHashMap<K, List<V>> {
 
   private static final long serialVersionUID = -1;
+
+  public MapToList() {
+  }
+
+  public MapToList(MapToList<K, V> copy) {
+    for (Map.Entry<K, List<V>> e : copy.entrySet()) {
+      put(e.getKey(), new ArrayList<V>(e.getValue()));
+    }
+  }
 
   @SuppressWarnings("unchecked")
   @Override
