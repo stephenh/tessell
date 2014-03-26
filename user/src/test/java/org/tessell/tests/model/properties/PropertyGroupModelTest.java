@@ -81,6 +81,13 @@ public class PropertyGroupModelTest extends AbstractRuleTest {
     assertThat(all.getProperties().size(), is(1));
   }
 
+  @Test
+  public void shouldNotFailWhenTheModelListIsNull() {
+    PropertyGroup all = new PropertyGroup("all", "parent invalid");
+    ListProperty<TestModel> models = listProperty("models", null);
+    PropertyUtils.syncModelsToGroup(all, models);
+  }
+
   private static class TestModel extends AbstractModel {
     public final StringProperty name = add(stringProperty("name")).req();
   }

@@ -34,8 +34,10 @@ public class PropertyUtils {
         all.remove(event.getValue().allValid());
       }
     });
-    for (M model : models.get()) {
-      all.add(model.allValid());
+    if (models.get() != null) {
+      for (M model : models.get()) {
+        all.add(model.allValid());
+      }
     }
   }
 
