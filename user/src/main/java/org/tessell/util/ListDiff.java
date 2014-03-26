@@ -15,6 +15,13 @@ public class ListDiff<T> {
     B map(A a);
   }
 
+  /** A minimal list interface that we is all we need for {@link #apply(List)}. */
+  public interface ListLike<A> {
+    A remove(int index);
+
+    void add(int index, A a);
+  }
+
   /** @returns a diff of {@code oldValue} and {@code newValue}. */
   public static <T> ListDiff<T> of(List<T> oldValue, List<T> newValue) {
     List<Location<T>> added = new ArrayList<Location<T>>();
@@ -100,7 +107,20 @@ public class ListDiff<T> {
     });
   }
 
-  public <U> void apply(List<U> copy, Mapper<T, U> mapper) {
+  public <U> void apply(final List<U> copy, Mapper<T, U> mapper) {
+    // sigh, no structural typing
+    apply(new ListLike<U>() {
+      public U remove(int index) {
+        return copy.remove(index);
+      }
+
+      public void add(int index, U a) {
+        copy.add(index, a);
+      }
+    }, mapper);
+  }
+
+  public <U> void apply(ListLike<U> copy, Mapper<T, U> mapper) {
     // apply any removes
     for (Location<T> remove : removed) {
       copy.remove(remove.index);

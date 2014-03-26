@@ -4,15 +4,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.tessell.gwt.user.client.ui.IsPanel;
+import org.tessell.gwt.user.client.ui.IsInsertPanel;
 import org.tessell.gwt.user.client.ui.IsWidget;
-import org.tessell.model.events.ValueAddedEvent;
-import org.tessell.model.events.ValueAddedHandler;
-import org.tessell.model.events.ValueRemovedEvent;
-import org.tessell.model.events.ValueRemovedHandler;
+import org.tessell.model.events.ListChangedEvent;
+import org.tessell.model.events.ListChangedHandler;
 import org.tessell.model.properties.ListProperty;
 import org.tessell.presenter.BasicPresenter;
 import org.tessell.presenter.Presenter;
+import org.tessell.util.ListDiff;
+import org.tessell.util.ListDiff.Location;
 
 /** Fluent binding methods for {@link ListProperty}s. */
 public class ListPropertyBinder<P> extends PropertyBinder<List<P>> {
@@ -35,38 +35,29 @@ public class ListPropertyBinder<P> extends PropertyBinder<List<P>> {
   }
 
   /** Binds each value in {@code p} to a view created by {@code factory}. */
-  public void to(final IsPanel panel, final ListViewFactory<P> factory) {
-    // map to remember the model->view mapping so we know which view to remove later
-    final Map<P, IsWidget> views = new HashMap<P, IsWidget>();
+  public void to(final IsInsertPanel panel, final ListViewFactory<P> factory) {
     if (p.get() != null) {
       for (P value : p.get()) {
-        IsWidget view = factory.create(value);
-        views.put(value, view);
-        panel.add(view);
+        panel.add(factory.create(value));
       }
     }
-    b.add(p.addValueAddedHandler(new ValueAddedHandler<P>() {
-      public void onValueAdded(ValueAddedEvent<P> event) {
-        IsWidget view = factory.create(event.getValue());
-        views.put(event.getValue(), view);
-        panel.add(view);
-      }
-    }));
-    b.add(p.addValueRemovedHandler(new ValueRemovedHandler<P>() {
-      public void onValueRemoved(ValueRemovedEvent<P> event) {
-        IsWidget view = views.remove(event.getValue());
-        if (view != null) {
-          panel.remove(view);
-        }
+    b.add(p.addListChangedHandler(new ListChangedHandler<P>() {
+      public void onListChanged(ListChangedEvent<P> event) {
+        event.getDiff().apply(new InsertPanelListLikeAdapter(panel), new ListDiff.Mapper<P, IsWidget>() {
+          public IsWidget map(P a) {
+            return factory.create(a);
+          }
+        });
       }
     }));
   }
 
-  /** Binds each value in {@code p} to a presenter created by {@code factory}.
+  /**
+   * Binds each value in {@code p} to a presenter created by {@code factory}.
    *
    * Also adds/removes the child presenters to the {@code parent} presenter for proper binding/unbinding.
    */
-  public void to(final BasicPresenter<?> parent, final IsPanel panel, final ListPresenterFactory<P> factory) {
+  public void to(final BasicPresenter<?> parent, final IsInsertPanel panel, final ListPresenterFactory<P> factory) {
     // map to remember the model->presenter mapping so we know which view to remove later
     final Map<P, Presenter> views = new HashMap<P, Presenter>();
     if (p.get() != null) {
@@ -77,23 +68,44 @@ public class ListPropertyBinder<P> extends PropertyBinder<List<P>> {
         panel.add(child.getView());
       }
     }
-    b.add(p.addValueAddedHandler(new ValueAddedHandler<P>() {
-      public void onValueAdded(ValueAddedEvent<P> event) {
-        Presenter child = factory.create(event.getValue());
-        parent.addPresenter(child);
-        views.put(event.getValue(), child);
-        panel.add(child.getView());
-      }
-    }));
-    b.add(p.addValueRemovedHandler(new ValueRemovedHandler<P>() {
-      public void onValueRemoved(ValueRemovedEvent<P> event) {
-        Presenter child = views.remove(event.getValue());
-        if (child != null) {
-          panel.remove(child.getView());
-          parent.removePresenter(child);
+    b.add(p.addListChangedHandler(new ListChangedHandler<P>() {
+      public void onListChanged(ListChangedEvent<P> event) {
+        event.getDiff().apply(new InsertPanelListLikeAdapter(panel), new ListDiff.Mapper<P, IsWidget>() {
+          public IsWidget map(P value) {
+            Presenter child = factory.create(value);
+            parent.addPresenter(child);
+            views.put(value, child);
+            return child.getView();
+          }
+        });
+        for (Location<P> remove : event.getDiff().removed) {
+          Presenter child = views.remove(remove.element);
+          if (child != null) {
+            parent.removePresenter(child);
+          }
         }
       }
     }));
+  }
+
+  private static class InsertPanelListLikeAdapter implements ListDiff.ListLike<IsWidget> {
+    private final IsInsertPanel panel;
+
+    private InsertPanelListLikeAdapter(IsInsertPanel panel) {
+      this.panel = panel;
+    }
+
+    @Override
+    public IsWidget remove(int index) {
+      IsWidget w = panel.getIsWidget(index);
+      panel.remove(index);
+      return w;
+    }
+
+    @Override
+    public void add(int index, IsWidget a) {
+      panel.insert(a, index);
+    }
   }
 
 }

@@ -1,5 +1,6 @@
 package org.tessell.tests.model.dsl;
 
+import static joist.util.Copy.list;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.tessell.model.properties.NewProperty.listProperty;
@@ -24,21 +25,9 @@ public class ListPropertyBinderTest {
   final Binder binder = new Binder();
   final StubFlowPanel panel = new StubFlowPanel();
   final ListProperty<String> names = listProperty("names");
-  final ListViewFactory<String> viewFactory = new ListViewFactory<String>() {
-    public IsWidget create(String value) {
-      StubLabel label = new StubLabel();
-      label.setText(value);
-      return label;
-    }
-  };
-  final ListPresenterFactory<String> presenterFactory = new ListPresenterFactory<String>() {
-    public Presenter create(String value) {
-      StubLabel label = new StubLabel();
-      label.setText(value);
-      return new BasicPresenter<IsWidget>(label) {
-      };
-    }
-  };
+  final StubViewFactory viewFactory = new StubViewFactory();
+  final StubPresenterFactory presenterFactory = new StubPresenterFactory();
+  final ParentPresenter parent = bind(new ParentPresenter());
 
   @Test
   public void initialNamesAreAddedToPanel() {
@@ -58,6 +47,43 @@ public class ListPropertyBinderTest {
   }
 
   @Test
+  public void newNamesAreAddedWithIndexToPanel() {
+    binder.bind(names).to(panel, viewFactory);
+    names.add("one");
+    assertLabel(panel.getIsWidget(0), "one");
+    names.add(0, "two");
+    assertLabel(panel.getIsWidget(0), "two");
+  }
+
+  @Test
+  public void reordersToDoNotRequireCreatingNewViews() {
+    binder.bind(names).to(panel, viewFactory);
+    names.set(list("one", "two"));
+    assertThat(panel.getWidgetCount(), is(2));
+    assertLabel(panel.getIsWidget(0), "one");
+    assertThat(viewFactory.created, is(2));
+
+    names.set(list("two", "one"));
+    assertThat(panel.getWidgetCount(), is(2));
+    assertLabel(panel.getIsWidget(0), "two");
+    assertThat(viewFactory.created, is(2));
+  }
+
+  @Test
+  public void reordersToDoNotRequireCreatingNewPresenters() {
+    binder.bind(names).to(parent, panel, presenterFactory);
+    names.set(list("one", "two"));
+    assertThat(panel.getWidgetCount(), is(2));
+    assertLabel(panel.getIsWidget(0), "one");
+    assertThat(presenterFactory.created, is(2));
+
+    names.set(list("two", "one"));
+    assertThat(panel.getWidgetCount(), is(2));
+    assertLabel(panel.getIsWidget(0), "two");
+    assertThat(presenterFactory.created, is(2));
+  }
+
+  @Test
   public void oldNamesAreRemovedFromPanel() {
     binder.bind(names).to(panel, viewFactory);
     names.add("one");
@@ -72,7 +98,6 @@ public class ListPropertyBinderTest {
   public void initialPresentersAreAddedToPanel() {
     names.add("one");
     names.add("two");
-    ParentPresenter parent = bind(new ParentPresenter());
     binder.bind(names).to(parent, panel, presenterFactory);
     assertLabel(panel.getIsWidget(0), "one");
     assertLabel(panel.getIsWidget(1), "two");
@@ -81,7 +106,6 @@ public class ListPropertyBinderTest {
 
   @Test
   public void newPresentersAreAddedToPanel() {
-    ParentPresenter parent = bind(new ParentPresenter());
     binder.bind(names).to(parent, panel, presenterFactory);
     assertThat(panel.getWidgetCount(), is(0));
     names.add("one");
@@ -91,7 +115,6 @@ public class ListPropertyBinderTest {
 
   @Test
   public void oldPresentersAreRemovedFromPanel() {
-    ParentPresenter parent = bind(new ParentPresenter());
     binder.bind(names).to(parent, panel, presenterFactory);
     names.add("one");
     names.add("two");
@@ -122,6 +145,29 @@ public class ListPropertyBinderTest {
 
   private static void assertLabel(IsWidget label, String text) {
     assertThat(((StubLabel) label).getText(), is(text));
+  }
+
+  private final class StubPresenterFactory implements ListPresenterFactory<String> {
+    int created = 0;
+
+    public Presenter create(String value) {
+      created++;
+      StubLabel label = new StubLabel();
+      label.setText(value);
+      return new BasicPresenter<IsWidget>(label) {
+      };
+    }
+  }
+
+  private final class StubViewFactory implements ListViewFactory<String> {
+    int created = 0;
+
+    public IsWidget create(String value) {
+      created++;
+      StubLabel label = new StubLabel();
+      label.setText(value);
+      return label;
+    }
   }
 
   private static final class ParentPresenter extends BasicPresenter<IsWidget> {
