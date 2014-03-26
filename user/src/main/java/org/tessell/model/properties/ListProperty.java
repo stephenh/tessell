@@ -71,8 +71,14 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
 
   /** Adds {@code item}, firing a {@link ValueAddedEvent}. */
   public void add(final E item) {
+    add(item, true);
+  }
+
+  private void add(final E item, boolean shouldTouch) {
     getDirect().add(item);
-    setTouched(true);
+    if (shouldTouch) {
+      setTouched(true);
+    }
     listenForMemberChanged(item);
     // will fire add+change if needed
     reassess();
@@ -103,8 +109,14 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
 
   /** Removes {@code item}, firing a {@link ValueRemovedEvent}. */
   public void remove(final E item) {
+    remove(item, true);
+  }
+
+  private void remove(final E item, boolean shouldTouch) {
     getDirect().remove(item);
-    setTouched(true);
+    if (shouldTouch) {
+      setTouched(true);
+    }
     // will fire remove+change if needed
     reassess();
   }
@@ -233,8 +245,9 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
     final MapToList<E, F> eToF = new MapToList<E, F>();
     final MapToList<F, E> fToE = new MapToList<F, E>();
     // make an intial copy of all the elements currently in our list
-    List<F> initial = new ArrayList<F>();
+    List<F> initial = null;
     if (get() != null) {
+      initial = new ArrayList<F>();
       for (E e : get()) {
         F f = converter.to(e);
         eToF.add(e, f);
@@ -253,8 +266,11 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
           F f = converter.to(e);
           eToF.add(e, f);
           fToE.add(f, e);
+          if (as.get() == null) {
+            as.setInitialValue(new ArrayList<F>());
+          }
           // TODO use add(f, newIndex)
-          as.add(f);
+          as.add(f, false);
           active[0] = false;
         }
       }
@@ -267,7 +283,7 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
           E e = event.getValue();
           F f = eToF.removeOne(e);
           fToE.removeOne(f);
-          as.remove(f);
+          as.remove(f, false);
           active[0] = false;
         }
       }
@@ -275,7 +291,7 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
     // keep the F order inline with Es
     addPropertyChangedHandler(new PropertyChangedHandler<List<E>>() {
       public void onPropertyChanged(PropertyChangedEvent<List<E>> event) {
-        if (!active[0] && event.getNewValue() != null) {
+        if (!active[0] && get() != null) {
           active[0] = true;
           // We're cheating here and assuming the previous add/remove handlers
           // have kept E/F in sync and all we need to do here is look at the order
@@ -284,7 +300,11 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
           for (E e : get()) {
             newOrder.add(eToFCopy.removeOne(e));
           }
-          as.set(newOrder);
+          if (isTouched()) {
+            as.set(newOrder);
+          } else {
+            as.setInitialValue(newOrder);
+          }
           active[0] = false;
         }
       }
@@ -299,7 +319,7 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
           fToE.add(f, e);
           eToF.add(e, f);
           // TODO use add(f, newIndex)
-          add(e);
+          add(e, false);
           active[0] = false;
         }
       }
@@ -312,7 +332,7 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
           F f = event.getValue();
           E e = fToE.removeOne(f);
           eToF.removeOne(e);
-          remove(e);
+          remove(e, false);
           active[0] = false;
         }
       }
@@ -320,7 +340,7 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
     // keep the E order inline with Fs
     as.addPropertyChangedHandler(new PropertyChangedHandler<List<F>>() {
       public void onPropertyChanged(PropertyChangedEvent<List<F>> event) {
-        if (!active[0] && event.getNewValue() != null) {
+        if (!active[0] && as.get() != null) {
           active[0] = true;
           // We're cheating here and assuming the previous add/remove handlers
           // have kept F/E in sync and all we need to do here is look at the order
@@ -329,7 +349,11 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
           for (F f : as.get()) {
             newOrder.add(fToECopy.removeOne(f));
           }
-          set(newOrder);
+          if (as.isTouched()) {
+            set(newOrder);
+          } else {
+            setInitialValue(newOrder);
+          }
           active[0] = false;
         }
       }

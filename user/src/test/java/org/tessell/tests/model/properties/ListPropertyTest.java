@@ -368,6 +368,61 @@ public class ListPropertyTest {
     assertThat(ints.toArrayList(), contains(3, 2));
   }
 
+  @Test
+  public void asIntsShouldMatchTouchedOnSetInitialValueOnOriginalList() {
+    ListProperty<String> p = listProperty("p", null);
+    ListProperty<Integer> ints = p.as(new StringToElementConverter());
+    p.setInitialValue(new ArrayList<String>());
+    assertThat(p.isTouched(), is(false));
+    assertThat(ints.isTouched(), is(false));
+    assertThat(ints.get().isEmpty(), is(true));
+  }
+
+  @Test
+  public void asIntsShouldMatchTouchedOnSetInitialValueWithNewItems() {
+    ListProperty<String> p = listProperty("p", null);
+    ListProperty<Integer> ints = p.as(new StringToElementConverter());
+    p.setInitialValue(list("1"));
+    assertThat(p.isTouched(), is(false));
+    assertThat(ints.isTouched(), is(false));
+  }
+
+  @Test
+  public void asIntsShouldMatchTouchedOnSetActualValue() {
+    ListProperty<String> p = listProperty("p", null);
+    ListProperty<Integer> ints = p.as(new StringToElementConverter());
+    p.set(list("1"));
+    assertThat(p.isTouched(), is(true));
+    assertThat(ints.isTouched(), is(true));
+  }
+
+  @Test
+  public void asIntsShouldMatchTouchedOnSetInitialValueOnDerivedList() {
+    ListProperty<String> p = listProperty("p", null);
+    ListProperty<Integer> ints = p.as(new StringToElementConverter());
+    ints.setInitialValue(new ArrayList<Integer>());
+    assertThat(ints.isTouched(), is(false));
+    assertThat(p.isTouched(), is(false));
+    assertThat(p.get().isEmpty(), is(true));
+  }
+
+  @Test
+  public void asIntsShouldBeNullIfOriginalListIsNull() {
+    ListProperty<String> p = listProperty("p", null);
+    ListProperty<Integer> ints = p.as(new StringToElementConverter());
+    assertThat(ints.get(), is(nullValue()));
+  }
+
+  @Test
+  public void asIntsShouldMatchTouched() {
+    ListProperty<Integer> ints = p.as(new StringToElementConverter());
+    assertThat(ints.isTouched(), is(false));
+    pValue.set(new ArrayList<String>());
+    p.reassess();
+    assertThat(p.isTouched(), is(false));
+    assertThat(ints.isTouched(), is(false));
+  }
+
   @Test(expected = UnsupportedOperationException.class)
   public void getReturnsUnmodifiableList() {
     p.get().add("1");
