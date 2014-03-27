@@ -13,6 +13,7 @@ import org.tessell.model.events.*;
 import org.tessell.model.values.DerivedValue;
 import org.tessell.model.values.Value;
 import org.tessell.util.ListDiff;
+import org.tessell.util.ListDiff.NewLocation;
 import org.tessell.util.MapToList;
 import org.tessell.util.ObjectUtils;
 
@@ -393,8 +394,8 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
   @Override
   protected void fireChanged(List<E> oldValue, List<E> newValue) {
     ListDiff<E> diff = ListDiff.of(oldValue, newValue);
-    for (E added : diff.added) {
-      fireEvent(new ValueAddedEvent<E>(this, added));
+    for (NewLocation<E> added : diff.added) {
+      fireEvent(new ValueAddedEvent<E>(this, added.element, added.index));
     }
     for (E removed : diff.removed) {
       fireEvent(new ValueRemovedEvent<E>(this, removed));
