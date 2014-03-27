@@ -133,18 +133,7 @@ public class ListDiffTest {
     {
       // make a copy of old
       List<String> copy = new ArrayList<String>(oldList);
-      // apply any removes
-      copy.removeAll(diff.removed);
-      // apply any adds
-      for (NewLocation<String> add : diff.added) {
-        copy.add(add.index, add.element);
-      }
-      // apply any moves
-      for (NewLocation<String> move : diff.moves) {
-        boolean removed = copy.remove(move.element);
-        assertThat(removed, is(true));
-        copy.add(move.index, move.element);
-      }
+      diff.apply(copy);
       assertThat(copy, is(newList));
     }
     // do the same logic, but by using oldIndex in the move logic

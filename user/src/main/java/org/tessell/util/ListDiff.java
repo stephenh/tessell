@@ -83,6 +83,21 @@ public class ListDiff<T> {
     }
   }
 
+  /** Brings an old list {@code copy} up to date with our new value by applying adds/removes. */
+  public void apply(List<T> copy) {
+    // apply any removes
+    copy.removeAll(removed);
+    // apply any adds
+    for (NewLocation<T> add : added) {
+      copy.add(add.index, add.element);
+    }
+    // apply any moves
+    for (NewLocation<T> move : moves) {
+      copy.remove(move.oldIndex);
+      copy.add(move.index, move.element);
+    }
+  }
+
   private ListDiff(Collection<NewLocation<T>> added, Collection<NewLocation<T>> moves, Collection<T> removed) {
     this.added = added;
     this.removed = removed;
