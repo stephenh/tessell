@@ -135,6 +135,23 @@ public class ListDiffTest {
       diff.apply(copy);
       assertThat(copy, is(newList));
     }
+    {
+      // apply a transformation to oldList, and make sure apply still works
+      List<String> oldList2 = new ArrayList<String>();
+      for (String s : oldList) {
+        oldList2.add(s + s);
+      }
+      List<String> newList2 = new ArrayList<String>();
+      for (String s : newList) {
+        newList2.add(s + s);
+      }
+      diff.apply(oldList2, new ListDiff.Mapper<String, String>() {
+        public String map(String a) {
+          return a + a;
+        }
+      });
+      assertThat(oldList2, is(newList2));
+    }
   }
 
 }

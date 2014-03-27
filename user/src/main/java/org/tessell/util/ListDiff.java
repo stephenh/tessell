@@ -10,6 +10,11 @@ import java.util.List;
  */
 public class ListDiff<T> {
 
+  /** Maps one type to another (e.g. DTO to model, or model to view, or string to int). */
+  public interface Mapper<A, B> {
+    B map(A a);
+  }
+
   /** @returns a diff of {@code oldValue} and {@code newValue}. */
   public static <T> ListDiff<T> of(List<T> oldValue, List<T> newValue) {
     List<NewLocation<T>> added = new ArrayList<NewLocation<T>>();
@@ -95,6 +100,22 @@ public class ListDiff<T> {
     for (NewLocation<T> move : moves) {
       copy.remove(move.oldIndex);
       copy.add(move.index, move.element);
+    }
+  }
+
+  public <U> void apply(List<U> copy, Mapper<T, U> mapper) {
+    // apply any removes
+    for (T remove : removed) {
+      copy.remove(mapper.map(remove));
+    }
+    // apply any adds
+    for (NewLocation<T> add : added) {
+      copy.add(add.index, mapper.map(add.element));
+    }
+    // apply any moves
+    for (NewLocation<T> move : moves) {
+      copy.remove(move.oldIndex);
+      copy.add(move.index, mapper.map(move.element));
     }
   }
 
