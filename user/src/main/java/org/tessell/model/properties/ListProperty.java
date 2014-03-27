@@ -13,8 +13,7 @@ import org.tessell.model.events.*;
 import org.tessell.model.values.DerivedValue;
 import org.tessell.model.values.Value;
 import org.tessell.util.ListDiff;
-import org.tessell.util.ListDiff.NewLocation;
-import org.tessell.util.MapToList;
+import org.tessell.util.ListDiff.Location;
 import org.tessell.util.ObjectUtils;
 
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -72,14 +71,8 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
 
   /** Adds {@code item}, firing a {@link ValueAddedEvent}. */
   public void add(final E item) {
-    add(item, true);
-  }
-
-  private void add(final E item, boolean shouldTouch) {
     getDirect().add(item);
-    if (shouldTouch) {
-      setTouched(true);
-    }
+    setTouched(true);
     listenForMemberChanged(item);
     // will fire add+change if needed
     reassess();
@@ -110,14 +103,8 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
 
   /** Removes {@code item}, firing a {@link ValueRemovedEvent}. */
   public void remove(final E item) {
-    remove(item, true);
-  }
-
-  private void remove(final E item, boolean shouldTouch) {
     getDirect().remove(item);
-    if (shouldTouch) {
-      setTouched(true);
-    }
+    setTouched(true);
     // will fire remove+change if needed
     reassess();
   }
@@ -248,117 +235,56 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
    * using {@code converter} to go between {@code E} and {@code F}.
    */
   public <F> ListProperty<F> as(final ElementConverter<E, F> converter) {
-    final MapToList<E, F> eToF = new MapToList<E, F>();
-    final MapToList<F, E> fToE = new MapToList<F, E>();
     // make an intial copy of all the elements currently in our list
     List<F> initial = null;
     if (get() != null) {
       initial = new ArrayList<F>();
       for (E e : get()) {
         F f = converter.to(e);
-        eToF.add(e, f);
-        fToE.add(f, e);
         initial.add(f);
       }
     }
     final ListProperty<F> as = listProperty(getName(), initial);
     final boolean[] active = { false };
     // keep converting E -> F into as
-    addValueAddedHandler(new ValueAddedHandler<E>() {
-      public void onValueAdded(ValueAddedEvent<E> event) {
+    addListChangedHandler(new ListChangedHandler<E>() {
+      public void onListChanged(ListChangedEvent<E> event) {
         if (!active[0]) {
           active[0] = true;
-          E e = event.getValue();
-          F f = converter.to(e);
-          eToF.add(e, f);
-          fToE.add(f, e);
-          if (as.get() == null) {
+          if (get() != null && as.get() == null) {
             as.setInitialValue(new ArrayList<F>());
           }
-          // TODO use add(f, newIndex)
-          as.add(f, false);
-          active[0] = false;
-        }
-      }
-    });
-    // remove Fs as Es are removed
-    addValueRemovedHandler(new ValueRemovedHandler<E>() {
-      public void onValueRemoved(ValueRemovedEvent<E> event) {
-        if (!active[0]) {
-          active[0] = true;
-          E e = event.getValue();
-          F f = eToF.removeOne(e);
-          fToE.removeOne(f);
-          as.remove(f, false);
-          active[0] = false;
-        }
-      }
-    });
-    // keep the F order inline with Es
-    addPropertyChangedHandler(new PropertyChangedHandler<List<E>>() {
-      public void onPropertyChanged(PropertyChangedEvent<List<E>> event) {
-        if (!active[0] && get() != null) {
-          active[0] = true;
-          // We're cheating here and assuming the previous add/remove handlers
-          // have kept E/F in sync and all we need to do here is look at the order
-          MapToList<E, F> eToFCopy = new MapToList<E, F>(eToF);
-          List<F> newOrder = new ArrayList<F>();
-          for (E e : get()) {
-            newOrder.add(eToFCopy.removeOne(e));
-          }
-          if (isTouched()) {
-            as.set(newOrder);
+          event.getDiff().apply(as.getDirect(), new ListDiff.Mapper<E, F>() {
+            public F map(E e) {
+              return converter.to(e);
+            }
+          });
+          if (isTouched() && !as.isTouched()) {
+            as.setTouched(true);
           } else {
-            as.setInitialValue(newOrder);
+            as.reassess();
           }
           active[0] = false;
         }
       }
     });
     // also convert new Fs back into Es
-    as.addValueAddedHandler(new ValueAddedHandler<F>() {
-      public void onValueAdded(ValueAddedEvent<F> event) {
+    as.addListChangedHandler(new ListChangedHandler<F>() {
+      public void onListChanged(ListChangedEvent<F> event) {
         if (!active[0]) {
           active[0] = true;
-          F f = event.getValue();
-          E e = converter.from(f);
-          fToE.add(f, e);
-          eToF.add(e, f);
-          // TODO use add(f, newIndex)
-          add(e, false);
-          active[0] = false;
-        }
-      }
-    });
-    // and remove Es as Fs are removed
-    as.addValueRemovedHandler(new ValueRemovedHandler<F>() {
-      public void onValueRemoved(ValueRemovedEvent<F> event) {
-        if (!active[0]) {
-          active[0] = true;
-          F f = event.getValue();
-          E e = fToE.removeOne(f);
-          eToF.removeOne(e);
-          remove(e, false);
-          active[0] = false;
-        }
-      }
-    });
-    // keep the E order inline with Fs
-    as.addPropertyChangedHandler(new PropertyChangedHandler<List<F>>() {
-      public void onPropertyChanged(PropertyChangedEvent<List<F>> event) {
-        if (!active[0] && as.get() != null) {
-          active[0] = true;
-          // We're cheating here and assuming the previous add/remove handlers
-          // have kept F/E in sync and all we need to do here is look at the order
-          MapToList<F, E> fToECopy = new MapToList<F, E>(fToE);
-          List<E> newOrder = new ArrayList<E>();
-          for (F f : as.get()) {
-            newOrder.add(fToECopy.removeOne(f));
+          if (get() == null && as.get() != null) {
+            setInitialValue(new ArrayList<E>());
           }
-          if (as.isTouched()) {
-            set(newOrder);
+          event.getDiff().apply(getDirect(), new ListDiff.Mapper<F, E>() {
+            public E map(F f) {
+              return converter.from(f);
+            }
+          });
+          if (as.isTouched() && !isTouched()) {
+            setTouched(true);
           } else {
-            setInitialValue(newOrder);
+            reassess();
           }
           active[0] = false;
         }
@@ -399,11 +325,11 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
   @Override
   protected void fireChanged(List<E> oldValue, List<E> newValue) {
     ListDiff<E> diff = ListDiff.of(oldValue, newValue);
-    for (NewLocation<E> added : diff.added) {
+    for (Location<E> added : diff.added) {
       fireEvent(new ValueAddedEvent<E>(this, added.element));
     }
-    for (E removed : diff.removed) {
-      fireEvent(new ValueRemovedEvent<E>(this, removed));
+    for (Location<E> removed : diff.removed) {
+      fireEvent(new ValueRemovedEvent<E>(this, removed.element));
     }
     fireEvent(new ListChangedEvent<E>(this, oldValue, newValue, diff));
     super.fireChanged(oldValue, newValue);

@@ -17,16 +17,18 @@ public class ListDiff<T> {
 
   /** @returns a diff of {@code oldValue} and {@code newValue}. */
   public static <T> ListDiff<T> of(List<T> oldValue, List<T> newValue) {
-    List<NewLocation<T>> added = new ArrayList<NewLocation<T>>();
-    List<NewLocation<T>> moves = new ArrayList<NewLocation<T>>();
-    List<T> removed = new ArrayList<T>();
+    List<Location<T>> added = new ArrayList<Location<T>>();
+    List<Location<T>> moves = new ArrayList<Location<T>>();
+    List<Location<T>> removed = new ArrayList<Location<T>>();
     if (oldValue == null && newValue != null) {
       int i = 0;
       for (T t : newValue) {
-        added.add(new NewLocation<T>(t, i++, -1));
+        added.add(new Location<T>(t, i++, -1));
       }
     } else if (oldValue != null && newValue == null) {
-      removed.addAll(oldValue);
+      for (T t : oldValue) {
+        removed.add(new Location<T>(t, 0, -1));
+      }
     } else if (oldValue != null && newValue != null) {
       // We make oldCopy/newCopy so that we can call .remove on
       // the copies (a destructive operation) so that we'll detect
@@ -37,7 +39,7 @@ public class ListDiff<T> {
       for (Iterator<T> i = oldCopy.iterator(); i.hasNext();) {
         T t = i.next();
         if (!newCopy.remove(t)) {
-          removed.add(t);
+          removed.add(new Location<T>(t, oldCopy.indexOf(t), -1));
           i.remove();
         }
       }
@@ -46,7 +48,7 @@ public class ListDiff<T> {
         if (!oldCopy.remove(t)) {
           // we didn't find in old, so it's new
           int newIndex = newValue.indexOf(t);
-          added.add(new NewLocation<T>(t, newIndex, -1));
+          added.add(new Location<T>(t, newIndex, -1));
           // keep withRemoves up to date
           withRemoves.add(newIndex, t);
         } else {
@@ -54,7 +56,7 @@ public class ListDiff<T> {
           int oldIndex = withRemoves.indexOf(t);
           int newIndex = newValue.indexOf(t);
           if (oldIndex != newIndex) {
-            moves.add(new NewLocation<T>(t, newIndex, oldIndex));
+            moves.add(new Location<T>(t, newIndex, oldIndex));
             // keep withRemoves up to date
             withRemoves.remove(oldIndex);
             withRemoves.add(newIndex, t);
@@ -65,18 +67,18 @@ public class ListDiff<T> {
     return new ListDiff<T>(added, moves, removed);
   }
 
-  public final Collection<NewLocation<T>> added;
-  public final Collection<NewLocation<T>> moves;
-  public final Collection<T> removed;
+  public final Collection<Location<T>> added;
+  public final Collection<Location<T>> moves;
+  public final Collection<Location<T>> removed;
 
   /** Tracks an element that was not added or moved to a new index in the list. */
-  public static class NewLocation<T> {
+  public static class Location<T> {
     public final T element;
     public final int index;
     /** The old index of {@code element}, *after* any removals are applied. */
     public final int oldIndex;
 
-    private NewLocation(T element, int index, int oldIndex) {
+    private Location(T element, int index, int oldIndex) {
       this.element = element;
       this.index = index;
       this.oldIndex = oldIndex;
@@ -90,36 +92,30 @@ public class ListDiff<T> {
 
   /** Brings an old list {@code copy} up to date with our new value by applying adds/removes. */
   public void apply(List<T> copy) {
-    // apply any removes
-    copy.removeAll(removed);
-    // apply any adds
-    for (NewLocation<T> add : added) {
-      copy.add(add.index, add.element);
-    }
-    // apply any moves
-    for (NewLocation<T> move : moves) {
-      copy.remove(move.oldIndex);
-      copy.add(move.index, move.element);
-    }
+    // call the overload with an identity mapper
+    apply(copy, new Mapper<T, T>() {
+      public T map(T a) {
+        return a;
+      }
+    });
   }
 
   public <U> void apply(List<U> copy, Mapper<T, U> mapper) {
     // apply any removes
-    for (T remove : removed) {
-      copy.remove(mapper.map(remove));
+    for (Location<T> remove : removed) {
+      copy.remove(remove.index);
     }
     // apply any adds
-    for (NewLocation<T> add : added) {
+    for (Location<T> add : added) {
       copy.add(add.index, mapper.map(add.element));
     }
     // apply any moves
-    for (NewLocation<T> move : moves) {
-      copy.remove(move.oldIndex);
-      copy.add(move.index, mapper.map(move.element));
+    for (Location<T> move : moves) {
+      copy.add(move.index, copy.remove(move.oldIndex));
     }
   }
 
-  private ListDiff(Collection<NewLocation<T>> added, Collection<NewLocation<T>> moves, Collection<T> removed) {
+  private ListDiff(Collection<Location<T>> added, Collection<Location<T>> moves, Collection<Location<T>> removed) {
     this.added = added;
     this.removed = removed;
     this.moves = moves;

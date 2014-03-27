@@ -22,7 +22,7 @@ public class ListDiffTest {
   @Test
   public void nullNewValue() {
     ListDiff<String> d = ListDiff.of(list("3", "3", "3"), null);
-    assertThat(d.removed.toString(), is("[3, 3, 3]"));
+    assertThat(d.removed.toString(), is("[3@0, 3@0, 3@0]"));
     assertThat(d.added.size(), is(0));
     assertThat(d.moves.size(), is(0));
   }
@@ -46,7 +46,7 @@ public class ListDiffTest {
   @Test
   public void testFindRemoves() {
     ListDiff<String> d = ListDiff.of(list("3", "3", "3"), list("3"));
-    assertThat(d.removed.toString(), is("[3, 3]"));
+    assertThat(d.removed.toString(), is("[3@0, 3@0]"));
     assertThat(d.added.size(), is(0));
     assertThat(d.moves.size(), is(0));
   }
@@ -95,7 +95,7 @@ public class ListDiffTest {
   @Test
   public void testFindRemoveInTheMiddle() {
     ListDiff<String> d = ListDiff.of(list("1", "2", "3", "4"), list("1", "2", "4"));
-    assertThat(d.removed.toString(), is("[3]"));
+    assertThat(d.removed.toString(), is("[3@2]"));
     assertThat(d.added.size(), is(0));
     // if we remove 3, 4 slides up, so we don't count it as a move
     assertThat(d.moves.size(), is(0));

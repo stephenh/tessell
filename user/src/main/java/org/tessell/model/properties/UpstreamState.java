@@ -3,7 +3,7 @@ package org.tessell.model.properties;
 import java.util.List;
 
 import org.tessell.util.ListDiff;
-import org.tessell.util.ListDiff.NewLocation;
+import org.tessell.util.ListDiff.Location;
 
 public class UpstreamState {
 
@@ -20,10 +20,11 @@ public class UpstreamState {
     // Only update our upstream properties if they've changed
     if (lastUpstream == null || !lastUpstream.equals(newUpstream)) {
       ListDiff<Property<?>> diff = ListDiff.of(lastUpstream, newUpstream);
-      for (Property<?> removed : diff.removed) {
+      for (Location<Property<?>> removedLocation : diff.removed) {
+        Property<?> removed = removedLocation.element;
         removed.removeDerived(owner, this);
       }
-      for (NewLocation<Property<?>> addedLocation : diff.added) {
+      for (Location<Property<?>> addedLocation : diff.added) {
         Property<?> added = addedLocation.element;
         if (added != owner) {
           added.addDerived(owner, this, touch);

@@ -178,7 +178,7 @@ public class ListPropertyTest {
     assertThat(lastDiff.lastDiff.toString(), is("[foo@0]; []; []"));
 
     p.remove("foo");
-    assertThat(lastDiff.lastDiff.toString(), is("[]; []; [foo]"));
+    assertThat(lastDiff.lastDiff.toString(), is("[]; []; [foo@0]"));
 
     p.add("bar");
     assertThat(lastDiff.lastDiff.toString(), is("[bar@0]; []; []"));
@@ -408,7 +408,17 @@ public class ListPropertyTest {
   }
 
   @Test
-  public void asIntsShouldMatchTouchedOnSetActualValue() {
+  public void asIntsShouldMatchTouchedOnSetInitialValueOnDerivedList() {
+    ListProperty<String> p = listProperty("p", null);
+    ListProperty<Integer> ints = p.as(new StringToElementConverter());
+    ints.setInitialValue(new ArrayList<Integer>());
+    assertThat(ints.isTouched(), is(false));
+    assertThat(p.isTouched(), is(false));
+    assertThat(p.get().isEmpty(), is(true));
+  }
+
+  @Test
+  public void asIntsShouldMatchTouchedOnSetActualValueOnOriginalList() {
     ListProperty<String> p = listProperty("p", null);
     ListProperty<Integer> ints = p.as(new StringToElementConverter());
     p.set(list("1"));
@@ -417,13 +427,12 @@ public class ListPropertyTest {
   }
 
   @Test
-  public void asIntsShouldMatchTouchedOnSetInitialValueOnDerivedList() {
+  public void asIntsShouldMatchTouchedOnSetActualValueOnDerivedList() {
     ListProperty<String> p = listProperty("p", null);
     ListProperty<Integer> ints = p.as(new StringToElementConverter());
-    ints.setInitialValue(new ArrayList<Integer>());
-    assertThat(ints.isTouched(), is(false));
-    assertThat(p.isTouched(), is(false));
-    assertThat(p.get().isEmpty(), is(true));
+    ints.set(list(1));
+    assertThat(ints.isTouched(), is(true));
+    assertThat(p.isTouched(), is(true));
   }
 
   @Test
