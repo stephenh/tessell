@@ -12,6 +12,4 @@ public class ValueAddedEventSpec<P> {
   Property<List<P>> property;
   @Param(2)
   P value;
-  @Param(3)
-  int newIndex;
 }
