@@ -423,6 +423,22 @@ public class ListPropertyTest {
     assertThat(ints.isTouched(), is(false));
   }
 
+  @Test
+  public void asIntsInsertPositionInOriginalListIsRespected() {
+    ListProperty<Integer> ints = p.as(new StringToElementConverter());
+    p.set(list("3"));
+    p.add(0, "2");
+    assertThat(ints.get(), contains(2, 3));
+  }
+
+  @Test
+  public void asIntsAInsertPositionInDerivedListIsRespected() {
+    ListProperty<Integer> ints = p.as(new StringToElementConverter());
+    p.set(list("3"));
+    ints.add(0, 2);
+    assertThat(p.get(), contains("2", "3"));
+  }
+
   @Test(expected = UnsupportedOperationException.class)
   public void getReturnsUnmodifiableList() {
     p.get().add("1");
