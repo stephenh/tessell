@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
-import org.tessell.util.ListDiff.NewLocation;
 
 public class ListDiffTest {
 
@@ -134,24 +133,6 @@ public class ListDiffTest {
       // make a copy of old
       List<String> copy = new ArrayList<String>(oldList);
       diff.apply(copy);
-      assertThat(copy, is(newList));
-    }
-    // do the same logic, but by using oldIndex in the move logic
-    {
-      // make a copy of old
-      List<String> copy = new ArrayList<String>(oldList);
-      // apply any removes
-      copy.removeAll(diff.removed);
-      // apply any adds
-      for (NewLocation<String> add : diff.added) {
-        copy.add(add.index, add.element);
-      }
-      // apply any moves
-      for (NewLocation<String> move : diff.moves) {
-        String removed = copy.remove(move.oldIndex);
-        assertThat(removed, is(move.element));
-        copy.add(move.index, move.element);
-      }
       assertThat(copy, is(newList));
     }
   }
