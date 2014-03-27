@@ -130,20 +130,41 @@ public class ListDiffTest {
 
   private static void assertDiffIsRight(List<String> oldList, List<String> newList) {
     ListDiff<String> diff = ListDiff.of(oldList, newList);
-    // make a copy of old
-    List<String> copy = new ArrayList<String>(oldList);
-    // apply any removes
-    copy.removeAll(diff.removed);
-    // apply any adds
-    for (NewLocation<String> add : diff.added) {
-      copy.add(add.index, add.element);
+    {
+      // make a copy of old
+      List<String> copy = new ArrayList<String>(oldList);
+      // apply any removes
+      copy.removeAll(diff.removed);
+      // apply any adds
+      for (NewLocation<String> add : diff.added) {
+        copy.add(add.index, add.element);
+      }
+      // apply any moves
+      for (NewLocation<String> move : diff.moves) {
+        boolean removed = copy.remove(move.element);
+        assertThat(removed, is(true));
+        copy.add(move.index, move.element);
+      }
+      assertThat(copy, is(newList));
     }
-    // apply any moves
-    for (NewLocation<String> move : diff.moves) {
-      copy.remove(move.element);
-      copy.add(move.index, move.element);
+    // do the same logic, but by using oldIndex in the move logic
+    {
+      // make a copy of old
+      List<String> copy = new ArrayList<String>(oldList);
+      // apply any removes
+      copy.removeAll(diff.removed);
+      // apply any adds
+      for (NewLocation<String> add : diff.added) {
+        copy.add(add.index, add.element);
+      }
+      // apply any moves
+      for (NewLocation<String> move : diff.moves) {
+        String removed = copy.remove(move.oldIndex);
+        assertThat(removed, is(move.element));
+        copy.add(move.index, move.element);
+      }
+      assertThat(copy, is(newList));
     }
-    assertThat(copy, is(newList));
   }
 
 }

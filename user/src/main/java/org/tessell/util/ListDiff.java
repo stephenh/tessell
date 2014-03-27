@@ -18,7 +18,7 @@ public class ListDiff<T> {
     if (oldValue == null && newValue != null) {
       int i = 0;
       for (T t : newValue) {
-        added.add(new NewLocation<T>(t, i++));
+        added.add(new NewLocation<T>(t, i++, -1));
       }
     } else if (oldValue != null && newValue == null) {
       removed.addAll(oldValue);
@@ -41,7 +41,7 @@ public class ListDiff<T> {
         if (!oldCopy.remove(t)) {
           // we didn't find in old, so it's new
           int newIndex = newValue.indexOf(t);
-          added.add(new NewLocation<T>(t, newIndex));
+          added.add(new NewLocation<T>(t, newIndex, -1));
           // keep withRemoves up to date
           withRemoves.add(newIndex, t);
         } else {
@@ -49,7 +49,7 @@ public class ListDiff<T> {
           int oldIndex = withRemoves.indexOf(t);
           int newIndex = newValue.indexOf(t);
           if (oldIndex != newIndex) {
-            moves.add(new NewLocation<T>(t, newIndex));
+            moves.add(new NewLocation<T>(t, newIndex, oldIndex));
             // keep withRemoves up to date
             withRemoves.remove(oldIndex);
             withRemoves.add(newIndex, t);
@@ -64,14 +64,17 @@ public class ListDiff<T> {
   public final Collection<NewLocation<T>> moves;
   public final Collection<T> removed;
 
-  /** Tracks an element that was not added or removed, but moved to a new index in the list. */
+  /** Tracks an element that was not added or moved to a new index in the list. */
   public static class NewLocation<T> {
     public final T element;
     public final int index;
+    /** The old index of {@code element}, *after* any removals are applied. */
+    public final int oldIndex;
 
-    private NewLocation(T element, int index) {
+    private NewLocation(T element, int index, int oldIndex) {
       this.element = element;
       this.index = index;
+      this.oldIndex = oldIndex;
     }
 
     @Override
