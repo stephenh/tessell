@@ -231,6 +231,11 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
     return addHandler(ValueRemovedEvent.getType(), handler);
   }
 
+  /** Registers {@code handler} to be called when the list changes. */
+  public HandlerRegistration addListChangedHandler(final ListChangedHandler<E> handler) {
+    return addHandler(ListChangedEvent.getType(), handler);
+  }
+
   /** Registers {@code handler} to be called when values changed. */
   public HandlerRegistration addMemberChangedHandler(final MemberChangedHandler handler) {
     return addHandler(MemberChangedEvent.getType(), handler);
@@ -400,6 +405,7 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
     for (E removed : diff.removed) {
       fireEvent(new ValueRemovedEvent<E>(this, removed));
     }
+    fireEvent(new ListChangedEvent<E>(this, oldValue, newValue, diff));
     super.fireChanged(oldValue, newValue);
   }
 

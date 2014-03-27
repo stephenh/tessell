@@ -23,6 +23,7 @@ import org.tessell.model.properties.ListProperty.ElementFilter;
 import org.tessell.model.validation.rules.Size;
 import org.tessell.model.values.DerivedValue;
 import org.tessell.model.values.SetValue;
+import org.tessell.util.ListDiff;
 
 public class ListPropertyTest {
 
@@ -31,6 +32,7 @@ public class ListPropertyTest {
   final CountingAdds<String> adds = new CountingAdds<String>();
   final CountingRemoves<String> removes = new CountingRemoves<String>();
   final CountingChanges<List<String>> changes = new CountingChanges<List<String>>();
+  final LastDiff<String> lastDiff = new LastDiff<String>();
 
   @Before
   public void initialValue() {
@@ -38,6 +40,7 @@ public class ListPropertyTest {
     p.addValueAddedHandler(adds);
     p.addValueRemovedHandler(removes);
     p.addPropertyChangedHandler(changes);
+    p.addListChangedHandler(lastDiff);
   }
 
   @Test
@@ -165,6 +168,23 @@ public class ListPropertyTest {
     assertThat(adds.count, is(3));
     assertThat(removes.count, is(1));
     assertThat(changes.count, is(2));
+  }
+
+  @Test
+  public void listChangedEventFires() {
+    ArrayList<String> l = new ArrayList<String>();
+    l.add("foo");
+    p.set(l);
+    assertThat(lastDiff.lastDiff.toString(), is("[foo@0]; []; []"));
+
+    p.remove("foo");
+    assertThat(lastDiff.lastDiff.toString(), is("[]; []; [foo]"));
+
+    p.add("bar");
+    assertThat(lastDiff.lastDiff.toString(), is("[bar@0]; []; []"));
+
+    p.add(0, "foo");
+    assertThat(lastDiff.lastDiff.toString(), is("[foo@0]; []; []"));
   }
 
   @Test
@@ -757,6 +777,16 @@ public class ListPropertyTest {
     public void onValueRemoved(final ValueRemovedEvent<P> event) {
       count++;
     }
+  }
+
+  public static class LastDiff<P> implements ListChangedHandler<P> {
+    public ListDiff<P> lastDiff;
+
+    @Override
+    public void onListChanged(ListChangedEvent<P> event) {
+      lastDiff = event.getDiff();
+    }
+
   }
 
   private final class StringToElementConverter implements ElementConverter<String, Integer> {
