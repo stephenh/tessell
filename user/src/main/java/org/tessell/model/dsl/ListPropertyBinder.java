@@ -38,10 +38,12 @@ public class ListPropertyBinder<P> extends PropertyBinder<List<P>> {
   public void to(final IsPanel panel, final ListViewFactory<P> factory) {
     // map to remember the model->view mapping so we know which view to remove later
     final Map<P, IsWidget> views = new HashMap<P, IsWidget>();
-    for (P value : p.get()) {
-      IsWidget view = factory.create(value);
-      views.put(value, view);
-      panel.add(view);
+    if (p.get() != null) {
+      for (P value : p.get()) {
+        IsWidget view = factory.create(value);
+        views.put(value, view);
+        panel.add(view);
+      }
     }
     b.add(p.addValueAddedHandler(new ValueAddedHandler<P>() {
       public void onValueAdded(ValueAddedEvent<P> event) {
@@ -67,11 +69,13 @@ public class ListPropertyBinder<P> extends PropertyBinder<List<P>> {
   public void to(final BasicPresenter<?> parent, final IsPanel panel, final ListPresenterFactory<P> factory) {
     // map to remember the model->presenter mapping so we know which view to remove later
     final Map<P, Presenter> views = new HashMap<P, Presenter>();
-    for (P value : p.get()) {
-      Presenter child = factory.create(value);
-      parent.addPresenter(child);
-      views.put(value, child);
-      panel.add(child.getView());
+    if (p.get() != null) {
+      for (P value : p.get()) {
+        Presenter child = factory.create(value);
+        parent.addPresenter(child);
+        views.put(value, child);
+        panel.add(child.getView());
+      }
     }
     b.add(p.addValueAddedHandler(new ValueAddedHandler<P>() {
       public void onValueAdded(ValueAddedEvent<P> event) {

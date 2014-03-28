@@ -6,6 +6,8 @@ import static org.tessell.model.properties.NewProperty.listProperty;
 
 import java.util.ArrayList;
 
+import joist.util.Copy;
+
 import org.junit.Test;
 import org.tessell.gwt.user.client.ui.IsWidget;
 import org.tessell.gwt.user.client.ui.StubFlowPanel;
@@ -99,6 +101,23 @@ public class ListPropertyBinderTest {
     assertThat(panel.getWidgetCount(), is(1));
     assertLabel(panel.getIsWidget(0), "two");
     assertThat(parent.getChildren().size(), is(1));
+  }
+
+  @Test
+  public void bindDoesNotNullPointerExceptionForViews() {
+    names.set(null);
+    binder.bind(names).to(panel, viewFactory);
+    names.set(Copy.list("one"));
+    assertThat(panel.getWidgetCount(), is(1));
+  }
+
+  @Test
+  public void bindDoesNotNullPointerExceptionForPresenters() {
+    names.set(null);
+    ParentPresenter parent = bind(new ParentPresenter());
+    binder.bind(names).to(parent, panel, presenterFactory);
+    names.set(Copy.list("one"));
+    assertThat(panel.getWidgetCount(), is(1));
   }
 
   private static void assertLabel(IsWidget label, String text) {
