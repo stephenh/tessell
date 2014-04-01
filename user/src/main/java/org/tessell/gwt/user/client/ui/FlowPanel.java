@@ -8,6 +8,13 @@ import org.tessell.gwt.dom.client.IsStyle;
 
 public class FlowPanel extends com.google.gwt.user.client.ui.FlowPanel implements IsFlowPanel {
 
+  public FlowPanel() {
+  }
+
+  public FlowPanel(String tag) {
+    super(tag);
+  }
+
   @Override
   public IsStyle getStyle() {
     return getIsElement().getStyle();
