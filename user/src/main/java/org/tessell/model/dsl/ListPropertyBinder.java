@@ -36,6 +36,7 @@ public class ListPropertyBinder<P> extends PropertyBinder<List<P>> {
 
   /** Binds each value in {@code p} to a view created by {@code factory}. */
   public void to(final IsInsertPanel panel, final ListViewFactory<P> factory) {
+    final InsertPanelListLikeAdapter adapter = new InsertPanelListLikeAdapter(panel);
     if (p.get() != null) {
       for (P value : p.get()) {
         panel.add(factory.create(value));
@@ -43,7 +44,7 @@ public class ListPropertyBinder<P> extends PropertyBinder<List<P>> {
     }
     b.add(p.addListChangedHandler(new ListChangedHandler<P>() {
       public void onListChanged(ListChangedEvent<P> event) {
-        event.getDiff().apply(new InsertPanelListLikeAdapter(panel), new ListDiff.Mapper<P, IsWidget>() {
+        event.getDiff().apply(adapter, new ListDiff.Mapper<P, IsWidget>() {
           public IsWidget map(P a) {
             return factory.create(a);
           }
@@ -58,6 +59,7 @@ public class ListPropertyBinder<P> extends PropertyBinder<List<P>> {
    * Also adds/removes the child presenters to the {@code parent} presenter for proper binding/unbinding.
    */
   public void to(final BasicPresenter<?> parent, final IsInsertPanel panel, final ListPresenterFactory<P> factory) {
+    final InsertPanelListLikeAdapter adapter = new InsertPanelListLikeAdapter(panel);
     // map to remember the model->presenter mapping so we know which view to remove later
     final Map<P, Presenter> views = new HashMap<P, Presenter>();
     if (p.get() != null) {
@@ -70,7 +72,7 @@ public class ListPropertyBinder<P> extends PropertyBinder<List<P>> {
     }
     b.add(p.addListChangedHandler(new ListChangedHandler<P>() {
       public void onListChanged(ListChangedEvent<P> event) {
-        event.getDiff().apply(new InsertPanelListLikeAdapter(panel), new ListDiff.Mapper<P, IsWidget>() {
+        event.getDiff().apply(adapter, new ListDiff.Mapper<P, IsWidget>() {
           public IsWidget map(P value) {
             Presenter child = factory.create(value);
             parent.addPresenter(child);
@@ -90,21 +92,23 @@ public class ListPropertyBinder<P> extends PropertyBinder<List<P>> {
 
   private static class InsertPanelListLikeAdapter implements ListDiff.ListLike<IsWidget> {
     private final IsInsertPanel panel;
+    private final int offsetForExistingContent;
 
     private InsertPanelListLikeAdapter(IsInsertPanel panel) {
       this.panel = panel;
+      this.offsetForExistingContent = panel.getWidgetCount();
     }
 
     @Override
     public IsWidget remove(int index) {
-      IsWidget w = panel.getIsWidget(index);
-      panel.remove(index);
+      IsWidget w = panel.getIsWidget(index + offsetForExistingContent);
+      panel.remove(index + offsetForExistingContent);
       return w;
     }
 
     @Override
     public void add(int index, IsWidget a) {
-      panel.insert(a, index);
+      panel.insert(a, index + offsetForExistingContent);
     }
   }
 

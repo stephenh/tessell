@@ -56,6 +56,15 @@ public class ListPropertyBinderTest {
   }
 
   @Test
+  public void newNamesAreAddedAfterExistingContent() {
+    panel.add(viewFactory.create("existing"));
+    binder.bind(names).to(panel, viewFactory);
+    names.add("one");
+    assertLabel(panel.getIsWidget(0), "existing");
+    assertLabel(panel.getIsWidget(1), "one");
+  }
+
+  @Test
   public void reordersToDoNotRequireCreatingNewViews() {
     binder.bind(names).to(panel, viewFactory);
     names.set(list("one", "two"));
