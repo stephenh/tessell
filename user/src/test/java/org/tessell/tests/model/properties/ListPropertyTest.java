@@ -823,6 +823,21 @@ public class ListPropertyTest {
     assertThat(p.get(), contains("b", "a"));
   }
 
+  @Test
+  public void testIndexOf() {
+    IntegerProperty index = p.indexOf("a");
+    assertThat(index.get(), is(-1));
+
+    p.add("a");
+    assertThat(index.get(), is(0));
+
+    p.add(0, "b");
+    assertThat(index.get(), is(1));
+
+    p.set(null);
+    assertThat(index.get(), is(-1));
+  }
+
   public static class CountingChanges<P> implements PropertyChangedHandler<P> {
     public int count;
 

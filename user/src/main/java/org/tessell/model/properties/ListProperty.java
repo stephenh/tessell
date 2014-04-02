@@ -250,6 +250,16 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
     });
   }
 
+  /** @return a property that will reflect the index of {@code element}. */
+  public IntegerProperty indexOf(final E element) {
+    return integerProperty(new DerivedValue<Integer>(element + "Index") {
+      public Integer get() {
+        List<E> l = ListProperty.this.get();
+        return l == null ? -1 : l.indexOf(element);
+      }
+    });
+  }
+
   /** Registers {@code handler} to be called when new values are added. */
   public HandlerRegistration addValueAddedHandler(final ValueAddedHandler<E> handler) {
     return addHandler(ValueAddedEvent.getType(), handler);
