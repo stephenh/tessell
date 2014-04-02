@@ -218,6 +218,28 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
     });
   }
 
+  /** Moves {@code element} up in the list; noop if it's already first. */
+  public void moveUp(E element) {
+    int at = getDirect().indexOf(element);
+    if (at > 0) {
+      getDirect().remove(at);
+      getDirect().add(at - 1, element);
+      setTouched(true);
+      reassess();
+    }
+  }
+
+  /** Moves {@code element} down in the list; noop if it's already last. */
+  public void moveDown(E element) {
+    int at = getDirect().indexOf(element);
+    if (at > -1 && at < getDirect().size() - 1) {
+      getDirect().remove(at);
+      getDirect().add(at + 1, element);
+      setTouched(true);
+      reassess();
+    }
+  }
+
   /** @return a property that will reflect whether {@code element} is the last element. */
   public BooleanProperty isLast(final E element) {
     return booleanProperty(new DerivedValue<Boolean>(element + "IsLast") {

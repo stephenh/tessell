@@ -791,6 +791,38 @@ public class ListPropertyTest {
     assertThat(bIsLast.get(), is(false));
   }
 
+  @Test
+  public void testMoveUp() {
+    // ignore invalid elements
+    p.moveUp("a");
+
+    // ignore moving 1st element up
+    p.add("a");
+    p.moveUp("a");
+
+    // actually move up
+    p.add("b");
+    assertThat(p.get(), contains("a", "b"));
+    p.moveUp("b");
+    assertThat(p.get(), contains("b", "a"));
+  }
+
+  @Test
+  public void testMoveDown() {
+    // ignore invalid elements
+    p.moveDown("a");
+
+    // ignore moving last element down
+    p.add("a");
+    p.moveDown("a");
+
+    // actually move down
+    p.add("b");
+    assertThat(p.get(), contains("a", "b"));
+    p.moveDown("a");
+    assertThat(p.get(), contains("b", "a"));
+  }
+
   public static class CountingChanges<P> implements PropertyChangedHandler<P> {
     public int count;
 
