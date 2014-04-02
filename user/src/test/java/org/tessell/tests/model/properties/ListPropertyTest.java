@@ -761,6 +761,36 @@ public class ListPropertyTest {
     assertThat(s1.isValid(), is(false));
   }
 
+  @Test
+  public void testIsFirst() {
+    final BooleanProperty bIsFirst = p.isFirst("b");
+    assertThat(bIsFirst.get(), is(false));
+
+    p.add("b");
+    assertThat(bIsFirst.get(), is(true));
+
+    p.add(0, "a");
+    assertThat(bIsFirst.get(), is(false));
+
+    p.set(null);
+    assertThat(bIsFirst.get(), is(false));
+  }
+
+  @Test
+  public void testIsLast() {
+    final BooleanProperty bIsLast = p.isLast("b");
+    assertThat(bIsLast.get(), is(false));
+
+    p.add("b");
+    assertThat(bIsLast.get(), is(true));
+
+    p.add("c");
+    assertThat(bIsLast.get(), is(false));
+
+    p.set(null);
+    assertThat(bIsLast.get(), is(false));
+  }
+
   public static class CountingChanges<P> implements PropertyChangedHandler<P> {
     public int count;
 

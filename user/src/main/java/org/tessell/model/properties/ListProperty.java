@@ -208,6 +208,26 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
     return size;
   }
 
+  /** @return a property that will reflect whether {@code element} is the first element. */
+  public BooleanProperty isFirst(final E element) {
+    return booleanProperty(new DerivedValue<Boolean>(element + "IsFirst") {
+      public Boolean get() {
+        List<E> l = ListProperty.this.get();
+        return l != null && !l.isEmpty() && element.equals(l.get(0));
+      }
+    });
+  }
+
+  /** @return a property that will reflect whether {@code element} is the last element. */
+  public BooleanProperty isLast(final E element) {
+    return booleanProperty(new DerivedValue<Boolean>(element + "IsLast") {
+      public Boolean get() {
+        List<E> l = ListProperty.this.get();
+        return l != null && !l.isEmpty() && element.equals(l.get(l.size() - 1));
+      }
+    });
+  }
+
   /** Registers {@code handler} to be called when new values are added. */
   public HandlerRegistration addValueAddedHandler(final ValueAddedHandler<E> handler) {
     return addHandler(ValueAddedEvent.getType(), handler);
