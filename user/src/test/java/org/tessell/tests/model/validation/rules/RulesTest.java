@@ -113,6 +113,21 @@ public class RulesTest extends AbstractRuleTest {
   }
 
   @Test
+  public void requiredSubclassWillBeTrackUpstreamValues() {
+    f.name.addRule(new Required("Required") {
+      protected boolean isValid() {
+        return f.description.get() != null;
+      }
+    });
+
+    f.name.touch();
+    assertMessages("Required");
+
+    f.description.set("some description");
+    assertNoMessages();
+  }
+
+  @Test
   public void untouchingUntriggersTheRule() {
     f.name.addRule(new Required("name required"));
 

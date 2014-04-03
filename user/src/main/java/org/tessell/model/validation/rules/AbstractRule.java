@@ -51,17 +51,13 @@ public abstract class AbstractRule<T> implements Rule<T> {
 
   @Override
   public final boolean validate() {
-    if (this instanceof Custom || onlyIf.size() > 0) {
-      if (lastUpstream == null) {
-        lastUpstream = new UpstreamState(property, false);
-      }
-      Capture c = Upstream.start();
-      boolean v = doValidate();
-      lastUpstream.update(c.finish());
-      return v;
-    } else {
-      return doValidate();
+    if (lastUpstream == null) {
+      lastUpstream = new UpstreamState(property, false);
     }
+    Capture c = Upstream.start();
+    boolean v = doValidate();
+    lastUpstream.update(c.finish());
+    return v;
   }
 
   @Override
