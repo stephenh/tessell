@@ -98,6 +98,16 @@ public abstract class EventBinder {
     return new RemoveBinder<P>(value);
   }
 
+  /** @return a fluent binder to move up {@code value} in a list when triggered. */
+  public <P> MoveBinder<P> moveUp(P value) {
+    return new MoveBinder<P>(value, true);
+  }
+
+  /** @return a fluent binder to move down {@code value} in a list when triggered. */
+  public <P> MoveBinder<P> moveDown(P value) {
+    return new MoveBinder<P>(value, false);
+  }
+
   protected abstract HandlerRegistration hookUpRunnable(Runnable runnable);
 
   protected abstract HandlerRegistration hookUpEventRunnable(DomEventRunnable runnable);
@@ -149,6 +159,28 @@ public abstract class EventBinder {
       b.add(hookUpRunnable(new Runnable() {
         public void run() {
           values.remove(value);
+        }
+      }));
+    }
+  }
+
+  public class MoveBinder<P> {
+    private final P value;
+    private final boolean up;
+
+    private MoveBinder(P value, boolean up) {
+      this.value = value;
+      this.up = up;
+    }
+
+    public void in(final ListProperty<P> values) {
+      b.add(hookUpRunnable(new Runnable() {
+        public void run() {
+          if (up) {
+            values.moveUp(value);
+          } else {
+            values.moveDown(value);
+          }
         }
       }));
     }

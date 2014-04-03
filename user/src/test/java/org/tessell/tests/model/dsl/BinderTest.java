@@ -1,6 +1,7 @@
 package org.tessell.tests.model.dsl;
 
 import static com.google.gwt.event.dom.client.KeyCodes.KEY_TAB;
+import static joist.util.Copy.list;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.Matchers.contains;
 import static org.junit.Assert.assertThat;
@@ -909,6 +910,26 @@ public class BinderTest {
     assertThat(strings.get().size(), is(1));
     a.click();
     assertThat(strings.get().size(), is(0));
+  }
+
+  @Test
+  public void onClickMoveUp() {
+    ListProperty<String> strings = listProperty("strings");
+    strings.set(list("a", "b"));
+    final StubAnchor a = new StubAnchor();
+    binder.onClick(a).moveUp("b").in(strings);
+    a.click();
+    assertThat(strings.get(), contains("b", "a"));
+  }
+
+  @Test
+  public void onClickMoveDown() {
+    ListProperty<String> strings = listProperty("strings");
+    strings.set(list("a", "b"));
+    final StubAnchor a = new StubAnchor();
+    binder.onClick(a).moveDown("a").in(strings);
+    a.click();
+    assertThat(strings.get(), contains("b", "a"));
   }
 
   @Test
