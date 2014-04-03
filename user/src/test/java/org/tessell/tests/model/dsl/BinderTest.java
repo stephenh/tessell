@@ -628,6 +628,15 @@ public class BinderTest {
   }
 
   @Test
+  public void whenSetToTakesValuesDoesNotTouchOnInitialEvaluation() {
+    final BooleanProperty b = booleanProperty("b", true);
+    final StringProperty s = stringProperty("s");
+    binder.when(b).is(true).set(s).to("t");
+    assertThat(s.get(), is("t"));
+    assertThat(s.isTouched(), is(false));
+  }
+
+  @Test
   public void whenSetToOrElse() {
     final BooleanProperty b = booleanProperty("b");
     binder.when(b).is(true).set(s).toOrElse("a", "b");

@@ -30,7 +30,11 @@ public class WhenIsSetValueBinder<P, Q> {
       }
     }));
     if (condition.evaluate(property)) {
-      value.setValue(newValue); // set initial
+      if (value instanceof Property) {
+        ((Property<Q>) value).setInitialValue(newValue);
+      } else {
+        value.setValue(newValue); // set initial
+      }
     }
   }
 
