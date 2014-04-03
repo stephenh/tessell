@@ -4,23 +4,24 @@ import static org.tessell.util.ObjectUtils.eq;
 
 import org.tessell.model.properties.Property;
 
+/**
+ * Common conditions.
+ *
+ * These can be used either in the Binder DSL (see {@link WhenBinder#is(WhenCondition)})
+ * or against properties directly (see {@link Property#is(org.tessell.model.properties.Condition)}).
+ */
 public class WhenConditions {
 
   private static final WhenCondition<Object> notNull = new WhenCondition<Object>() {
-    public boolean evaluate(Property<Object> property) {
-      return property.get() != null;
+    public boolean evaluate(Object value) {
+      return value != null;
     }
 
-    public void setInitialValue(Property<Object> property) {
-    }
   };
 
   private static final WhenCondition<Object> nullValue = new WhenCondition<Object>() {
-    public boolean evaluate(Property<Object> property) {
-      return property.get() == null;
-    }
-
-    public void setInitialValue(Property<Object> property) {
+    public boolean evaluate(Object value) {
+      return value == null;
     }
   };
 
@@ -34,38 +35,29 @@ public class WhenConditions {
 
   public static WhenCondition<Integer> greaterThan(final Integer number) {
     return new WhenCondition<Integer>() {
-      public boolean evaluate(Property<Integer> property) {
-        return number != null && property.get() != null && property.get().intValue() > number.intValue();
-      }
-
-      public void setInitialValue(Property<Integer> property) {
+      public boolean evaluate(Integer value) {
+        return number != null && value != null && value.intValue() > number.intValue();
       }
     };
   }
 
   public static WhenCondition<Integer> lessThan(final Integer number) {
     return new WhenCondition<Integer>() {
-      public boolean evaluate(Property<Integer> property) {
-        return number != null && property.get() != null && property.get().intValue() < number.intValue();
-      }
-
-      public void setInitialValue(Property<Integer> property) {
+      public boolean evaluate(Integer value) {
+        return number != null && value != null && value.intValue() < number.intValue();
       }
     };
   }
 
   public static <P> WhenCondition<P> or(final P... values) {
     return new WhenCondition<P>() {
-      public boolean evaluate(Property<P> property) {
+      public boolean evaluate(P currentValue) {
         for (P value : values) {
-          if (eq(property.get(), value)) {
+          if (eq(currentValue, value)) {
             return true;
           }
         }
         return false;
-      }
-
-      public void setInitialValue(Property<P> property) {
       }
     };
   }

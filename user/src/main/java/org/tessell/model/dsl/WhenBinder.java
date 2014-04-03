@@ -17,8 +17,8 @@ public class WhenBinder<P> {
 
   public WhenIsBinder<P> is(final P value) {
     return new WhenIsBinder<P>(b, property, new WhenCondition<P>() {
-      public boolean evaluate(Property<P> property) {
-        return eq(property.get(), value);
+      public boolean evaluate(P current) {
+        return eq(current, value);
       }
 
       public void setInitialValue(Property<P> property) {
