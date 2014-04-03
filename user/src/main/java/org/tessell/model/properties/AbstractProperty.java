@@ -31,6 +31,7 @@ import com.google.gwt.event.shared.GwtEvent.Type;
 /** Provides most of the validation/derived/etc. implementation guts of {@link Property}. */
 public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> extends AbstractAbstractProperty<P> {
 
+  private static int outstandingSetInitials = 0;
   private static final Logger log = Logger.getLogger("org.tessell.model");
   // handlers
   private final EventBus handlers = new SimplerEventBus();
@@ -119,7 +120,7 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> exte
   @Override
   public void set(final P value) {
     this.value.set(defaultIfNull(copyLastValue(value)));
-    if (!touched && !reassessing) {
+    if (!touched && !reassessing && !isWithinASetInitial()) {
       // even if unchanged, treat this as touching
       setTouched(true);
     } else {
@@ -129,8 +130,13 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> exte
 
   @Override
   public void setInitialValue(final P value) {
-    this.value.set(defaultIfNull(copyLastValue(value)));
-    reassess();
+    try {
+      outstandingSetInitials++;
+      this.value.set(defaultIfNull(copyLastValue(value)));
+      reassess();
+    } finally {
+      outstandingSetInitials--;
+    }
   }
 
   @Override
@@ -428,6 +434,10 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> exte
 
   private P defaultIfNull(P value) {
     return (value == null) ? defaultValue : value;
+  }
+
+  private static boolean isWithinASetInitial() {
+    return outstandingSetInitials > 0;
   }
 
   /** Remembers rules fired against us. */

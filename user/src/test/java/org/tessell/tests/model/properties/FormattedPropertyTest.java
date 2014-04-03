@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
+import org.tessell.gwt.user.client.ui.StubTextBox;
+import org.tessell.model.dsl.Binder;
 import org.tessell.model.events.PropertyChangedEvent;
 import org.tessell.model.events.PropertyChangedHandler;
 import org.tessell.model.properties.IntegerProperty;
@@ -168,6 +170,19 @@ public class FormattedPropertyTest extends AbstractRuleTest {
 
     i.set(null);
     assertThat(s.get(), is("NULL"));
+  }
+
+  @Test
+  public void testSettingInitialValueWhenBound() {
+    IntegerProperty i = integerProperty("i");
+    Property<String> s = i.asString();
+    StubTextBox textBox = new StubTextBox();
+
+    Binder b = new Binder();
+    b.bind(s).to(textBox);
+
+    i.setInitialValue(1);
+    assertThat(i.isTouched(), is(false));
   }
 
   private final PropertyFormatter<Integer, String> intToString = new PropertyFormatter<Integer, String>() {
