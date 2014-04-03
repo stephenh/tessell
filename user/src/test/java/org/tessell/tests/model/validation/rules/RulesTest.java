@@ -141,6 +141,17 @@ public class RulesTest extends AbstractRuleTest {
   }
 
   @Test
+  public void onlyIfDoesNotTouchDownstreamRulesWhenAlreadyTouched() {
+    final BooleanProperty b = booleanProperty("b");
+    // start out with b already touched
+    b.set(true);
+    Required required = new Required("name required");
+    required.onlyIf(b);
+    f.name.addRule(required);
+    assertThat(f.name.isTouched(), is(false));
+  }
+
+  @Test
   public void onlyIfDoesUpstreamTracking() {
     final BooleanProperty b = booleanProperty("b", false);
     Required r = new Required("name required");

@@ -204,7 +204,7 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> exte
       d = new Downstream(other, touch);
       d.tokens.add(token);
       downstream.add(d);
-      if (touched) {
+      if (touch && touched) {
         other.setTouched(touched);
       }
     }
