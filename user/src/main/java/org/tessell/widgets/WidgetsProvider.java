@@ -84,6 +84,8 @@ public interface WidgetsProvider {
 
   IsFlowPanel newFlowPanel();
 
+  IsFrame newFrame();
+
   IsScrollPanel newScrollPanel();
 
   IsTabLayoutPanel newTabLayoutPanel(double barHeight, Unit barUnit);

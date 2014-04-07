@@ -164,6 +164,10 @@ public class Widgets {
     return provider.newFlowPanel();
   }
 
+  public static IsFrame newFrame() {
+    return provider.newFrame();
+  }
+
   public static IsFlowPanel newFlowPanel(IsWidget... widgets) {
     IsFlowPanel p = provider.newFlowPanel();
     for (IsWidget widget : widgets) {

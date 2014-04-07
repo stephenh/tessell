@@ -270,4 +270,9 @@ public class StubWidgetsProvider implements WidgetsProvider {
     return new StubElementWidget((StubElement) element);
   }
 
+  @Override
+  public IsFrame newFrame() {
+    return new StubFrame();
+  }
+
 }

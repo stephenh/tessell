@@ -265,4 +265,9 @@ public class GwtWidgetsProvider implements WidgetsProvider {
     return new GwtElementWidget(element.asElement());
   }
 
+  @Override
+  public IsFrame newFrame() {
+    return new Frame();
+  }
+
 }
