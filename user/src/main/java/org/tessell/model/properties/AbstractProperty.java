@@ -193,24 +193,41 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> exte
     return newValue;
   }
 
-  /** Track {@code other} as derived on us, so we'll forward changed/changing events to it. */
+  /**
+   * Track {@code other} as derived on us, so we'll forward changed/changing events to it.
+   * 
+   * This is somewhat esoteric, but if you have property A and property B, B can depend on A
+   * (be downstream/"derived") for (at least) two reasons: 
+   * 
+   * 1. Because B's value is inherently based on A
+   * 2. Because B has a validation rule that is based on A 
+   * 
+   * For the 1st case, if A becomes touched, we also mark B as touched (so we pass percolateTouch=true). 
+   * 
+   * However, for the 2nd case, if A becomes touched, but B isn't really based on A, but instead just uses it
+   * for a validation rule, then we don't want to mark B as touched (so we pass percolateTouch=false). 
+   * 
+   * @param other the property that depends on us
+   * @param token a token that can be used to revoke the derivation (see {@link #removeDerived(Property, Object)}
+   * @param percolateTouch whether we should percolate our touched state to {@code other}
+   */
   @Override
-  public <P1 extends Property<?>> P1 addDerived(P1 other, Object token, boolean touch) {
+  public <P1 extends Property<?>> P1 addDerived(P1 other, Object token, boolean percolateTouch) {
     Downstream d = findDownstreamOrNull(other);
     if (d != null) {
       d.tokens.add(token);
       // upgrade an existing non-touch to touch
-      if (!d.touch && touch) {
+      if (!d.touch && percolateTouch) {
         d.touch = true;
         if (touched) {
           other.setTouched(touched);
         }
       }
     } else {
-      d = new Downstream(other, touch);
+      d = new Downstream(other, percolateTouch);
       d.tokens.add(token);
       downstream.add(d);
-      if (touch && touched) {
+      if (percolateTouch && touched) {
         other.setTouched(touched);
       }
     }
