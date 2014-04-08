@@ -47,10 +47,11 @@ public class BinderTest {
     StubWidgetsProvider.install();
   }
 
-  final Binder binder = new Binder();
-  final StringProperty s = stringProperty("s");
-  final StubTextBox box = new StubTextBox();
-  final StubTextList errors = new StubTextList();
+  private final Binder binder = new Binder();
+  private final StringProperty s = stringProperty("s");
+  private final StubTextBox box = new StubTextBox();
+  private final StubTextList errors = new StubTextList();
+  private final StubAnchor anchor = new StubAnchor();
 
   public static enum Color {
     Blue, Green
@@ -874,39 +875,35 @@ public class BinderTest {
   @Test
   public void onClickToggleSetsNoInitialValue() {
     final BooleanProperty b = booleanProperty("b");
-    final StubAnchor a = new StubAnchor();
-    binder.onClick(a).toggle(b);
+    binder.onClick(anchor).toggle(b);
     assertThat(b.get(), is(nullValue()));
   }
 
   @Test
   public void onClickToggleDoesActuallyToggle() {
     final BooleanProperty b = booleanProperty("b");
-    final StubAnchor a = new StubAnchor();
-    binder.onClick(a).toggle(b);
-    a.click();
+    binder.onClick(anchor).toggle(b);
+    anchor.click();
     assertThat(b.get(), is(true));
-    a.click();
+    anchor.click();
     assertThat(b.get(), is(false));
   }
 
   @Test
   public void onClickTogglePreventsDefault() {
     final BooleanProperty b = booleanProperty("b");
-    final StubAnchor a = new StubAnchor();
-    binder.onClick(a).toggle(b);
+    binder.onClick(anchor).toggle(b);
     final StubClickEvent c = new StubClickEvent();
-    a.fireEvent(c);
+    anchor.fireEvent(c);
     assertThat(c.prevented, is(true));
   }
 
   @Test
   public void onClickAdd() {
     ListProperty<String> strings = listProperty("strings");
-    final StubAnchor a = new StubAnchor();
-    binder.onClick(a).add("a").to(strings);
+    binder.onClick(anchor).add("a").to(strings);
     assertThat(strings.get().size(), is(0));
-    a.click();
+    anchor.click();
     assertThat(strings.get().size(), is(1));
   }
 
@@ -914,10 +911,9 @@ public class BinderTest {
   public void onClickRemove() {
     ListProperty<String> strings = listProperty("strings");
     strings.add("a");
-    final StubAnchor a = new StubAnchor();
-    binder.onClick(a).remove("a").from(strings);
+    binder.onClick(anchor).remove("a").from(strings);
     assertThat(strings.get().size(), is(1));
-    a.click();
+    anchor.click();
     assertThat(strings.get().size(), is(0));
   }
 
@@ -925,9 +921,8 @@ public class BinderTest {
   public void onClickMoveUp() {
     ListProperty<String> strings = listProperty("strings");
     strings.set(list("a", "b"));
-    final StubAnchor a = new StubAnchor();
-    binder.onClick(a).moveUp("b").in(strings);
-    a.click();
+    binder.onClick(anchor).moveUp("b").in(strings);
+    anchor.click();
     assertThat(strings.get(), contains("b", "a"));
   }
 
@@ -935,18 +930,16 @@ public class BinderTest {
   public void onClickMoveDown() {
     ListProperty<String> strings = listProperty("strings");
     strings.set(list("a", "b"));
-    final StubAnchor a = new StubAnchor();
-    binder.onClick(a).moveDown("a").in(strings);
-    a.click();
+    binder.onClick(anchor).moveDown("a").in(strings);
+    anchor.click();
     assertThat(strings.get(), contains("b", "a"));
   }
 
   @Test
   public void onClickFocus() {
     final StubFocusWidget f = new StubFocusWidget();
-    final StubAnchor a = new StubAnchor();
-    binder.onClick(a).focus(f);
-    a.click();
+    binder.onClick(anchor).focus(f);
+    anchor.click();
     assertThat(f.isFocused(), is(true));
   }
 
