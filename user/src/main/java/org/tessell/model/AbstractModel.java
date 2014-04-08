@@ -26,6 +26,16 @@ public abstract class AbstractModel implements Model {
   }
 
   @Override
+  public boolean touch() {
+    return all.touch();
+  }
+
+  @Override
+  public void setTouched(boolean touched) {
+    all.setTouched(touched);
+  }
+
+  @Override
   public Property<Boolean> isTouched() {
     if (isTouched == null) {
       isTouched = booleanProperty(new DerivedValue<Boolean>("isTouched") {

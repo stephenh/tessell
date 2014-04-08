@@ -106,17 +106,17 @@ public class AbstractModelTest {
     EmployeeModel m = new EmployeeModel();
     AccountModel a = new AccountModel();
     m.accounts.add(a);
-    m.allValid().setTouched(true);
+    assertThat(m.touch(), is(false));
     assertThat(a.isTouched().get(), is(true));
   }
 
   @Test
   public void touchWillTouchAllChildModelsEvenIfModelIsAlreadyTouched() {
     EmployeeModel m = new EmployeeModel();
-    m.allValid().setTouched(true);
+    m.touch();
     AccountModel a = new AccountModel();
     m.accounts.add(a);
-    m.allValid().setTouched(true);
+    m.touch();
     assertThat(a.isTouched().get(), is(true));
   }
 

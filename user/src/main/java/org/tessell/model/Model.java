@@ -10,4 +10,8 @@ public interface Model extends HasMemberChangedHandlers {
 
   Property<Boolean> isTouched();
 
+  boolean touch();
+
+  void setTouched(boolean touched);
+
 }
