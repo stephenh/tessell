@@ -22,15 +22,22 @@ import org.apache.commons.io.FileUtils;
 public class UiXmlCache {
 
   private static final int cacheVersion = 9;
+  private static final String viewgenTimestampKey = "viewgenTimestamp";
   private final Map<String, Entry> entries = new HashMap<String, Entry>();
+  private String viewgenTimestamp;
 
+  @SuppressWarnings("unchecked")
   public static UiXmlCache loadOrCreate(final File outputDirectory) {
     UiXmlCache c = new UiXmlCache();
     if (cache(outputDirectory).exists()) {
       try {
-        for (Object line : FileUtils.readLines(cache(outputDirectory))) {
-          Entry e = new Entry((String) line);
-          c.entries.put(e.uiXmlFileName, e);
+        for (String line : (List<String>) FileUtils.readLines(cache(outputDirectory))) {
+          if (line.startsWith(viewgenTimestampKey)) {
+            c.viewgenTimestamp = line.split("=")[1];
+          } else {
+            Entry e = new Entry(line);
+            c.entries.put(e.uiXmlFileName, e);
+          }
         }
       } catch (IOException e) {
         throw new RuntimeException(e);
@@ -76,12 +83,18 @@ public class UiXmlCache {
   }
 
   /** Saves the cache to the file system for loading next time. */
-  public void save(File outputDirectory) {
+  public void save(File outputDirectory, String viewgenTimestamp) {
     try {
-      FileUtils.writeLines(cache(outputDirectory), entriesToLines());
+      List<String> lines = entriesToLines();
+      lines.add(viewgenTimestampKey + "=" + viewgenTimestamp);
+      FileUtils.writeLines(cache(outputDirectory), lines);
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
+  }
+
+  public String getViewgenTimestamp() {
+    return viewgenTimestamp;
   }
 
   /** @return the cache entries as a list of lines. */

@@ -54,8 +54,10 @@ public class ViewGenerator {
       uiXmlFiles.add(new UiXmlFile(this, uiXml));
     }
 
+    boolean viewgenChanged = !config.getViewgenTimestamp().equals(cache.getViewgenTimestamp());
+
     for (final UiXmlFile uiXml : uiXmlFiles) {
-      if (uiXml.hasChanged() || !cache.has(uiXml)) {
+      if (uiXml.hasChanged() || !cache.has(uiXml) || viewgenChanged) {
         uiXml.generate();
         cache.update(uiXml);
       }
@@ -74,7 +76,7 @@ public class ViewGenerator {
     generateGwtViews();
     generateStubViews();
 
-    cache.save(output);
+    cache.save(output, config.getViewgenTimestamp());
   }
 
   private void generateAppViews() {

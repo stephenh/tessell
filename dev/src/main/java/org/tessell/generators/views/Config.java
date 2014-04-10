@@ -27,6 +27,7 @@ import com.google.gwt.dom.client.Element;
 /** Holds mappings of ui.xml type -> interface type, stub type, and subclass type. */
 public class Config {
 
+  private static String[] viewgenFiles = new String[] { "viewgen.properties", "viewgen-root.properties" };
   private final Map<String, String> typeToInterface = new HashMap<String, String>();
   private final Map<String, String> typeToStub = new HashMap<String, String>();
   private final Map<String, List<String>> stubToCstrParams = new HashMap<String, List<String>>();
@@ -63,9 +64,13 @@ public class Config {
     return t;
   }
 
+  public String getViewgenTimestamp() {
+    return Integer.toString(typeToInterface.hashCode() + typeToStub.hashCode() + stubToCstrParams.hashCode());
+  }
+
   private void loadViewGenDotProperties() {
     try {
-      for (String file : new String[] { "viewgen.properties", "viewgen-root.properties" }) {
+      for (String file : viewgenFiles) {
         Enumeration<URL> urls = Config.class.getClassLoader().getResources(file);
         while (urls.hasMoreElements()) {
           URL url = urls.nextElement();
