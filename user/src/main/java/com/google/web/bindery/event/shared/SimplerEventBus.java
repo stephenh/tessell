@@ -120,13 +120,24 @@ public class SimplerEventBus extends EventBus {
         }
       }
 
+      if (!queuedEvents.isEmpty()) {
+        isFiring = false;
+        try {
+          fireQueuedEvents();
+        } catch (UmbrellaException e) {
+          if (causes == null) {
+            causes = new HashSet<Throwable>();
+          }
+          causes.addAll(e.getCauses());
+        }
+      }
+
       if (causes != null) {
         throw new UmbrellaException(causes);
       }
     } finally {
       isFiring = false;
       executeCleaning();
-      fireQueuedEvents();
     }
   }
 

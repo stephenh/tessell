@@ -17,6 +17,7 @@
 package com.google.web.bindery.event.shared;
 
 import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
 import java.util.ArrayList;
@@ -457,6 +458,42 @@ public class SimplerEventBusTest extends HandlerTestBase {
 
     fireClickEvent(reg);
     assertThat(orderOfFires, contains(1, 2, 1, 2));
+  }
+
+  public void testReentrantEventsAreFiredIfThereWasAnException() {
+    final SimplerEventBus reg = new SimplerEventBus();
+
+    // a flag to make our first handler cause a reentrant event
+    final boolean fireAgain[] = { true };
+
+    final List<Integer> orderOfFires = new ArrayList<Integer>();
+
+    // setup 1st handler that will conditionally be reentrant
+    reg.addHandler(ClickEvent.getType(), new ClickHandler() {
+      public void onClick(ClickEvent arg0) {
+        // make a reentrant event, e.g. a change handler caused another change event 
+        orderOfFires.add(1);
+        if (fireAgain[0]) {
+          fireAgain[0] = false;
+          fireClickEvent(reg);
+        }
+      }
+    });
+
+    // setup 2nd handler to fail
+    reg.addHandler(ClickEvent.getType(), new ClickHandler() {
+      public void onClick(ClickEvent arg0) {
+        throw new RuntimeException("failed");
+      }
+    });
+
+    try {
+      fireClickEvent(reg);
+    } catch (UmbrellaException r) {
+      assertThat(r.getMessage(), is("2 exceptions caught: failed; failed"));
+      assertThat(r.getCauses().size(), is(2));
+    }
+    assertThat(orderOfFires, contains(1, 1));
   }
 
   private void fireMouseDown(EventBus eventBus) {
