@@ -35,7 +35,7 @@ import com.google.gwt.event.shared.GwtEvent.Type;
  */
 public class SimplerEventBus extends EventBus {
 
-  private int firingDepth = 0;
+  private boolean isFiring;
 
   /** Handler lists that have null markers in them. */
   private final List<ToClean<?>> needsCleaning = new ArrayList<ToClean<?>>();
@@ -79,7 +79,7 @@ public class SimplerEventBus extends EventBus {
     ensureHandlerList(type, source).add(handler);
     return new HandlerRegistration() {
       public void removeHandler() {
-        if (firingDepth > 0) {
+        if (isFiring) {
           doRemoveWithDeferredCleanup(type, source, handler);
         } else {
           doRemoveNow(type, source, handler);
@@ -89,12 +89,12 @@ public class SimplerEventBus extends EventBus {
   }
 
   private <H extends EventHandler> void doFire(GwtEvent<H> event, Object source) {
-    if (firingDepth > 0) {
+    if (isFiring) {
       queuedEvents.add(new ToFire(event, source));
       return;
     }
     try {
-      firingDepth++;
+      isFiring = true;
 
       if (source != null) {
         setSourceOfEvent(event, source);
@@ -123,11 +123,9 @@ public class SimplerEventBus extends EventBus {
         throw new UmbrellaException(causes);
       }
     } finally {
-      firingDepth--;
-      if (firingDepth == 0) {
-        executeCleaning();
-        fireQueuedEvents();
-      }
+      isFiring = false;
+      executeCleaning();
+      fireQueuedEvents();
     }
   }
 
