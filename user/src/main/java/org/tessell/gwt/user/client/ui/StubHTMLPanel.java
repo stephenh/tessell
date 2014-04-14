@@ -89,7 +89,9 @@ public class StubHTMLPanel extends StubComplexPanel implements IsHTMLPanel {
 
   @Override
   public void insert(IsWidget widget, IsElement parent, int beforeIndex, boolean domInsert) {
-    super.add(widget);
+    // We can't really honor beforeIndex, because it deals with DOM order (which
+    // depends on the contents of the ui.xml file), and we only track widgets.
+    add(widget, parent);
   }
 
 }
