@@ -16,15 +16,18 @@
 
 package com.google.web.bindery.event.shared;
 
+import static org.hamcrest.Matchers.contains;
+import static org.junit.Assert.assertThat;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import junit.framework.AssertionFailedError;
 
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
-import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.*;
 import com.google.gwt.event.dom.client.DomEvent.Type;
-import com.google.gwt.event.dom.client.MouseDownEvent;
-import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.web.bindery.event.shared.testing.CountingEventBus;
 
 public class SimplerEventBusTest extends HandlerTestBase {
@@ -423,6 +426,37 @@ public class SimplerEventBusTest extends HandlerTestBase {
     reg.fireEvent(new MouseDownEvent() {
     });
     assertFired(handler);
+  }
+
+  public void testReentrantFiresAreQueuedUp() {
+    final SimplerEventBus reg = new SimplerEventBus();
+
+    // a flag to make our first handler cause a reentrant event
+    final boolean fireAgain[] = { true };
+
+    final List<Integer> orderOfFires = new ArrayList<Integer>();
+
+    // setup 1st handler that will conditionally be reentrant
+    reg.addHandler(ClickEvent.getType(), new ClickHandler() {
+      public void onClick(ClickEvent arg0) {
+        // make a reentrant event, e.g. a change handler caused another change event 
+        orderOfFires.add(1);
+        if (fireAgain[0]) {
+          fireAgain[0] = false;
+          fireClickEvent(reg);
+        }
+      }
+    });
+
+    // setup 2nd handler to
+    reg.addHandler(ClickEvent.getType(), new ClickHandler() {
+      public void onClick(ClickEvent arg0) {
+        orderOfFires.add(2);
+      }
+    });
+
+    fireClickEvent(reg);
+    assertThat(orderOfFires, contains(1, 2, 1, 2));
   }
 
   private void fireMouseDown(EventBus eventBus) {

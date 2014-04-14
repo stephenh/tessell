@@ -16,13 +16,7 @@
 
 package com.google.web.bindery.event.shared;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import com.google.web.bindery.event.shared.Event.Type;
 
@@ -48,6 +42,9 @@ public class SimplerEventBus extends EventBus {
 
   /** Map of event type to map of event source to list of their handlers. */
   private final Map<Event.Type<?>, Map<Object, List<?>>> map = new HashMap<Event.Type<?>, Map<Object, List<?>>>();
+
+  /** Queued events. */
+  private final List<ToFire> queuedEvents = new ArrayList<ToFire>();
 
   @Override
   public <H> HandlerRegistration addHandler(Type<H> type, H handler) {
@@ -92,6 +89,10 @@ public class SimplerEventBus extends EventBus {
   }
 
   private <H> void doFire(Event<H> event, Object source) {
+    if (firingDepth > 0) {
+      queuedEvents.add(new ToFire(event, source));
+      return;
+    }
     try {
       firingDepth++;
 
@@ -125,6 +126,7 @@ public class SimplerEventBus extends EventBus {
       firingDepth--;
       if (firingDepth == 0) {
         executeCleaning();
+        fireQueuedEvents();
       }
     }
   }
@@ -197,15 +199,16 @@ public class SimplerEventBus extends EventBus {
   }
 
   private void executeCleaning() {
-    if (needsCleaning.size() == 0) {
-      return;
+    for (ToClean<?> h : needsCleaning) {
+      clean(h);
     }
-    try {
-      for (ToClean<?> h : needsCleaning) {
-        clean(h);
-      }
-    } finally {
-      needsCleaning.clear();
+    needsCleaning.clear();
+  }
+
+  private void fireQueuedEvents() {
+    while (!queuedEvents.isEmpty()) {
+      ToFire f = queuedEvents.remove(0);
+      doFire(f.event, f.source);
     }
   }
 
@@ -222,6 +225,16 @@ public class SimplerEventBus extends EventBus {
   private void checkNotNull(Object arg, String message) {
     if (arg == null) {
       throw new NullPointerException(message);
+    }
+  }
+
+  private static class ToFire {
+    private final Event<?> event;
+    private final Object source;
+
+    private ToFire(Event<?> event, Object source) {
+      this.event = event;
+      this.source = source;
     }
   }
 
