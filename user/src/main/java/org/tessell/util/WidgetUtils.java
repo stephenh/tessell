@@ -9,6 +9,7 @@ import org.tessell.gwt.user.client.ui.IsFocusWidget;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.dom.client.Style.Visibility;
 import com.google.gwt.event.logical.shared.AttachEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 
@@ -66,6 +67,20 @@ public class WidgetUtils {
   public static void show(HasCss... csses) {
     for (HasCss css : csses) {
       css.getStyle().clearDisplay();
+    }
+  }
+
+  /** Set {@code visibility=hidden} on each element. */
+  public static void invisible(HasCss... csses) {
+    for (HasCss css : csses) {
+      css.getStyle().setVisibility(Visibility.HIDDEN);
+    }
+  }
+
+  /** Clears {@code visibility} on each element. */
+  public static void visible(HasCss... csses) {
+    for (HasCss css : csses) {
+      css.getStyle().clearVisibility();
     }
   }
 
