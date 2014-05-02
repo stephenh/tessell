@@ -15,7 +15,10 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class StubWidget implements IsWidget, IsStubWidget {
 
-  protected final EventBus handlers = new SimplerEventBus();
+  // Prefer SimpleEventBus because it matches browser semantics better; specifically
+  // if we're reacting to, say, a click event, and cause a focus event to fire, it
+  // fires right away instead of queueing it for later like SimplerEventBus does.
+  protected final EventBus handlers = new SimpleEventBus();
   private final StubElement element;
   private boolean attached = false;
   public int absoluteTop;
