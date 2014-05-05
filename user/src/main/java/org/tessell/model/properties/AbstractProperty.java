@@ -68,6 +68,11 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> exte
     RuleHandler ruleHandler = new RuleHandler();
     addRuleTriggeredHandler(ruleHandler);
     addRuleUntriggeredHandler(ruleHandler);
+    // Fixes people calling NewProperty.booleanProperty(otherBooleanProperty).not(); I'm
+    // not entirely sure this is a good idea, but it passes the test.
+    if (value instanceof Property) {
+      ((Property<?>) value).addDerived(this);
+    }
   }
 
   @SuppressWarnings("unchecked")

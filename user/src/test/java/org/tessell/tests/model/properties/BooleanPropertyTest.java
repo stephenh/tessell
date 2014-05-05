@@ -10,6 +10,8 @@ import static org.tessell.model.properties.NewProperty.booleanProperty;
 import static org.tessell.model.properties.NewProperty.or;
 
 import org.junit.Test;
+import org.tessell.model.events.PropertyChangedEvent;
+import org.tessell.model.events.PropertyChangedHandler;
 import org.tessell.model.properties.BooleanProperty;
 import org.tessell.model.properties.Property;
 import org.tessell.tests.model.validation.rules.AbstractRuleTest;
@@ -84,6 +86,22 @@ public class BooleanPropertyTest extends AbstractRuleTest {
 
     b.set(true);
     assertThat(o.get(), is(true));
+  }
+
+  @Test
+  public void testAbusingTheValueConstructorStillWorks() {
+    Property<Boolean> p = booleanProperty("p", false);
+
+    Property<Boolean> p1 = booleanProperty(p).not();
+    final int changes[] = { 0 };
+    p1.addPropertyChangedHandler(new PropertyChangedHandler<Boolean>() {
+      public void onPropertyChanged(PropertyChangedEvent<Boolean> event) {
+        changes[0] = changes[0] + 1;
+      }
+    });
+
+    p.set(true);
+    assertThat(changes[0], is(1));
   }
 
 }
