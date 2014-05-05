@@ -32,15 +32,6 @@ public class BooleanProperty extends AbstractProperty<Boolean, BooleanProperty> 
 
   /** @return the inverse of this property. */
   public Property<Boolean> not() {
-    final BooleanProperty parent = this;
-    return formatted(new PropertyFormatter<Boolean, Boolean>() {
-      public Boolean format(Boolean a) {
-        return !parent.get();
-      }
-
-      public Boolean parse(Boolean b) throws Exception {
-        return !b;
-      }
-    });
+    return NewProperty.not(this);
   }
 }

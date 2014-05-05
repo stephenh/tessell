@@ -54,6 +54,18 @@ public class NewProperty {
     return new BooleanProperty(new BoundValue<Boolean>(binding));
   }
 
+  public static Property<Boolean> not(final Property<Boolean> property) {
+    return property.formatted(new PropertyFormatter<Boolean, Boolean>() {
+      public Boolean format(Boolean a) {
+        return !property.get();
+      }
+
+      public Boolean parse(Boolean b) throws Exception {
+        return !b;
+      }
+    });
+  }
+
   @SafeVarargs
   public static BooleanProperty or(final Property<Boolean>... properties) {
     return booleanProperty(new DerivedValue<Boolean>() {
