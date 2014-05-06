@@ -102,6 +102,17 @@ public class BooleanPropertyTest extends AbstractRuleTest {
 
     p.set(true);
     assertThat(changes[0], is(1));
+    assertThat(p1.get(), is(false));
+
+    p.set(false);
+    assertThat(changes[0], is(2));
+    assertThat(p1.get(), is(true));
+
+    // p1 is technically writeable as it will call Value.set
+    assertThat(p1.isReadOnly(), is(false));
+    p1.set(false);
+    assertThat(changes[0], is(3));
+    assertThat(p.get(), is(true));
   }
 
 }
