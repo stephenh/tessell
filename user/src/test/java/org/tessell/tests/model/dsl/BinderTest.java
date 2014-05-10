@@ -143,22 +143,11 @@ public class BinderTest {
   @Test
   public void propertyToListBoxUpdatesListBoxWhenPropertyIsAdaptedAndInitiallySet() {
     final StubListBox listBox = new StubListBox();
-    final ArrayList<Integer> values = new ArrayList<Integer>();
-    values.add(1);
-    values.add(2);
+    final ArrayList<Integer> values = list(1, 2);
     // s starts out null
     assertThat(s.get(), is(nullValue()));
-    binder.bind(s).to(listBox, values, new ListBoxAdaptor<String, Integer>() {
-      public String toDisplay(Integer option) {
-        return option.toString();
-      }
-
-      @Override
-      public String toValue(Integer option) {
-        return option.toString();
-      }
-    });
-    // but is coerced to be a when we bind
+    binder.bind(s).to(listBox, values, new IntegerAdaptor());
+    // but is coerced to be a string when we bind
     assertThat(s.get(), is("1"));
     // and we made sure to set the listBox to the right value
     assertThat(listBox.getSelectedIndex(), is(0));
@@ -170,16 +159,7 @@ public class BinderTest {
     final ArrayList<Integer> values = new ArrayList<Integer>();
     // s starts out null
     assertThat(s.get(), is(nullValue()));
-    binder.bind(s).to(listBox, values, new ListBoxAdaptor<String, Integer>() {
-      public String toDisplay(Integer option) {
-        return option.toString();
-      }
-
-      @Override
-      public String toValue(Integer option) {
-        return option.toString();
-      }
-    });
+    binder.bind(s).to(listBox, values, new IntegerAdaptor());
     // and s is still null
     assertThat(s.get(), is(nullValue()));
     // and so we were unable to select anything
@@ -187,13 +167,12 @@ public class BinderTest {
   }
 
   @Test
-  public void propertyToListBoxUpdatesPropertyWhenListBoxChange() {
+  public void propertyToListBoxUpdatesPropertyWhenListBoxChanges() {
     final StubListBox listBox = new StubListBox();
-    final ArrayList<String> values = new ArrayList<String>();
-    values.add("a");
-    values.add("b");
+    final ArrayList<String> values = list("a", "b");
 
     binder.bind(s).to(listBox, values);
+
     listBox.select("b");
     assertThat(s.get(), is("b"));
   }
@@ -201,12 +180,11 @@ public class BinderTest {
   @Test
   public void propertyToListBoxHandlesNullValue() {
     final StubListBox listBox = new StubListBox();
-    final ArrayList<String> values = new ArrayList<String>();
-    values.add(null);
-    values.add("a");
-    values.add("b");
+    final ArrayList<String> values = list(null, "a", "b");
 
     binder.bind(s).to(listBox, values);
+    assertThat(listBox.getSelectedIndex(), is(0));
+
     listBox.select("b");
     assertThat(s.get(), is("b"));
 
@@ -1311,6 +1289,17 @@ public class BinderTest {
     b2.check();
     assertThat(v1, is(hidden()));
     assertThat(v2, is(shown()));
+  }
+
+  private final class IntegerAdaptor implements ListBoxAdaptor<String, Integer> {
+    public String toDisplay(Integer option) {
+      return option.toString();
+    }
+
+    @Override
+    public String toValue(Integer option) {
+      return option.toString();
+    }
   }
 
 }
