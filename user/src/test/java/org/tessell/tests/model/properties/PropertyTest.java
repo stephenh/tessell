@@ -505,18 +505,4 @@ public class PropertyTest extends AbstractRuleTest {
     assertThat(set.isReadOnly(), is(true));
   }
 
-  private static class CountChanges {
-    private static <T> CountChanges on(Property<T> source) {
-      final CountChanges c = new CountChanges();
-      source.addPropertyChangedHandler(new PropertyChangedHandler<T>() {
-        public void onPropertyChanged(PropertyChangedEvent<T> event) {
-          c.changes++;
-        }
-      });
-      return c;
-    }
-
-    private int changes;
-  }
-
 }
