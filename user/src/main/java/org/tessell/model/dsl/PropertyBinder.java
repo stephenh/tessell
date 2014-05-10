@@ -13,6 +13,7 @@ import org.tessell.gwt.user.client.ui.IsTextBox;
 import org.tessell.model.events.PropertyChangedEvent;
 import org.tessell.model.events.PropertyChangedHandler;
 import org.tessell.model.properties.HasMaxLength;
+import org.tessell.model.properties.ListProperty;
 import org.tessell.model.properties.Property;
 import org.tessell.util.ObjectUtils;
 import org.tessell.widgets.IsTextList;
@@ -90,22 +91,12 @@ public class PropertyBinder<P> {
 
   /** Binds our {@code p} to the selection in {@code source}, given the {@code options}. */
   public <O> void to(final IsListBox source, final List<O> options, final ListBoxAdaptor<P, O> adaptor) {
-    int i = 0;
-    for (final O option : options) {
-      source.addItem(adaptor.toDisplay(option), Integer.toString(i++));
-    }
-    if (p.get() == null) {
-      if (!options.contains(null) && !options.isEmpty()) {
-        p.set(adaptor.toValue(options.get(0)));
-      }
-    }
-    source.setSelectedIndex(indexInOptions(adaptor, options));
+    addOptionsAndSetIfNull(source, options, adaptor);
     b.add(source.addChangeHandler(new ChangeHandler() {
       public void onChange(final ChangeEvent event) {
         final int i = source.getSelectedIndex();
-        if (i == -1) {
-          p.set(null);
-        } else {
+        // getSelectedIndex within an onchange should never be -1, but check just in case
+        if (i != -1) {
           p.set(adaptor.toValue(options.get(i)));
         }
       }
@@ -115,6 +106,41 @@ public class PropertyBinder<P> {
         source.setSelectedIndex(indexInOptions(adaptor, options));
       }
     }));
+  }
+
+  /** Binds our {@code p} to the selection in {@code source}, given the {@code options}. */
+  public void to(final IsListBox source, final ListProperty<P> options) {
+    to(source, options, new ListBoxIdentityAdaptor<P>());
+  }
+
+  /** Binds our {@code p} to the selection in {@code source}, given the {@code options}. */
+  public <O> void to(final IsListBox source, final ListProperty<O> options, final ListBoxAdaptor<P, O> adaptor) {
+    if (options.get() != null) {
+      addOptionsAndSetIfNull(source, options.get(), adaptor);
+    }
+    b.add(source.addChangeHandler(new ChangeHandler() {
+      public void onChange(final ChangeEvent event) {
+        final int i = source.getSelectedIndex();
+        // getSelectedIndex within an onchange should never be -1, but check just in case
+        if (i != -1) {
+          p.set(adaptor.toValue(options.get().get(i)));
+        }
+      }
+    }));
+    b.add(p.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
+      public void onPropertyChanged(final PropertyChangedEvent<P> event) {
+        source.setSelectedIndex(indexInOptions(adaptor, options.get()));
+      }
+    }));
+    options.addPropertyChangedHandler(new PropertyChangedHandler<List<O>>() {
+      public void onPropertyChanged(PropertyChangedEvent<List<O>> event) {
+        // it looks like this does not cause an onchange in the browser
+        source.clear();
+        if (options.get() != null) {
+          addOptionsAndSetIfNull(source, options.get(), adaptor);
+        }
+      }
+    });
   }
 
   /** Binds errors for our property to {@code errors}. */
@@ -189,6 +215,19 @@ public class PropertyBinder<P> {
       i++;
     }
     return -1;
+  }
+
+  private <O> void addOptionsAndSetIfNull(final IsListBox source, final List<O> options, final ListBoxAdaptor<P, O> adaptor) {
+    int i = 0;
+    for (final O option : options) {
+      source.addItem(adaptor.toDisplay(option), Integer.toString(i++));
+    }
+    if (p.get() == null) {
+      if (!options.contains(null) && !options.isEmpty()) {
+        p.setInitialValue(adaptor.toValue(options.get(0)));
+      }
+    }
+    source.setSelectedIndex(indexInOptions(adaptor, options));
   }
 
 }

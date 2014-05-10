@@ -77,7 +77,7 @@ public class ListBoxFormLineTest extends AbstractFormPresenterTest {
     assertThat(employee.employerId.get(), is(nullValue()));
     p.add(newListBoxFormLine(employee.employerId, employers, new EmployerDtoAdaptor()));
     assertThat(employee.employerId.get(), is(1));
-    assertThat(employee.employerId.isTouched(), is(true));
+    assertThat(employee.employerId.isTouched(), is(false));
   }
 
   @Test
