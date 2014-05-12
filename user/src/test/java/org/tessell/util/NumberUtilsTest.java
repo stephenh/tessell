@@ -26,6 +26,7 @@ public class NumberUtilsTest {
     assertThat(NumberUtils.format(100.6, 0), is("101"));
     assertThat(NumberUtils.format(100.1, 2), is("100.10"));
     assertThat(NumberUtils.format(10.1234, 2), is("10.12"));
+    assertThat(NumberUtils.format(10.1234, 4), is("10.1234"));
     assertThat(NumberUtils.format(1000.123, 2), is("1,000.12"));
     assertThat(NumberUtils.format(1000.126, 2), is("1,000.13"));
   }

@@ -36,6 +36,6 @@ public class NumberUtils {
     double adjust = Math.pow(10, decimalPlaces);
     // We actually do 45.6 + 100 (adjust) so that we get "100" (instead of just "0") and then drop the leading 1
     long decimalPart = Math.round((Math.abs(value) * adjust) % adjust) + (long) adjust;
-    return format(integerPart) + "." + format(decimalPart).substring(1);
+    return format(integerPart) + "." + Long.toString(decimalPart).substring(1);
   }
 }
