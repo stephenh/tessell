@@ -42,7 +42,7 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> exte
   // outstanding errors
   private final Map<Object, String> errors = new LinkedHashMap<Object, String>();
   // our wrapped value
-  private final Value<P> value;
+  private Value<P> value;
   // snapshot of the value for diff purposes (e.g. derived values)
   private P lastValue;
   // what we should use for null
@@ -62,7 +62,17 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> exte
   // only used if someone calls .valid()
   private Property<Boolean> validProperty;
 
+  protected AbstractProperty() {
+    // the subclass should call initialize as soon as possible
+  }
+
   public AbstractProperty(final Value<P> value) {
+    initializeValue(value);
+  }
+
+  // Basically the constructor, but separate so that {@link DerivedProperty}
+  // can pass a DerivedValue anonymous class that refers to itself. 
+  protected void initializeValue(final Value<P> value) {
     this.value = value;
     lastValue = copyLastValue(getWithUpstreamTracking());
     RuleHandler ruleHandler = new RuleHandler();
