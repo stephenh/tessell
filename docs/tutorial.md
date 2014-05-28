@@ -35,7 +35,7 @@ We'll start by looking at [ClientView.ui.xml](http://github.com/stephenh/gwt-hac
         <div><gwt:SubmitButton ui:field="submit" text="Submit" /></div>
       </gwt:HTMLPanel>
     </ui:UiBinder>
-{: class=brush:xml}
+{: class="brush:xml"}
 
 This is [UiBinder](http://code.google.com/webtoolkit/doc/latest/DevGuideUiBinder.html), GWT client-side templating. At compile-time, GWT turns it into a variety of `DOM.createElement`, `new TextBox`, and `innerHTML` calls in the generated JavaScript.
 
@@ -55,7 +55,7 @@ Tessell's forte is using the `ClientView.ui.xml` file as the source for generati
 If you edit `ClientView.ui.xml`, make a change, and hit save, you should see the console output:
 
     gwt-hack/src/main/java/com/bizo/gwthack/client/views/ClientView.ui.xml
-{: class=brush:plain}
+{: class="brush:plain"}
 
 The gwt-hack Eclipse project has a "views" External Tool Builder configured to automatically run anytime a file is changed in the `views` directory. The builder runs Tessell's `ViewGenerator` and creates:
 
@@ -74,7 +74,7 @@ Going through its source in pieces, we first declare `ClientPresenter` as a pres
 
     public class ClientPresenter extends AbstractPresenter<IsClientView> {
     }
-{: class=brush:java}
+{: class="brush:java"}
 
 For the constructor, we take the application's `AppRegistry` (add link here) and the `ClientModel` we are to display.
 
@@ -83,7 +83,7 @@ For the constructor, we take the application's `AppRegistry` (add link here) and
         this.client = client;
         nameLeft = makeNameleft();
       }
-{: class=brush:java}
+{: class="brush:java"}
 
 We also assigned two fields:
 
@@ -100,7 +100,7 @@ The main logic of our presenter is in the `onBind` method, which is called when 
         binder.bind(saveCommand).to(view.submit());
         binder.enhance(view.name());
       }
-{: class=brush:java}
+{: class="brush:java"}
 
 The first `binder.bind` call sets up two-way binding between the `client.name` property and the `view.name()` text box widget. If the model changes, the text box is updated; if the text box changes, the model is updated.
 
@@ -118,7 +118,7 @@ The third `binder.bind` call sets up `saveCommand` to be called when `submit` is
           goTo(ClientListPlace.newRequest());
         }
       };
-{: class=brush:java}
+{: class="brush:java"}
 
 The `DispatchUiCommand` base class encapsulates the logic that only allows "Submit" to be clicked once, and can optionally disable/enable `submit` as needed.
 
@@ -136,7 +136,7 @@ Finally, coming back to the `nameLeft` field, it is created by the `makeNameLeft
           }
         }).depends(remaining);
       }
-{: class=brush:java}
+{: class="brush:java"}
 
 The `DerivedValue` inner class returns the new value of the property and `depends(remaining)` means the `nameLeft` property will be re-evaluated each time the `remaining` property of `name` changes (which in turn changes each time `name` changes).
 
@@ -154,7 +154,7 @@ One part of the `ClientPresenter` that I skipped was the static `show` method:
           }
         });
       }
-{: class=brush:java}
+{: class="brush:java"}
 
 Places are part of traditional GWT MPV and denote different bookmarks in an application: `#clients`, `#client;id=4`, etc.
 
@@ -173,7 +173,7 @@ Finally, the reason we're doing all this MVP abstraction is for great testing. A
       private final ClientPresenter p = new ClientPresenter(registry, client);
       private final StubClientView v = (StubClientView) p.getView();
     }
-{: class=brush:java}
+{: class="brush:java"}
 
 We assume each of our test methods will use a `dto`, model `client`, presenter `p`, and view `v`, and declare these as fields. Note our view is actually a `StubClientView`, which was code-generated to include stub widgets/elements for all of the `ui:field`-marked elements in the `ui.xml` file.
 
@@ -188,7 +188,7 @@ On to the test methods themselves, the first asserts that the view's values are 
       assertThat(v.name().getText(), is("foo"));
       assertThat(v.nameLeft().getText(), is("47 left"));
     }
-{: class=brush:java}
+{: class="brush:java"}
 
 Here `v.name()` is a `StubTextBox`, and it's `getText()` method is just getting from a `StubTextBox.text` field instead of any normal `TextBox` DOM coupling.
 
@@ -204,7 +204,7 @@ The next test ensures that the "X left" label updates as the user types:
       v.name.press('b');
       assertThat(v.nameLeft().getText(), is("46 left"));
     }
-{: class=brush:java}
+{: class="brush:java"}
 
 `StubTextBox.press` is a helper method that takes a char and fires dummy key down, key press, and key up events (but no change event or blur event). After calling `press('b')`, we see that the `nameLeft` label got updated to "46 left".
 
@@ -230,7 +230,7 @@ The last test asserts the submit button works:
       async.getCallback(SaveClientAction.class).onSuccess(//
         new SaveClientResult(success, new ArrayList<String>(Arrays.asList(messages))));
     }
-{: class=brush:java}
+{: class="brush:java"}
 
 Note that we check that:
 

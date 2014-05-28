@@ -53,7 +53,7 @@ For example, given a page with an employees table, we'd have `Page.ui.xml`:
         <mpv:RowTable ui:field="employeeTable"/>
       </gwt:HTMLPanel>
     </ui:UiBinder>
-{: class=brush:xml}
+{: class="brush:xml"}
 
 `EmployeeHeader.ui.xml`:
 
@@ -66,7 +66,7 @@ For example, given a page with an employees table, we'd have `Page.ui.xml`:
         </tr>
       </gwt:HTMLPanel>
     </ui:UiBinder>
-{: class=brush:xml}
+{: class="brush:xml"}
 
 `EmployeeRow.ui.xml`:
 
@@ -82,7 +82,7 @@ For example, given a page with an employees table, we'd have `Page.ui.xml`:
         </tr>
       </gwt:HTMLPanel>
     </ui:UiBinder>
-{: class=brush:xml}
+{: class="brush:xml"}
 
 Tessell's [view generation](viewgeneration.html) will turn these into 3 views, `IsPageView`, `IsEmployeeHeaderView`, and `IsEmployeeRowView`.
 
@@ -127,7 +127,7 @@ The `PagePresenter` fetches the table data, instantiates an inner-class presente
         }
       }
     }
-{: class=brush:java}
+{: class="brush:java"}
 
 While this example doesn't do anything fancy, the idea is that the per-row, stateful `EmployeeRowPresenter` will scale as your table logic becomes more complex.
 
@@ -165,7 +165,7 @@ Testing RowTable works much like regular Tessell stub-based testing.
         // PagePresenter.onData being called
       }
     }
-{: class=brush:java}
+{: class="brush:java"}
 
 Implementation Details
 ----------------------

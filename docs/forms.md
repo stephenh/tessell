@@ -36,7 +36,7 @@ For example, a FormPresenter-enabled form might look like:
     form.add(new ButtonFormAction(saveCommand, "Save"));
 
     view.flowPanel().add(form.getView());
-{: class=brush:java}
+{: class="brush:java"}
 
 The page's `ui.xml` file is then as simple as:
 
@@ -45,7 +45,7 @@ The page's `ui.xml` file is then as simple as:
         <gwt:FlowPanel ui:field="formPanel"/>
       </gwt:HTMLPanel>
     </ui:UiBinder>
-{: class=brush:xml}
+{: class="brush:xml"}
 
 Notice how the presenter can focus on only declaring the form's structure. And notice that no layout details are needed (either here in the presenter or the presenter's `ui.xml` file).
 
@@ -108,7 +108,7 @@ For example, [DefaultFormLayout][DefaultFormLayout] look something like:
       }
 
       // ... more methods ...
-{: class=brush:java}
+{: class="brush:java"}
 
 Where it uses `div`, `ol`, and `li` tags to layout the form elements (based on the markup from [fancy form design](http://articles.sitepoint.com/print/fancy-form-design-css)).
 
@@ -136,7 +136,7 @@ For example, you might have something like:
         add(new CustomDayFormLine(p));
       }
     }
-{: class=brush:java}
+{: class="brush:java"}
 
 Note again that this subclass is not required to use FormPresenter, but is a helpful way of centralizing the form layout decisions and making consuming page presenters that much more simple.
 
@@ -187,7 +187,7 @@ Instead, we have to grab the form elements by their `id` from FormPresenter's ba
       private StubButton save() {
         return (StubButton) v.findById("formId-save");
       }
-{: class=brush:java}
+{: class="brush:java"}
 
 
 

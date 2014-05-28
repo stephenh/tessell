@@ -23,7 +23,7 @@ With GWT's [traditional MVP](http://code.google.com/webtoolkit/articles/mvp-arch
         <div><gwt:SubmitButton ui:field="submit" text="Submit"/></div>
       </gwt:HTMLPanel>
     </ui:UiBinder>
-{: class=brush:xml}
+{: class="brush:xml"}
 
 After creating the `ui.xml` file, the programmer is now responsible for creating:
 
@@ -60,7 +60,7 @@ Very briefly, these two files will look something like:
         return name;
       }
     }
-{: class=brush:java}
+{: class="brush:java"}
 
 With fields, getters, etc., these two classes can easily add up to **80** lines of boilerplate Java code that the programmer has to maintain for an **8** line `ui.xml` file. This is an **10x** increase in manually-maintained lines of code.
 
@@ -79,7 +79,7 @@ Looking again at the `ui.xml` file:
         <div><gwt:SubmitButton ui:field="submit" text="Submit"/></div>
       </gwt:HTMLPanel>
     </ui:UiBinder>
-{: class=brush:xml}
+{: class="brush:xml"}
 
 We can say that any element with a `ui:field` attribute (`heading`, `name`, etc.) should automatically be:
 
@@ -98,7 +98,7 @@ So, given the same `ClientView.ui.xml` file, Tessell will generate the view inte
       // repeat for each ui:field
       public IsTextBox name();
     }
-{: class=brush:java}
+{: class="brush:java"}
 
 Note that all of `IsXxx` types (`IsElement`, `IsTextBox`) are interfaces provided by Tessell and so are fully mockable/stub-able.
 
@@ -129,7 +129,7 @@ Tessell will also generate the UiBinder implementation:
       public static interface MyUiBinder extends UiBinder<HTMLPanel, ClientView> {
       }
     }
-{: class=brush:java}
+{: class="brush:java"}
 
 And, finally, Tessell will generate a view stub for testing:
 
@@ -151,7 +151,7 @@ And, finally, Tessell will generate a view stub for testing:
         return name;
       }
     }
-{: class=brush:java}
+{: class="brush:java"}
 
 So, with the stub, it's ~90 lines of code generated from 8 lines of the `client.ui.xml`. An **order of magnitude** decrease in code a programmer has to type out.
 
@@ -182,7 +182,7 @@ For example, gwt-hack's `AppViews` class looks something like:
         ...
       }
     }
-{: class=brush:java}
+{: class="brush:java"}
 
 When your presenter wants to instantiate its view, it can use the appropriate `AppViews` static method, e.g.:
 
@@ -191,7 +191,7 @@ When your presenter wants to instantiate its view, it can use the appropriate `A
         super(newAppView());
       }
     }
-{: class=brush:java}
+{: class="brush:java"}
 
 Presenters
 ----------
@@ -234,7 +234,7 @@ Here is a `ClientPresenter`:
         // when clicked use IsFocusWidget.addClickHandler
         view.submit().addClickHandler(...);
       }
-{: class=brush:java}
+{: class="brush:java"}
 
 Notice how:
 

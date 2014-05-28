@@ -49,12 +49,12 @@ For example, model-less/DTO-only UI logic typically has to use inner classes to 
         model.setName(view.name().getText());
       }
     }
-{: class=brush:java}
+{: class="brush:java"}
 
 While a rich model with data binding allows the much simpler:
 
     binder.bind(model.name).to(view.name());
-{: class=brush:java}
+{: class="brush:java"}
 
 Other frameworks using rich models/data binding include:
 

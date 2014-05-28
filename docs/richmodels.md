@@ -29,7 +29,7 @@ This generally means you can program declaratively, rather than imperatively. Fo
       // must remember to update the view
       view.employeeName().setText(newName);
     }
-{: class=brush:java}
+{: class="brush:java"}
 
 Tessell allows you to do this declaratively:
 
@@ -42,7 +42,7 @@ Tessell allows you to do this declaratively:
       // only have to set the name
       employee.name.set(newName);
     }
-{: class=brush:java}
+{: class="brush:java"}
 
 This is a trivial example, but as your application grows more complicated, having the model implicitly update downstream dependencies leads to less code and less bugs.
 
@@ -59,7 +59,7 @@ Tessell also has so-called "live collections", which are property-like versions 
           return new EmployeePresenter(ee);
         }
       });
-{: class=brush:java}
+{: class="brush:java"}
 
 Means that any time `listOfEmployees` is changed (elements added or removed), then corresponding views will be added/removed to the `employeeDiv` in the UI.
 
@@ -72,7 +72,7 @@ For example, a model might look like:
       public final IntegerProperty id = intProperty("id");
       public final StringProperty name = stringProperty("name");
     }
-{: class=brush:java}
+{: class="brush:java"}
 
 The employee's attributes being `Property` objects instead of regular primitives/value objects means they can be used declaratively, e.g.:
 
@@ -83,12 +83,12 @@ The employee's attributes being `Property` objects instead of regular primitives
         binder.bind(employee.name).to(view.name());
       }
     }
-{: class=brush:java}
+{: class="brush:java"}
 
 This sets up two-way data binding. If your business-logic calls:
 
     employee.name.set("foo");
-{: class=brush:java}
+{: class="brush:java"}
 
 The view's text box will be updated. If the user changes the view, the model employee's name will be updated.
 
@@ -104,7 +104,7 @@ Models and properties have the notion of validation as well, so you can mark `id
         binder.bind(employee.id).to(view.id(), view.idErrors());
       }
     }
-{: class=brush:java}
+{: class="brush:java"}
 
 As the user fills in/clears the Id text field in the view, the property will re-validate itself and fire validation events, and the `idErrors` list will show/hide the messages to the user.
 
@@ -117,7 +117,7 @@ Binding declarations typically are of the form:
 
     bind <property> to <source>
     when <property> <condition> do <something>
-{: class=brush:plain}
+{: class="brush:plain"}
 
 E.g.:
 
@@ -126,7 +126,7 @@ E.g.:
     binder.when(model.name).is("Bob").show(view.bobsSpecialNote());
     binder.when(model.name).is("Fred").set(s.bold()).on(view.nameBox());
     binder.bind(saveCommand).to(view.submitButton());
-{: class=brush:java}
+{: class="brush:java"}
 
 Each declaration means:
 

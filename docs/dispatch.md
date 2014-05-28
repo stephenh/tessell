@@ -51,7 +51,7 @@ Where as traditionally every new action (distinct AJAX call) requires you need t
       @Out(2)
       String outputParam2;
     }
-{: class=brush:java}
+{: class="brush:java"}
 
 And `tessell-apt` will generate `FooAction` and `FooResult` DTOs with all of the necessary boilerplate for you.
      
@@ -63,7 +63,7 @@ Every AJAX call may fail, but it's not a good idea to reimplement failure logic 
     public interface SuccessCallback<T> {
       void onSuccess(T result);
     }
-{: class=brush:java}
+{: class="brush:java"}
 
 Which is just like `AsyncCallback` without the `onFailure` method. So, instead of reimplementing `AsyncCallback.onFailure` each time you make an AJAX call, Tessell's [OutstandingDispatchAysnc][OutstandingDispatchAysnc] accepts `SuccessCallbacks` and will provide a single `onFailure` implementation.
 
@@ -100,7 +100,7 @@ Again using [ClientPresenterTest][ClientPresenterTest], testing save looks like:
       async.getCallback(SaveClientAction.class).onSuccess(
         new SaveClientResult(success));
     }
-{: class=brush:java}
+{: class="brush:java"}
 
 Where:
 

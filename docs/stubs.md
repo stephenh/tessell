@@ -29,12 +29,12 @@ The real `XxxView` will have `@UiField`-annotated fields of the real GWT widgets
 
     @UiField(provided = true)
     final TextBox name = new org.tessell.widgets.GwtTextBox();
-{: class=brush:java}
+{: class="brush:java"}
 
 While the `StubXxxView` will simply instantiate the `StubXxx` version of each widget in the `ui.xml` file to use at test time, e.g.:
 
     final StubTextBox name = new org.tessell.widgets.StubTextBox();
-{: class=brush:java}
+{: class="brush:java"}
 
 These "for free" `StubXxxView` classes make testing very easy to do--seeing the [Tests](./tests.html) page for examples.
 
@@ -47,7 +47,7 @@ When you're testing, the stub widgets attempt to mimic browser behavior, so you 
       view.nameTextBox().press('a');
       view.nameTextBox().type("my name");
     }
-{: class=brush:java}
+{: class="brush:java"}
 
 And the `StubTextBox` will, for `press`, fire key down, key press, and key up events and, for `type`, fire value change and blur events.
 

@@ -28,7 +28,7 @@ As a short example, [ClientPresenterTest][ClientPresenterTest] from the [gwt-hac
       view.name().press('b');
       assertThat(view.nameLeft().getText(), is("46 left"));
     }
-{: class=brush:java}
+{: class="brush:java"}
 
 Note how the `view.name().press('b')` call results in:
 

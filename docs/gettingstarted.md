@@ -37,7 +37,7 @@ To setup view generation, you'll need:
        <dependency org="org.tessell" name="tessell-user" rev="2.0.0" conf="compile,sources"/>
        <dependency org="org.tessell" name="tessell-dev" rev="2.0.0" conf="provided,sources"/>
        <dependency org="org.tessell" name="tessell-apt" rev="2.0.0" conf="provided,sources"/>
-   {: class=brush:xml}
+   {: class="brush:xml"}
 
    But you can use Maven or the jars directly if you want.
    
@@ -79,7 +79,7 @@ To setup view generation, you'll need:
            --viewsPackageName com.business.sample.client.views
            --resourcesPackageName com.business.sample.client.resources
            --outputDirectory gen/
-       {: class=brush:plain}
+       {: class="brush:plain"}
    * On the Refresh tab, 
      * Check "Refresh resources upon completion"
      * Select "Specific resources" and check the `sample/gen` folder
@@ -101,7 +101,7 @@ To setup view generation, you'll need:
        gen/com/business/sample/client/resources/AppResources.java
        gen/com/business/sample/client/resources/StubAppResources.java
        gen/com/business/sample/client/resources/AppResourcesUtil.java
-   {: class=brush:plain}
+   {: class="brush:plain"}
 
 6. Check `.externalToolBuilders/tessell.launch` into your repository.
 
@@ -111,7 +111,7 @@ To setup view generation, you'll need:
 
        src/com/business/sample/client/views/Foo.ui.xml
        gen/com/business/sample/client/views/Foo-gen.ui.xml
-   {: class=brush:plain}
+   {: class="brush:plain"}
 
 8. You can create a presenter, e.g. `com/business/sample/client/app/FooPresenter.java`:
 
@@ -120,7 +120,7 @@ To setup view generation, you'll need:
            super(AppViews.newFooView());
          }
        }
-   {: class=brush:java}
+   {: class="brush:java"}
 
 9. In your `onModuleLoad`, initiate the `AppViews` provider and then use your presenter:
 
@@ -129,7 +129,7 @@ To setup view generation, you'll need:
        FooPresenter p = new FooPresenter();
        p.bind();
        RootPanel.get().add(p.getView());
-   {: class=brush:java}
+   {: class="brush:java"}
 
 Eclipse should now be setup to generate views for you. For more information on writing presenters, see the [tutorial](./tutorial.html) and other docs.
 
@@ -173,7 +173,7 @@ For unit tests, you can:
        static {
          StubWidgetsProvider.install();
        }
-   {: class=brush:java}
+   {: class="brush:java"}
 
 3. Create your presenter and use the stub views to put it under test:
 
@@ -185,7 +185,7 @@ For unit tests, you can:
          v.textName().type("what the user typed");
          // assert various things happened
        }
-   {: class=brush:java}
+   {: class="brush:java"}
 
 For more on testing, see [tests](./tests.html) or the example projects for how the manipulate the fake view objects and fake dispatch implementation to test the presenter.
 
