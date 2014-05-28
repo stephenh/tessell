@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.5.0//EN" "http://google-web-toolkit.googlecode.com/svn/tags/2.5.0/distro-source/core/src/gwt-module.dtd">
+<module rename-to="examples">
+  <inherits name="com.google.gwt.user.User" />
+  <inherits name="com.google.gwt.uibinder.UiBinder" />
+  <inherits name="com.google.gwt.resources.Resources" />
+  <inherits name="org.tessell.Tessell" />
+  <inherits name="com.google.web.bindery.event.Event" />
+  <inherits name="com.google.gwt.user.Debug" />
+
+  <source path="client">
+    <exclude name="**/Stub*"/>
+  </source>
+  <source path="shared" />
+
+  <collapse-all-properties/>
+
+  <entry-point class="org.tessell.examples.client.ExamplesModule" />
+</module>
+    

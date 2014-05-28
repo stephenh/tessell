@@ -1,0 +1,13 @@
+config:
+  dtoPackage: org.tessell.examples.shared.dtos
+  mapperPackage: org.tessell.examples.server.mapper
+  indent: two-space
+  pruneOldFiles: disabled
+  commonInterfaces: com.google.gwt.user.client.rpc.IsSerializable
+  modelPackage: org.tessell.examples.client.model
+  outputDirectory: target/generated/java
+
+EmployeeDto:
+  properties: id Long, name String, salary Double
+  publicConstructor: true
+  tessellModel: true
