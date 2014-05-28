@@ -20,7 +20,6 @@
 
     <!-- default (compile, runtime) dependencies -->
     <dependency org="com.google.gwt" name="gwt-servlet" rev="${gwt.version}" conf="default"/>
-    <dependency org="org.bindgen" name="bindgen-gwt" rev="2.19" conf="default"/>
 
     <!-- test time only dependencies -->
     <dependency org="junit" name="junit-dep" rev="4.8.2" conf="default,test" />

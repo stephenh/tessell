@@ -5,8 +5,6 @@ import static java.lang.Boolean.TRUE;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bindgen.Binding;
-import org.tessell.model.values.BoundValue;
 import org.tessell.model.values.DerivedValue;
 import org.tessell.model.values.SetValue;
 import org.tessell.model.values.Value;
@@ -24,10 +22,6 @@ public class NewProperty {
 
   public static <P> BasicProperty<P> basicProperty(final Value<P> value) {
     return new BasicProperty<P>(value);
-  }
-
-  public static <P> BasicProperty<P> basicProperty(final Binding<P> binding) {
-    return new BasicProperty<P>(new BoundValue<P>(binding));
   }
 
   public static <P> BasicProperty<P> basicProperty(final String name) {
@@ -48,10 +42,6 @@ public class NewProperty {
 
   public static BooleanProperty booleanProperty(final Value<Boolean> value) {
     return new BooleanProperty(value);
-  }
-
-  public static BooleanProperty booleanProperty(final Binding<Boolean> binding) {
-    return new BooleanProperty(new BoundValue<Boolean>(binding));
   }
 
   public static Property<Boolean> not(final Property<Boolean> property) {
@@ -106,10 +96,6 @@ public class NewProperty {
     return new IntegerProperty(derived);
   }
 
-  public static IntegerProperty integerProperty(final Binding<Integer> binding) {
-    return new IntegerProperty(new BoundValue<Integer>(binding));
-  }
-
   public static LongProperty longProperty(final String name) {
     return new LongProperty(new SetValue<Long>(name));
   }
@@ -122,10 +108,6 @@ public class NewProperty {
     return new LongProperty(derived);
   }
 
-  public static LongProperty longProperty(final Binding<Long> binding) {
-    return new LongProperty(new BoundValue<Long>(binding));
-  }
-
   public static StringProperty stringProperty(final String name) {
     return new StringProperty(new SetValue<String>(name));
   }
@@ -134,20 +116,12 @@ public class NewProperty {
     return new StringProperty(new SetValue<String>(name, initialValue));
   }
 
-  public static StringProperty stringProperty(final Binding<String> binding) {
-    return new StringProperty(new BoundValue<String>(binding));
-  }
-
   public static StringProperty stringProperty(final Value<String> value) {
     return new StringProperty(value);
   }
 
   public static <E> ListProperty<E> listProperty(final Value<List<E>> value) {
     return new ListProperty<E>(value);
-  }
-
-  public static <E> ListProperty<E> listProperty(final Binding<List<E>> binding) {
-    return new ListProperty<E>(new BoundValue<List<E>>(binding));
   }
 
   public static <E> ListProperty<E> listProperty(final String name, final List<E> list) {
@@ -176,10 +150,6 @@ public class NewProperty {
 
   public static <E extends Enum<E>> EnumProperty<E> enumProperty(final String name, E initialValue) {
     return new EnumProperty<E>(new SetValue<E>(name, initialValue));
-  }
-
-  public static <E extends Enum<E>> EnumProperty<E> enumProperty(Binding<E> binding) {
-    return new EnumProperty<E>(new BoundValue<E>(binding));
   }
 
 }

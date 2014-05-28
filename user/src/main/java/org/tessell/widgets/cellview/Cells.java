@@ -3,9 +3,6 @@ package org.tessell.widgets.cellview;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bindgen.BindingRoot;
-import org.tessell.model.properties.Property;
-
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.HasCell;
 import com.google.gwt.core.client.GWT;
@@ -40,10 +37,6 @@ public class Cells {
     return provider.newColumn(value, cell);
   }
 
-  public static <T, C> BoundColumnValue<T, C> boundValue(BindingRoot<T, C> binding) {
-    return new BoundColumnValue<T, C>(binding);
-  }
-
   public static <T, C> ColumnValue<T, C> constantValue(final C value) {
     return new ColumnValue<T, C>() {
       public C get(T object) {
@@ -58,10 +51,6 @@ public class Cells {
         return object;
       }
     };
-  }
-
-  public static <T, C> BoundColumnProperty<T, C> boundProperty(BindingRoot<T, ? extends Property<C>> binding) {
-    return new BoundColumnProperty<T, C>(binding);
   }
 
   public static <C> IsHeader<C> newHeader(HeaderValue<C> value, Cell<C> cell) {

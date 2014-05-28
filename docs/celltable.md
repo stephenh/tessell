@@ -8,6 +8,8 @@ Cell Table
 
 GWT 2.1's CellTable widget is one of two primary ways to do tables in Tessell The other is [RowTable](rowtable.html).
 
+**Update/Disclaimer May 2014**: I personally don't use cell tables, so this page is likely out of date. The example also uses bindgen integration, which was also removed from Tessell because it was not actively used.
+
 Benefits
 --------
 

@@ -32,6 +32,4 @@
   </source>
   <super-source path="supersrc" />
 
-  <inherits name="org.bindgen.Bindgen" />                  <!-- For bindgen -->
-
 </module>
