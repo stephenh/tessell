@@ -70,8 +70,10 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> exte
     initializeValue(value);
   }
 
-  // Basically the constructor, but separate so that {@link DerivedProperty}
-  // can pass a DerivedValue anonymous class that refers to itself. 
+  /**
+   * Basically the constructor, but separate so that {@link DerivedProperty}
+   * can pass a DerivedValue anonymous class that refers to itself.
+   */
   protected void initializeValue(final Value<P> value) {
     this.value = value;
     lastValue = copyLastValue(getWithUpstreamTracking());
