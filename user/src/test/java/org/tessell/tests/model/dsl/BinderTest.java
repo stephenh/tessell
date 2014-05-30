@@ -238,25 +238,56 @@ public class BinderTest {
   }
 
   @Test
-  public void listPropertyToListBoxLeavesSetsPropertyWhenSelectedValueGoesAway() {
+  public void listPropertyToListBoxResetsPropertyToNullWhenSelectedValueGoesAway() {
     final StubListBox listBox = new StubListBox();
-    final ListProperty<Integer> values = listProperty("values", list(1, 2));
 
-    // s starts out null
+    // given we're binding against a list of values that includes null
+    final ListProperty<Integer> values = listProperty("values", list(null, 1, 2));
+
+    // and s itself starts out null
     assertThat(s.get(), is(nullValue()));
 
-    // and so is set to the 1st option when we bind
+    // when we bind
     binder.bind(s).to(listBox, values, new IntegerAdaptor());
+
+    // then s is left as is
+    assertThat(s.get(), is(nullValue()));
+
+    // when later we select something
+    listBox.select("1");
     assertThat(s.get(), is("1"));
 
-    // when our selected value goes away
+    // and our selected value goes away
+    values.set(list(null, 3, 4));
+
+    // then the property goes back to null
+    assertThat(s.get(), is(nullValue()));
+    assertThat(listBox.getSelectedIndex(), is(0));
+  }
+
+  @Test
+  public void listPropertyToListBoxResetsPropertyWhenSelectedValueGoesAway() {
+    final StubListBox listBox = new StubListBox();
+
+    // given we're binding against a list of values that does not include null
+    final ListProperty<Integer> values = listProperty("values", list(1, 2));
+
+    // and s starts out null
+    assertThat(s.get(), is(nullValue()));
+
+    // when we bind
+    binder.bind(s).to(listBox, values, new IntegerAdaptor());
+
+    // then s is set to the 1st option
+    assertThat(s.get(), is("1"));
+    assertThat(listBox.getSelectedText(), is("1"));
+
+    // when later our selected value goes away
     values.set(list(3, 4));
 
-    // then the property isn't changed
-    assertThat(s.get(), is("1"));
-
-    // but the list box goes blank
-    assertThat(listBox.getSelectedIndex(), is(-1));
+    // then the property is again set to the 1st option
+    assertThat(s.get(), is("3"));
+    assertThat(listBox.getSelectedText(), is("3"));
   }
 
   @Test
@@ -285,30 +316,26 @@ public class BinderTest {
   public void listPropertyToListBoxDoesNotResetPropertyWhenTheListIsNull() {
     final StubListBox listBox = new StubListBox();
 
-    // s starts out set
+    // given s starts out set
     s.set("3");
 
-    // and we bind to a null list property
+    // when we bind to a null list property
     final ListProperty<Integer> values = listProperty("values", null);
     binder.bind(s).to(listBox, values, new IntegerAdaptor());
 
     // then s does not change
     assertThat(s.get(), is("3"));
 
-    // and so the select box is blank
+    // and the select box is blank
     assertThat(listBox.getSelectedIndex(), is(-1));
 
-    // when we have values that don't include the current value
-    values.set(list(1, 2));
+    // when later we do have values
+    values.set(list(1, 2, 3));
 
     // then s still does not change
     assertThat(s.get(), is("3"));
-    assertThat(listBox.getSelectedIndex(), is(-1));
 
-    // when we finally have values that do include the current value
-    values.set(list(1, 2, 3));
-
-    // then we can show it in the list box
+    // and we can show it's current value in the list
     assertThat(listBox.getSelectedIndex(), is(2));
   }
 
@@ -1423,12 +1450,12 @@ public class BinderTest {
 
   private final class IntegerAdaptor implements ListBoxAdaptor<String, Integer> {
     public String toDisplay(Integer option) {
-      return option.toString();
+      return option == null ? "" : option.toString();
     }
 
     @Override
     public String toValue(Integer option) {
-      return option.toString();
+      return option == null ? null : option.toString();
     }
   }
 

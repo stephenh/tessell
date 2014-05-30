@@ -138,6 +138,10 @@ public class PropertyBinder<P> {
         source.clear();
         if (options.get() != null) {
           addOptionsAndSetIfNull(source, options.get(), adaptor);
+          // reselect the 1st value if p's current value is not available.
+          if (p.get() != null && indexInOptions(adaptor, options.get()) == -1 && !options.get().isEmpty()) {
+            p.setInitialValue(adaptor.toValue(options.get().get(0)));
+          }
         }
       }
     });
