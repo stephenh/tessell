@@ -196,6 +196,7 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> exte
       }
 
       if (valueChanged) {
+        clearTemporaryError();
         fireChanged(oldValue, newValue);
       }
     } finally {

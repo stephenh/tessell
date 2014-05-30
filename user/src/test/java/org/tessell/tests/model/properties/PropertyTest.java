@@ -433,6 +433,16 @@ public class PropertyTest extends AbstractRuleTest {
   }
 
   @Test
+  public void temporaryErrorClearsOnChange() {
+    final BasicProperty<String> s = basicProperty("s");
+    s.setTouched(true);
+    listenTo(s);
+    s.setTemporaryError("Something bad 1");
+    s.set("new value");
+    assertNoMessages();
+  }
+
+  @Test
   public void temporaryErrorTakesPrecedenceOverOtherRules() {
     final BasicProperty<String> s = basicProperty("s");
     s.req();
