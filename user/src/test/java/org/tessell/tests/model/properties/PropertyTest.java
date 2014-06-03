@@ -211,7 +211,7 @@ public class PropertyTest extends AbstractRuleTest {
     a.setDefaultValue(true);
     assertThat(c.changes, is(1));
     a.set(null);
-    assertThat(c.changes, is(1));
+    assertThat(c.changes, is(2));
   }
 
   @Test

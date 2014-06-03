@@ -134,7 +134,7 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> exte
 
   @Override
   public void set(final P value) {
-    this.value.set(defaultIfNull(copyLastValue(value)));
+    this.value.set(copyLastValue(value));
     if (!touched && !reassessing && !isWithinASetInitial()) {
       // even if unchanged, treat this as touching
       setTouched(true);
@@ -169,6 +169,7 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> exte
       // watch for out-of-band changes, e.g. model.merge(newDto);
       if (newValue == null && defaultValue != null) {
         value.set(defaultValue);
+        lastValue = newValue; // so that we detect/fire change
         newValue = defaultValue;
       }
       final P oldValue = lastValue;
