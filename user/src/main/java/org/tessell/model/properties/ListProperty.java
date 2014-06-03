@@ -384,6 +384,9 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
       fireEvent(new ValueRemovedEvent<E>(this, removed.element));
     }
     fireEvent(new ListChangedEvent<E>(this, oldValue, newValue, diff));
+    // if someone is listening for "did one of your models change", they
+    // probably also care about a new model showing up/old model going away
+    fireEvent(new MemberChangedEvent());
     super.fireChanged(oldValue, newValue);
   }
 

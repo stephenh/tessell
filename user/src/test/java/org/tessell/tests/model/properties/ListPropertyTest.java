@@ -491,9 +491,11 @@ public class ListPropertyTest {
     });
     DummyModel m1 = new DummyModel();
     models.add(m1);
-    assertThat(fires[0], is(0));
-    m1.name.set("adsf");
     assertThat(fires[0], is(1));
+    m1.name.set("adsf");
+    assertThat(fires[0], is(2));
+    models.clear();
+    assertThat(fires[0], is(3));
   }
 
   @Test

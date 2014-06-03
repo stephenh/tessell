@@ -59,16 +59,17 @@ public abstract class AbstractModel implements Model {
 
   /** Adds {@code p} to the property group. */
   protected <P extends Property<U>, U> P add(P p) {
-    p.addPropertyChangedHandler(new PropertyChangedHandler<U>() {
-      public void onPropertyChanged(PropertyChangedEvent<U> event) {
-        fireEvent(new MemberChangedEvent());
-      }
-    });
     if (p instanceof HasMemberChangedHandlers) {
       // forward on member changes up the tree, e.g. from ListProperties
       ((HasMemberChangedHandlers) p).addMemberChangedHandler(new MemberChangedHandler() {
         public void onMemberChanged(MemberChangedEvent event) {
           fireEvent(event);
+        }
+      });
+    } else {
+      p.addPropertyChangedHandler(new PropertyChangedHandler<U>() {
+        public void onPropertyChanged(PropertyChangedEvent<U> event) {
+          fireEvent(new MemberChangedEvent());
         }
       });
     }

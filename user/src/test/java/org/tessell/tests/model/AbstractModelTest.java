@@ -95,6 +95,7 @@ public class AbstractModelTest {
       }
     });
     AccountModel a = new AccountModel();
+    assertThat(fires[0], is(0));
     m.accounts.add(a);
     assertThat(fires[0], is(1));
     a.name.set("asdf");
