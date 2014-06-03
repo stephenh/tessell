@@ -395,6 +395,7 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
   }
 
   // Forwards member changed events on our models to our own model
+  @SuppressWarnings("unchecked")
   private void listenForMemberChanged(final E item) {
     if (item instanceof HasMemberChangedHandlers) {
       ((HasMemberChangedHandlers) item).addMemberChangedHandler(new MemberChangedHandler() {
@@ -402,6 +403,14 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
           // in case the item was removed, we don't currently unsubscribe
           if (getDirect().contains(item)) {
             fireEvent(event);
+          }
+        }
+      });
+    } else if (item instanceof Property<?>) {
+      ((Property<Object>) item).addPropertyChangedHandler(new PropertyChangedHandler<Object>() {
+        public void onPropertyChanged(PropertyChangedEvent<Object> event) {
+          if (getDirect().contains(item)) {
+            fireEvent(new MemberChangedEvent());
           }
         }
       });

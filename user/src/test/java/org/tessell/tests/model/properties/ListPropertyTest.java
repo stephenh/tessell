@@ -8,6 +8,7 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 import static org.tessell.model.properties.NewProperty.integerProperty;
 import static org.tessell.model.properties.NewProperty.listProperty;
+import static org.tessell.model.properties.NewProperty.stringProperty;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -495,6 +496,24 @@ public class ListPropertyTest {
     m1.name.set("adsf");
     assertThat(fires[0], is(2));
     models.clear();
+    assertThat(fires[0], is(3));
+  }
+
+  @Test
+  public void firesMemberChangedForProperties() {
+    final int[] fires = { 0 };
+    ListProperty<StringProperty> strings = listProperty("strings");
+    strings.addMemberChangedHandler(new MemberChangedHandler() {
+      public void onMemberChanged(MemberChangedEvent event) {
+        fires[0]++;
+      }
+    });
+    StringProperty s1 = stringProperty("s1");
+    strings.add(s1);
+    assertThat(fires[0], is(1));
+    s1.set("adsf");
+    assertThat(fires[0], is(2));
+    strings.clear();
     assertThat(fires[0], is(3));
   }
 
