@@ -2,6 +2,8 @@ package org.tessell.model;
 
 import static org.tessell.model.properties.NewProperty.booleanProperty;
 
+import java.util.logging.Logger;
+
 import org.tessell.model.events.*;
 import org.tessell.model.properties.BooleanProperty;
 import org.tessell.model.properties.Property;
@@ -16,6 +18,7 @@ import com.google.gwt.event.shared.SimplerEventBus;
 /** A base class for models. Provides a {@link PropertyGroup} for all of the properties. */
 public abstract class AbstractModel implements Model {
 
+  private static final Logger log = Logger.getLogger("org.tessel.model");
   protected final PropertyGroup all = new PropertyGroup("all", "model invalid");
   private BooleanProperty isTouched;
   private final EventBus handlers = new SimplerEventBus();
@@ -78,6 +81,7 @@ public abstract class AbstractModel implements Model {
   }
 
   protected void fireEvent(GwtEvent<?> event) {
+    log.finest(this + " firing " + event);
     handlers.fireEvent(event);
   }
 }

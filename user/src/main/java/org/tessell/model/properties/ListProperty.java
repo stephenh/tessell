@@ -73,7 +73,6 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
   public void add(final E item) {
     getDirect().add(item);
     setTouched(true);
-    listenForMemberChanged(item);
     // will fire add+change if needed
     reassess();
   }
@@ -82,7 +81,6 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
   public void add(final int index, final E item) {
     getDirect().add(index, item);
     setTouched(true);
-    listenForMemberChanged(item);
     // will fire add+change if needed
     reassess();
   }
@@ -94,9 +92,6 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
     }
     getDirect().addAll(items);
     setTouched(true);
-    for (E item : items) {
-      listenForMemberChanged(item);
-    }
     // will fire adds+change if needed
     reassess();
   }
@@ -379,6 +374,7 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
     ListDiff<E> diff = ListDiff.of(oldValue, newValue);
     for (Location<E> added : diff.added) {
       fireEvent(new ValueAddedEvent<E>(this, added.element));
+      listenForMemberChanged(added.element);
     }
     for (Location<E> removed : diff.removed) {
       fireEvent(new ValueRemovedEvent<E>(this, removed.element));

@@ -500,6 +500,25 @@ public class ListPropertyTest {
   }
 
   @Test
+  public void firesMemberChangedWhenReassessed() {
+    final int[] fires = { 0 };
+    SetValue<List<DummyModel>> v = new SetValue<List<DummyModel>>("v");
+    v.set(list(new DummyModel("m1")));
+    ListProperty<DummyModel> models = new ListProperty<DummyModel>(v);
+    models.addMemberChangedHandler(new MemberChangedHandler() {
+      public void onMemberChanged(MemberChangedEvent event) {
+        fires[0]++;
+      }
+    });
+    assertThat(fires[0], is(0));
+    v.set(list(new DummyModel("m2")));
+    models.reassess();
+    assertThat(fires[0], is(1));
+    v.get().get(0).name.set("newValue");
+    assertThat(fires[0], is(2));
+  }
+
+  @Test
   public void firesMemberChangedForProperties() {
     final int[] fires = { 0 };
     ListProperty<StringProperty> strings = listProperty("strings");
