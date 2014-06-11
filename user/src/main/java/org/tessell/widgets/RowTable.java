@@ -6,6 +6,7 @@ import java.util.Iterator;
 import org.tessell.gwt.dom.client.GwtElement;
 import org.tessell.gwt.dom.client.IsElement;
 import org.tessell.gwt.dom.client.IsStyle;
+import org.tessell.util.ListDiff.ListLike;
 
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.DOM;
@@ -16,14 +17,13 @@ import com.google.gwt.user.client.ui.WidgetCollection;
 
 /**
  * A table that can add entire rows at a time.
- * 
+ *
  * Most GWT tables are cell-focused. E.g. <code>setWidget(0, 0, widget)</code>.
- * 
+ *
  * We want a table where we can add an entire row at a time, and it was easiest to just roll our own extending from
  * {@link Panel}.
  */
 public class RowTable extends Panel implements IsRowTable {
-
   private final Element table;
   private final Element head;
   private final Element body;
@@ -73,6 +73,11 @@ public class RowTable extends Panel implements IsRowTable {
     insertRow(index, isWidget.asWidget());
   }
 
+  @Override
+  public ListLike<org.tessell.gwt.user.client.ui.IsWidget> getRowsPanel() {
+    return new ListLikeAdapter();
+  }
+
   /** Assumes {@code widget} is a table and puts its first TR into row {@code i} of our own table's body. */
   public void insertRow(final int i, final Widget newWidget) {
     final Element newTr = findTr(newWidget.getElement());
@@ -105,8 +110,8 @@ public class RowTable extends Panel implements IsRowTable {
   }
 
   @Override
-  public void removeRow(final IsWidget view) {
-    remove(view.asWidget());
+  public boolean removeRow(final IsWidget view) {
+    return remove(view.asWidget());
   }
 
   @Override
@@ -206,6 +211,21 @@ public class RowTable extends Panel implements IsRowTable {
       current = tableElement;
     }
     return current;
+  }
+
+  /** Facilitates binding ListProperties to our rows. */
+  private final class ListLikeAdapter implements ListLike<org.tessell.gwt.user.client.ui.IsWidget> {
+    @Override
+    public org.tessell.gwt.user.client.ui.IsWidget remove(int index) {
+      Widget row = rows.get(index);
+      removeRow(index);
+      return (org.tessell.gwt.user.client.ui.IsWidget) row;
+    }
+
+    @Override
+    public void add(int index, org.tessell.gwt.user.client.ui.IsWidget a) {
+      insertRow(index, a);
+    }
   }
 
 }

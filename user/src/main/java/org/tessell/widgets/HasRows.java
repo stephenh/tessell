@@ -21,7 +21,7 @@ public interface HasRows {
   void removeRow(int i);
 
   /** Removes row {@code view}. */
-  void removeRow(final IsWidget view);
+  boolean removeRow(final IsWidget view);
 
   /** @return the number of rows shown */
   int size();

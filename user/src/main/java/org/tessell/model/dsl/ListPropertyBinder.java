@@ -12,6 +12,7 @@ import org.tessell.model.properties.ListProperty;
 import org.tessell.presenter.BasicPresenter;
 import org.tessell.presenter.Presenter;
 import org.tessell.util.ListDiff;
+import org.tessell.util.ListDiff.ListLike;
 import org.tessell.util.ListDiff.Location;
 
 /** Fluent binding methods for {@link ListProperty}s. */
@@ -36,15 +37,20 @@ public class ListPropertyBinder<P> extends PropertyBinder<List<P>> {
 
   /** Binds each value in {@code p} to a view created by {@code factory}. */
   public void to(final IsInsertPanel panel, final ListViewFactory<P> factory) {
-    final InsertPanelListLikeAdapter adapter = new InsertPanelListLikeAdapter(panel);
+    to(new InsertPanelListLikeAdapter(panel), factory);
+  }
+
+  /** Binds each value in {@code p} to a view created by {@code factory}. */
+  public void to(final ListLike<IsWidget> panel, final ListViewFactory<P> factory) {
     if (p.get() != null) {
+      int i = 0;
       for (P value : p.get()) {
-        panel.add(factory.create(value));
+        panel.add(i++, factory.create(value));
       }
     }
     b.add(p.addListChangedHandler(new ListChangedHandler<P>() {
       public void onListChanged(ListChangedEvent<P> event) {
-        event.getDiff().apply(adapter, new ListDiff.Mapper<P, IsWidget>() {
+        event.getDiff().apply(panel, new ListDiff.Mapper<P, IsWidget>() {
           public IsWidget map(P a) {
             return factory.create(a);
           }

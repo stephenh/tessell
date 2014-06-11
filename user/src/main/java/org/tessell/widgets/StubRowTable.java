@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.tessell.gwt.user.client.ui.IsWidget;
+import org.tessell.util.ListDiff.ListLike;
 
 public class StubRowTable extends StubWidget implements IsRowTable {
 
@@ -40,8 +41,9 @@ public class StubRowTable extends StubWidget implements IsRowTable {
   }
 
   @Override
-  public void removeRow(com.google.gwt.user.client.ui.IsWidget view) {
+  public boolean removeRow(com.google.gwt.user.client.ui.IsWidget view) {
     removeRow(rows.indexOf(view));
+    return true;
   }
 
   @Override
@@ -70,4 +72,22 @@ public class StubRowTable extends StubWidget implements IsRowTable {
     return findInChildren(rows.iterator(), id);
   }
 
+  @Override
+  public ListLike<IsWidget> getRowsPanel() {
+    return new ListLikeAdaptor();
+  }
+
+  private class ListLikeAdaptor implements ListLike<IsWidget> {
+    @Override
+    public IsWidget remove(int index) {
+      IsWidget row = rows.get(index);
+      removeRow(index);
+      return row;
+    }
+
+    @Override
+    public void add(int index, IsWidget a) {
+      insertRow(index, a);
+    }
+  }
 }
