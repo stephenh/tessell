@@ -11,6 +11,7 @@ import static org.tessell.model.properties.NewProperty.listProperty;
 import static org.tessell.model.properties.NewProperty.stringProperty;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import org.junit.Before;
@@ -25,15 +26,17 @@ import org.tessell.model.validation.rules.Size;
 import org.tessell.model.values.DerivedValue;
 import org.tessell.model.values.SetValue;
 import org.tessell.util.ListDiff;
+import org.tessell.util.NaturalComparator;
 
 public class ListPropertyTest {
 
-  final SetValue<List<String>> pValue = new SetValue<List<String>>("p");
-  final ListProperty<String> p = new ListProperty<String>(pValue);
-  final CountingAdds<String> adds = new CountingAdds<String>();
-  final CountingRemoves<String> removes = new CountingRemoves<String>();
-  final CountingChanges<List<String>> changes = new CountingChanges<List<String>>();
-  final LastDiff<String> lastDiff = new LastDiff<String>();
+  private static final Comparator<String> naturalComparator = new NaturalComparator<String>();
+  private final SetValue<List<String>> pValue = new SetValue<List<String>>("p");
+  private final ListProperty<String> p = new ListProperty<String>(pValue);
+  private final CountingAdds<String> adds = new CountingAdds<String>();
+  private final CountingRemoves<String> removes = new CountingRemoves<String>();
+  private final CountingChanges<List<String>> changes = new CountingChanges<List<String>>();
+  private final LastDiff<String> lastDiff = new LastDiff<String>();
 
   @Before
   public void initialValue() {
@@ -876,6 +879,42 @@ public class ListPropertyTest {
 
     p.set(null);
     assertThat(index.get(), is(-1));
+  }
+
+  @Test
+  public void testSort() {
+    p.set(list("c", "b"));
+    p.sort(naturalComparator);
+    assertThat(p.get(), contains("b", "c"));
+  }
+
+  @Test
+  public void testSortIsNotPersistent() {
+    p.set(list("c", "b"));
+    p.sort(naturalComparator);
+    assertThat(p.get(), contains("b", "c"));
+    p.add("a");
+    assertThat(p.get(), contains("b", "c", "a"));
+  }
+
+  @Test
+  public void testSortReversesOnMultipleInvocations() {
+    p.set(list("c", "b"));
+    assertThat(changes.count, is(1));
+    assertThat(adds.count, is(2));
+    assertThat(removes.count, is(0));
+
+    p.sort(naturalComparator);
+    assertThat(p.get(), contains("b", "c"));
+    assertThat(changes.count, is(2));
+    assertThat(adds.count, is(2));
+    assertThat(removes.count, is(0));
+
+    p.sort(naturalComparator);
+    assertThat(p.get(), contains("c", "b"));
+    assertThat(changes.count, is(3));
+    assertThat(adds.count, is(2));
+    assertThat(removes.count, is(0));
   }
 
   public static class CountingChanges<P> implements PropertyChangedHandler<P> {

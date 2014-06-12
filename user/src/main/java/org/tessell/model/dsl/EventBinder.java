@@ -2,6 +2,7 @@ package org.tessell.model.dsl;
 
 import static java.lang.Boolean.TRUE;
 
+import java.util.Comparator;
 import java.util.List;
 
 import org.tessell.model.commands.UiCommand;
@@ -108,6 +109,10 @@ public abstract class EventBinder {
     return new MoveBinder<P>(value, false);
   }
 
+  public <P> SortBinder<P> sort(ListProperty<P> list) {
+    return new SortBinder<P>(list);
+  }
+
   protected abstract HandlerRegistration hookUpRunnable(Runnable runnable);
 
   protected abstract HandlerRegistration hookUpEventRunnable(DomEventRunnable runnable);
@@ -186,4 +191,19 @@ public abstract class EventBinder {
     }
   }
 
+  public class SortBinder<P> {
+    private final ListProperty<P> list;
+
+    private SortBinder(ListProperty<P> list) {
+      this.list = list;
+    }
+
+    public void by(final Comparator<P> comparator) {
+      b.add(hookUpRunnable(new Runnable() {
+        public void run() {
+          list.sort(comparator);
+        }
+      }));
+    }
+  }
 }

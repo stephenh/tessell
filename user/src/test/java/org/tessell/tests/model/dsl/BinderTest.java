@@ -11,6 +11,7 @@ import static org.tessell.model.properties.NewProperty.*;
 import static org.tessell.testing.TessellMatchers.*;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import org.junit.After;
@@ -32,6 +33,7 @@ import org.tessell.place.events.PlaceRequestEvent;
 import org.tessell.tests.model.commands.DummyActiveCommand;
 import org.tessell.tests.model.commands.DummyUiCommand;
 import org.tessell.tests.model.properties.DummyModel;
+import org.tessell.util.NaturalComparator;
 import org.tessell.util.cookies.StringCookie;
 import org.tessell.widgets.StubTextList;
 import org.tessell.widgets.StubWidget;
@@ -47,6 +49,7 @@ public class BinderTest {
     StubWidgetsProvider.install();
   }
 
+  private static final Comparator<String> naturalComparator = new NaturalComparator<String>();
   private final Binder binder = new Binder();
   private final StringProperty s = stringProperty("s");
   private final StubTextBox box = new StubTextBox();
@@ -1112,6 +1115,20 @@ public class BinderTest {
     binder.onClick(box).goTo(bus, new PlaceRequest("dummy"));
     box.click();
     assertThat(bus.getEvent(PlaceRequestEvent.class, 0).getRequest().getName(), is("dummy"));
+  }
+
+  @Test
+  public void onClickSort() {
+    ListProperty<String> foo = listProperty("foo", list("b", "a"));
+
+    binder.onClick(anchor).sort(foo).by(naturalComparator);
+    assertThat(foo.get(), contains("b", "a"));
+
+    anchor.click();
+    assertThat(foo.get(), contains("a", "b"));
+
+    anchor.click();
+    assertThat(foo.get(), contains("b", "a"));
   }
 
   @Test

@@ -4,10 +4,7 @@ import static org.tessell.model.properties.NewProperty.booleanProperty;
 import static org.tessell.model.properties.NewProperty.integerProperty;
 import static org.tessell.model.properties.NewProperty.listProperty;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import org.tessell.model.events.*;
 import org.tessell.model.values.DerivedValue;
@@ -23,6 +20,7 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
   private IntegerProperty size;
   private List<E> readOnly;
   private List<E> readOnlySource;
+  private Comparator<E> lastComparator;
 
   /** Used to convert a list from one type of element to another. */
   public interface ElementConverter<E, F> {
@@ -253,6 +251,25 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
         return l == null ? -1 : l.indexOf(element);
       }
     });
+  }
+
+  /**
+   * Sorts our values by {@code comparator}.
+   *
+   * If we've already been sorted by comparator, it will reverse the order.
+   */
+  public void sort(Comparator<E> comparator) {
+    if (lastComparator == comparator) {
+      // Creating this new reverse comparator means we'll also "reset"
+      // lastComparator to some other value, such that if we get called
+      // with the same comparator again, we'll toggle back/forth the order
+      //
+      // Eventually we could get fancier and keep a stack of comparators.
+      comparator = Collections.reverseOrder(comparator);
+    }
+    Collections.sort(getDirect(), comparator);
+    lastComparator = comparator;
+    reassess();
   }
 
   /** Registers {@code handler} to be called when new values are added. */
