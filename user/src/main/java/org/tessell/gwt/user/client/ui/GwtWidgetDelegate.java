@@ -51,6 +51,11 @@ public class GwtWidgetDelegate implements IsWidget {
   }
 
   @Override
+  public IsWidget getIsParent() {
+    return (IsWidget) delegate.getParent();
+  }
+
+  @Override
   public Widget asWidget() {
     return delegate;
   }

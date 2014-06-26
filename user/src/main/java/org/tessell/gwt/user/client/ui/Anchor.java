@@ -16,4 +16,9 @@ public class Anchor extends com.google.gwt.user.client.ui.Anchor implements IsAn
     return new GwtElement(getElement());
   }
 
+  @Override
+  public IsWidget getIsParent() {
+    return (IsWidget) getParent();
+  }
+
 }

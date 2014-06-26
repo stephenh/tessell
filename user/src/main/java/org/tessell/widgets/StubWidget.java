@@ -20,6 +20,7 @@ public class StubWidget implements IsWidget, IsStubWidget {
   // fires right away instead of queueing it for later like SimplerEventBus does.
   protected final EventBus handlers = new SimpleEventBus();
   private final StubElement element;
+  private IsWidget parent;
   private boolean attached = false;
   public int absoluteTop;
   public int absoluteLeft;
@@ -56,6 +57,15 @@ public class StubWidget implements IsWidget, IsStubWidget {
   @Override
   public void onBrowserEvent(final Event event) {
     throw new UnsupportedOperationException("This is a stub.");
+  }
+
+  @Override
+  public IsWidget getIsParent() {
+    return parent;
+  }
+
+  public void setIsParent(IsWidget parent) {
+    this.parent = parent;
   }
 
   @Override

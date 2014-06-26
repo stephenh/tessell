@@ -19,6 +19,11 @@ public class PopupPanel extends com.google.gwt.user.client.ui.PopupPanel impleme
   }
 
   @Override
+  public IsWidget getIsParent() {
+    return (IsWidget) getParent();
+  }
+
+  @Override
   public void addAutoHidePartner(IsElement element) {
     addAutoHidePartner(element.asElement());
   }

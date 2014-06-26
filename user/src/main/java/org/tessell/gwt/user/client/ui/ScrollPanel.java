@@ -14,6 +14,11 @@ public class ScrollPanel extends com.google.gwt.user.client.ui.ScrollPanel imple
   }
 
   @Override
+  public IsWidget getIsParent() {
+    return (IsWidget) getParent();
+  }
+
+  @Override
   public IsStyle getStyle() {
     return getIsElement().getStyle();
   }

@@ -21,6 +21,11 @@ public class FadingDialogBox extends com.google.gwt.user.client.ui.FadingDialogB
   }
 
   @Override
+  public IsWidget getIsParent() {
+    return (IsWidget) getParent();
+  }
+
+  @Override
   public void addAutoHidePartner(IsElement element) {
     addAutoHidePartner(element.asElement());
   }

@@ -35,6 +35,8 @@ public interface IsWidget extends EventListener, HasHandlers, HasCss, HasAttachH
 
   IsElement getIsElement();
 
+  IsWidget getIsParent();
+
   <H extends EventHandler> HandlerRegistration addDomHandler(final H handler, DomEvent.Type<H> type);
 
 }

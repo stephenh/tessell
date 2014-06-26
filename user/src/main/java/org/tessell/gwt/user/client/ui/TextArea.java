@@ -17,6 +17,11 @@ public class TextArea extends com.google.gwt.user.client.ui.TextArea implements 
   }
 
   @Override
+  public IsWidget getIsParent() {
+    return (IsWidget) getParent();
+  }
+
+  @Override
   public com.google.gwt.user.client.ui.TextArea asWidget() {
     return this;
   }

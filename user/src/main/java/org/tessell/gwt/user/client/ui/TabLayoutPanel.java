@@ -20,6 +20,11 @@ public class TabLayoutPanel extends com.google.gwt.user.client.ui.TabLayoutPanel
   }
 
   @Override
+  public IsWidget getIsParent() {
+    return (IsWidget) getParent();
+  }
+
+  @Override
   public IsStyle getStyle() {
     return getIsElement().getStyle();
   }

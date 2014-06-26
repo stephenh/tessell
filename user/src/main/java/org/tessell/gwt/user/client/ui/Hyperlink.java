@@ -16,4 +16,9 @@ public class Hyperlink extends com.google.gwt.user.client.ui.Hyperlink implement
     return new GwtElement(getElement());
   }
 
+  @Override
+  public IsWidget getIsParent() {
+    return (IsWidget) getParent();
+  }
+
 }

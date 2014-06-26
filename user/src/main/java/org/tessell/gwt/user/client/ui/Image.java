@@ -25,4 +25,9 @@ public class Image extends com.google.gwt.user.client.ui.Image implements IsImag
     return new GwtElement(getElement());
   }
 
+  @Override
+  public IsWidget getIsParent() {
+    return (IsWidget) getParent();
+  }
+
 }

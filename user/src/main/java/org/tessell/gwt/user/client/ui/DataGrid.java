@@ -85,6 +85,11 @@ public class DataGrid<T> extends com.google.gwt.user.cellview.client.DataGrid<T>
   }
 
   @Override
+  public IsWidget getIsParent() {
+    return (IsWidget) getParent();
+  }
+
+  @Override
   public IsStyle getStyle() {
     return getIsElement().getStyle();
   }

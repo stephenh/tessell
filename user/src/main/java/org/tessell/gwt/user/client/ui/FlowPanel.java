@@ -26,6 +26,11 @@ public class FlowPanel extends com.google.gwt.user.client.ui.FlowPanel implement
   }
 
   @Override
+  public IsWidget getIsParent() {
+    return (IsWidget) getParent();
+  }
+
+  @Override
   public Iterator<IsWidget> iteratorIsWidgets() {
     return new IsWidgetIteratorAdaptor(iterator());
   }

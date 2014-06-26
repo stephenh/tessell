@@ -12,6 +12,11 @@ public class FileUpload extends com.google.gwt.user.client.ui.FileUpload impleme
   }
 
   @Override
+  public IsWidget getIsParent() {
+    return (IsWidget) getParent();
+  }
+
+  @Override
   public IsStyle getStyle() {
     return getIsElement().getStyle();
   }

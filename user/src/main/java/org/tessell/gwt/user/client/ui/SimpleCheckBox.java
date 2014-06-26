@@ -12,6 +12,11 @@ public class SimpleCheckBox extends com.google.gwt.user.client.ui.SimpleCheckBox
   }
 
   @Override
+  public IsWidget getIsParent() {
+    return (IsWidget) getParent();
+  }
+
+  @Override
   public IsStyle getStyle() {
     return getIsElement().getStyle();
   }

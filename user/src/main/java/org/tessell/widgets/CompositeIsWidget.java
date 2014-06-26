@@ -20,11 +20,11 @@ import com.google.gwt.user.client.ui.Widget;
  * <code>
  *     class MyWidget extends CompositeIsWidget {
  *       private final IsTextBox textBox = newTextBox();
- *       
+ *
  *       public MyWidget() {
  *         setWidget(textBox);
  *       }
- *       
+ *
  *       public void customLogic() {
  *         textBox.getStyle().setBackgroundColor("blue");
  *       }
@@ -153,5 +153,10 @@ public class CompositeIsWidget implements IsWidget {
 
   public IsWidget getIsWidget() {
     return widget;
+  }
+
+  @Override
+  public IsWidget getIsParent() {
+    return widget.getIsParent();
   }
 }

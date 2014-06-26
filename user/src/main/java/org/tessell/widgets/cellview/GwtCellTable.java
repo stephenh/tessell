@@ -3,6 +3,7 @@ package org.tessell.widgets.cellview;
 import org.tessell.gwt.dom.client.GwtElement;
 import org.tessell.gwt.dom.client.IsElement;
 import org.tessell.gwt.dom.client.IsStyle;
+import org.tessell.gwt.user.client.ui.IsWidget;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.safehtml.shared.SafeHtml;
@@ -20,6 +21,11 @@ public class GwtCellTable<T> extends CellTable<T> implements IsCellTable<T> {
   @Override
   public IsElement getIsElement() {
     return new GwtElement(getElement());
+  }
+
+  @Override
+  public IsWidget getIsParent() {
+    return (IsWidget) getParent();
   }
 
   @Override

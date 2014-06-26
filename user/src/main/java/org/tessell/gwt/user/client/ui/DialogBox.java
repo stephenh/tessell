@@ -19,6 +19,11 @@ public class DialogBox extends com.google.gwt.user.client.ui.DialogBox implement
   }
 
   @Override
+  public IsWidget getIsParent() {
+    return (IsWidget) getParent();
+  }
+
+  @Override
   public void addAutoHidePartner(IsElement element) {
     addAutoHidePartner(element.asElement());
   }

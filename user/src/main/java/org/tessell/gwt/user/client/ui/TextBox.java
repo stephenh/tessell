@@ -19,6 +19,11 @@ public class TextBox extends com.google.gwt.user.client.ui.TextBox implements Is
   }
 
   @Override
+  public IsWidget getIsParent() {
+    return (IsWidget) getParent();
+  }
+
+  @Override
   public TextBoxBase asWidget() {
     return this;
   }

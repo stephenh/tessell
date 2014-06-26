@@ -28,6 +28,11 @@ public class HTMLPanel extends com.google.gwt.user.client.ui.HTMLPanel implement
   }
 
   @Override
+  public IsWidget getIsParent() {
+    return (IsWidget) getParent();
+  }
+
+  @Override
   public IsStyle getStyle() {
     return getIsElement().getStyle();
   }

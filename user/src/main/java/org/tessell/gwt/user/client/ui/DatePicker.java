@@ -16,4 +16,9 @@ public class DatePicker extends com.google.gwt.user.datepicker.client.DatePicker
     return new GwtElement(getElement());
   }
 
+  @Override
+  public IsWidget getIsParent() {
+    return (IsWidget) getParent();
+  }
+
 }

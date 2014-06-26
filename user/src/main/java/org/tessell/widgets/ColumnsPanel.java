@@ -51,6 +51,11 @@ public class ColumnsPanel extends FlowPanel implements IsColumnsPanel {
   }
 
   @Override
+  public IsWidget getIsParent() {
+    return (IsWidget) getParent();
+  }
+
+  @Override
   public IsStyle getStyle() {
     return getIsElement().getStyle();
   }

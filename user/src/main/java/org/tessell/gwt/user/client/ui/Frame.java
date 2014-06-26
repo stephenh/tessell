@@ -16,4 +16,9 @@ public class Frame extends com.google.gwt.user.client.ui.Frame implements IsFram
     return new GwtElement(getElement());
   }
 
+  @Override
+  public IsWidget getIsParent() {
+    return (IsWidget) getParent();
+  }
+
 }

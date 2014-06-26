@@ -16,4 +16,9 @@ public class CheckBox extends com.google.gwt.user.client.ui.CheckBox implements 
     return new GwtElement(getElement());
   }
 
+  @Override
+  public IsWidget getIsParent() {
+    return (IsWidget) getParent();
+  }
+
 }

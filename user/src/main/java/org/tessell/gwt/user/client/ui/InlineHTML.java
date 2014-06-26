@@ -12,6 +12,11 @@ public class InlineHTML extends com.google.gwt.user.client.ui.InlineHTML impleme
   }
 
   @Override
+  public IsWidget getIsParent() {
+    return (IsWidget) getParent();
+  }
+
+  @Override
   public IsStyle getStyle() {
     return getIsElement().getStyle();
   }

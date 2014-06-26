@@ -16,4 +16,9 @@ public class HTML extends com.google.gwt.user.client.ui.HTML implements IsHTML {
     return new GwtElement(getElement());
   }
 
+  @Override
+  public IsWidget getIsParent() {
+    return (IsWidget) getParent();
+  }
+
 }

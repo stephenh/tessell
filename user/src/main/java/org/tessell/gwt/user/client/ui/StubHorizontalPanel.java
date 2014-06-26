@@ -20,7 +20,7 @@ public class StubHorizontalPanel extends StubCellPanel implements IsHorizontalPa
 
   @Override
   public void insert(com.google.gwt.user.client.ui.IsWidget w, int beforeIndex) {
-    widgets.add(beforeIndex, (IsWidget) w);
+    add(beforeIndex, w);
   }
 
   @Override

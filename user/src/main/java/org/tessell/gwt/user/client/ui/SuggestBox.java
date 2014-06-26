@@ -31,6 +31,11 @@ public class SuggestBox extends com.google.gwt.user.client.ui.SuggestBox impleme
   }
 
   @Override
+  public IsWidget getIsParent() {
+    return (IsWidget) getParent();
+  }
+
+  @Override
   public IsStyle getStyle() {
     return getIsElement().getStyle();
   }

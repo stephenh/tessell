@@ -19,6 +19,11 @@ public class SimplePanel extends com.google.gwt.user.client.ui.SimplePanel imple
   }
 
   @Override
+  public IsWidget getIsParent() {
+    return (IsWidget) getParent();
+  }
+
+  @Override
   public Iterator<IsWidget> iteratorIsWidgets() {
     return new IsWidgetIteratorAdaptor(iterator());
   }

@@ -27,12 +27,12 @@ public class StubAbsolutePanel extends StubComplexPanel implements IsAbsolutePan
 
   @Override
   public void insert(com.google.gwt.user.client.ui.IsWidget w, int beforeIndex) {
-    widgets.add(beforeIndex, (IsWidget) w);
+    add(beforeIndex, w);
   }
 
   @Override
   public void insert(com.google.gwt.user.client.ui.IsWidget w, int left, int top, int beforeIndex) {
-    widgets.add(beforeIndex, (IsWidget) w);
+    add(beforeIndex, w);
     lefts.put((IsWidget) w, left);
     tops.put((IsWidget) w, left);
   }

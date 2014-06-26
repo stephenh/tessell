@@ -17,6 +17,11 @@ public class PasswordTextBox extends com.google.gwt.user.client.ui.PasswordTextB
   }
 
   @Override
+  public IsWidget getIsParent() {
+    return (IsWidget) getParent();
+  }
+
+  @Override
   public com.google.gwt.user.client.ui.PasswordTextBox asWidget() {
     return this;
   }

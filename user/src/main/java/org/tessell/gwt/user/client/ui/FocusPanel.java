@@ -19,6 +19,11 @@ public class FocusPanel extends com.google.gwt.user.client.ui.FocusPanel impleme
   }
 
   @Override
+  public IsWidget getIsParent() {
+    return (IsWidget) getParent();
+  }
+
+  @Override
   public Iterator<IsWidget> iteratorIsWidgets() {
     return new IsWidgetIteratorAdaptor(iterator());
   }

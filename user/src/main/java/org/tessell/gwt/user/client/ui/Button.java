@@ -16,4 +16,9 @@ public class Button extends com.google.gwt.user.client.ui.Button implements IsBu
     return new GwtElement(getElement());
   }
 
+  @Override
+  public IsWidget getIsParent() {
+    return (IsWidget) getParent();
+  }
+
 }

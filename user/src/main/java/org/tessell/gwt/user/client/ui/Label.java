@@ -16,4 +16,9 @@ public class Label extends com.google.gwt.user.client.ui.Label implements IsLabe
     return new GwtElement(getElement());
   }
 
+  @Override
+  public IsWidget getIsParent() {
+    return (IsWidget) getParent();
+  }
+
 }

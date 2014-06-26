@@ -19,6 +19,11 @@ public class RadioButton extends com.google.gwt.user.client.ui.RadioButton imple
   }
 
   @Override
+  public IsWidget getIsParent() {
+    return (IsWidget) getParent();
+  }
+
+  @Override
   public IsStyle getStyle() {
     return getIsElement().getStyle();
   }

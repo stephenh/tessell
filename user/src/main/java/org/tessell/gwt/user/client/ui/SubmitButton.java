@@ -16,4 +16,9 @@ public class SubmitButton extends com.google.gwt.user.client.ui.SubmitButton imp
     return new GwtElement(getElement());
   }
 
+  @Override
+  public IsWidget getIsParent() {
+    return (IsWidget) getParent();
+  }
+
 }

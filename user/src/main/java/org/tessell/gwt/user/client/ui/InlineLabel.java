@@ -16,4 +16,9 @@ public class InlineLabel extends com.google.gwt.user.client.ui.InlineLabel imple
     return new GwtElement(getElement());
   }
 
+  @Override
+  public IsWidget getIsParent() {
+    return (IsWidget) getParent();
+  }
+
 }

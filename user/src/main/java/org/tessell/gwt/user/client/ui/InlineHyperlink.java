@@ -16,4 +16,9 @@ public class InlineHyperlink extends com.google.gwt.user.client.ui.InlineHyperli
     return new GwtElement(getElement());
   }
 
+  @Override
+  public IsWidget getIsParent() {
+    return (IsWidget) getParent();
+  }
+
 }

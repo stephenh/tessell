@@ -20,6 +20,11 @@ public class DockLayoutPanel extends com.google.gwt.user.client.ui.DockLayoutPan
   }
 
   @Override
+  public IsWidget getIsParent() {
+    return (IsWidget) getParent();
+  }
+
+  @Override
   public IsStyle getStyle() {
     return getIsElement().getStyle();
   }

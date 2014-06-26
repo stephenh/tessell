@@ -184,6 +184,11 @@ public class RowTable extends Panel implements IsRowTable {
     return new GwtElement(getElement());
   }
 
+  @Override
+  public org.tessell.gwt.user.client.ui.IsWidget getIsParent() {
+    return (org.tessell.gwt.user.client.ui.IsWidget) getParent();
+  }
+
   private com.google.gwt.dom.client.Element findBodyTr(final int i) {
     int j = 0;
     Element tr = body.getFirstChildElement();

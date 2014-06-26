@@ -19,6 +19,11 @@ public class FormPanel extends com.google.gwt.user.client.ui.FormPanel implement
   }
 
   @Override
+  public IsWidget getIsParent() {
+    return (IsWidget) getParent();
+  }
+
+  @Override
   public IsStyle getStyle() {
     return getIsElement().getStyle();
   }
