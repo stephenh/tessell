@@ -21,7 +21,7 @@ import org.apache.commons.io.FileUtils;
  */
 public class UiXmlCache {
 
-  private static final int cacheVersion = 9;
+  private static final int cacheVersion = 10;
   private static final String viewgenTimestampKey = "viewgenTimestamp";
   private final Map<String, Entry> entries = new HashMap<String, Entry>();
   private String viewgenTimestamp;

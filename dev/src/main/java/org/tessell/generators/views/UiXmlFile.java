@@ -193,6 +193,9 @@ class UiXmlFile {
     getIsElement.body.line("return new GwtElement(getElement());");
     gwtView.addImports(GwtElement.class);
 
+    GMethod getIsParent = gwtView.getMethod("getIsParent").returnType(IsWidget.class).addAnnotation("@Override");
+    getIsParent.body.line("return (IsWidget) getParent();");
+
     viewGenerator.markAndSave(gwtView);
   }
 
