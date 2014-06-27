@@ -172,4 +172,19 @@ public class GwtElement implements IsElement {
     this.element.insertFirst(element.asElement());
   }
 
+  @Override
+  public void removeChild(IsElement element) {
+    this.element.removeChild(element.asElement());
+  }
+
+  @Override
+  public void removeAllChildren() {
+    element.removeAllChildren();
+  }
+
+  @Override
+  public int getChildCount() {
+    return element.getChildCount();
+  }
+
 }

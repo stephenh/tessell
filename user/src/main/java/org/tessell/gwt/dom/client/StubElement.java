@@ -220,4 +220,19 @@ public class StubElement implements IsElement {
     wasScrolledIntoView = true;
   }
 
+  @Override
+  public void removeChild(IsElement element) {
+    children.remove(element);
+  }
+
+  @Override
+  public void removeAllChildren() {
+    children.clear();
+  }
+
+  @Override
+  public int getChildCount() {
+    return children.size();
+  }
+
 }

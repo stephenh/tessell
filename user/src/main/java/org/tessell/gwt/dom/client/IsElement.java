@@ -52,7 +52,13 @@ public interface IsElement extends HasCss, HasText {
 
   void appendChild(IsElement element);
 
+  void removeChild(IsElement element);
+
   void removeFromParent();
+
+  void removeAllChildren();
+
+  int getChildCount();
 
   Element asElement();
 
