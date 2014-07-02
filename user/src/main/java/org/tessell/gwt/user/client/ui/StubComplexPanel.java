@@ -64,12 +64,12 @@ public class StubComplexPanel extends StubPanel implements IsComplexPanel {
     setIsParent(isWidget, this);
   }
 
-  private static void setIsParent(final com.google.gwt.user.client.ui.IsWidget isWidget, IsWidget parent) {
-    if (isWidget instanceof CompositeIsWidget) {
-      ((StubWidget) ((CompositeIsWidget) isWidget).getIsWidget()).setIsParent(parent);
-    } else {
-      ((StubWidget) isWidget).setIsParent(parent);
+  private static void setIsParent(com.google.gwt.user.client.ui.IsWidget isWidget, IsWidget parent) {
+    // a CompositeIsWidget might itself use a CompositeIsWidget as its view
+    while (isWidget instanceof CompositeIsWidget) {
+      isWidget = ((CompositeIsWidget) isWidget).getIsWidget();
     }
+    ((StubWidget) isWidget).setIsParent(parent);
   }
 
 }
