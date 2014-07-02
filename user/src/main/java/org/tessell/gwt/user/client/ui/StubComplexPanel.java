@@ -29,8 +29,8 @@ public class StubComplexPanel extends StubPanel implements IsComplexPanel {
 
   @Override
   public void clear() {
-    for (Iterator<IsWidget> i = widgets.iterator(); i.hasNext();) {
-      remove(i.next());
+    for (IsWidget w : new ArrayList<IsWidget>(widgets)) {
+      remove(w);
     }
   }
 
