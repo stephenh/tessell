@@ -21,6 +21,7 @@ public class StubElement implements IsElement {
   private final ArrayList<StubElement> children = new ArrayList<StubElement>();
   private final Map<String, String> attributes = new HashMap<String, String>();
   private final StubStyle style = new StubStyle();
+  public StubElement parent;
   public int offsetHeight;
   public int offsetWidth;
   public int clientHeight;
@@ -146,11 +147,13 @@ public class StubElement implements IsElement {
   @Override
   public void insertFirst(IsElement element) {
     children.add(0, (StubElement) element);
+    setParent(element, this);
   }
 
   @Override
   public void appendChild(IsElement element) {
     children.add((StubElement) element);
+    setParent(element, this);
   }
 
   public ArrayList<StubElement> getChildren() {
@@ -207,6 +210,10 @@ public class StubElement implements IsElement {
 
   @Override
   public void removeFromParent() {
+    if (parent != null) {
+      // removeChild will unset our parent
+      parent.removeChild(this);
+    }
     wasRemovedFromParent = true;
   }
 
@@ -223,16 +230,29 @@ public class StubElement implements IsElement {
   @Override
   public void removeChild(IsElement element) {
     children.remove(element);
+    setParent(element, null);
   }
 
   @Override
   public void removeAllChildren() {
-    children.clear();
+    for (Iterator<StubElement> i = children.iterator(); i.hasNext();) {
+      setParent(i.next(), null);
+      i.remove();
+    }
   }
 
   @Override
   public int getChildCount() {
     return children.size();
+  }
+
+  @Override
+  public IsElement getParentElement() {
+    return parent;
+  }
+
+  private static void setParent(IsElement element, IsElement parent) {
+    ((StubElement) element).parent = (StubElement) parent;
   }
 
 }

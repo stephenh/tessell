@@ -187,4 +187,9 @@ public class GwtElement implements IsElement {
     return element.getChildCount();
   }
 
+  @Override
+  public IsElement getParentElement() {
+    return (IsElement) element.getParentElement();
+  }
+
 }

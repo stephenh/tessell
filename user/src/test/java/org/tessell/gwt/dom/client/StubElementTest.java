@@ -1,6 +1,7 @@
 package org.tessell.gwt.dom.client;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.junit.Test;
@@ -49,6 +50,35 @@ public class StubElementTest {
   public void setStyleName() {
     s.setStyleName("one two");
     assertThat(s.getStyleNames().toString(), is("[one, two]"));
+  }
+
+  @Test
+  public void getParent() {
+    StubElement p = new StubElement();
+    p.appendChild(s);
+    assertThat(s.getParentElement(), is((IsElement) p));
+    p.removeChild(s);
+    assertThat(s.getParentElement(), is(nullValue()));
+  }
+
+  @Test
+  public void removeFromParent() {
+    StubElement p = new StubElement();
+    p.appendChild(s);
+    assertThat(s.getParentElement(), is((IsElement) p));
+    s.removeFromParent();
+    assertThat(s.getParentElement(), is(nullValue()));
+    assertThat(p.getChildCount(), is(0));
+  }
+
+  @Test
+  public void removeAllChildren() {
+    StubElement p = new StubElement();
+    p.appendChild(s);
+    assertThat(s.getParentElement(), is((IsElement) p));
+    p.removeAllChildren();
+    assertThat(s.getParentElement(), is(nullValue()));
+    assertThat(p.getChildCount(), is(0));
   }
 
 }
