@@ -189,7 +189,11 @@ public class GwtElement implements IsElement {
 
   @Override
   public IsElement getParentElement() {
-    return (IsElement) element.getParentElement();
+    if (element.getParentElement() == null) {
+      return null;
+    } else {
+      return new GwtElement(element.getParentElement());
+    }
   }
 
 }
