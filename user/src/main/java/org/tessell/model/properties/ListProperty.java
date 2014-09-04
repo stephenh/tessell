@@ -1,6 +1,7 @@
 package org.tessell.model.properties;
 
 import static org.tessell.model.properties.NewProperty.booleanProperty;
+import static org.tessell.model.properties.NewProperty.derivedProperty;
 import static org.tessell.model.properties.NewProperty.integerProperty;
 import static org.tessell.model.properties.NewProperty.listProperty;
 
@@ -18,6 +19,8 @@ import com.google.gwt.event.shared.HandlerRegistration;
 public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> implements HasMemberChangedHandlers {
 
   private IntegerProperty size;
+  private BasicProperty<E> first;
+  private BasicProperty<E> last;
   private List<E> readOnly;
   private List<E> readOnlySource;
   private Comparator<E> lastComparator;
@@ -199,6 +202,32 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
       }));
     }
     return size;
+  }
+
+  /** @return a derived property that reflects this list's first element (or null) */
+  public Property<E> first() {
+    if (first == null) {
+      first = derivedProperty(new DerivedValue<E>("first") {
+        public E get() {
+          List<E> list = ListProperty.this.get();
+          return list == null || list.isEmpty() ? null : list.get(0);
+        }
+      });
+    }
+    return first;
+  }
+
+  /** @return a derived property that reflects this list's last element (or null) */
+  public Property<E> last() {
+    if (last == null) {
+      last = derivedProperty(new DerivedValue<E>("last") {
+        public E get() {
+          List<E> list = ListProperty.this.get();
+          return list == null || list.isEmpty() ? null : list.get(list.size() - 1);
+        }
+      });
+    }
+    return last;
   }
 
   /** @return a property that will reflect whether {@code element} is the first element. */

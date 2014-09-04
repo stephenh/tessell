@@ -660,6 +660,54 @@ public class ListPropertyTest {
   }
 
   @Test
+  public void first() {
+    final ListProperty<String> names = listProperty("names");
+    final Property<String> first = names.first();
+    CountChanges changes = CountChanges.on(first);
+
+    assertThat(first.get(), is(nullValue()));
+
+    names.add("foo");
+    assertThat(changes.changes, is(1));
+    assertThat(first.get(), is("foo"));
+
+    names.add(0, "bar");
+    assertThat(changes.changes, is(2));
+    assertThat(first.get(), is("bar"));
+
+    names.add("zaz");
+    assertThat(changes.changes, is(2));
+
+    names.clear();
+    assertThat(changes.changes, is(3));
+    assertThat(first.get(), is(nullValue()));
+  }
+
+  @Test
+  public void last() {
+    final ListProperty<String> names = listProperty("names");
+    final Property<String> last = names.last();
+    CountChanges changes = CountChanges.on(last);
+
+    assertThat(last.get(), is(nullValue()));
+
+    names.add("foo");
+    assertThat(changes.changes, is(1));
+    assertThat(last.get(), is("foo"));
+
+    names.add("bar");
+    assertThat(changes.changes, is(2));
+    assertThat(last.get(), is("bar"));
+
+    names.add(0, "zaz");
+    assertThat(changes.changes, is(2));
+
+    names.clear();
+    assertThat(changes.changes, is(3));
+    assertThat(last.get(), is(nullValue()));
+  }
+
+  @Test
   public void testContains() {
     BooleanProperty b = p.contains("s");
     assertThat(b.get(), is(false));
