@@ -214,18 +214,18 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> exte
 
   /**
    * Track {@code other} as derived on us, so we'll forward changed/changing events to it.
-   * 
+   *
    * This is somewhat esoteric, but if you have property A and property B, B can depend on A
-   * (be downstream/"derived") for (at least) two reasons: 
-   * 
+   * (be downstream/"derived") for (at least) two reasons:
+   *
    * 1. Because B's value is inherently based on A
-   * 2. Because B has a validation rule that is based on A 
-   * 
-   * For the 1st case, if A becomes touched, we also mark B as touched (so we pass percolateTouch=true). 
-   * 
+   * 2. Because B has a validation rule that is based on A
+   *
+   * For the 1st case, if A becomes touched, we also mark B as touched (so we pass percolateTouch=true).
+   *
    * However, for the 2nd case, if A becomes touched, but B isn't really based on A, but instead just uses it
-   * for a validation rule, then we don't want to mark B as touched (so we pass percolateTouch=false). 
-   * 
+   * for a validation rule, then we don't want to mark B as touched (so we pass percolateTouch=false).
+   *
    * @param other the property that depends on us
    * @param token a token that can be used to revoke the derivation (see {@link #removeDerived(Property, Object)}
    * @param percolateTouch whether we should percolate our touched state to {@code other}
@@ -315,6 +315,17 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> exte
         });
       }
     });
+  }
+
+  @Override
+  public HandlerRegistration nowAndOnChange(final PropertyValueHandler<P> handler) {
+    HandlerRegistration hr = addPropertyChangedHandler(new PropertyChangedHandler<P>() {
+      public void onPropertyChanged(PropertyChangedEvent<P> event) {
+        handler.onValue(event.getNewValue());
+      }
+    });
+    handler.onValue(get());
+    return hr;
   }
 
   @Override

@@ -2,11 +2,15 @@ package org.tessell.tests.model.properties;
 
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;
 import static org.tessell.model.properties.NewProperty.basicProperty;
 import static org.tessell.model.properties.NewProperty.booleanProperty;
 import static org.tessell.model.properties.NewProperty.integerProperty;
 import static org.tessell.model.properties.NewProperty.stringProperty;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Test;
 import org.tessell.model.events.PropertyChangedEvent;
@@ -515,4 +519,17 @@ public class PropertyTest extends AbstractRuleTest {
     assertThat(set.isReadOnly(), is(true));
   }
 
+  @Test
+  public void nowAndOnChange() {
+    final List<Integer> values = new ArrayList<Integer>();
+    final IntegerProperty a = integerProperty("a", 10);
+    a.nowAndOnChange(new PropertyValueHandler<Integer>() {
+      public void onValue(Integer value) {
+        values.add(value);
+      }
+    });
+    assertThat(values, contains(10));
+    a.set(11);
+    assertThat(values, contains(10, 11));
+  }
 }

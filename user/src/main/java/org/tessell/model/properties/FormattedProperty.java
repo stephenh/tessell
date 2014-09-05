@@ -15,7 +15,7 @@ import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 
 /**
- * Converts a source property to/from another type, using a {@link PropertyFormatter}. 
+ * Converts a source property to/from another type, using a {@link PropertyFormatter}.
  *
  * @param <SP> the source property type
  * @param <DP> the destination property type
@@ -204,6 +204,16 @@ public class FormattedProperty<DP, SP> extends AbstractAbstractProperty<DP> {
         DP oldValue = event.getOldValue() == null ? null : formatter.format(event.getOldValue());
         DP newValue = event.getNewValue() == null ? null : formatter.format(event.getNewValue());
         handler.onPropertyChanged(new PropertyChangedEvent<DP>(FormattedProperty.this, oldValue, newValue));
+      }
+    });
+  }
+
+  @Override
+  public HandlerRegistration nowAndOnChange(final PropertyValueHandler<DP> handler) {
+    return source.nowAndOnChange(new PropertyValueHandler<SP>() {
+      public void onValue(SP value) {
+        DP newValue = value == null ? null : formatter.format(value);
+        handler.onValue(newValue);
       }
     });
   }

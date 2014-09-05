@@ -14,7 +14,7 @@ import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 
 /**
- * Converts a source property from another type, using a {@link PropertyConverter}. 
+ * Converts a source property from another type, using a {@link PropertyConverter}.
  *
  * Although technically a separate property instance, all validation rules/errors/etc.
  * are deferred to our source property.
@@ -152,6 +152,16 @@ public class ConvertedProperty<DP, SP> extends AbstractAbstractProperty<DP> {
         DP oldValue = event.getOldValue() == null ? null : converter.to(event.getOldValue());
         DP newValue = event.getNewValue() == null ? null : converter.to(event.getNewValue());
         handler.onPropertyChanged(new PropertyChangedEvent<DP>(ConvertedProperty.this, oldValue, newValue));
+      }
+    });
+  }
+
+  @Override
+  public HandlerRegistration nowAndOnChange(final PropertyValueHandler<DP> handler) {
+    return source.nowAndOnChange(new PropertyValueHandler<SP>() {
+      public void onValue(SP value) {
+        DP newValue = value == null ? null : converter.to(value);
+        handler.onValue(newValue);
       }
     });
   }

@@ -75,6 +75,9 @@ public interface Property<P> extends HasHandlers, HasRuleTriggers, Value<P>, Has
   /** Adds {@code handler} to be called on property change. */
   HandlerRegistration addPropertyChangedHandler(PropertyChangedHandler<P> handler);
 
+  /** Adds {@code handler} to be ran immediately and also on property change. */
+  HandlerRegistration nowAndOnChange(PropertyValueHandler<P> handler);
+
   /** @return the name of the property. */
   String getName();
 
