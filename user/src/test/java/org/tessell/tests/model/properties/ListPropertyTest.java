@@ -965,6 +965,66 @@ public class ListPropertyTest {
     assertThat(removes.count, is(0));
   }
 
+  @Test
+  public void testCursor() {
+    // given a list cursor against an empty list
+    ListCursor<String> c = p.newCursor();
+
+    // then it starts out with no value
+    assertThat(c.value().get(), is(nullValue()));
+    assertThat(c.isFirst().get(), is(false));
+    assertThat(c.isLast().get(), is(false));
+
+    // when the list finally has a value
+    p.add("foo");
+    // then the cursor moves to that value
+    assertThat(c.value().get(), is("foo"));
+    assertThat(c.isFirst().get(), is(true));
+    assertThat(c.isLast().get(), is(true));
+
+    // when the list gets another value
+    p.add("bar");
+    // we stay on the current value
+    assertThat(c.value().get(), is("foo"));
+    assertThat(c.isFirst().get(), is(true));
+    assertThat(c.isLast().get(), is(false));
+
+    // when we move next
+    c.moveNext();
+    // then the value/properties update
+    assertThat(c.value().get(), is("bar"));
+    assertThat(c.isFirst().get(), is(false));
+    assertThat(c.isLast().get(), is(true));
+
+    // when we move back
+    c.moveBack();
+    // then the value/properties update
+    assertThat(c.value().get(), is("foo"));
+    assertThat(c.isFirst().get(), is(true));
+    assertThat(c.isLast().get(), is(false));
+
+    // when the client sets the cursor to a valid value
+    c.value().set("bar");
+    // then the value/properties update
+    assertThat(c.value().get(), is("bar"));
+    assertThat(c.isFirst().get(), is(false));
+    assertThat(c.isLast().get(), is(true));
+
+    // when the client sets the cursor to an invalid value
+    c.value().set("invalid");
+    // then, currently, we allow that to happen
+    assertThat(c.value().get(), is("invalid"));
+    assertThat(c.isFirst().get(), is(false));
+    assertThat(c.isLast().get(), is(false));
+
+    // when the list is cleared
+    p.clear();
+    // then the cursor unsets
+    assertThat(c.value().get(), is(nullValue()));
+    assertThat(c.isFirst().get(), is(false));
+    assertThat(c.isLast().get(), is(false));
+  }
+
   public static class CountingChanges<P> implements PropertyChangedHandler<P> {
     public int count;
 

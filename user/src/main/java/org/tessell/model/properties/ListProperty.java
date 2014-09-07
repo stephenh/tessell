@@ -282,6 +282,11 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
     });
   }
 
+  /** @return a new {@link ListCursor} that can be used to move through the list. */
+  public ListCursor<E> newCursor() {
+    return new ListCursor<E>(this);
+  }
+
   /**
    * Sorts our values by {@code comparator}.
    *
