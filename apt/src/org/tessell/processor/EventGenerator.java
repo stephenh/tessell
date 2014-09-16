@@ -77,7 +77,7 @@ public class EventGenerator {
 		if (eventSpec.gwtEvent()) {
 			handlerClass.baseClassName("com.google.gwt.event.shared.EventHandler");
 		}
-		handlerClass.getMethod(getMethodName()).argument(eventClass.getFileName() + generics.vars, "event");
+		handlerClass.getMethod(getMethodName()).argument(eventClass.getFullName() + generics.vars, "event");
 	}
 
 	private void generateType() {
