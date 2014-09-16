@@ -77,7 +77,7 @@ public class EventGenerator {
 		if (eventSpec.gwtEvent()) {
 			handlerClass.baseClassName("com.google.gwt.event.shared.EventHandler");
 		}
-		handlerClass.getMethod(getMethodName()).argument(eventClass.getFullClassNameWithoutGeneric() + generics.vars, "event");
+		handlerClass.getMethod(getMethodName()).argument(eventClass.getFileName() + generics.vars, "event");
 	}
 
 	private void generateType() {
@@ -128,7 +128,7 @@ public class EventGenerator {
 				fire.argument(p.type, p.name);
 				args.add(p.name);
 			}
-			fire.body.line("eventBus.fireEvent(new {}({}));", eventClass.getSimpleClassNameWithoutGeneric() + generics.vars, Join.commaSpace(args));
+			fire.body.line("eventBus.fireEvent(new {}({}));", eventClass.getSimpleName() + generics.vars, Join.commaSpace(args));
 		}
 	}
 

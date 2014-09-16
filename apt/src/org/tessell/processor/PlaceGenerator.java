@@ -88,8 +88,8 @@ public class PlaceGenerator {
 	}
 
 	private void addStaticNewRequest() {
-		GMethod m = placeClass.getMethod("newRequest").setStatic().returnType(placeRequestClass.getSimpleClassName());
-		m.body.line("return new {}();", placeRequestClass.getSimpleClassName());
+		GMethod m = placeClass.getMethod("newRequest").setStatic().returnType(placeRequestClass.getSimpleName());
+		m.body.line("return new {}();", placeRequestClass.getSimpleName());
 	}
 
 	private void addCstrSuperCall(GMethod cstr) {
@@ -173,14 +173,14 @@ public class PlaceGenerator {
 	private void addPlaceRequestCstrOne() {
 		GMethod cstr = placeRequestClass.getConstructor(Argument.arg("PlaceRequest", "request"));
 		cstr.body.line("super(request);");
-		cstr.body.line("if (!{}.NAME.equals(request.getName())) {", placeClass.getSimpleClassName());
+		cstr.body.line("if (!{}.NAME.equals(request.getName())) {", placeClass.getSimpleName());
 		cstr.body.line("    throw new IllegalArgumentException(\"Wrong place for class: \" + request.getName());");
 		cstr.body.line("}");
 	}
 
 	private void addPlaceRequestCstrTwo() {
 		GMethod cstr = placeRequestClass.getConstructor();
-		cstr.body.line("super({}.NAME);", placeClass.getSimpleClassName());
+		cstr.body.line("super({}.NAME);", placeClass.getSimpleName());
 	}
 
 	private void addPlaceRequestCstrThree() {
@@ -188,7 +188,7 @@ public class PlaceGenerator {
 			return;
 		}
 		GMethod cstr = placeRequestClass.getConstructor(//
-			Argument.arg(placeRequestClass.getSimpleClassName(), "request"),
+			Argument.arg(placeRequestClass.getSimpleName(), "request"),
 			Argument.arg("String", "param"),
 			Argument.arg("String", "value")).setPrivate();
 		cstr.body.line("super(request, param, value);");
@@ -205,8 +205,8 @@ public class PlaceGenerator {
 			GMethod getterWithDefault = placeRequestClass.getMethod(param + "Or", Argument.arg("String", "def")).returnType("String");
 			getterWithDefault.body.line("return getParameter(\"{}\", def);", param);
 
-			GMethod setter = placeRequestClass.getMethod(param, Argument.arg("Object", "value")).returnType(placeRequestClass.getSimpleClassName());
-			setter.body.line("return new {}(this, \"{}\", ObjectUtils.toStr(value, \"\"));", placeRequestClass.getSimpleClassName(), param);
+			GMethod setter = placeRequestClass.getMethod(param, Argument.arg("Object", "value")).returnType(placeRequestClass.getSimpleName());
+			setter.body.line("return new {}(this, \"{}\", ObjectUtils.toStr(value, \"\"));", placeRequestClass.getSimpleName(), param);
 			placeRequestClass.addImports("org.tessell.util.ObjectUtils");
 		}
 	}

@@ -7,7 +7,7 @@ Bundle-Name: tessell-apt Annotation Processor Plug-in
 Bundle-ActivationPolicy: lazy
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.tessell;singleton:=true
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ClassPath: bin/lib/build/jars/joist-util.jar,
  bin/lib/build/jars/apt-util.jar,
  .
