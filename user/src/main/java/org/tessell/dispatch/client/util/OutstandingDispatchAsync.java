@@ -26,7 +26,7 @@ import com.google.web.bindery.event.shared.EventBus;
 public class OutstandingDispatchAsync implements DispatchAsync {
 
   protected final EventBus eventBus;
-  protected final DispatchAsync realDispatch;
+  protected final DispatchAsync delegate;
   protected final ArrayList<Action<?>> outstanding = new ArrayList<Action<?>>();
 
   /** Fires events on {@code eventBus} with a {@link DefaultDispatchAsync}. */
@@ -34,10 +34,10 @@ public class OutstandingDispatchAsync implements DispatchAsync {
     this(eventBus, new DefaultDispatchAsync(null));
   }
 
-  /** Fires events on {@code eventBus} before making calls against the {@link realDispatch}. */
-  public OutstandingDispatchAsync(final EventBus eventBus, final DispatchAsync realDispatch) {
+  /** Fires events on {@code eventBus} before making calls against the {@link delegate}. */
+  public OutstandingDispatchAsync(final EventBus eventBus, final DispatchAsync delegate) {
     this.eventBus = eventBus;
-    this.realDispatch = realDispatch;
+    this.delegate = delegate;
   }
 
   @Override
@@ -47,7 +47,7 @@ public class OutstandingDispatchAsync implements DispatchAsync {
 
   /**
    * Executes {@code action} and defers failure handling from the caller.
-   * 
+   *
    * @param action
    *          the action
    * @param success
@@ -59,7 +59,7 @@ public class OutstandingDispatchAsync implements DispatchAsync {
 
   /**
    * Executes {@code action}, defers failure handling from the caller, with an in-progress {@code message}.
-   * 
+   *
    * @param action
    *          the action
    * @param success
@@ -81,7 +81,7 @@ public class OutstandingDispatchAsync implements DispatchAsync {
 
   /**
    * Executes {@code action} with an in-progress {@code message}.
-   * 
+   *
    * @param action
    *          the action
    * @param callback
@@ -92,7 +92,7 @@ public class OutstandingDispatchAsync implements DispatchAsync {
   public <A extends Action<R>, R extends Result> void execute(final A action, final AsyncCallback<R> callback, final String message) {
     outstanding.add(action);
     eventBus.fireEvent(new DispatchActionEvent(action, message));
-    realDispatch.execute(action, new AsyncCallback<R>() {
+    delegate.execute(action, new AsyncCallback<R>() {
       public void onSuccess(final R result) {
         outstanding.remove(action);
         eventBus.fireEvent(new DispatchResultEvent(action, result, message));
