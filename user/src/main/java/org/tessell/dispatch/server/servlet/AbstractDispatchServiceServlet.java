@@ -28,14 +28,7 @@ public abstract class AbstractDispatchServiceServlet extends RemoteServiceServle
     }
     try {
       beginAction(action);
-      final ExecutionContext context = new ExecutionContext(getThreadLocalRequest(), getThreadLocalResponse());
-      if (getSessionValidator() != null && !d.skipCSRFCheck(action)) {
-        String secureSessionId = getSessionValidator().get(context);
-        if (secureSessionId == null || !secureSessionId.equals(sessionId)) {
-          throw invalidSession(context);
-        }
-      }
-      return d.execute(action, context);
+      return d.execute(action, new ExecutionContext(getThreadLocalRequest(), getThreadLocalResponse(), sessionId));
     } catch (final ActionException ae) {
       // assume the user has already logged the ActionException appropriately
       throw ae;
@@ -64,14 +57,6 @@ public abstract class AbstractDispatchServiceServlet extends RemoteServiceServle
   protected ActionException wrapInActionException(Exception e) {
     return new ActionException("A server error occured."); // don't leak the raw exception message
   }
-
-  /** Allows subclasses to create their own invalid session subclasses of {@link ActionException}. */
-  protected Exception invalidSession(ExecutionContext context) {
-    return new IllegalStateException("Invalid session");
-  }
-
-  /** Method for subclasses to provide an optional {@link SessionIdValidator} for CSRF protection (or {@code null} to skip CSRF checking). */
-  protected abstract SessionIdValidator getSessionValidator();
 
   /** Method for subclasses to return their {@link ActionDispatch} class. */
   protected abstract ActionDispatch getActionDispatch();
