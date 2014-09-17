@@ -1,14 +1,16 @@
 package org.tessell.dispatch.server;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.tessell.dispatch.server.handlers.ActionHandler;
-import org.tessell.dispatch.server.handlers.ActionHandlerRegistry;
 import org.tessell.dispatch.shared.Action;
 import org.tessell.dispatch.shared.Result;
 
 /** Stock server-side implementation of {@link ActionDispatch}. */
 public class DefaultActionDispatch implements ActionDispatch {
 
-  protected final ActionHandlerRegistry handlers = new ActionHandlerRegistry();
+  private final Map<Class<?>, ActionHandler<?, ?>> handlers = new HashMap<Class<?>, ActionHandler<?, ?>>(100);
 
   /** Executes {@code action}. */
   @Override
@@ -18,7 +20,7 @@ public class DefaultActionDispatch implements ActionDispatch {
 
   /** Adds {@code handler}. */
   public void addHandler(final ActionHandler<?, ?> handler) {
-    handlers.addHandler(handler);
+    handlers.put(handler.getActionType(), handler);
   }
 
   @Override
@@ -28,15 +30,12 @@ public class DefaultActionDispatch implements ActionDispatch {
 
   /** @return the handler for {@code action} or throws {@code IllegalStateException} */
   protected <A extends Action<R>, R extends Result> ActionHandler<A, R> findHandler(final A action) {
-    final ActionHandler<A, R> handler = getHandlerRegistry().findHandler(action);
+    @SuppressWarnings("unchecked")
+    final ActionHandler<A, R> handler = (ActionHandler<A, R>) handlers.get(action.getClass());
     if (handler == null) {
       throw new IllegalStateException("No handler for " + action);
     }
     return handler;
-  }
-
-  protected ActionHandlerRegistry getHandlerRegistry() {
-    return handlers;
   }
 
 }
