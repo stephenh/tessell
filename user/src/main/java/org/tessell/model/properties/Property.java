@@ -115,4 +115,5 @@ public interface Property<P> extends HasHandlers, HasRuleTriggers, Value<P>, Has
 
   /** @return a read-only property that is true/false when {@code this} is set. */
   Property<Boolean> isSet();
+
 }

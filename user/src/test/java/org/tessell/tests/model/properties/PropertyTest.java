@@ -410,9 +410,9 @@ public class PropertyTest extends AbstractRuleTest {
   @Test
   public void canAddTemporaryErrors() {
     final BasicProperty<String> s = basicProperty("s");
-    s.setTouched(true);
     listenTo(s);
     s.setTemporaryError("Something bad");
+    assertThat(s.isTouched(), is(true));
     assertMessages("Something bad");
   }
 
@@ -422,7 +422,15 @@ public class PropertyTest extends AbstractRuleTest {
     s.setTouched(true);
     listenTo(s);
     s.setTemporaryError("Something bad");
+    // when the code explicitly requests to clear
     s.clearTemporaryError();
+    // then we untouch to let the user re-enter a valid value
+    assertThat(s.isTouched(), is(false));
+    // and so no messages are shown
+    assertNoMessages();
+    // and when they re-touch
+    s.setTouched(true);
+    // then the temporary error doesn't reappear
     assertNoMessages();
   }
 
@@ -465,7 +473,13 @@ public class PropertyTest extends AbstractRuleTest {
     s.setTouched(true);
     assertMessages("S is required");
     s.setTemporaryError("Something bad");
+    // when the code explicitly requests clearTemporaryError
     s.clearTemporaryError();
+    // then we untouch to let the user re-enter, so no errors are shown
+    assertNoMessages();
+    // when they do retouch
+    s.setTouched(true);
+    // then we show the usual error messages
     assertMessages("S is required");
   }
 

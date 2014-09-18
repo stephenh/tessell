@@ -89,6 +89,8 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> exte
 
   @SuppressWarnings("unchecked")
   public void setTemporaryError(String temporaryErrorMessage) {
+    // Automatically touch so that the temporary error actually shows up
+    setTouched(true);
     if (temporaryRule == null) {
       temporaryRule = new Static(temporaryErrorMessage);
       temporaryRule.setProperty((Property<Object>) this);
@@ -103,9 +105,7 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> exte
   }
 
   public void clearTemporaryError() {
-    if (temporaryRule != null && !temporaryRule.isValid()) {
-      temporaryRule.set(true);
-    }
+    clearTemporaryError(true);
   }
 
   @Override
@@ -199,7 +199,7 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> exte
       }
 
       if (valueChanged) {
-        clearTemporaryError();
+        clearTemporaryError(false);
         fireChanged(oldValue, newValue);
       }
     } finally {
@@ -336,9 +336,7 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> exte
 
   @Override
   public void setTouched(final boolean touched) {
-    // For now, assume touching should reset the temporary error and let
-    // the regular rules take over.
-    clearTemporaryError();
+    clearTemporaryError(false);
     if (this.touched == touched) {
       return;
     }
@@ -481,6 +479,15 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> exte
 
   private P defaultIfNull(P value) {
     return (value == null) ? defaultValue : value;
+  }
+
+  private void clearTemporaryError(boolean resetTouched) {
+    if (temporaryRule != null && !temporaryRule.isValid()) {
+      temporaryRule.set(true);
+    }
+    if (resetTouched && touched) {
+      setTouched(false);
+    }
   }
 
   private static boolean isWithinASetInitial() {
