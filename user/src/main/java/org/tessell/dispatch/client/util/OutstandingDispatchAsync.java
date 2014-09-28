@@ -1,5 +1,7 @@
 package org.tessell.dispatch.client.util;
 
+import java.util.ArrayList;
+
 import org.tessell.dispatch.client.DefaultDispatchAsync;
 import org.tessell.dispatch.client.DispatchAsync;
 import org.tessell.dispatch.client.SuccessCallback;
@@ -25,6 +27,7 @@ public class OutstandingDispatchAsync implements DispatchAsync {
 
   protected final EventBus eventBus;
   protected final DispatchAsync delegate;
+  protected final ArrayList<Action<?>> outstanding = new ArrayList<Action<?>>();
 
   /** Fires events on {@code eventBus} with a {@link DefaultDispatchAsync}. */
   public OutstandingDispatchAsync(EventBus eventBus) {
@@ -87,14 +90,17 @@ public class OutstandingDispatchAsync implements DispatchAsync {
    *          the in-progress message to include in the {@link DispatchActionEvent}/{@link DispatchResultEvent} events
    */
   public <A extends Action<R>, R extends Result> void execute(final A action, final AsyncCallback<R> callback, final String message) {
+    outstanding.add(action);
     eventBus.fireEvent(new DispatchActionEvent(action, message));
     delegate.execute(action, new AsyncCallback<R>() {
       public void onSuccess(final R result) {
+        outstanding.remove(action);
         eventBus.fireEvent(new DispatchResultEvent(action, result, message));
         callback.onSuccess(result);
       }
 
       public void onFailure(final Throwable caught) {
+        outstanding.remove(action);
         eventBus.fireEvent(new DispatchFailureEvent(action, caught, message));
         callback.onFailure(caught);
       }
@@ -103,6 +109,16 @@ public class OutstandingDispatchAsync implements DispatchAsync {
 
   public void unhandledFailure(Throwable caught) {
     eventBus.fireEvent(new DispatchUnhandledFailureEvent(null, caught, null));
+  }
+
+  /** @return whether there are action calls that have not returned from the server for {@code actionType} */
+  public <A extends Action<R>, R extends Result> boolean hasOutstanding(final Class<A> actionType) {
+    for (final Action<?> action : outstanding) {
+      if (action.getClass().equals(actionType)) {
+        return true;
+      }
+    }
+    return false;
   }
 
 }
