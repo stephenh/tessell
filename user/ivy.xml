@@ -16,7 +16,6 @@
     <dependency org="org.tessell" name="tessell-apt" rev="2.16.1" conf="build"/>
     <dependency org="com.google.gwt" name="gwt-user" rev="${gwt.version}" conf="build"/>
     <dependency org="com.google.gwt" name="gwt-dev" rev="${gwt.version}" conf="build"/>
-    <dependency org="com.google.gwt" name="gwt-codeserver" rev="${gwt.version}" conf="build"/>
     <dependency org="javax.servlet" name="servlet-api" rev="2.4" conf="build" />
 
     <!-- default (compile, runtime) dependencies -->
