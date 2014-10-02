@@ -1,0 +1,20 @@
+
+dependencies {
+  // libs that would only be needed at server-side runtime downstream
+  compile 'javax.servlet:servlet-api:2.4'
+  compile "com.google.gwt:gwt-servlet:${gwtVersion}"
+  compile 'org.hamcrest:hamcrest-all:1.3'
+
+  // libs that we only need for compilation; downstream projects
+  // can get these from putting tessell-dev in their provided
+  // provided doesn't work in STS plugin
+  compile 'org.tessell:tessell-apt:2.16.1'
+  compile "com.google.gwt:gwt-user:${gwtVersion}"
+  compile "com.google.gwt:gwt-dev:${gwtVersion}"
+
+  testCompile 'org.hamcrest:hamcrest-core:1.3'
+  testCompile 'junit:junit-dep:4.8.2'
+  testCompile 'joist:joist-util:1.4.17'
+  testCompile 'commons-lang:commons-lang:2.4'
+}
+

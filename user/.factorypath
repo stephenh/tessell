@@ -1,3 +1,3 @@
 <factorypath>
-    <factorypathentry kind="WKSPJAR" id="/tessell-user/target/lib/build/tessell-apt.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="GRADLE_REPO/files-2.1/org.tessell/tessell-apt/2.16.1/4c0faf73a0d8f939296da36d989bf80155b94692/tessell-apt-2.16.1.jar" enabled="true" runInBatchMode="false"/>
 </factorypath>

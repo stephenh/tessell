@@ -1,0 +1,55 @@
+
+subprojects {
+  apply plugin: 'java'
+  apply plugin: 'project-report'
+  apply plugin: 'maven'
+
+  group = 'org.tessell'
+  version = [System.env.TRAVIS_TAG, 'SNAPSHOT'].find { it != null }
+  archivesBaseName = "tessell-${name}"
+  ext {
+    gwtVersion = '2.6.1-724c722'
+  }
+
+  sourceCompatibility = '1.7'
+  targetCompatibility = '1.7'
+
+  task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier 'sources'
+    from sourceSets.main.allSource
+  }
+
+  artifacts {
+    archives sourcesJar
+  }
+
+  repositories {
+    mavenCentral()
+    maven { url 'http://repo.joist.ws' }
+  }
+
+  configurations {
+    deployerJars
+    provided
+  }
+
+  sourceSets.main.compileClasspath += configurations.provided
+
+  dependencies {
+    deployerJars 'org.apache.maven.wagon:wagon-ssh:2.6'
+  }
+
+  uploadArchives {
+    repositories.mavenDeployer {
+      configuration = configurations.deployerJars
+      repository(url: 'scp://repo.joist.ws/var/www/joist.repo') {
+        authentication(userName: System.env.REPO_USERNAME, password: System.env.REPO_PASSWORD)
+      }
+    }
+  }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.1'
+}
+
