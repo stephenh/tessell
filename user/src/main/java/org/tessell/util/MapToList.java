@@ -37,8 +37,8 @@ public class MapToList<K, V> extends LinkedHashMap<K, List<V>> {
     get(key).add(value);
   }
 
-  public void remove(Object key, V value) {
-    get(key).remove(value);
+  public boolean remove(Object key, Object value) {
+    return get(key).remove(value);
   }
 
   public V removeOne(Object key) {
