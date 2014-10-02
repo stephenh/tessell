@@ -5,7 +5,7 @@ config:
   pruneOldFiles: disabled
   commonInterfaces: com.google.gwt.user.client.rpc.IsSerializable
   modelPackage: org.tessell.examples.client.model
-  outputDirectory: target/generated/java
+  outputDirectory: build/generated/java
 
 EmployeeDto:
   properties: id Long, name String, salary Double
