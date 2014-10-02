@@ -1,0 +1,7 @@
+language: java
+env:
+  global:
+  - secure: aevqfh4fwUBHInFwtKAuGpmvRsh/nsRO+cf22ikb4Ku6LN+UZ5MeVejzG//pJ6NGHVbsGnerbhTkIqqgbS1uSuxo1XziYP1KNRMDZKN1PfLf0c22szoQqzoKgXpi50qCJnZks7+JNxhYKm0j0FgxvV4isGr6tcaR7ECSPRZiWE0=
+  - secure: Eh+QaI3gbx83NqB3ShVJEzTFhV//xpCtTApOpv7LdrzSQYlq8Z950TkbMX+ZX7X66ZOed+IL3s5LlptWXD6v/AXTHtYeoYOTZfob6XyICViWV4lse13LuQy8Dp3YMTHOzff0no+mN3hG0NQlIIGFXDZWYDmZKF7Rtt7iwm864RI=
+after_success:
+  - test -n "$TRAVIS_TAG" && ssh-keyscan -H repo.joist.ws >> ~/.ssh/known_hosts && gradle uploadArchives
