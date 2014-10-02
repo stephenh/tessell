@@ -207,7 +207,6 @@ public class ViewGenerator {
     }
   }
 
-  @SuppressWarnings("unchecked")
   private Collection<File> findUiXmlFiles() {
     return FileUtils.listFiles(input, new String[] { "ui.xml" }, true);
   }

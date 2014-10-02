@@ -26,12 +26,11 @@ public class UiXmlCache {
   private final Map<String, Entry> entries = new HashMap<String, Entry>();
   private String viewgenTimestamp;
 
-  @SuppressWarnings("unchecked")
   public static UiXmlCache loadOrCreate(final File outputDirectory) {
     UiXmlCache c = new UiXmlCache();
     if (cache(outputDirectory).exists()) {
       try {
-        for (String line : (List<String>) FileUtils.readLines(cache(outputDirectory))) {
+        for (String line : FileUtils.readLines(cache(outputDirectory))) {
           if (line.startsWith(viewgenTimestampKey)) {
             c.viewgenTimestamp = line.split("=")[1];
           } else {

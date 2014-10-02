@@ -1,7 +1,6 @@
 package org.tessell.generators;
 
 import java.io.File;
-import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -18,11 +17,10 @@ public class Cleanup {
     this.outputDirectory = outputDirectory;
   }
 
-  @SuppressWarnings("unchecked")
   public void watchPackage(String packageName) {
     File packageDirectory = new File(outputDirectory, packageName.replace(".", File.separator));
     if (packageDirectory.exists()) {
-      for (File file : (List<File>) FileUtils.listFiles(packageDirectory, null, true)) {
+      for (File file : FileUtils.listFiles(packageDirectory, null, true)) {
         filesAssumedBad.add(file.getAbsolutePath());
       }
     }
