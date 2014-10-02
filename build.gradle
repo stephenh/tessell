@@ -3,6 +3,7 @@ subprojects {
   apply plugin: 'java'
   apply plugin: 'project-report'
   apply plugin: 'maven'
+  apply plugin: 'eclipse'
 
   group = 'org.tessell'
   version = [System.env.TRAVIS_TAG, 'SNAPSHOT'].find { it != null }
@@ -34,6 +35,12 @@ subprojects {
   }
 
   sourceSets.main.compileClasspath += configurations.provided
+
+  eclipse {
+    classpath {
+      plusConfigurations += [ configurations.provided ]
+    }
+  }
 
   dependencies {
     deployerJars 'org.apache.maven.wagon:wagon-ssh:2.6'
