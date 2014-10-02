@@ -1,6 +1,3 @@
-bin
-lib
-target
 /examples-workspace
 .gwt
 .gradle
