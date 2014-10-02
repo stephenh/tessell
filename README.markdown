@@ -76,3 +76,4 @@ Binder DSL Ideas
 
       form.setBlah(htmlPanel, List<Bar> bars);
 
+
