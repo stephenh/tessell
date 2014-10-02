@@ -35,6 +35,7 @@ subprojects {
   }
 
   sourceSets.main.compileClasspath += configurations.provided
+  sourceSets.test.runtimeClasspath += configurations.provided
 
   eclipse {
     classpath {
