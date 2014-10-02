@@ -125,8 +125,8 @@ public class ResourcesGenerator {
   public static File fileInOutputDirectory(File inputDirectory, File outputDirectory, File file, String extMatch, String extReplace) {
     return new File(//
       file.getAbsolutePath()//
-        .replace(inputDirectory.getAbsolutePath(), outputDirectory.getAbsolutePath())
-        .replace(extMatch, extReplace));
+      .replace(inputDirectory.getAbsolutePath(), outputDirectory.getAbsolutePath())
+      .replace(extMatch, extReplace));
   }
 
   /** Finds {@code url(...)} in the css and replaces it with GWT @url declarations. */
@@ -173,25 +173,25 @@ public class ResourcesGenerator {
     {
       // ImageResource
       appResources.getMethod(methodName) //
-        .returnType(ImageResource.class)
-        .addAnnotation("@Source(\"{}\")", getRelativePath(imageFile));
+      .returnType(ImageResource.class)
+      .addAnnotation("@Source(\"{}\")", getRelativePath(imageFile));
       // stub
       stubResources.getField(methodName) //
-        .type(ImageResource.class)
-        .setFinal()
-        .initialValue("new StubImageResource(\"{}\", \"{}\")", methodName, imageFile.getName());
+      .type(ImageResource.class)
+      .setFinal()
+      .initialValue("new StubImageResource(\"{}\", \"{}\")", methodName, imageFile.getName());
       stubResources.getMethod(methodName).returnType(ImageResource.class).body.line("return {};", methodName);
     }
     {
       // DataResource
       appResources.getMethod(methodName + "Data") //
-        .returnType(DataResource.class)
-        .addAnnotation("@Source(\"{}\")", getRelativePath(imageFile));
+      .returnType(DataResource.class)
+      .addAnnotation("@Source(\"{}\")", getRelativePath(imageFile));
       // stub
       stubResources.getField(methodName + "Data") //
-        .type(DataResource.class)
-        .setFinal()
-        .initialValue("new StubDataResource(\"{}\", \"{}\")", methodName, imageFile.getName());
+      .type(DataResource.class)
+      .setFinal()
+      .initialValue("new StubDataResource(\"{}\", \"{}\")", methodName, imageFile.getName());
       stubResources.getMethod(methodName + "Data").returnType(DataResource.class).body.line("return {};", methodName + "Data");
     }
     stubResources.addImports(StubImageResource.class, StubDataResource.class);
