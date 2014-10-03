@@ -1,4 +1,6 @@
 
+<a href="https://travis-ci.org/stephenh/tessell"><img src="https://api.travis-ci.org/stephenh/tessell.svg"></a>
+
 See [tessell.org](http://www.tessell.org).
 
 Todo
