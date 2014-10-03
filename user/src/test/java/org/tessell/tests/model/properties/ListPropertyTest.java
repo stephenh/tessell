@@ -1025,6 +1025,24 @@ public class ListPropertyTest {
     assertThat(c.isLast().get(), is(false));
   }
 
+  @Test
+  @SuppressWarnings("unchecked")
+  public void testUnion() {
+    ListProperty<String> a = listProperty("a", list("1", "2"));
+    ListProperty<String> b = listProperty("b", list("2", "3"));
+    ListProperty<String> union = NewProperty.union(a, b);
+    assertThat(union.get(), contains("1", "2", "2", "3"));
+
+    CountChanges c = CountChanges.on(union);
+    a.remove("1");
+    assertThat(c.changes, is(1));
+    assertThat(union.get(), contains("2", "2", "3"));
+
+    b.add("4");
+    assertThat(c.changes, is(2));
+    assertThat(union.get(), contains("2", "2", "3", "4"));
+  }
+
   public static class CountingChanges<P> implements PropertyChangedHandler<P> {
     public int count;
 

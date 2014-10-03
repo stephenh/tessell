@@ -71,6 +71,19 @@ public class NewProperty {
   }
 
   @SafeVarargs
+  public static <E> ListProperty<E> union(final ListProperty<E>... properties) {
+    return listProperty(new DerivedValue<List<E>>("union") {
+      public List<E> get() {
+        List<E> copy = new ArrayList<E>();
+        for (ListProperty<E> property : properties) {
+          copy.addAll(property.get());
+        }
+        return copy;
+      }
+    });
+  }
+
+  @SafeVarargs
   public static BooleanProperty and(final Property<Boolean>... properties) {
     return booleanProperty(new DerivedValue<Boolean>() {
       public Boolean get() {
