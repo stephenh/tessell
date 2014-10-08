@@ -11,9 +11,11 @@ import static org.tessell.model.properties.NewProperty.listProperty;
 import static org.tessell.model.properties.NewProperty.stringProperty;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.apache.commons.collections.ComparatorUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.tessell.gwt.user.client.ui.StubCheckBox;
@@ -1041,6 +1043,54 @@ public class ListPropertyTest {
     b.add("4");
     assertThat(c.changes, is(2));
     assertThat(union.get(), contains("2", "2", "3", "4"));
+  }
+
+  @SuppressWarnings("unchecked")
+  @Test
+  public void testSetComparator() {
+    ListProperty<String> a = listProperty("a", list("2", "1"));
+
+    final boolean[] sawNonSorted = { false };
+    a.addPropertyChangedHandler(new PropertyChangedHandler<List<String>>() {
+      public void onPropertyChanged(PropertyChangedEvent<List<String>> event) {
+        List<String> copy = list(event.getNewValue());
+        Collections.sort(copy);
+        if (!copy.equals(event.getNewValue())) {
+          sawNonSorted[0] = true;
+        }
+      }
+    });
+
+    a.setComparator(ComparatorUtils.naturalComparator());
+    assertThat(a.get(), contains("1", "2"));
+    assertThat(sawNonSorted[0], is(false));
+
+    a.clear();
+    assertThat(sawNonSorted[0], is(false));
+
+    a.add("1");
+    assertThat(a.get(), contains("1"));
+    assertThat(sawNonSorted[0], is(false));
+
+    a.add(0, "2");
+    assertThat(a.get(), contains("1", "2"));
+    assertThat(sawNonSorted[0], is(false));
+
+    a.add("0");
+    assertThat(a.get(), contains("0", "1", "2"));
+    assertThat(sawNonSorted[0], is(false));
+
+    a.remove("1");
+    assertThat(a.get(), contains("0", "2"));
+    assertThat(sawNonSorted[0], is(false));
+
+    a.addAll(list("3", "1"));
+    assertThat(a.get(), contains("0", "1", "2", "3"));
+    assertThat(sawNonSorted[0], is(false));
+
+    a.set(list("2", "1"));
+    assertThat(a.get(), contains("1", "2"));
+    assertThat(sawNonSorted[0], is(false));
   }
 
   public static class CountingChanges<P> implements PropertyChangedHandler<P> {

@@ -24,6 +24,7 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
   private List<E> readOnly;
   private List<E> readOnlySource;
   private Comparator<E> lastComparator;
+  private Comparator<E> persistentComparator;
 
   /** Used to convert a list from one type of element to another. */
   public interface ElementConverter<E, F> {
@@ -73,6 +74,7 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
   /** Adds {@code item}, firing a {@link ValueAddedEvent}. */
   public void add(final E item) {
     getDirect().add(item);
+    sortIfNeeded();
     setTouched(true);
     // will fire add+change if needed
     reassess();
@@ -81,6 +83,7 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
   /** Adds {@code item}, firing a {@link ValueAddedEvent}. */
   public void add(final int index, final E item) {
     getDirect().add(index, item);
+    sortIfNeeded();
     setTouched(true);
     // will fire add+change if needed
     reassess();
@@ -92,6 +95,7 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
       return;
     }
     getDirect().addAll(items);
+    sortIfNeeded();
     setTouched(true);
     // will fire adds+change if needed
     reassess();
@@ -100,6 +104,7 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
   /** Removes {@code item}, firing a {@link ValueRemovedEvent}. */
   public void remove(final E item) {
     getDirect().remove(item);
+    sortIfNeeded();
     setTouched(true);
     // will fire remove+change if needed
     reassess();
@@ -288,7 +293,8 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
   }
 
   /**
-   * Sorts our values by {@code comparator}.
+   * Sorts our values by {@code comparator} (only once, to keep the sort
+   * continually updated, see {@link #setComparator}).
    *
    * If we've already been sorted by comparator, it will reverse the order.
    */
@@ -304,6 +310,18 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
     Collections.sort(getDirect(), comparator);
     lastComparator = comparator;
     reassess();
+  }
+
+  /**
+   * Sorts our values by {@code comparator} (and continually applies
+   * the comparator as new values are added/removed/set).
+   */
+  public void setComparator(Comparator<E> comparator) {
+    this.persistentComparator = comparator;
+    List<E> copy = copyLastValue(getDirect());
+    if (copy != null && !copy.equals(getDirect())) {
+      set(copy);
+    }
   }
 
   /** Registers {@code handler} to be called when new values are added. */
@@ -417,7 +435,11 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
     if (newValue == null) {
       return null;
     }
-    return new ArrayList<E>(newValue);
+    List<E> copy = new ArrayList<E>(newValue);
+    if (persistentComparator != null) {
+      Collections.sort(copy, persistentComparator);
+    }
+    return copy;
   }
 
   @Override
@@ -435,6 +457,12 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
     // probably also care about a new model showing up/old model going away
     fireEvent(new MemberChangedEvent());
     super.fireChanged(oldValue, newValue);
+  }
+
+  private void sortIfNeeded() {
+    if (persistentComparator != null) {
+      Collections.sort(getDirect(), persistentComparator);
+    }
   }
 
   private List<E> getDirect() {
