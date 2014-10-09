@@ -1114,6 +1114,12 @@ public class ListPropertyTest {
     a.add("3");
     assertThat(b.get(), contains(1, 2, 3));
     assertThat(b.isTouched(), is(true));
+
+    a.remove("1");
+    assertThat(b.get(), contains(2, 3));
+
+    a.clear();
+    assertThat(b.get().size(), is(0));
   }
 
   public static class CountingChanges<P> implements PropertyChangedHandler<P> {
