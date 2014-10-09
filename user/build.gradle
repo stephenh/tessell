@@ -17,3 +17,8 @@ dependencies {
   testCompile 'commons-lang:commons-lang:2.4'
 }
 
+jar {
+  from {
+    fileTree(dir: 'src/main/java')
+  }
+}
