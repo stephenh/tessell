@@ -21,4 +21,7 @@ jar {
   from {
     fileTree(dir: 'src/main/java')
   }
+  from {
+    fileTree(dir: 'src/main/super')
+  }
 }
