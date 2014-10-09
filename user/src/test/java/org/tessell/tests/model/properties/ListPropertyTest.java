@@ -15,7 +15,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import org.apache.commons.collections.ComparatorUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.tessell.gwt.user.client.ui.StubCheckBox;
@@ -1045,7 +1044,6 @@ public class ListPropertyTest {
     assertThat(union.get(), contains("2", "2", "3", "4"));
   }
 
-  @SuppressWarnings("unchecked")
   @Test
   public void testSetComparator() {
     ListProperty<String> a = listProperty("a", list("2", "1"));
@@ -1061,7 +1059,11 @@ public class ListPropertyTest {
       }
     });
 
-    a.setComparator(ComparatorUtils.naturalComparator());
+    a.setComparator(new Comparator<String>() {
+      public int compare(String o1, String o2) {
+        return o1.compareTo(o2);
+      }
+    });
     assertThat(a.get(), contains("1", "2"));
     assertThat(sawNonSorted[0], is(false));
 
