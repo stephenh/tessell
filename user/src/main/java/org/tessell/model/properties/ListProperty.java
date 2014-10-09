@@ -33,6 +33,11 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
     E from(F element);
   }
 
+  /** Used to map a list from one type of element to another. */
+  public interface ElementMapper<E, F> {
+    F map(E element);
+  }
+
   /** Used to filter a list to a matching condition. */
   public interface ElementFilter<E> {
     boolean matches(E element);
@@ -407,6 +412,43 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
       }
     });
     return as;
+  }
+
+  /**
+   * Creates a new {@link ListProperty>} of type {@code F}.
+   *
+   * Only changes in this list will be reflected in the returned
+   * list, e.g. it's a one way conversion.
+   */
+  public <F> ListProperty<F> map(final ElementMapper<E, F> mapper) {
+    // make an intial copy of all the elements currently in our list
+    List<F> initial = null;
+    if (get() != null) {
+      initial = new ArrayList<F>();
+      for (E e : get()) {
+        initial.add(mapper.map(e));
+      }
+    }
+    final ListProperty<F> mapped = listProperty(getName(), initial);
+    // keep converting E -> F into as
+    addListChangedHandler(new ListChangedHandler<E>() {
+      public void onListChanged(ListChangedEvent<E> event) {
+        if (get() != null && mapped.get() == null) {
+          mapped.setInitialValue(new ArrayList<F>());
+        }
+        event.getDiff().apply(mapped.getDirect(), new ListDiff.Mapper<E, F>() {
+          public F map(E e) {
+            return mapper.map(e);
+          }
+        });
+        if (isTouched() && !mapped.isTouched()) {
+          mapped.setTouched(true);
+        } else {
+          mapped.reassess();
+        }
+      }
+    });
+    return mapped;
   }
 
   public ListProperty<E> filter(final ElementFilter<E> filter) {

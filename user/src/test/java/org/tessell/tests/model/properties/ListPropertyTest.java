@@ -23,6 +23,7 @@ import org.tessell.model.events.*;
 import org.tessell.model.properties.*;
 import org.tessell.model.properties.ListProperty.ElementConverter;
 import org.tessell.model.properties.ListProperty.ElementFilter;
+import org.tessell.model.properties.ListProperty.ElementMapper;
 import org.tessell.model.validation.rules.Size;
 import org.tessell.model.values.DerivedValue;
 import org.tessell.model.values.SetValue;
@@ -1093,6 +1094,26 @@ public class ListPropertyTest {
     a.set(list("2", "1"));
     assertThat(a.get(), contains("1", "2"));
     assertThat(sawNonSorted[0], is(false));
+  }
+
+  @Test
+  public void testMap() {
+    ListProperty<String> a = listProperty("a");
+    ListProperty<Integer> b = a.map(new ElementMapper<String, Integer>() {
+      public Integer map(String element) {
+        return Integer.valueOf(element);
+      }
+    });
+
+    assertThat(b.isTouched(), is(false));
+
+    a.setInitialValue(list("1", "2"));
+    assertThat(b.get(), contains(1, 2));
+    assertThat(b.isTouched(), is(false));
+
+    a.add("3");
+    assertThat(b.get(), contains(1, 2, 3));
+    assertThat(b.isTouched(), is(true));
   }
 
   public static class CountingChanges<P> implements PropertyChangedHandler<P> {
