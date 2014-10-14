@@ -3,6 +3,25 @@
 
 See [tessell.org](http://www.tessell.org).
 
+Eclipse Setup
+-------------
+
+After checking Tessell out of git, there are two main projects, `tessell-user` and `tessell-dev`.
+
+`tessell-user` uses annotation processing to generate some event classes, which is unfortunately kind of janky to setup in Eclipse.
+
+1. Install the [Gradle Eclipse plugin](https://github.com/spring-projects/eclipse-integration-gradle)
+  * This is not strictly required, but the checked-in `.classpath`/`.factorypath` files assume this setup
+2. Go to Window / Preferences / Java / Build Path / Classpath Variables
+  * Add `GRADLE_REPO` has `/yourHomeDir/.gradle/caches/modules-2`
+3. Import `tessell-user` and `tessell-dev` into Eclipse
+  * Gradle should download all the dependencies and put them onto the Gradle classpath container
+  * However, Eclipse needs to be "kicked" to see the annotation processor jar is now available
+4. Close `tessell-user`
+5. Open `tessell-user`
+6. Clean `tessell-user`
+7. Hopefully you have no build errors
+
 Todo
 ----
 
