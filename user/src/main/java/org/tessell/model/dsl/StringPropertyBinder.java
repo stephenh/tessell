@@ -2,7 +2,7 @@ package org.tessell.model.dsl;
 
 import static org.tessell.util.StringUtils.sanitizeIfString;
 
-import org.tessell.gwt.user.client.ui.IsTextBox;
+import org.tessell.gwt.user.client.ui.IsTextBoxBase;
 import org.tessell.model.events.PropertyChangedEvent;
 import org.tessell.model.events.PropertyChangedHandler;
 import org.tessell.model.properties.StringProperty;
@@ -25,8 +25,8 @@ public class StringPropertyBinder extends PropertyBinder<String> {
   }
 
   public <V extends HasValue<String> & HasKeyUpHandlers> void toKeyUp(final V source) {
-    if (sp.getMaxLength() != null && source instanceof IsTextBox) {
-      ((IsTextBox) source).setMaxLength(sp.getMaxLength());
+    if (sp.getMaxLength() != null && source instanceof IsTextBoxBase) {
+      ((IsTextBoxBase) source).setMaxLength(sp.getMaxLength());
     }
     b.add(sp.addPropertyChangedHandler(new PropertyChangedHandler<String>() {
       public void onPropertyChanged(final PropertyChangedEvent<String> event) {

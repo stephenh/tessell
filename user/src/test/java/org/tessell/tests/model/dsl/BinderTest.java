@@ -1011,6 +1011,14 @@ public class BinderTest {
   }
 
   @Test
+  public void stringToKeyUpSetsMaxLengthOnTextArea() {
+    final StubTextArea box = new StubTextArea();
+    s.max(20);
+    binder.bind(s).toKeyUp(box);
+    assertThat(box.getMaxLength(), is(20));
+  }
+
+  @Test
   public void onClickToggleSetsNoInitialValue() {
     final BooleanProperty b = booleanProperty("b");
     binder.onClick(anchor).toggle(b);
