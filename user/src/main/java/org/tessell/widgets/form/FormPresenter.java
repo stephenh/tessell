@@ -27,7 +27,7 @@ public class FormPresenter extends BasicPresenter<IsFlowPanel> {
 
   private final ArrayList<FormLine> formLines = new ArrayList<FormLine>();
   private final ArrayList<FormAction> formActions = new ArrayList<FormAction>();
-  private final PropertyGroup all = new PropertyGroup("all", null);
+  private final PropertyGroup all = new PropertyGroup("all");
   private final String id;
   private final Binder binder = new Binder();
   private final FormLayout layout;

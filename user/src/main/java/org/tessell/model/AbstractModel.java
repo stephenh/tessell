@@ -19,7 +19,7 @@ import com.google.gwt.event.shared.SimplerEventBus;
 public abstract class AbstractModel implements Model {
 
   private static final Logger log = Logger.getLogger("org.tessel.model");
-  protected final PropertyGroup all = new PropertyGroup("all", "model invalid");
+  protected final PropertyGroup all = new PropertyGroup("all");
   private BooleanProperty isTouched;
   private final EventBus handlers = new SimplerEventBus();
 

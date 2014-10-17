@@ -13,7 +13,7 @@ public class PropertyGroupTest extends AbstractRuleTest {
 
   @Test
   public void touchesAllChildren() {
-    PropertyGroup all = new PropertyGroup("all", "some message");
+    PropertyGroup all = new PropertyGroup("all");
     StringProperty p1 = stringProperty("p1").in(all);
     StringProperty p2 = stringProperty("p1").in(all);
     assertThat(p1.isTouched(), is(false));
@@ -26,7 +26,7 @@ public class PropertyGroupTest extends AbstractRuleTest {
 
   @Test
   public void isInvalidIfChildIsInvalid() {
-    PropertyGroup all = new PropertyGroup("all", "some message");
+    PropertyGroup all = new PropertyGroup("all");
     StringProperty p1 = stringProperty("p1").in(all).max(5);
 
     p1.set("123456");
@@ -35,7 +35,7 @@ public class PropertyGroupTest extends AbstractRuleTest {
 
   @Test
   public void becomesValidIfChildIsValid() {
-    PropertyGroup all = new PropertyGroup("all", "some message");
+    PropertyGroup all = new PropertyGroup("all");
     StringProperty p1 = stringProperty("p1").in(all).max(5);
 
     p1.set("123456");
@@ -47,7 +47,7 @@ public class PropertyGroupTest extends AbstractRuleTest {
 
   @Test
   public void becomesValidOnRemovalOfInvalidChild() {
-    PropertyGroup all = new PropertyGroup("all", "some message");
+    PropertyGroup all = new PropertyGroup("all");
     StringProperty p1 = stringProperty("p1").in(all).max(5);
 
     p1.set("123456");
@@ -64,7 +64,7 @@ public class PropertyGroupTest extends AbstractRuleTest {
 
   @Test
   public void changesItsValueBasedOnBeingValid() {
-    PropertyGroup all = new PropertyGroup("all", "some message");
+    PropertyGroup all = new PropertyGroup("all");
     assertThat(all.get(), is(true));
 
     StringProperty p1 = stringProperty("p1").in(all).max(5);
@@ -77,7 +77,7 @@ public class PropertyGroupTest extends AbstractRuleTest {
 
   @Test
   public void addingAlreadyInvalidPropertyMakesGroupInvalid() {
-    PropertyGroup all = new PropertyGroup("all", "some message");
+    PropertyGroup all = new PropertyGroup("all");
 
     StringProperty p1 = stringProperty("p1").max(5);
     p1.set("123456");

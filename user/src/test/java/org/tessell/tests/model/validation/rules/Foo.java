@@ -11,7 +11,7 @@ import org.tessell.model.validation.rules.Required;
 
 public class Foo {
 
-  public PropertyGroup all = new PropertyGroup("some", "some invalid");
+  public PropertyGroup all = new PropertyGroup("some");
   public StringProperty name = stringProperty("name");
   public StringProperty description = stringProperty("description");
   public BooleanProperty condition = booleanProperty("condition", true);

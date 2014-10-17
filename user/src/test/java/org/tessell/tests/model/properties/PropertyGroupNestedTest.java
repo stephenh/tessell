@@ -12,9 +12,9 @@ import org.tessell.tests.model.validation.rules.AbstractRuleTest;
 
 public class PropertyGroupNestedTest extends AbstractRuleTest {
 
-  private final PropertyGroup parentAll = new PropertyGroup("all", "parent invalid");
+  private final PropertyGroup parentAll = new PropertyGroup("all");
   private final StringProperty parentName = stringProperty("parentName").req();
-  private final PropertyGroup childAll = new PropertyGroup("all", "child invalid");
+  private final PropertyGroup childAll = new PropertyGroup("all");
   private final StringProperty childName = stringProperty("childName").req();
 
   @Before

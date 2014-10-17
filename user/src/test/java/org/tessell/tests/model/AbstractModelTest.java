@@ -67,7 +67,7 @@ public class AbstractModelTest {
       }
     });
     e.name.setTouched(true);
-    assertThat(message[0], is("model invalid"));
+    assertThat(message[0], is("all invalid"));
   }
 
   @Test

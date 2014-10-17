@@ -23,10 +23,10 @@ public class PropertyGroup extends AbstractProperty<Boolean, PropertyGroup> {
   private final ArrayList<PropertyError> invalid = new ArrayList<PropertyError>();
   private Snapshot snapshot;
 
-  public PropertyGroup(final String name, final String message) {
+  public PropertyGroup(final String name) {
     super(new SetValue<Boolean>(name, true));
     // add a rule that fires whenever we're false (and touched)
-    addRule(new Custom(message, this));
+    addRule(new Custom(name + " invalid", this));
     // We always want to consider ourselves "touched", so that our
     // error message fires right away, and the UI/parent property
     // group can see it. However, we don't want to touch our children

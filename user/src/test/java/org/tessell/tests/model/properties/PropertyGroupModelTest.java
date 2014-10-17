@@ -16,7 +16,7 @@ import org.tessell.util.PropertyUtils;
 
 public class PropertyGroupModelTest extends AbstractRuleTest {
 
-  private final PropertyGroup all = new PropertyGroup("all", "parent invalid");
+  private final PropertyGroup all = new PropertyGroup("all");
   private final ListProperty<TestModel> models = listProperty("models");
   private final TestModel m1 = new TestModel();
   private final TestModel m2 = new TestModel();
@@ -74,7 +74,7 @@ public class PropertyGroupModelTest extends AbstractRuleTest {
 
   @Test
   public void syncAddsExistingModelsToGroup() {
-    PropertyGroup all = new PropertyGroup("all", "parent invalid");
+    PropertyGroup all = new PropertyGroup("all");
     ListProperty<TestModel> models = listProperty("models");
     models.add(m1);
     PropertyUtils.syncModelsToGroup(all, models);
@@ -83,7 +83,7 @@ public class PropertyGroupModelTest extends AbstractRuleTest {
 
   @Test
   public void shouldNotFailWhenTheModelListIsNull() {
-    PropertyGroup all = new PropertyGroup("all", "parent invalid");
+    PropertyGroup all = new PropertyGroup("all");
     ListProperty<TestModel> models = listProperty("models", null);
     PropertyUtils.syncModelsToGroup(all, models);
   }
