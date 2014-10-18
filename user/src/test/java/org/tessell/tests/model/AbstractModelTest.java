@@ -37,6 +37,23 @@ public class AbstractModelTest {
   }
 
   @Test
+  public void allValidIsFalseIfChildPropertiesAreInvalid() {
+    e.name.set("name");
+    AccountModel a = new AccountModel();
+    a.name.req();
+    e.accounts.add(a);
+    // still valid because we're not touched
+    assertThat(e.allValid().isValid(), is(true));
+    assertThat(a.allValid().isValid(), is(true));
+
+    a.name.touch();
+    assertThat(a.name.isValid(), is(false));
+    assertThat(a.allValid().isValid(), is(false));
+    assertThat(e.accounts.allValid().isValid(), is(false));
+    assertThat(e.allValid().isValid(), is(false));
+  }
+
+  @Test
   public void allValidIsValidIfAllPropertiesAreValid() {
     e.id.set(1);
     e.name.set("f");

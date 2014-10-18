@@ -24,6 +24,7 @@ import org.tessell.model.properties.*;
 import org.tessell.model.properties.ListProperty.ElementConverter;
 import org.tessell.model.properties.ListProperty.ElementFilter;
 import org.tessell.model.properties.ListProperty.ElementMapper;
+import org.tessell.model.validation.rules.AbstractRule;
 import org.tessell.model.validation.rules.Size;
 import org.tessell.model.values.DerivedValue;
 import org.tessell.model.values.SetValue;
@@ -1120,6 +1121,61 @@ public class ListPropertyTest {
 
     a.clear();
     assertThat(b.get().size(), is(0));
+  }
+
+  @Test
+  public void testAllValidWithProperties() {
+    final ListProperty<StringProperty> l = listProperty("l");
+    assertThat(l.allValid().get(), is(true));
+
+    StringProperty p = stringProperty("p").req();
+    l.add(p);
+    assertThat(l.allValid().get(), is(true));
+
+    p.touch();
+    assertThat(l.allValid().get(), is(false));
+
+    l.remove(p);
+    assertThat(l.allValid().get(), is(true));
+
+    l.addRule(new AbstractRule<List<StringProperty>>("Only one allowed") {
+      protected boolean isValid() {
+        return property.get().size() == 1;
+      }
+    });
+    assertThat(l.allValid().get(), is(false));
+
+    l.add(p);
+    p.set("asdf");
+    assertThat(l.allValid().get(), is(true));
+  }
+
+  @Test
+  public void testAllValidWithModels() {
+    final ListProperty<DummyModel> l = listProperty("l");
+    assertThat(l.allValid().get(), is(true));
+
+    DummyModel m = new DummyModel();
+    m.name.req();
+    l.add(m);
+    assertThat(l.allValid().get(), is(true));
+
+    m.name.touch();
+    assertThat(l.allValid().get(), is(false));
+
+    l.remove(m);
+    assertThat(l.allValid().get(), is(true));
+
+    l.addRule(new AbstractRule<List<DummyModel>>("Only one allowed") {
+      protected boolean isValid() {
+        return property.get().size() == 1;
+      }
+    });
+    assertThat(l.allValid().get(), is(false));
+
+    l.add(m);
+    m.name.set("foo");
+    assertThat(l.allValid().get(), is(true));
   }
 
   public static class CountingChanges<P> implements PropertyChangedHandler<P> {

@@ -7,6 +7,7 @@ import static org.tessell.model.properties.NewProperty.listProperty;
 
 import java.util.*;
 
+import org.tessell.model.Model;
 import org.tessell.model.events.*;
 import org.tessell.model.values.DerivedValue;
 import org.tessell.model.values.Value;
@@ -25,6 +26,7 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
   private List<E> readOnlySource;
   private Comparator<E> lastComparator;
   private Comparator<E> persistentComparator;
+  private PropertyGroup allValid;
 
   /** Used to convert a list from one type of element to another. */
   public interface ElementConverter<E, F> {
@@ -467,6 +469,21 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
     });
   }
 
+  /**
+   * @return a property that, if we contain properties or models, will be true if all
+   * contains properties/models (as well as ourself) are valid.
+   */
+  public Property<Boolean> allValid() {
+    if (allValid == null) {
+      allValid = new PropertyGroup(getValueObject().getName() + ".allValid");
+      allValid.add(this);
+      for (E element : getDirect()) {
+        addToAllValidIfNeeded(element);
+      }
+    }
+    return allValid;
+  }
+
   @Override
   protected ListProperty<E> getThis() {
     return this;
@@ -490,15 +507,37 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
     for (Location<E> added : diff.added) {
       fireEvent(new ValueAddedEvent<E>(this, added.element));
       listenForMemberChanged(added.element);
+      addToAllValidIfNeeded(added.element);
     }
     for (Location<E> removed : diff.removed) {
       fireEvent(new ValueRemovedEvent<E>(this, removed.element));
+      removeFromAllValidIfNeeded(removed.element);
     }
     fireEvent(new ListChangedEvent<E>(this, oldValue, newValue, diff));
     // if someone is listening for "did one of your models change", they
     // probably also care about a new model showing up/old model going away
     fireEvent(new MemberChangedEvent());
     super.fireChanged(oldValue, newValue);
+  }
+
+  private void addToAllValidIfNeeded(E element) {
+    if (allValid != null) {
+      if (element instanceof Property<?>) {
+        allValid.add((Property<?>) element);
+      } else if (element instanceof Model) {
+        allValid.add(((Model) element).allValid());
+      }
+    }
+  }
+
+  private void removeFromAllValidIfNeeded(E element) {
+    if (allValid != null) {
+      if (element instanceof Property<?>) {
+        allValid.remove((Property<?>) element);
+      } else if (element instanceof Model) {
+        allValid.remove(((Model) element).allValid());
+      }
+    }
   }
 
   private void sortIfNeeded() {
