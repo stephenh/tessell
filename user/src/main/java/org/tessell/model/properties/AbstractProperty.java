@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.tessell.model.events.PropertyChangedEvent;
@@ -293,7 +294,9 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> exte
 
   @Override
   public void fireEvent(final GwtEvent<?> event) {
-    log.finest(this + " firing " + event);
+    if (log.isLoggable(Level.FINEST)) {
+      log.finest(this + " firing " + event);
+    }
     handlers.fireEventFromSource(event, this);
   }
 
