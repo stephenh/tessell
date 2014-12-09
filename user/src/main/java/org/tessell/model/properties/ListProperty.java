@@ -87,7 +87,7 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
     // Janky, but keep ListProperty.toString from being huge and accidentally ruining perf
     String s = getValueObject().getName() + " [";
     for (int i = 0; i < e.size() && i < 20; i++) {
-      s += e.get(i).toString();
+      s += ObjectUtils.toStr(e.get(i), "null");
       if (i != e.size() - 1) {
         s += ", ";
       }

@@ -1189,6 +1189,9 @@ public class ListPropertyTest {
     assertThat(p.toString(), endsWith(", 19, ...]"));
     p.set(null);
     assertThat(p.toString(), is("p null"));
+    p.set(new ArrayList<String>());
+    p.add(null);
+    assertThat(p.toString(), is("p [null]"));
   }
 
   public static class CountingChanges<P> implements PropertyChangedHandler<P> {
