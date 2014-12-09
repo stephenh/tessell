@@ -505,12 +505,12 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
   protected void fireChanged(List<E> oldValue, List<E> newValue) {
     ListDiff<E> diff = ListDiff.of(oldValue, newValue);
     for (Location<E> added : diff.added) {
-      fireEvent(new ValueAddedEvent<E>(this, added.element));
+      fireEvent(new ValueAddedEvent<E>(added.element));
       listenForMemberChanged(added.element);
       addToAllValidIfNeeded(added.element);
     }
     for (Location<E> removed : diff.removed) {
-      fireEvent(new ValueRemovedEvent<E>(this, removed.element));
+      fireEvent(new ValueRemovedEvent<E>(removed.element));
       removeFromAllValidIfNeeded(removed.element);
     }
     fireEvent(new ListChangedEvent<E>(this, oldValue, newValue, diff));
