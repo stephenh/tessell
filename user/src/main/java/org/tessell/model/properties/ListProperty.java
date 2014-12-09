@@ -81,6 +81,9 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
   @Override
   public String toString() {
     List<E> e = getDirect();
+    if (e == null) {
+      return getValueObject().getName() + " null";
+    }
     // Janky, but keep ListProperty.toString from being huge and accidentally ruining perf
     String s = getValueObject().getName() + " [";
     for (int i = 0; i < e.size() && i < 20; i++) {
