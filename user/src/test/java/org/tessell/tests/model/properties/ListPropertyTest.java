@@ -1,6 +1,7 @@
 package org.tessell.tests.model.properties;
 
 import static joist.util.Copy.list;
+import static org.hamcrest.CoreMatchers.endsWith;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.contains;
@@ -1176,6 +1177,16 @@ public class ListPropertyTest {
     l.add(m);
     m.name.set("foo");
     assertThat(l.allValid().get(), is(true));
+  }
+
+  @Test
+  public void testToStringIsAbbreviated() {
+    for (int i = 0; i < 20; i++) {
+      p.add(Integer.toString(i));
+    }
+    assertThat(p.toString(), endsWith(", 19]"));
+    p.add("20");
+    assertThat(p.toString(), endsWith(", 19, ...]"));
   }
 
   public static class CountingChanges<P> implements PropertyChangedHandler<P> {

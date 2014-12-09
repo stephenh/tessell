@@ -78,6 +78,24 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
     return new ArrayList<E>(getDirect());
   }
 
+  @Override
+  public String toString() {
+    List<E> e = getDirect();
+    // Janky, but keep ListProperty.toString from being huge and accidentally ruining perf
+    String s = getValueObject().getName() + " [";
+    for (int i = 0; i < e.size() && i < 20; i++) {
+      s += e.get(i).toString();
+      if (i != e.size() - 1) {
+        s += ", ";
+      }
+    }
+    if (e.size() > 20) {
+      s += "...";
+    }
+    s += "]";
+    return s;
+  }
+
   /** Adds {@code item}, firing a {@link ValueAddedEvent}. */
   public void add(final E item) {
     getDirect().add(item);
