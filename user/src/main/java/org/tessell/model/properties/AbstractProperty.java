@@ -13,6 +13,7 @@ import java.util.logging.Logger;
 import org.tessell.model.events.PropertyChangedEvent;
 import org.tessell.model.events.PropertyChangedHandler;
 import org.tessell.model.properties.Upstream.Capture;
+import org.tessell.model.validation.Valid;
 import org.tessell.model.validation.events.RuleTriggeredEvent;
 import org.tessell.model.validation.events.RuleTriggeredHandler;
 import org.tessell.model.validation.events.RuleUntriggeredEvent;
@@ -53,7 +54,7 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> exte
   // whether this property is required
   private boolean required;
   // the result of the last validate()
-  private boolean valid = true;
+  private Valid valid = Valid.TRUE;
   // whether we're currently reassessing
   private boolean reassessing = false;
   // only used if this is a derived value
@@ -182,11 +183,11 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> exte
       }
 
       // run validation before firing change so handlers see latest wasValid
-      final boolean oldValid = valid;
+      final Valid oldValid = valid;
       validate();
       final boolean validChanged = oldValid != valid;
       if (validProperty != null) {
-        validProperty.set(valid);
+        validProperty.set(valid == Valid.TRUE);
       }
 
       // only reassess downstream if needed. this is somewhat odd, but we reassess
@@ -365,13 +366,13 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> exte
   @Override
   public boolean isValid() {
     Upstream.addIfTracking(this);
-    return valid;
+    return valid == Valid.TRUE;
   }
 
   @Override
   public Property<Boolean> valid() {
     if (validProperty == null) {
-      validProperty = booleanProperty(value.getName() + ".valid", valid);
+      validProperty = booleanProperty(value.getName() + ".valid", valid == Valid.TRUE);
     }
     return validProperty;
   }
@@ -435,16 +436,17 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> exte
 
   /** Runs validation against our rules. */
   private void validate() {
-    valid = true; // start out valid
+    valid = Valid.TRUE; // start out valid
     for (final Rule<? super P> rule : rules) {
-      if (rule.validate()) {
+      Valid validationResult = rule.validate();
+      if (validationResult == Valid.TRUE) {
         rule.untriggerIfNeeded();
       } else {
         // only trigger the first invalid rule
-        if (valid) {
-          valid = false;
+        if (valid == Valid.TRUE) {
+          valid = validationResult;
           if (isTouched()) {
-            rule.triggerIfNeeded();
+            rule.triggerIfNeeded(validationResult);
           } else {
             rule.untriggerIfNeeded();
           }
@@ -485,7 +487,7 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> exte
   }
 
   private void clearTemporaryError(boolean resetTouched) {
-    if (temporaryRule != null && !temporaryRule.isValid()) {
+    if (temporaryRule != null && temporaryRule.isValid() == Valid.FALSE) {
       temporaryRule.set(true);
     }
     if (resetTouched && touched) {

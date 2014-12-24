@@ -15,6 +15,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.tessell.model.properties.BooleanProperty;
 import org.tessell.model.properties.StringProperty;
+import org.tessell.model.validation.Valid;
 import org.tessell.model.validation.events.RuleTriggeredEvent;
 import org.tessell.model.validation.events.RuleTriggeredHandler;
 import org.tessell.model.validation.rules.Custom;
@@ -115,8 +116,8 @@ public class RulesTest extends AbstractRuleTest {
   @Test
   public void requiredSubclassWillBeTrackUpstreamValues() {
     f.name.addRule(new Required("Required") {
-      protected boolean isValid() {
-        return f.description.get() != null;
+      protected Valid isValid() {
+        return Valid.fromBoolean(f.description.get() != null);
       }
     });
 
