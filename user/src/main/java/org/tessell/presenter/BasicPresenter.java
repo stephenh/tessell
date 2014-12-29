@@ -21,9 +21,18 @@ public abstract class BasicPresenter<V extends IsWidget> extends AbstractBound i
   /** @return The view for the presenter. */
   @Override
   public V getView() {
-    if (!isBound()) {
-      throw new IllegalStateException(this + " has not been bound");
-    }
+    // Previously we enforced that the presenter was bound, but this led to a lot
+    // of false positives where:
+    // 1. Presenter is bound, AJAX request fires in onBind()
+    // 2. User clicks back, presenter is unbound
+    // 3. AJAX response, fires onResult(), which tries to call getView()
+    // 4. IllegalStateException on the presenter the user no longer cares about
+    //
+    // Perhaps ideally the AJAX command objects could be tied into the presenter
+    // life cycle, and just immediately drop responses on the floor when on longer
+    // bound. But it doesn't seem very harmful to let the now-disconnected onResult
+    // update it's view, and then fairly soon get GC'd anyway. E.g. it should not
+    // actively cause leaks.
     return view;
   }
 

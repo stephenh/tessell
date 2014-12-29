@@ -14,8 +14,8 @@ public class BasicPresenterTest {
     StubWidgetsProvider.install();
   }
 
-  @Test(expected = IllegalStateException.class)
-  public void getViewShouldFailIfUnbound() {
+  @Test
+  public void getViewShouldNotFailIfUnbound() {
     TestPresenter p = new TestPresenter();
     p.getView();
   }
