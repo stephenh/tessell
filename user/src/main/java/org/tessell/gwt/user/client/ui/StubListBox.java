@@ -102,7 +102,6 @@ public class StubListBox extends StubFocusWidget implements IsListBox {
     } else {
       items.add(index, i);
     }
-
   }
 
   @Override

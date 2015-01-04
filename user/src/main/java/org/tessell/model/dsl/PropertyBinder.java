@@ -30,6 +30,7 @@ public class PropertyBinder<P> {
 
   protected final Binder b;
   protected final Property<P> p;
+  private final boolean[] active = { false };
 
   public PropertyBinder(final Binder b, final Property<P> p) {
     this.b = b;
@@ -103,6 +104,7 @@ public class PropertyBinder<P> {
     }));
     b.add(p.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
       public void onPropertyChanged(final PropertyChangedEvent<P> event) {
+        setToFirstIfNull(options, adaptor);
         source.setSelectedIndex(indexInOptions(adaptor, options));
       }
     }));
@@ -129,6 +131,7 @@ public class PropertyBinder<P> {
     }));
     b.add(p.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
       public void onPropertyChanged(final PropertyChangedEvent<P> event) {
+        setToFirstIfNull(options.get(), adaptor);
         source.setSelectedIndex(indexInOptions(adaptor, options.get()));
       }
     }));
@@ -226,12 +229,21 @@ public class PropertyBinder<P> {
     for (final O option : options) {
       source.addItem(adaptor.toDisplay(option), Integer.toString(i++));
     }
-    if (p.get() == null) {
-      if (!options.contains(null) && !options.isEmpty()) {
+    setToFirstIfNull(options, adaptor);
+    source.setSelectedIndex(indexInOptions(adaptor, options));
+  }
+
+  /** If our property is null, but the list of options doesn't contain {@code null}, auto-select the first valid value. */
+  private <O> void setToFirstIfNull(List<O> options, final ListBoxAdaptor<P, O> adaptor) {
+    // Just to be cautious, call setInitialValue with an active check to prevent stack overflows
+    // if the application code has a handler that tries to keep setting it back to null
+    if (!active[0]) {
+      active[0] = true;
+      if (p.get() == null && !options.contains(null) && !options.isEmpty()) {
         p.setInitialValue(adaptor.toValue(options.get(0)));
       }
+      active[0] = false;
     }
-    source.setSelectedIndex(indexInOptions(adaptor, options));
   }
 
 }

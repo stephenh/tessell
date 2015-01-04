@@ -212,6 +212,18 @@ public class BinderTest {
   }
 
   @Test
+  public void propertyToListBoxAutoSelectsFirstValueOnChange() {
+    final StubListBox listBox = new StubListBox();
+    final ArrayList<String> values = list("a", "b");
+
+    binder.bind(s).to(listBox, values);
+    assertThat(s.get(), is("a"));
+
+    s.set(null);
+    assertThat(s.get(), is("a"));
+  }
+
+  @Test
   public void listPropertyToListBoxChangesListBoxContents() {
     final StubListBox listBox = new StubListBox();
     final ListProperty<String> values = listProperty("values", list("a", "b"));
@@ -367,6 +379,18 @@ public class BinderTest {
 
     listBox.select("");
     assertThat(s.get(), is(""));
+  }
+
+  @Test
+  public void listPropertyToListBoxAutoSelectsFirstValueOnChange() {
+    final StubListBox listBox = new StubListBox();
+    final ListProperty<String> values = listProperty("values", list("a", "b"));
+
+    binder.bind(s).to(listBox, values);
+    assertThat(s.get(), is("a"));
+
+    s.set(null);
+    assertThat(s.get(), is("a"));
   }
 
   @Test
