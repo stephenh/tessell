@@ -8,6 +8,7 @@ import org.tessell.model.properties.Property;
 import org.tessell.model.properties.Upstream;
 import org.tessell.model.properties.Upstream.Capture;
 import org.tessell.model.properties.UpstreamState;
+import org.tessell.model.validation.Valid;
 import org.tessell.model.validation.events.RuleTriggeredEvent;
 import org.tessell.model.validation.events.RuleTriggeredHandler;
 import org.tessell.model.validation.events.RuleUntriggeredEvent;
@@ -21,7 +22,7 @@ import com.google.gwt.event.shared.SimplerEventBus;
 
 /**
  * A base class with most of the common {@link Rule} functionality implemented
- * 
+ *
  * @param T
  *          the value of the property for this rule
  * @param U
@@ -47,15 +48,15 @@ public abstract class AbstractRule<T> implements Rule<T> {
     this.message = message;
   }
 
-  protected abstract boolean isValid();
+  protected abstract Valid isValid();
 
   @Override
-  public final boolean validate() {
+  public final Valid validate() {
     if (lastUpstream == null) {
       lastUpstream = new UpstreamState(property, false);
     }
     Capture c = Upstream.start();
-    boolean v = doValidate();
+    Valid v = doValidate();
     lastUpstream.update(c.finish());
     return v;
   }
@@ -84,9 +85,10 @@ public abstract class AbstractRule<T> implements Rule<T> {
     }
   }
 
-  public void triggerIfNeeded() {
+  public void triggerIfNeeded(Valid validationResult) {
     if (!triggered && message != null) { // custom rules (PropertyGroup's) may not have explicit error messages
-      fireEvent(new RuleTriggeredEvent(this, message, new Boolean[] { false }));
+      boolean dontDisplay = validationResult == Valid.PENDING ? true : false;
+      fireEvent(new RuleTriggeredEvent(this, message, new Boolean[] { dontDisplay }));
       triggered = true;
     }
   }
@@ -125,9 +127,9 @@ public abstract class AbstractRule<T> implements Rule<T> {
     return false;
   }
 
-  private boolean doValidate() {
+  private Valid doValidate() {
     if (onlyIfSaysToSkip()) {
-      return true;
+      return Valid.TRUE;
     }
     return this.isValid();
   }

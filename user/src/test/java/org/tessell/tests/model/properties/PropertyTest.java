@@ -16,9 +16,13 @@ import org.junit.Test;
 import org.tessell.model.events.PropertyChangedEvent;
 import org.tessell.model.events.PropertyChangedHandler;
 import org.tessell.model.properties.*;
+import org.tessell.model.validation.Valid;
 import org.tessell.model.validation.events.RuleTriggeredEvent;
 import org.tessell.model.validation.events.RuleTriggeredHandler;
+import org.tessell.model.validation.events.RuleUntriggeredEvent;
+import org.tessell.model.validation.events.RuleUntriggeredHandler;
 import org.tessell.model.validation.rules.Custom;
+import org.tessell.model.validation.rules.ExternalRule;
 import org.tessell.model.values.DerivedValue;
 import org.tessell.model.values.SetValue;
 import org.tessell.tests.model.validation.rules.AbstractRuleTest;
@@ -95,6 +99,38 @@ public class PropertyTest extends AbstractRuleTest {
 
     a.set(3);
     assertThat(asWasInvalid[0], is(true));
+  }
+
+  @Test
+  public void validateTriggersPendingRules() {
+    final IntegerProperty externalId = integerProperty("externalId");
+    final RuleTriggeredEvent[] mostRecentEvent = new RuleTriggeredEvent[] { null };
+    ExternalRule rule = addAccessCheckRule(externalId, mostRecentEvent);
+
+    externalId.set(42);
+    assertThat(mostRecentEvent[0].getDisplayed()[0], is(true)); //validation rule triggered but not be shown (pending)
+  }
+
+  @Test
+  public void validateUntriggersRulersWhichWerePendingButAreNowValid() {
+    final IntegerProperty externalId = integerProperty("externalId");
+    final RuleTriggeredEvent[] mostRecentEvent = new RuleTriggeredEvent[] { null };
+    ExternalRule rule = addAccessCheckRule(externalId, mostRecentEvent);
+
+    externalId.set(42);
+    rule.set(true); //simulates server-call then returning that access check passed
+    assertThat(mostRecentEvent[0], nullValue()); //validation rule not triggered
+  }
+
+  @Test
+  public void validateReTriggersRulesWhereWerePendingButAreNowInvalid() {
+    final IntegerProperty externalId = integerProperty("externalId");
+    final RuleTriggeredEvent[] mostRecentEvent = new RuleTriggeredEvent[] { null };
+    ExternalRule rule = addAccessCheckRule(externalId, mostRecentEvent);
+
+    externalId.set(42);
+    rule.set(false); //simulates server-call returning that access check did not pass
+    assertThat(mostRecentEvent[0].getDisplayed()[0], is(false)); //validation rule triggered and shown
   }
 
   @Test
@@ -545,5 +581,27 @@ public class PropertyTest extends AbstractRuleTest {
     assertThat(values, contains(10));
     a.set(11);
     assertThat(values, contains(10, 11));
+  }
+
+  private ExternalRule addAccessCheckRule(final IntegerProperty externalId, final RuleTriggeredEvent[] mostRecentEvent) {
+    final ExternalRule rule = new ExternalRule("must have access");
+    externalId.addRule(rule);
+    externalId.addPropertyChangedHandler(new PropertyChangedHandler<Integer>() {
+      public void onPropertyChanged(PropertyChangedEvent<Integer> event) {
+        rule.set(Valid.PENDING);
+      }
+    });
+    rule.addRuleTriggeredHandler(new RuleTriggeredHandler() {
+      public void onTrigger(RuleTriggeredEvent event) {
+        mostRecentEvent[0] = event;
+      }
+    });
+    rule.addRuleUntriggeredHandler(new RuleUntriggeredHandler() {
+      public void onUntrigger(RuleUntriggeredEvent event) {
+        mostRecentEvent[0] = null;
+      }
+    });
+
+    return rule;
   }
 }

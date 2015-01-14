@@ -25,6 +25,7 @@ import org.tessell.model.properties.*;
 import org.tessell.model.properties.ListProperty.ElementConverter;
 import org.tessell.model.properties.ListProperty.ElementFilter;
 import org.tessell.model.properties.ListProperty.ElementMapper;
+import org.tessell.model.validation.Valid;
 import org.tessell.model.validation.rules.AbstractRule;
 import org.tessell.model.validation.rules.Size;
 import org.tessell.model.values.DerivedValue;
@@ -1140,8 +1141,8 @@ public class ListPropertyTest {
     assertThat(l.allValid().get(), is(true));
 
     l.addRule(new AbstractRule<List<StringProperty>>("Only one allowed") {
-      protected boolean isValid() {
-        return property.get().size() == 1;
+      protected Valid isValid() {
+        return Valid.fromBoolean(property.get().size() == 1);
       }
     });
     assertThat(l.allValid().get(), is(false));
@@ -1168,8 +1169,8 @@ public class ListPropertyTest {
     assertThat(l.allValid().get(), is(true));
 
     l.addRule(new AbstractRule<List<DummyModel>>("Only one allowed") {
-      protected boolean isValid() {
-        return property.get().size() == 1;
+      protected Valid isValid() {
+        return Valid.fromBoolean(property.get().size() == 1);
       }
     });
     assertThat(l.allValid().get(), is(false));
