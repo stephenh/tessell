@@ -78,7 +78,7 @@ public class PropertyGroup extends AbstractProperty<Boolean, PropertyGroup> {
 
   @Override
   public void setTouched(final boolean touched) {
-    for (final PropertyWithHandlers other : properties) {
+    for (final PropertyWithHandlers other : new ArrayList<PropertyWithHandlers>(properties)) {
       other.property.setTouched(touched);
     }
     // Per comment in the constructor, we don't actually want
