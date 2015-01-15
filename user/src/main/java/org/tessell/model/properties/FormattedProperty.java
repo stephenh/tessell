@@ -177,6 +177,11 @@ public class FormattedProperty<DP, SP> extends AbstractAbstractProperty<DP> {
   }
 
   @Override
+  public Property<Boolean> touched() {
+    return source.touched();
+  }
+
+  @Override
   public void fireEvent(GwtEvent<?> event) {
     source.fireEvent(event);
   }

@@ -62,6 +62,8 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> exte
   private Static temporaryRule = null;
   // only used if someone calls .valid()
   private Property<Boolean> validProperty;
+  // only used if someone calls .touched()
+  private Property<Boolean> touchedProperty;
 
   protected AbstractProperty() {
     // the subclass should call initialize as soon as possible
@@ -344,6 +346,9 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> exte
       return;
     }
     this.touched = touched;
+    if (this.touchedProperty != null) {
+      this.touchedProperty.set(touched);
+    }
     for (final Downstream other : new ArrayList<Downstream>(downstream)) {
       if (other.touch) {
         other.property.setTouched(touched);
@@ -374,6 +379,14 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> exte
       validProperty = booleanProperty(value.getName() + ".valid", valid);
     }
     return validProperty;
+  }
+
+  @Override
+  public Property<Boolean> touched() {
+    if (touchedProperty == null) {
+      touchedProperty = booleanProperty(value.getName() + ".touched", touched);
+    }
+    return touchedProperty;
   }
 
   @Override

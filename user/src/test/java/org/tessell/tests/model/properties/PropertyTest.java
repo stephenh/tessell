@@ -150,6 +150,19 @@ public class PropertyTest extends AbstractRuleTest {
   }
 
   @Test
+  public void derivedWatchesTouched() {
+    final IntegerProperty a = integerProperty("a");
+    final BooleanProperty b = booleanProperty(new DerivedValue<Boolean>("was touched") {
+      public Boolean get() {
+        return a.touched().get() == true;
+      }
+    });
+    CountChanges c = CountChanges.on(b);
+    a.set(1);
+    assertThat(c.changes, is(1));
+  }
+
+  @Test
   public void derivedWatchesIsTouched() {
     final IntegerProperty a = integerProperty("a");
     final BooleanProperty b = booleanProperty(new DerivedValue<Boolean>("not null") {
