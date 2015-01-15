@@ -187,9 +187,6 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> exte
       final boolean oldValid = valid;
       validate();
       final boolean validChanged = oldValid != valid;
-      if (validProperty != null) {
-        validProperty.set(valid);
-      }
 
       // only reassess downstream if needed. this is somewhat odd, but we reassess
       // our downstream properties before firing our own change event. this is so
@@ -448,6 +445,7 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> exte
 
   /** Runs validation against our rules. */
   private void validate() {
+    boolean oldValid = valid;
     valid = true; // start out valid
     for (final Rule<? super P> rule : rules) {
       if (rule.validate()) {
@@ -465,6 +463,9 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> exte
           rule.untriggerIfNeeded();
         }
       }
+    }
+    if (oldValid != valid && validProperty != null) {
+      validProperty.set(valid);
     }
   }
 

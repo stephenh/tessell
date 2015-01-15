@@ -19,6 +19,7 @@ import org.tessell.model.properties.*;
 import org.tessell.model.validation.events.RuleTriggeredEvent;
 import org.tessell.model.validation.events.RuleTriggeredHandler;
 import org.tessell.model.validation.rules.Custom;
+import org.tessell.model.validation.rules.Required;
 import org.tessell.model.values.DerivedValue;
 import org.tessell.model.values.SetValue;
 import org.tessell.tests.model.validation.rules.AbstractRuleTest;
@@ -527,6 +528,28 @@ public class PropertyTest extends AbstractRuleTest {
     assertThat(c.changes, is(1));
     s.set("asdf");
     assertThat(c.changes, is(2));
+  }
+
+  @Test
+  public void validFiresChangeEventsForConditionalRules() {
+    final BasicProperty<String> s = basicProperty("s");
+    // make a conditional rule
+    Required rule = new Required();
+    final BooleanProperty condition = booleanProperty("condition", false);
+    rule.onlyIf(condition);
+    s.addRule(rule);
+
+    CountChanges c = CountChanges.on(s.valid());
+    assertThat(c.changes, is(0));
+    assertThat(s.isValid(), is(true));
+
+    s.set(null);
+    assertThat(c.changes, is(0));
+    assertThat(s.isValid(), is(true));
+
+    condition.set(true);
+    assertThat(c.changes, is(1));
+    assertThat(s.isValid(), is(false));
   }
 
   @Test
