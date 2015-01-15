@@ -8,12 +8,12 @@ import org.tessell.util.ListDiff.Location;
 public class UpstreamState {
 
   private final Property<?> owner;
-  private final boolean touch;
+  private final boolean percolateTouch;
   private List<Property<?>> lastUpstream;
 
-  public UpstreamState(Property<?> owner, boolean touch) {
+  public UpstreamState(Property<?> owner, boolean percolateTouch) {
     this.owner = owner;
-    this.touch = touch;
+    this.percolateTouch = percolateTouch;
   }
 
   public void update(List<Property<?>> newUpstream) {
@@ -27,7 +27,7 @@ public class UpstreamState {
       for (Location<Property<?>> addedLocation : diff.added) {
         Property<?> added = addedLocation.element;
         if (added != owner) {
-          added.addDerived(owner, this, touch);
+          added.addDerived(owner, this, percolateTouch);
         }
       }
       // Remember for change tracking next time
