@@ -9,7 +9,7 @@ subprojects {
   version = [System.env.TRAVIS_TAG, 'SNAPSHOT'].find { it != null }
   archivesBaseName = "tessell-${name}"
   ext {
-    gwtVersion = '2.6.1-724c722'
+    gwtVersion = '2.7.0'
   }
 
   sourceCompatibility = '1.7'

@@ -9,9 +9,9 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="build/generated/java"/>
+	<classpathentry exported="true" kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
 	<classpathentry exported="true" kind="src" path="/tessell-user"/>
 	<classpathentry exported="true" kind="src" path="/tessell-dev"/>
-	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry exported="true" kind="con" path="org.springsource.ide.eclipse.gradle.classpathcontainer"/>
 	<classpathentry kind="output" path="build/eclipse"/>
