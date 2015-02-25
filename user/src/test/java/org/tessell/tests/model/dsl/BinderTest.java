@@ -1362,6 +1362,24 @@ public class BinderTest {
   }
 
   @Test
+  public void whenIsAnyOf() {
+    final IntegerProperty i = integerProperty("i");
+    final StubWidget w = new StubWidget();
+    binder.when(i).isAnyOf(1, 2, 3).setOrElse("c", "d").on(w);
+    assertThat(w, hasStyle("d"));
+    assertThat(w, not(hasStyle("c")));
+    i.set(1);
+    assertThat(w, hasStyle("c"));
+    assertThat(w, not(hasStyle("d")));
+    i.set(4);
+    assertThat(w, hasStyle("d"));
+    assertThat(w, not(hasStyle("c")));
+    i.set(3);
+    assertThat(w, hasStyle("c"));
+    assertThat(w, not(hasStyle("d")));
+  }
+
+  @Test
   public void whenIsAttach() {
     final BooleanProperty b = booleanProperty("b", false);
     final StubWidget w = new StubWidget();

@@ -27,6 +27,10 @@ public class WhenBinder<P> {
     });
   }
 
+  public WhenIsBinder<P> isAnyOf(final P... values) {
+    return new WhenIsBinder<P>(b, property, WhenConditions.or(values));
+  }
+
   @SuppressWarnings("unchecked")
   public WhenIsBinder<P> is(WhenCondition<? super P> condition) {
     // any condition written for a superclass of P is fine
