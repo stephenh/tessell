@@ -51,6 +51,46 @@ public class FormattedPropertyTest extends AbstractRuleTest {
   }
 
   @Test
+  public void setBadStringThatIsRequired() {
+    IntegerProperty i = integerProperty("i", 1).req();
+    listenTo(i);
+
+    Property<String> p = i.formatted(intToString);
+    p.set("a");
+    assertMessages("I is invalid");
+    // we keep the old value, because setting to null would send up
+    // resetting the user's last-invalid attempt in the UI
+    assertThat(i.get(), is(1));
+
+    i.set(2);
+    assertNoMessages();
+
+    p.set(null);
+    assertMessages("I is required");
+  }
+
+  @Test
+  public void setBadStringThatIsBoundToATextBox() {
+    IntegerProperty i = integerProperty("i", 1).req();
+    Binder binder = new Binder();
+    StubTextBox box = new StubTextBox();
+    binder.bind(i.asString()).to(box);
+    listenTo(i);
+
+    box.type("a");
+    assertThat(box.getText(), is("a"));
+    assertMessages("I must be an integer");
+    assertThat(i.get(), is(1));
+    assertThat(box.getText(), is("a"));
+
+    i.set(2);
+    assertNoMessages();
+
+    box.type("");
+    assertMessages("I is required");
+  }
+
+  @Test
   public void setNull() {
     IntegerProperty i = integerProperty("i", 1);
     listenTo(i);
