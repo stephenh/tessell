@@ -29,7 +29,7 @@ import com.google.gwt.event.shared.SimplerEventBus;
  * to potentially trigger validation rules. If any of them fail validation or
  * return false, the execute is skipped.
  */
-public abstract class UiCommand implements HasRuleTriggers {
+public abstract class UiCommand implements HasRuleTriggers, Runnable {
 
   private final BooleanProperty enabled = booleanProperty("enabled", true);
   private final EventBus handlers = new SimplerEventBus();
@@ -50,6 +50,11 @@ public abstract class UiCommand implements HasRuleTriggers {
     if (canExecute()) {
       doExecute();
     }
+  }
+
+  /** An alias for {@link #execute()}. */
+  public void run() {
+    execute();
   }
 
   /**
