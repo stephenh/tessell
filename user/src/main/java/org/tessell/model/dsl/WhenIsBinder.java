@@ -3,6 +3,7 @@ package org.tessell.model.dsl;
 import org.tessell.gwt.animation.client.IsAnimation;
 import org.tessell.gwt.user.client.ui.HasCss;
 import org.tessell.gwt.user.client.ui.IsWidget;
+import org.tessell.model.commands.UiCommand;
 import org.tessell.model.events.PropertyChangedEvent;
 import org.tessell.model.events.PropertyChangedHandler;
 import org.tessell.model.properties.Property;
@@ -60,6 +61,11 @@ public class WhenIsBinder<P> {
       }
     }));
     runIfCondition(runnables); // run initial
+  }
+
+  // UiCommands are Runnables (now), but execute is still a nice alias
+  public void execute(final UiCommand command) {
+    run(command);
   }
 
   public void show(final HasCss... csses) {
