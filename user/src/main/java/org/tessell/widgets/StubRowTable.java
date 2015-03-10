@@ -99,7 +99,7 @@ public class StubRowTable extends StubWidget implements IsRowTable {
   }
 
   @Override
-  public int indexOfRow(com.google.gwt.user.client.ui.IsWidget row) {
+  public int indexOfRow(IsWidget row) {
     return rows.indexOf(row.asWidget());
   }
 }

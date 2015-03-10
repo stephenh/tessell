@@ -1,7 +1,6 @@
 package org.tessell.widgets;
 
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Widget;
 
 /** An interface for {@link RowTable}. */
 public interface HasRows {
@@ -23,12 +22,6 @@ public interface HasRows {
 
   /** Removes row {@code view}. */
   boolean removeRow(final IsWidget view);
-
-  /** Assumes {@code row} is a table row and returns its index */
-  int indexOfRow(final Widget row);
-
-  /** Assumes {@code row} is a table row and returns its index */
-  int indexOfRow(final IsWidget row);
 
   /** @return the number of rows shown */
   int size();
