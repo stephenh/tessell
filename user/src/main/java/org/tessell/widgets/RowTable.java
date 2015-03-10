@@ -62,6 +62,11 @@ public class RowTable extends Panel implements IsRowTable {
     addRow(isWidget.asWidget());
   }
 
+  /** Assumes {@code row} is a table row and returns its index */
+  public int indexOfRow(final Widget row) {
+    return rows.indexOf(row);
+  }
+
   /** Assumes {@code widget} is a table and appends any of its TRs to our own table's body. */
   public void addRow(final Widget widget) {
     addTo(widget, body);
