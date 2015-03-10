@@ -100,6 +100,6 @@ public class StubRowTable extends StubWidget implements IsRowTable {
 
   @Override
   public int indexOfRow(IsWidget row) {
-    return rows.indexOf(row.asWidget());
+    return rows.indexOf(row);
   }
 }

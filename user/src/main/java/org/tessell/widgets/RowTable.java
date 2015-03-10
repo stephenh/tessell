@@ -71,7 +71,7 @@ public class RowTable extends Panel implements IsRowTable {
   /** Assumes {@code row} is a table row and returns its index */
   @Override
   public int indexOfRow(final org.tessell.gwt.user.client.ui.IsWidget row) {
-    return rows.indexOf(row.asWidget());
+    return rows.indexOf(row);
   }
 
   /** Assumes {@code widget} is a table and appends any of its TRs to our own table's body. */
