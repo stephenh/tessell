@@ -90,4 +90,9 @@ public class StubRowTable extends StubWidget implements IsRowTable {
       insertRow(index, a);
     }
   }
+
+  @Override
+  public int indexOfRow(com.google.gwt.user.client.ui.IsWidget row) {
+    return rows.indexOf(row);
+  }
 }
