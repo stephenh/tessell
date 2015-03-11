@@ -6,8 +6,6 @@ import java.util.List;
 import org.tessell.gwt.user.client.ui.IsWidget;
 import org.tessell.util.ListDiff.ListLike;
 
-import com.google.gwt.user.client.ui.Widget;
-
 public class StubRowTable extends StubWidget implements IsRowTable {
 
   private final List<IsWidget> headers = new ArrayList<IsWidget>();
@@ -94,12 +92,7 @@ public class StubRowTable extends StubWidget implements IsRowTable {
   }
 
   @Override
-  public int indexOfRow(Widget row) {
-    return rows.indexOf(row);
-  }
-
-  @Override
-  public int indexOfRow(IsWidget row) {
+  public int indexOfRow(com.google.gwt.user.client.ui.IsWidget row) {
     return rows.indexOf(row);
   }
 }

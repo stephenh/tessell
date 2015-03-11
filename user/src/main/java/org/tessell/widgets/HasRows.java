@@ -14,6 +14,9 @@ public interface HasRows {
   /** Assumes {@code view} is a table and puts its first TR into row {@code i} of our own table's body. */
   void insertRow(int i, final IsWidget view);
 
+  /** Assumes {@code row} is a table row and returns its index */
+  int indexOfRow(final IsWidget row);
+
   /** Assumes {@code view} is a table and puts its first TR into row {@code i} of our own table's body. */
   void replaceRow(int i, final IsWidget view);
 
