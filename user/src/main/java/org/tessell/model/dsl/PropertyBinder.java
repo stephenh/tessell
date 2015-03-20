@@ -18,8 +18,7 @@ import org.tessell.model.properties.Property;
 import org.tessell.util.ObjectUtils;
 import org.tessell.widgets.IsTextList;
 
-import com.google.gwt.event.dom.client.ChangeEvent;
-import com.google.gwt.event.dom.client.ChangeHandler;
+import com.google.gwt.event.dom.client.*;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.TakesValue;
@@ -71,10 +70,30 @@ public class PropertyBinder<P> {
           p.set(sanitizeIfString(source.getValue()));
         }
       }));
+      if (source instanceof HasKeyUpHandlers) {
+        b.add(((HasKeyUpHandlers) source).addKeyUpHandler(new KeyUpHandler() {
+          public void onKeyUp(KeyUpEvent event) {
+            // We don't want to entirely sanitize (e.g. 'the ' => 'the' during
+            // mid-edit, which is what sanitizeIfString will do), but we do always
+            // want to do "" => null
+            if ("".equals(source.getValue())) {
+              p.setInitialValue(null);
+            } else {
+              p.setInitialValue(source.getValue());
+            }
+          }
+        }));
+      }
     }
     b.add(p.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
       public void onPropertyChanged(final PropertyChangedEvent<P> event) {
-        source.setValue(event.getProperty().get(), true);
+        // Explicitly check if we need to source.setValue, because if this change
+        // is due to a key up event, then source.getValue is already correct, but
+        // calling the admittedly needless .setValue will reset the cursor to the
+        // end of the input field
+        if (!ObjectUtils.eq(event.getProperty().get(), source.getValue())) {
+          source.setValue(event.getProperty().get(), true);
+        }
       }
     }));
     if (p instanceof HasMaxLength && source instanceof IsTextBox) {

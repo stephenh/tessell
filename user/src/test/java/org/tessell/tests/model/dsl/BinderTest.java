@@ -833,6 +833,42 @@ public class BinderTest {
   }
 
   @Test
+  public void propertyValidatesOnKeyUpAfterBeingInvalid() {
+    final StringProperty b = stringProperty("b", null).numeric();
+    binder.bind(b).to(box);
+
+    // when the user enters an invalid value, we don't touch right away
+    box.press("a");
+    assertThat(b.isTouched(), is(false));
+    // even though we've updated the value
+    assertThat(b.get(), is("a"));
+    // so there are no errors fired
+    assertThat(b.getErrors().size(), is(0));
+
+    // when the user tabs out, we do touch
+    box.typeEach("b");
+    assertThat(b.isTouched(), is(true));
+    // and so we've updated the value
+    assertThat(b.get(), is("ab"));
+    // and also fired the error
+    assertThat(b.getErrors().size(), is(1));
+
+    // now when they fix their value by keying up
+    box.press(KeyCodes.KEY_BACKSPACE);
+    box.press(KeyCodes.KEY_BACKSPACE);
+    box.press("1");
+    // we've immediately updated the value
+    assertThat(b.get(), is("1"));
+    // and recognized the error shouldn't be shown
+    assertThat(b.getErrors().size(), is(0));
+
+    // and if they delete all of their input
+    box.press(KeyCodes.KEY_BACKSPACE);
+    // we treat that as null
+    assertThat(b.get(), is(nullValue()));
+  }
+
+  @Test
   public void propertyToStringTrims() {
     binder.bind(s).to(box);
     box.type(" foo bar ");
