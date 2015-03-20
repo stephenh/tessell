@@ -11,6 +11,8 @@ import org.tessell.model.values.DerivedValue;
 /** Methods that can be used cross the value-based {@link AbstractProperty} and also derived properties like {@link FormattedProperty} and {@link ConvertedProperty}. */
 abstract class AbstractAbstractProperty<P> implements Property<P> {
 
+  private BooleanProperty invalid = null;
+
   /** Track {@code other} as derived on us, so we'll forward changed/changing events to it. */
   @Override
   public <P1 extends Property<?>> P1 addDerived(final P1 other) {
@@ -160,6 +162,15 @@ abstract class AbstractAbstractProperty<P> implements Property<P> {
         return a != null;
       }
     });
+  }
+
+  @Override
+  @SuppressWarnings("unchecked")
+  public BooleanProperty invalid() {
+    if (invalid == null) {
+      invalid = NewProperty.and(valid().is(false), touched());
+    }
+    return invalid;
   }
 
   /** Checks equality between a and b for the {@link #is} methods. Overrideable by subclasses. */

@@ -582,4 +582,39 @@ public class PropertyTest extends AbstractRuleTest {
     a.set(11);
     assertThat(values, contains(10, 11));
   }
+
+  @Test
+  public void testInvalidForUntouchedIsFalse() {
+    final StringProperty s = stringProperty("s").numeric();
+    BooleanProperty invalid = s.invalid();
+    assertThat(invalid.get(), is(false));
+    assertThat(s.valid().get(), is(true));
+  }
+
+  @Test
+  public void testInvalidForSetInvalidAndUntouncedIsFalse() {
+    final StringProperty s = stringProperty("s").numeric();
+    BooleanProperty invalid = s.invalid();
+    s.setInitialValue("foo");
+    assertThat(invalid.get(), is(false));
+    assertThat(s.valid().get(), is(false));
+  }
+
+  @Test
+  public void testInvalidForSetInvalidAndTouncedIsTrue() {
+    final StringProperty s = stringProperty("s").numeric();
+    BooleanProperty invalid = s.invalid();
+    s.set("foo");
+    assertThat(invalid.get(), is(true));
+    assertThat(s.valid().get(), is(false));
+  }
+
+  @Test
+  public void testInvalidForSetValidAndTouncedIsFalse() {
+    final StringProperty s = stringProperty("s").numeric();
+    BooleanProperty invalid = s.invalid();
+    s.set("1");
+    assertThat(invalid.get(), is(false));
+    assertThat(s.valid().get(), is(true));
+  }
 }

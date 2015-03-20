@@ -58,6 +58,9 @@ public interface Property<P> extends HasHandlers, HasRuleTriggers, Value<P>, Has
   /** @return whether this property is valid, as a property. */
   Property<Boolean> valid();
 
+  /** @return whether this property is invalid *and* touched (useful for bindings), as a property. */
+  Property<Boolean> invalid();
+
   /** @return whether this property has been touched, as a property. */
   Property<Boolean> touched();
 
