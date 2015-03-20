@@ -24,7 +24,10 @@ public class StubTextBoxBase extends StubValueBoxBase<String> implements IsTextB
 
   /** Simulates the user typing {@code value}, with a key down/press/up for each char, then a final change. */
   public void typeEach(String value) {
+    String oldValue = getValue();
     press(value);
+    ValueChangeEvent.fireIfNotEqual(this, oldValue, getValue());
+    blur();
   }
 
   @Override
@@ -71,14 +74,6 @@ public class StubTextBoxBase extends StubValueBoxBase<String> implements IsTextB
   public void press(char charCode) {
     String oldValue = getValue();
     super.press(charCode);
-    ValueChangeEvent.fireIfNotEqual(this, oldValue, getValue());
-    blur();
-  }
-
-  @Override
-  public void press(String charCodes) {
-    String oldValue = getValue();
-    super.press(charCodes);
     ValueChangeEvent.fireIfNotEqual(this, oldValue, getValue());
     blur();
   }

@@ -53,7 +53,7 @@ public class StubTextBoxBaseTest {
   }
 
   @Test
-  public void testPressKeyCodesFiresOneChange() {
+  public void testPressKeyCodesFiresNoChange() {
     box.type("as");
     final int[] changes = { 0 };
     box.addValueChangeHandler(new ValueChangeHandler<String>() {
@@ -62,7 +62,21 @@ public class StubTextBoxBaseTest {
       }
     });
     box.press("df");
+    assertThat(changes[0], is(0));
+  }
+
+  @Test
+  public void testTypeEachFiresOneChange() {
+    box.type("as");
+    final int[] changes = { 0 };
+    box.addValueChangeHandler(new ValueChangeHandler<String>() {
+      public void onValueChange(ValueChangeEvent<String> event) {
+        changes[0]++;
+      }
+    });
+    box.typeEach("df");
     assertThat(changes[0], is(1));
+    assertThat(box.getText(), is("asdf"));
   }
 
   @Test
