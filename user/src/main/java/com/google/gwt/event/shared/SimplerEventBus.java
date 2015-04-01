@@ -1,12 +1,12 @@
 /*
  * Copyright 2010 Google Inc.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -23,9 +23,9 @@ import com.google.gwt.event.shared.GwtEvent.Type;
 /** Simpler implementation of {@link EventBus}.
  *
  * Specifically, we:
- * 
+ *
  * 1. Don't worry about legacy HandlerManager features (reverse firing)
- * 
+ *
  * 2. Adds/removes immediately take effect, even if an event is already firing
  *
  * The 2nd difference is the most critical to me, where something like place
@@ -36,6 +36,8 @@ import com.google.gwt.event.shared.GwtEvent.Type;
 public class SimplerEventBus extends EventBus {
 
   private boolean isFiring;
+  private int doFireEntries;
+  private String doFireDebugging = "";
 
   /** Handler lists that have null markers in them. */
   private final List<ToClean<?>> needsCleaning = new ArrayList<ToClean<?>>();
@@ -90,11 +92,25 @@ public class SimplerEventBus extends EventBus {
 
   private <H extends EventHandler> void doFire(GwtEvent<H> event, Object source) {
     if (isFiring) {
+      if (doFireEntries > 50) {
+        doFireDebugging += "Queue " + event.toDebugString() + ", ";
+      }
       queuedEvents.add(new ToFire(event, source));
       return;
     }
+    // Sanity check against recursion
+    doFireEntries++;
     try {
       isFiring = true;
+
+      // Start debugging around 50 re-entries
+      if (doFireEntries > 50) {
+        doFireDebugging += "Fire " + event.toDebugString() + ", ";
+      }
+      // After 55 re-entries, give up
+      if (doFireEntries > 55) {
+        throw new IllegalStateException("Detected loop: " + doFireDebugging);
+      }
 
       if (source != null) {
         setSourceOfEvent(event, source);
@@ -105,7 +121,7 @@ public class SimplerEventBus extends EventBus {
       List<H> handlers = getDispatchList(event.getAssociatedType(), source);
       for (int i = 0; i < handlers.size(); i++) {
         H handler = handlers.get(i);
-        // was the handler unregistered during our iteration? 
+        // was the handler unregistered during our iteration?
         if (handler == null) {
           continue;
         }
@@ -136,6 +152,7 @@ public class SimplerEventBus extends EventBus {
       }
     } finally {
       isFiring = false;
+      doFireEntries--;
       executeCleaning();
     }
   }
