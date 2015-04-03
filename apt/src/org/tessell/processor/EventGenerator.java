@@ -64,6 +64,7 @@ public class EventGenerator {
     generateDispatch();
     generateFields();
     generateFire();
+    generateToDebugStringIfGwtEvent();
     PropUtil.addEquals(eventClass, generics, properties);
     PropUtil.addHashCode(eventClass, properties);
     PropUtil.addToString(eventClass, properties);
@@ -129,6 +130,14 @@ public class EventGenerator {
         args.add(p.name);
       }
       fire.body.line("eventBus.fireEvent(new {}({}));", eventClass.getSimpleName() + generics.vars, Join.commaSpace(args));
+    }
+  }
+
+  private void generateToDebugStringIfGwtEvent() {
+    if (eventSpec.gwtEvent()) {
+      // We already generate a nice toString, so just use that.
+      GMethod toDebugString = eventClass.getMethod("toDebugString").returnType(String.class);
+      toDebugString.body.line("return toString();");
     }
   }
 
