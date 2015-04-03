@@ -10,12 +10,12 @@ import org.exigencecorp.aptutil.Prop;
 
 public class MpvUtil {
 
-	public static List<Prop> toProperties(Collection<VariableElement> fields) {
-		List<Prop> props = new ArrayList<Prop>();
-		for (VariableElement f : fields) {
-			props.add(new Prop(f.getSimpleName().toString(), f.asType().toString()));
-		}
-		return props;
-	}
+  public static List<Prop> toProperties(Collection<VariableElement> fields) {
+    List<Prop> props = new ArrayList<Prop>();
+    for (VariableElement f : fields) {
+      props.add(new Prop(f.getSimpleName().toString(), f.asType().toString()));
+    }
+    return props;
+  }
 
 }

@@ -19,38 +19,38 @@ import org.tessell.GenPlace;
 @SupportedAnnotationTypes({ "org.tessell.GenDispatch", "org.tessell.GenEvent", "org.tessell.GenPlace" })
 public class Processor extends AbstractProcessor {
 
-	@Override
-	public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-		for (TypeElement element : typesIn(roundEnv.getElementsAnnotatedWith(GenDispatch.class))) {
-			try {
-				new DispatchGenerator(this.processingEnv, element).generate();
-			} catch (InvalidTypeElementException itee) {
-				// continue
-			}
-		}
+  @Override
+  public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
+    for (TypeElement element : typesIn(roundEnv.getElementsAnnotatedWith(GenDispatch.class))) {
+      try {
+        new DispatchGenerator(this.processingEnv, element).generate();
+      } catch (InvalidTypeElementException itee) {
+        // continue
+      }
+    }
 
-		for (TypeElement element : typesIn(roundEnv.getElementsAnnotatedWith(GenEvent.class))) {
-			try {
-				new EventGenerator(this.processingEnv, element, element.getAnnotation(GenEvent.class)).generate();
-			} catch (InvalidTypeElementException itee) {
-				// continue
-			}
-		}
+    for (TypeElement element : typesIn(roundEnv.getElementsAnnotatedWith(GenEvent.class))) {
+      try {
+        new EventGenerator(this.processingEnv, element, element.getAnnotation(GenEvent.class)).generate();
+      } catch (InvalidTypeElementException itee) {
+        // continue
+      }
+    }
 
-		for (ExecutableElement element : methodsIn(roundEnv.getElementsAnnotatedWith(GenPlace.class))) {
-			try {
-				new PlaceGenerator(this.processingEnv, element, element.getAnnotation(GenPlace.class)).generate();
-			} catch (InvalidTypeElementException itee) {
-				// continue
-			}
-		}
+    for (ExecutableElement element : methodsIn(roundEnv.getElementsAnnotatedWith(GenPlace.class))) {
+      try {
+        new PlaceGenerator(this.processingEnv, element, element.getAnnotation(GenPlace.class)).generate();
+      } catch (InvalidTypeElementException itee) {
+        // continue
+      }
+    }
 
-		return true;
-	}
+    return true;
+  }
 
-	@Override
-	public SourceVersion getSupportedSourceVersion() {
-		return SourceVersion.latest();
-	}
+  @Override
+  public SourceVersion getSupportedSourceVersion() {
+    return SourceVersion.latest();
+  }
 
 }
