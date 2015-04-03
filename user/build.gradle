@@ -4,7 +4,7 @@ dependencies {
   compile 'javax.servlet:servlet-api:2.4'
   compile "com.google.gwt:gwt-servlet:${gwtVersion}"
   compile 'org.hamcrest:hamcrest-all:1.3'
-  compile 'org.tessell:tessell-apt:2.16.1'
+  compile 'org.tessell:tessell-apt:2.16.3'
 
   // libs that we only need for compilation/testing; downstream projects
   // can get these from putting tessell-dev in their provided
