@@ -87,7 +87,9 @@ public class PropertyBinder<P> {
         b.add(((HasBlurHandlers) source).addBlurHandler(new BlurHandler() {
           public void onBlur(BlurEvent event) {
             isFocusing[0] = false;
-            source.setValue(p.get(), true);
+            if (p.isValid()) {
+              source.setValue(p.get(), true);
+            }
           }
         }));
       }
