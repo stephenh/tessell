@@ -28,6 +28,7 @@ import org.tessell.model.dsl.ListBoxAdaptor;
 import org.tessell.model.properties.*;
 import org.tessell.model.values.DerivedValue;
 import org.tessell.model.values.SetValue;
+import org.tessell.model.values.Value;
 import org.tessell.place.PlaceRequest;
 import org.tessell.place.events.PlaceRequestEvent;
 import org.tessell.tests.model.commands.DummyActiveCommand;
@@ -63,6 +64,22 @@ public class BinderTest {
   @After
   public void tearDown() {
     StubAnimations.clearCapture();
+  }
+
+  @Test
+  public void shouldOnlyUpdateSourceOnBlur() {
+    final DoubleProperty p = new DoubleProperty(new SetValue<Double>("p"));
+    binder.bind(p.asString()).to(box);
+    box.focus();
+    box.typeEachWithoutBlur("123");
+    assertThat(box.getValue(), is("123"));
+    assertThat(p.getValue(), is(123.0));
+    box.typeEachWithoutBlur("4");
+    assertThat(box.getValue(), is("1234"));
+    assertThat(p.getValue(), is(1234.0));
+    box.blur();
+    assertThat(box.getValue(), is("1234.0"));
+    assertThat(p.getValue(), is(1234.0));
   }
 
   @Test
@@ -880,10 +897,13 @@ public class BinderTest {
   @Test
   public void propertyToStringTrimsToNull() {
     binder.bind(s).to(box);
-    box.type("  ");
-    assertThat(s.get(), is(nullValue()));
-    // to the property the value is still null, so it doesn't update the text box
+    box.typeEachWithoutBlur("  ");
     assertThat(box.getValue(), is("  "));
+    // to the property the value is still null, so it doesn't update the text box
+    assertThat(s.get(), is(nullValue()));
+    box.blur();
+    assertThat(box.getValue(), is(""));
+    assertThat(s.get(), is(nullValue()));
   }
 
   @Test
@@ -1559,6 +1579,32 @@ public class BinderTest {
     @Override
     public String toValue(Integer option) {
       return option == null ? null : option.toString();
+    }
+  }
+
+  private class DoubleProperty extends AbstractProperty<Double, DoubleProperty> {
+    public DoubleProperty(final Value<Double> value) {
+      super(value);
+    }
+
+    public Property<String> asString() {
+      final FormattedProperty<String, Double> fp = this.formatted(new PropertyFormatter<Double, String>() {
+        public Double parse(final String value) throws Exception {
+          return Double.parseDouble(value);
+        }
+
+        @Override
+        public String format(final Double value) {
+          return value.toString();
+        }
+      });
+      fp.setInvalidMessage("Invalid");
+      return fp;
+    }
+
+    @Override
+    protected DoubleProperty getThis() {
+      return this;
     }
   }
 

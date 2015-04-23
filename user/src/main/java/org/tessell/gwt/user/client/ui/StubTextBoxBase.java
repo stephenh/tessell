@@ -22,11 +22,16 @@ public class StubTextBoxBase extends StubValueBoxBase<String> implements IsTextB
     blur();
   }
 
-  /** Simulates the user typing {@code value}, with a key down/press/up for each char, then a final change. */
-  public void typeEach(String value) {
+  /** Simulates the user typing {@code value}, with a key down/press/up for each char, without a final change. */
+  public void typeEachWithoutBlur(String value) {
     String oldValue = getValue();
     press(value);
     ValueChangeEvent.fireIfNotEqual(this, oldValue, getValue());
+  }
+
+  /** Simulates the user typing {@code value}, with a key down/press/up for each char, then a final change. */
+  public void typeEach(String value) {
+    typeEachWithoutBlur(value);
     blur();
   }
 

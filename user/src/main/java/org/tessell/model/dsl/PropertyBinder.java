@@ -56,6 +56,7 @@ public class PropertyBinder<P> {
 
   /** Binds our property to {@code source} (two-way). */
   public void to(final HasValue<P> source) {
+    final boolean[] isFocusing = { false };
     // set initial value
     if (b.canSetInitialValue(p) && sanitizeIfString(source.getValue()) != null) {
       p.setInitialValue(sanitizeIfString(source.getValue()));
@@ -73,13 +74,21 @@ public class PropertyBinder<P> {
       if (source instanceof HasKeyUpHandlers) {
         b.add(((HasKeyUpHandlers) source).addKeyUpHandler(new KeyUpHandler() {
           public void onKeyUp(KeyUpEvent event) {
-            // We don't want to entirely sanitize (e.g. 'the ' => 'the' during
-            // mid-edit, which is what sanitizeIfString will do), but we do always
-            // want to do "" => null
-            if ("".equals(source.getValue())) {
-              p.setInitialValue(null);
-            } else {
-              p.setInitialValue(source.getValue());
+            p.setInitialValue(sanitizeIfString(source.getValue()));
+          }
+        }));
+      }
+      if (source instanceof HasFocusHandlers && source instanceof HasBlurHandlers) {
+        b.add(((HasFocusHandlers) source).addFocusHandler(new FocusHandler() {
+          public void onFocus(FocusEvent event) {
+            isFocusing[0] = true;
+          }
+        }));
+        b.add(((HasBlurHandlers) source).addBlurHandler(new BlurHandler() {
+          public void onBlur(BlurEvent event) {
+            isFocusing[0] = false;
+            if (p.isValid()) {
+              source.setValue(p.get(), true);
             }
           }
         }));
@@ -87,11 +96,7 @@ public class PropertyBinder<P> {
     }
     b.add(p.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
       public void onPropertyChanged(final PropertyChangedEvent<P> event) {
-        // Explicitly check if we need to source.setValue, because if this change
-        // is due to a key up event, then source.getValue is already correct, but
-        // calling the admittedly needless .setValue will reset the cursor to the
-        // end of the input field
-        if (!ObjectUtils.eq(event.getProperty().get(), source.getValue())) {
+        if (!isFocusing[0]) {
           source.setValue(event.getProperty().get(), true);
         }
       }
