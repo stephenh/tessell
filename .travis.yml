@@ -6,3 +6,5 @@ env:
   - secure: Etx9coeOnuaMtGokR+M6KmD1af0N71t5NZzinph6pW6hZ3fFscchDD7iolPqqJ/CNjxf/P230oaDO82GMu4OmFCDM+cEUI0QKPENKl61a62pOiaz2sZ5qEBcWWbSSGppRhcJXe9WNa41Yq9TuLQMiqxQ1aFB1imqjJ4LVdkd7T4=
 after_success:
   - test -n "$TRAVIS_TAG" && ssh-keyscan -H repo.joist.ws >> ~/.ssh/known_hosts && ./gradlew uploadArchives
+jdk:
+  - oraclejdk8
