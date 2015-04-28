@@ -5,6 +5,7 @@ import static java.lang.Boolean.TRUE;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.tessell.model.values.DerivedInterface;
 import org.tessell.model.values.DerivedValue;
 import org.tessell.model.values.SetValue;
 import org.tessell.model.values.Value;
@@ -14,6 +15,10 @@ public class NewProperty {
 
   public static <P> BasicProperty<P> property(String name, P value) {
     return new BasicProperty<P>(new SetValue<P>(name, value));
+  }
+
+  public static <P> BasicProperty<P> derivedProperty(final DerivedInterface<P> value) {
+    return new BasicProperty<P>(value);
   }
 
   public static <P> BasicProperty<P> derivedProperty(final DerivedValue<P> value) {

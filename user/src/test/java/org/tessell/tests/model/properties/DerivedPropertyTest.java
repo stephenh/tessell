@@ -2,10 +2,12 @@ package org.tessell.tests.model.properties;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.tessell.model.properties.NewProperty.derivedProperty;
 import static org.tessell.model.properties.NewProperty.stringProperty;
 
 import org.junit.Test;
 import org.tessell.model.properties.DerivedProperty;
+import org.tessell.model.properties.Property;
 import org.tessell.model.properties.StringProperty;
 
 public class DerivedPropertyTest {
@@ -21,6 +23,16 @@ public class DerivedPropertyTest {
       }
     };
     assertThat(d.get(), is("ab"));
+  }
+
+  @Test
+  public void testDerivedInterface() {
+    Property<String> d = derivedProperty(() -> s1.get() + s2.get());
+    CountChanges c = CountChanges.on(d);
+    assertThat(d.get(), is("ab"));
+    s1.set("c");
+    assertThat(d.get(), is("cb"));
+    assertThat(c.changes, is(1));
   }
 
   @Test

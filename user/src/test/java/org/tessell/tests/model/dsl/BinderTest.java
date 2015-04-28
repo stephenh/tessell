@@ -1571,6 +1571,15 @@ public class BinderTest {
     assertThat(v2, is(shown()));
   }
 
+  @Test
+  public void testLambda() {
+    s.set("foo");
+    binder.bind(() -> s.get() + "bar").to(textOf(anchor));
+    assertThat(anchor.getText(), is("foobar"));
+    s.set("zaz");
+    assertThat(anchor.getText(), is("zazbar"));
+  }
+
   private final class IntegerAdaptor implements ListBoxAdaptor<String, Integer> {
     public String toDisplay(Integer option) {
       return option == null ? "" : option.toString();

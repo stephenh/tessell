@@ -6,7 +6,6 @@ import static org.tessell.model.properties.NewProperty.booleanProperty;
 
 import org.tessell.examples.client.views.IsCheckboxExampleView;
 import org.tessell.model.properties.BooleanProperty;
-import org.tessell.model.properties.DerivedProperty;
 import org.tessell.presenter.BasicPresenter;
 
 /** An example of checkbox binding. */
@@ -25,12 +24,8 @@ public class CheckboxExamplePresenter extends BasicPresenter<IsCheckboxExampleVi
     // two-way binding between checked and view.box()
     binder.bind(checked).to(view.box());
 
-    // two-way binding between our derived value and view.label()'s text
-    binder.bind(new DerivedProperty<String>() {
-      protected String getDerivedValue() {
-        return checked.isTrue() ? "Checked!" : "Not checked";
-      }
-    }).to(textOf(view.label()));
+    // one-way binding between our derived value and view.label()'s text
+    binder.bind(() -> checked.isTrue() ? "Checked!" : "Not checked").to(textOf(view.label()));
   }
 
 }

@@ -9,11 +9,11 @@ subprojects {
   version = [System.env.TRAVIS_TAG, 'SNAPSHOT'].find { it != null }
   archivesBaseName = "tessell-${name}"
   ext {
-    gwtVersion = '2.7.0'
+    gwtVersion = '0.0.0-230c633'
   }
 
-  sourceCompatibility = '1.7'
-  targetCompatibility = '1.7'
+  sourceCompatibility = '1.8'
+  targetCompatibility = '1.8'
 
   task sourcesJar(type: Jar, dependsOn: classes) {
     classifier 'sources'

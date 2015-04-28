@@ -4,7 +4,7 @@ import org.tessell.model.properties.Property;
 
 /**
  * Wraps a function as a {@link Value}.
- * 
+ *
  * This is for making {@link Property}s around a value you compute with a function.
  */
 public abstract class DerivedValue<P> implements Value<P> {

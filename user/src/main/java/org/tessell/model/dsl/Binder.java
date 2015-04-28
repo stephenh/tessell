@@ -1,6 +1,7 @@
 package org.tessell.model.dsl;
 
 import static com.google.gwt.event.dom.client.KeyCodes.KEY_TAB;
+import static org.tessell.model.properties.NewProperty.derivedProperty;
 
 import java.util.Arrays;
 
@@ -10,6 +11,7 @@ import org.tessell.model.commands.UiCommand;
 import org.tessell.model.events.HasMemberChangedHandlers;
 import org.tessell.model.properties.*;
 import org.tessell.model.validation.rules.Rule;
+import org.tessell.model.values.DerivedInterface;
 
 import com.google.gwt.event.dom.client.*;
 import com.google.gwt.event.logical.shared.HasAttachHandlers;
@@ -20,7 +22,7 @@ import com.google.gwt.user.client.ui.HasValue;
 
 /**
  * Provides a fluent interface for binding properties to widgets.
- * 
+ *
  * Very heavily influenced by gwt-pectin.
  */
 public class Binder extends AbstractBound {
@@ -28,6 +30,11 @@ public class Binder extends AbstractBound {
   /** @return a fluent {@link PropertyBinder} against {@code property}. */
   public <P> PropertyBinder<P> bind(Property<P> property) {
     return new PropertyBinder<P>(this, property);
+  }
+
+  /** @return a fluent {@link PropertyBinder} against {@code property}. */
+  public <P> PropertyBinder<P> bind(DerivedInterface<P> value) {
+    return new PropertyBinder<P>(this, derivedProperty(value));
   }
 
   /** @return a fluent {@link ListPropertyBinder} against {@code property}. */
@@ -152,7 +159,7 @@ public class Binder extends AbstractBound {
    * Properties might need two kinds of values--current and changing. E.g. property.changing()
    * is the same value, except that it includes results from key up events. Then derivative
    * properties can be made off of either the current or changing property.
-   * 
+   *
    * Think of the login email box case:
    *
    * 1. User starts typing "foo@" -- do not do validation.
@@ -163,12 +170,12 @@ public class Binder extends AbstractBound {
    *
    * Or is 'remaining' just a view artifact, that is driven directly by key up,
    * textBox.getValue and not by the backing model property?
-   * 
+   *
    * Maybe that makes more sense--the model is only updated when the user
    * is no longer in input mode. While in input mode, the view can display
    * various view-specific content, like length of input remaining. But
    * there is no reason for the in-progress state to leak back into the model.
-   * 
+   *
    * ...but what about in error-mode correction? After a field/model have
    * been touched, and determined invalid, don't we want to let the user
    * know they've remedied the error ASAP, e.g. after key up? After a pause?
@@ -194,7 +201,7 @@ public class Binder extends AbstractBound {
      * a currently valid property would not eagerly invalidated as the user is
      * changing it from 1 valid value to another valid value. It's only when
      * properties are invalid that we want to fix things as soon as possible.
-     * 
+     *
      * For validation anyway...for characters left, that seems better suited to
      * a separate "property.changing" derived property.
      */
