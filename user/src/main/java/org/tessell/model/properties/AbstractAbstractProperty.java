@@ -165,7 +165,6 @@ abstract class AbstractAbstractProperty<P> implements Property<P> {
   }
 
   @Override
-  @SuppressWarnings("unchecked")
   public BooleanProperty invalid() {
     if (invalid == null) {
       invalid = NewProperty.and(valid().is(false), touched());

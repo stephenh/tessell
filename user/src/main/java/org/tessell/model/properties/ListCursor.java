@@ -51,7 +51,6 @@ public class ListCursor<E> {
     return value;
   }
 
-  @SuppressWarnings("unchecked")
   public Property<Boolean> isFirst() {
     if (isFirst == null) {
       isFirst = NewProperty.and(list.first().is(value), value.isSet());
@@ -59,7 +58,6 @@ public class ListCursor<E> {
     return isFirst;
   }
 
-  @SuppressWarnings("unchecked")
   public Property<Boolean> isLast() {
     if (isLast == null) {
       isLast = NewProperty.and(list.last().is(value), value.isSet());

@@ -62,7 +62,6 @@ public class BooleanPropertyTest extends AbstractRuleTest {
   }
 
   @Test
-  @SuppressWarnings("unchecked")
   public void testOr() {
     BooleanProperty a = booleanProperty("a");
     BooleanProperty b = booleanProperty("b");
@@ -74,7 +73,6 @@ public class BooleanPropertyTest extends AbstractRuleTest {
   }
 
   @Test
-  @SuppressWarnings("unchecked")
   public void testAnd() {
     BooleanProperty a = booleanProperty("a");
     BooleanProperty b = booleanProperty("b");

@@ -1030,7 +1030,6 @@ public class ListPropertyTest {
   }
 
   @Test
-  @SuppressWarnings("unchecked")
   public void testUnion() {
     ListProperty<String> a = listProperty("a", list("1", "2"));
     ListProperty<String> b = listProperty("b", list("2", "3"));
