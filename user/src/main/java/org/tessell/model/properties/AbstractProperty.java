@@ -20,7 +20,7 @@ import org.tessell.model.validation.events.RuleUntriggeredHandler;
 import org.tessell.model.validation.rules.Required;
 import org.tessell.model.validation.rules.Rule;
 import org.tessell.model.validation.rules.Static;
-import org.tessell.model.values.DerivedInterface;
+import org.tessell.model.values.LambdaValue;
 import org.tessell.model.values.DerivedValue;
 import org.tessell.model.values.Value;
 import org.tessell.util.Inflector;
@@ -473,7 +473,7 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> exte
   private P getWithUpstreamTracking() {
     // this logic should probably go in DerivedValue somehow, except that
     // it's only a value and does not know about it's parent property
-    if (value instanceof DerivedValue || value instanceof DerivedInterface) {
+    if (value instanceof DerivedValue || value instanceof LambdaValue) {
       if (lastUpstream == null) {
         lastUpstream = new UpstreamState(this, true);
       }

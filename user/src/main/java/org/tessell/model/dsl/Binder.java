@@ -11,7 +11,7 @@ import org.tessell.model.commands.UiCommand;
 import org.tessell.model.events.HasMemberChangedHandlers;
 import org.tessell.model.properties.*;
 import org.tessell.model.validation.rules.Rule;
-import org.tessell.model.values.DerivedInterface;
+import org.tessell.model.values.LambdaValue;
 
 import com.google.gwt.event.dom.client.*;
 import com.google.gwt.event.logical.shared.HasAttachHandlers;
@@ -33,7 +33,7 @@ public class Binder extends AbstractBound {
   }
 
   /** @return a fluent {@link PropertyBinder} against {@code property}. */
-  public <P> PropertyBinder<P> bind(DerivedInterface<P> value) {
+  public <P> PropertyBinder<P> bind(LambdaValue<P> value) {
     return new PropertyBinder<P>(this, derivedProperty(value));
   }
 

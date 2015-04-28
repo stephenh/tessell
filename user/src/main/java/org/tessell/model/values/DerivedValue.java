@@ -3,9 +3,11 @@ package org.tessell.model.values;
 import org.tessell.model.properties.Property;
 
 /**
- * Wraps a function as a {@link Value}.
+ * Wraps a function, implemented by a subclasses in {@link #get()}, as a {@link Value}.
  *
  * This is for making {@link Property}s around a value you compute with a function.
+ *
+ * Note for using Java 8 lambdas, you can use {@link LambdaValue}.
  */
 public abstract class DerivedValue<P> implements Value<P> {
 
