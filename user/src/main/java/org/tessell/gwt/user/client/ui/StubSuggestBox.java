@@ -39,6 +39,10 @@ public class StubSuggestBox extends StubWidget implements IsSuggestBox {
     this.display = display;
   }
 
+  public List<Suggestion> getSuggestions() {
+    return lastSuggestions;
+  }
+
   /** The user types some text, but focus doesn't leave the box. */
   public void typeSome(String query) {
     if (query == null || "".equals(query)) {
