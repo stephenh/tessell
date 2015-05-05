@@ -83,6 +83,13 @@ public class BinderTest {
   }
 
   @Test
+  public void shouldTouchPropertyOnBlur() {
+    binder.bind(s).to(box);
+    box.blur();
+    assertThat(s.isTouched(), is(true));
+  }
+
+  @Test
   public void propertyToWidget() {
     binder.bind(s).to(box);
     s.set("test");

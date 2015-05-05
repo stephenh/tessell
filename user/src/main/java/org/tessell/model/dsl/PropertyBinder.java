@@ -90,6 +90,7 @@ public class PropertyBinder<P> {
             if (p.isValid()) {
               source.setValue(p.get(), true);
             }
+            p.touch();
           }
         }));
       }
