@@ -28,8 +28,8 @@ task tessell(type: JavaExec) {
   main = 'org.tessell.generators.Generator'
   args '--inputDirectory', 'src/main/java',
     '--outputDirectory', 'build/generated/java',
-    '--viewsPackageName', 'org.tessell.examples.client.views'
-  // '--resourcesPackageName', 'org.tessell.examples.client.resources'
+    '--viewsPackageName', 'org.tessell.examples.client.views',
+    '--resourcesPackageName', 'org.tessell.examples.client.resources'
 }
 
 task dtonator(type: JavaExec) {

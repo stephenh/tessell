@@ -1,11 +1,13 @@
 package org.tessell.generators.resources;
 
 import static joist.sourcegen.Argument.arg;
-import static org.apache.commons.lang.StringUtils.substringBeforeLast;
+import static joist.util.Copy.list;
+import static org.apache.commons.lang.StringUtils.substringBefore;
 
 import java.io.File;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -34,6 +36,11 @@ import com.google.gwt.resources.client.TextResource;
 /** A utility class for generating resource interfaces from files in directory. */
 public class ResourcesGenerator {
 
+  private static final List<String> cssExt = list("css");
+  private static final List<String> imageExts = list("png", "gif", "jpg", "htc", "bmp");
+  private static final List<String> textExts = list("js", "txt", "html");
+  private static final List<String> dataExts = list("woff", "woff2", "ttf", "svg", "eot", "htc");
+
   // ignore literal('url(...)') with a negative look behind
   private static final Pattern urlPattern = Pattern.compile("(?<!literal\\(')url\\(([^\\)]+)\\)");
   private static final Pattern plusKeywordPattern = Pattern.compile("\\-X-([a-z-]+): *([^;]+);");
@@ -61,18 +68,17 @@ public class ResourcesGenerator {
     appResources.setInterface().baseClass(ClientBundle.class);
     stubResources.implementsInterface(appResources.getFullName());
 
-    for (final File file : getFilesInInputDirectory()) {
-      if (file.getName().endsWith(".css")) {
-        addCss(file);
-      } else if (file.getName().endsWith(".png")
-        || file.getName().endsWith(".gif")
-        || file.getName().endsWith(".jpg")
-        || file.getName().endsWith(".bmp")
-        || file.getName().endsWith("htc")) {
-        addImage(file);
-      } else if (file.getName().endsWith(".html") || file.getName().endsWith("js")) {
-        addText(file);
-      }
+    for (final File file : getFilesInInputDirectory(textExts)) {
+      addText(file);
+    }
+    for (final File file : getFilesInInputDirectory(imageExts)) {
+      addImage(file);
+    }
+    for (final File file : getFilesInInputDirectory(dataExts)) {
+      addData(file);
+    }
+    for (final File file : getFilesInInputDirectory(cssExt)) {
+      addCss(file);
     }
 
     cleanup.markOkay(appResources);
@@ -125,8 +131,8 @@ public class ResourcesGenerator {
   public static File fileInOutputDirectory(File inputDirectory, File outputDirectory, File file, String extMatch, String extReplace) {
     return new File(//
       file.getAbsolutePath()//
-      .replace(inputDirectory.getAbsolutePath(), outputDirectory.getAbsolutePath())
-      .replace(extMatch, extReplace));
+        .replace(inputDirectory.getAbsolutePath(), outputDirectory.getAbsolutePath())
+        .replace(extMatch, extReplace));
   }
 
   /** Finds {@code url(...)} in the css and replaces it with GWT @url declarations. */
@@ -139,8 +145,8 @@ public class ResourcesGenerator {
     StringBuffer sb = new StringBuffer();
     Matcher m = urlPattern.matcher(cssContent);
     while (m.find()) {
-      String path = m.group(1);
-      String methodName = GenUtils.toMethodName(substringBeforeLast(new File(path).getName(), "."));
+      String path = substringBefore(m.group(1), "?"); // strip any ?v=4.1 oddities, e.g. web fonts
+      String methodName = GenUtils.toMethodName(new File(path).getName());
       String aliasName = "_" + methodName + "Url";
       String resourceName = methodName + "Data"; // for the DataResource
       if (defined.add(aliasName)) {
@@ -169,31 +175,46 @@ public class ResourcesGenerator {
   }
 
   public void addImage(final File imageFile) throws Exception {
-    final String methodName = GenUtils.toMethodName(StringUtils.substringBeforeLast(imageFile.getName(), "."));
+    final String methodName = GenUtils.toMethodName(imageFile.getName());
     {
       // ImageResource
       appResources.getMethod(methodName) //
-      .returnType(ImageResource.class)
-      .addAnnotation("@Source(\"{}\")", getRelativePath(imageFile));
+        .returnType(ImageResource.class)
+        .addAnnotation("@Source(\"{}\")", getRelativePath(imageFile));
       // stub
       stubResources.getField(methodName) //
-      .type(ImageResource.class)
-      .setFinal()
-      .initialValue("new StubImageResource(\"{}\", \"{}\")", methodName, imageFile.getName());
+        .type(ImageResource.class)
+        .setFinal()
+        .initialValue("new StubImageResource(\"{}\", \"{}\")", methodName, imageFile.getName());
       stubResources.getMethod(methodName).returnType(ImageResource.class).body.line("return {};", methodName);
     }
     {
       // DataResource
       appResources.getMethod(methodName + "Data") //
-      .returnType(DataResource.class)
-      .addAnnotation("@Source(\"{}\")", getRelativePath(imageFile));
+        .returnType(DataResource.class)
+        .addAnnotation("@Source(\"{}\")", getRelativePath(imageFile));
       // stub
       stubResources.getField(methodName + "Data") //
-      .type(DataResource.class)
-      .setFinal()
-      .initialValue("new StubDataResource(\"{}\", \"{}\")", methodName, imageFile.getName());
+        .type(DataResource.class)
+        .setFinal()
+        .initialValue("new StubDataResource(\"{}\", \"{}\")", methodName, imageFile.getName());
       stubResources.getMethod(methodName + "Data").returnType(DataResource.class).body.line("return {};", methodName + "Data");
     }
+    stubResources.addImports(StubImageResource.class, StubDataResource.class);
+  }
+
+  public void addData(final File dataFile) throws Exception {
+    final String methodName = GenUtils.toMethodName(dataFile.getName());
+    // DataResource
+    appResources.getMethod(methodName + "Data") //
+      .returnType(DataResource.class)
+      .addAnnotation("@Source(\"{}\")", getRelativePath(dataFile));
+    // stub
+    stubResources.getField(methodName + "Data") //
+      .type(DataResource.class)
+      .setFinal()
+      .initialValue("new StubDataResource(\"{}\", \"{}\")", methodName, dataFile.getName());
+    stubResources.getMethod(methodName + "Data").returnType(DataResource.class).body.line("return {};", methodName + "Data");
     stubResources.addImports(StubImageResource.class, StubDataResource.class);
   }
 
@@ -220,10 +241,9 @@ public class ResourcesGenerator {
     }
   }
 
-  private Collection<File> getFilesInInputDirectory() {
-    String[] exts = new String[] { "css", "png", "gif", "jpg", "html", "js", "htc" };
+  private Collection<File> getFilesInInputDirectory(List<String> extensions) {
     File packageDirectory = new File(inputDirectory, packageName.replace(".", File.separator));
-    return FileUtils.listFiles(packageDirectory, exts, true);
+    return FileUtils.listFiles(packageDirectory, extensions.toArray(new String[] {}), true);
   }
 
 }
