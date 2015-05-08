@@ -115,6 +115,10 @@ public class PropertyBinder<P> {
     to(source, options, new ListBoxIdentityAdaptor<P>());
   }
 
+  public void to(final IsListBox source, final List<P> options, final ListBoxLambdaAdaptor<P> adaptor) {
+    to(source, options, (ListBoxAdaptor<P, P>) adaptor);
+  }
+
   /** Binds our {@code p} to the selection in {@code source}, given the {@code options}. */
   public <O> void to(final IsListBox source, final List<O> options, final ListBoxAdaptor<P, O> adaptor) {
     addOptionsAndSetIfNull(source, options, adaptor);

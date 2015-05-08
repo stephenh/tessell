@@ -248,6 +248,24 @@ public class BinderTest {
   }
 
   @Test
+  public void propertyToListBoxWithLambdas() {
+    final StubListBox listBox = new StubListBox();
+    final ArrayList<String> values = list(null, "1", "2");
+
+    binder.bind(s).to(listBox, values, s -> "line " + s);
+    assertThat(listBox.getSelectedIndex(), is(0));
+    assertThat(listBox.getSelectedText(), is("line null"));
+
+    s.set("2");
+    assertThat(listBox.getSelectedIndex(), is(2));
+    assertThat(listBox.getSelectedText(), is("line 2"));
+
+    s.set(null);
+    assertThat(listBox.getSelectedIndex(), is(0));
+    assertThat(listBox.getSelectedText(), is("line null"));
+  }
+
+  @Test
   public void listPropertyToListBoxChangesListBoxContents() {
     final StubListBox listBox = new StubListBox();
     final ListProperty<String> values = listProperty("values", list("a", "b"));
