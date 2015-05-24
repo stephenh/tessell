@@ -228,7 +228,8 @@ public class Binder extends AbstractBound {
     }
   }
 
-  protected void add(HandlerRegistration registration) {
+  /** Adds {@code registration} to be removed when this binder is unbound. */
+  public void add(HandlerRegistration registration) {
     super.registerHandler(registration);
   }
 
