@@ -83,6 +83,20 @@ public class BinderTest {
   }
 
   @Test
+  public void shouldSetInitialValueEvenIfBlurred() {
+    // given a property that is not set
+    final DoubleProperty p = new DoubleProperty(new SetValue<Double>("p"));
+    // and we bind to it
+    binder.bind(p.asString()).to(box);
+    // and immediately focus (e.g. because it's the first form field on the page)
+    box.focus();
+    // when we bind the initial value from the server
+    p.setInitialValue(2.0);
+    // then we should go ahead and update the box value
+    assertThat(box.getValue(), is("2.0"));
+  }
+
+  @Test
   public void shouldTouchPropertyOnBlur() {
     binder.bind(s).to(box);
     box.blur();

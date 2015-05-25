@@ -97,7 +97,8 @@ public class PropertyBinder<P> {
     }
     b.add(p.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
       public void onPropertyChanged(final PropertyChangedEvent<P> event) {
-        if (!isFocusing[0]) {
+        // if we're focusing by the source value is empty, go ahead and over write
+        if (!isFocusing[0] || sanitizeIfString(source.getValue()) == null) {
           source.setValue(event.getProperty().get(), true);
         }
       }
