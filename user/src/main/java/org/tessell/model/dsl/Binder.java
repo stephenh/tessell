@@ -72,6 +72,11 @@ public class Binder extends AbstractBound {
     return new WhenBinder<P>(this, property);
   }
 
+  /** @return a fluent {@link WhenBinder} against {@code lambda}. */
+  public <P> WhenBinder<P> when(LambdaValue<P> lambda) {
+    return new WhenBinder<P>(this, derivedProperty(lambda));
+  }
+
   /** @return a fluent {@link EventBinder} against {@code clickable}. */
   public EventBinder onClick(IsWidget clickable) {
     return new ClickBinder(this, clickable);
