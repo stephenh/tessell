@@ -4,6 +4,7 @@ import org.tessell.gwt.dom.client.IsElement;
 import org.tessell.gwt.user.client.ui.HasCss;
 import org.tessell.gwt.user.client.ui.IsImage;
 import org.tessell.gwt.user.client.ui.IsWidget;
+import org.tessell.widgets.HasEnsureDebugIdSuffix;
 
 import com.google.gwt.user.client.TakesValue;
 import com.google.gwt.user.client.ui.HasHTML;
@@ -110,6 +111,15 @@ public class TakesValues {
       @Override
       public String getValue() {
         return w.getIsElement().getAttribute("id");
+      }
+    };
+  }
+
+  public static SetsValue<String> debugIdSuffix(final HasEnsureDebugIdSuffix w) {
+    return new SetsValue<String>() {
+      @Override
+      public void setValue(String value) {
+        w.ensureDebugIdSuffix(value);
       }
     };
   }

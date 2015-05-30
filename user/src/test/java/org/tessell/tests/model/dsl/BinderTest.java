@@ -889,6 +889,16 @@ public class BinderTest {
   }
 
   @Test
+  public void propertyToSetsValueLambda() {
+    final StringProperty b = stringProperty("b", "foo");
+    final String[] value = { null };
+    binder.bind(b).to(v -> value[0] = v);
+    assertThat(value[0], is("foo"));
+    b.set("bar");
+    assertThat(value[0], is("bar"));
+  }
+
+  @Test
   public void propertyValidatesOnKeyUpAfterBeingInvalid() {
     final StringProperty b = stringProperty("b", null).numeric();
     binder.bind(b).to(box);

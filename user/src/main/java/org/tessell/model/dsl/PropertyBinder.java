@@ -35,6 +35,12 @@ public class PropertyBinder<P> {
   }
 
   /** Binds our property to {@code value} (one-way). */
+  public void to(final SetsValue<P> value) {
+    b.add(p.addPropertyChangedHandler(e -> value.setValue(p.get())));
+    value.setValue(p.get());
+  }
+
+  /** Binds our property to {@code value} (one-way). */
   public void to(final TakesValue<P> value) {
     b.add(p.addPropertyChangedHandler(e -> value.setValue(p.get())));
     // Set initial value. Even though this is one-way, if value is a cookie/etc.,
