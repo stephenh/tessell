@@ -27,6 +27,7 @@ import org.tessell.gwt.dom.client.GwtElement;
 import org.tessell.gwt.dom.client.IsElement;
 import org.tessell.gwt.dom.client.IsStyle;
 import org.tessell.gwt.user.client.ui.IsWidget;
+import org.tessell.widgets.HasEnsureDebugIdSuffix;
 import org.tessell.widgets.StubView;
 
 import com.google.gwt.core.client.GWT;
@@ -85,6 +86,7 @@ class UiXmlFile {
   private void generateIsView() throws Exception {
     isView.baseClass(IsWidget.class);
     isView.setInterface();
+    isView.implementsInterface(HasEnsureDebugIdSuffix.class);
 
     // methods for each ui:with
     for (final UiWithDeclaration uiField : handler.withFields) {

@@ -4,7 +4,7 @@ dependencies {
   compile "com.google.gwt:gwt-dev:${gwtVersion}"
   compile "com.google.gwt:gwt-codeserver:${gwtVersion}"
   compile project(':user')
-  compile 'joist:joist-util:1.9.1'
+  compile 'joist:joist-util:1.10.3'
   compile 'commons-io:commons-io:1.4'
   compile 'commons-lang:commons-lang:2.4'
 }
