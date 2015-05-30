@@ -23,11 +23,7 @@ public class WhenIsAttachBinder<P> {
 
   /** Adds/removes our {@code widget} to/from {@code panel} our {@code property} is {@code value}. */
   public void to(final IsPanel panel) {
-    b.add(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
-      public void onPropertyChanged(PropertyChangedEvent<P> event) {
-        update(panel);
-      }
-    }));
+    b.add(property.addPropertyChangedHandler(e -> update(panel)));
     update(panel); // set initial value
   }
 

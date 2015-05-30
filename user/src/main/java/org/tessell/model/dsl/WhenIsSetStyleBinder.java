@@ -1,8 +1,6 @@
 package org.tessell.model.dsl;
 
 import org.tessell.gwt.user.client.ui.HasCss;
-import org.tessell.model.events.PropertyChangedEvent;
-import org.tessell.model.events.PropertyChangedHandler;
 import org.tessell.model.properties.Property;
 
 /** Sets the style based on the property value. */
@@ -22,11 +20,7 @@ public class WhenIsSetStyleBinder<P> {
 
   /** Sets/removes our {@code style} when our property is {@code true}. */
   public void on(final HasCss... css) {
-    b.add(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
-      public void onPropertyChanged(PropertyChangedEvent<P> event) {
-        update(css);
-      }
-    }));
+    b.add(property.addPropertyChangedHandler(e -> update(css)));
     update(css); // set initial value
   }
 

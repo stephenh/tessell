@@ -22,19 +22,11 @@ public class SetPropertyBinder<P> {
   }
 
   public void to(final P newValue) {
-    b.add(setup.setup(new Runnable() {
-      public void run() {
-        value.setValue(newValue);
-      }
-    }));
+    b.add(setup.setup(() -> value.setValue(newValue)));
   }
 
   public void to(final HasValue<P> hasValue) {
-    b.add(setup.setup(new Runnable() {
-      public void run() {
-        value.setValue(hasValue.getValue());
-      }
-    }));
+    b.add(setup.setup(() -> value.setValue(hasValue.getValue())));
   }
 
 }

@@ -2,8 +2,6 @@ package org.tessell.model.dsl;
 
 import java.util.List;
 
-import org.tessell.model.events.PropertyChangedEvent;
-import org.tessell.model.events.PropertyChangedHandler;
 import org.tessell.model.properties.ListProperty;
 import org.tessell.model.properties.Property;
 
@@ -24,11 +22,7 @@ public class WhenIsAddBinder<P, V> {
 
   /** Adds/removes our {@code value} when our {@code property} is {@code value}. */
   public void to(final List<V> values) {
-    b.add(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
-      public void onPropertyChanged(PropertyChangedEvent<P> event) {
-        update(values);
-      }
-    }));
+    b.add(property.addPropertyChangedHandler(e -> update(values)));
     if (b.canSetInitialValue(property) && values.contains(newValue)) {
       condition.setInitialValue(property);
     } else {
@@ -38,11 +32,7 @@ public class WhenIsAddBinder<P, V> {
 
   /** Adds/removes our {@code value} when our {@code property} is {@code value}. */
   public void to(final ListProperty<V> values) {
-    b.add(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
-      public void onPropertyChanged(PropertyChangedEvent<P> event) {
-        update(values);
-      }
-    }));
+    b.add(property.addPropertyChangedHandler(e -> update(values)));
     if (b.canSetInitialValue(property) && values.get().contains(newValue)) {
       condition.setInitialValue(property);
     } else {

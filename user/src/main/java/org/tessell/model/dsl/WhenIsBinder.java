@@ -4,8 +4,6 @@ import org.tessell.gwt.animation.client.IsAnimation;
 import org.tessell.gwt.user.client.ui.HasCss;
 import org.tessell.gwt.user.client.ui.IsWidget;
 import org.tessell.model.commands.UiCommand;
-import org.tessell.model.events.PropertyChangedEvent;
-import org.tessell.model.events.PropertyChangedHandler;
 import org.tessell.model.properties.Property;
 import org.tessell.model.validation.events.RuleTriggeredEvent;
 import org.tessell.model.validation.events.RuleUntriggeredEvent;
@@ -55,11 +53,7 @@ public class WhenIsBinder<P> {
   }
 
   public void run(final Runnable... runnables) {
-    b.add(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
-      public void onPropertyChanged(PropertyChangedEvent<P> event) {
-        runIfCondition(runnables);
-      }
-    }));
+    b.add(property.addPropertyChangedHandler(e -> runIfCondition(runnables)));
     runIfCondition(runnables); // run initial
   }
 
@@ -69,71 +63,45 @@ public class WhenIsBinder<P> {
   }
 
   public void show(final HasCss... csses) {
-    b.add(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
-      public void onPropertyChanged(final PropertyChangedEvent<P> event) {
-        showIfCondition(csses);
-      }
-    }));
+    b.add(property.addPropertyChangedHandler(e -> showIfCondition(csses)));
     showIfCondition(csses); // set initial
   }
 
   public void hide(final HasCss... csses) {
-    b.add(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
-      public void onPropertyChanged(final PropertyChangedEvent<P> event) {
-        hideIfCondition(csses);
-      }
-    }));
+    b.add(property.addPropertyChangedHandler(e -> hideIfCondition(csses)));
     hideIfCondition(csses); // set initial
   }
 
   public void visible(final HasCss... css) {
-    b.add(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
-      public void onPropertyChanged(final PropertyChangedEvent<P> event) {
-        visibleIfCondition(css);
-      }
-    }));
+    b.add(property.addPropertyChangedHandler(e -> visibleIfCondition(css)));
     visibleIfCondition(css); // set initial
   }
 
   public void error(final String message) {
-    b.add(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
-      public void onPropertyChanged(final PropertyChangedEvent<P> event) {
-        errorIfCondition(message);
-      }
-    }));
+    b.add(property.addPropertyChangedHandler(e -> errorIfCondition(message)));
     errorIfCondition(message);
   }
 
   public void enable(final HasEnabled... enabled) {
-    b.add(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
-      public void onPropertyChanged(final PropertyChangedEvent<P> event) {
-        updateEnabled(enabled, true);
-      }
-    }));
+    b.add(property.addPropertyChangedHandler(e -> updateEnabled(enabled, true)));
     updateEnabled(enabled, true); // set initial value
   }
 
   public void disable(final HasEnabled... enabled) {
-    b.add(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
-      public void onPropertyChanged(final PropertyChangedEvent<P> event) {
-        updateEnabled(enabled, false);
-      }
-    }));
+    b.add(property.addPropertyChangedHandler(e -> updateEnabled(enabled, false)));
     updateEnabled(enabled, false); // set initial value
   }
 
   public void fadeIn(final HasCss widget) {
     final IsAnimation[] lastAnimation = { null };
-    b.add(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
-      public void onPropertyChanged(final PropertyChangedEvent<P> event) {
-        if (lastAnimation[0] != null) {
-          lastAnimation[0].cancel();
-        }
-        if (condition.evaluate(property)) {
-          lastAnimation[0] = WidgetUtils.fadeIn(widget);
-        } else {
-          lastAnimation[0] = WidgetUtils.fadeOut(widget);
-        }
+    b.add(property.addPropertyChangedHandler(e -> {
+      if (lastAnimation[0] != null) {
+        lastAnimation[0].cancel();
+      }
+      if (condition.evaluate(property)) {
+        lastAnimation[0] = WidgetUtils.fadeIn(widget);
+      } else {
+        lastAnimation[0] = WidgetUtils.fadeOut(widget);
       }
     }));
     // set initial value

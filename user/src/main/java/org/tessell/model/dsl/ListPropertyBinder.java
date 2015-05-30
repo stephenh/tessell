@@ -6,8 +6,6 @@ import java.util.Map;
 
 import org.tessell.gwt.user.client.ui.IsInsertPanel;
 import org.tessell.gwt.user.client.ui.IsWidget;
-import org.tessell.model.events.ListChangedEvent;
-import org.tessell.model.events.ListChangedHandler;
 import org.tessell.model.properties.ListProperty;
 import org.tessell.presenter.BasicPresenter;
 import org.tessell.presenter.Presenter;
@@ -48,14 +46,8 @@ public class ListPropertyBinder<P> extends PropertyBinder<List<P>> {
         panel.add(i++, factory.create(value));
       }
     }
-    b.add(p.addListChangedHandler(new ListChangedHandler<P>() {
-      public void onListChanged(ListChangedEvent<P> event) {
-        event.getDiff().apply(panel, new ListDiff.Mapper<P, IsWidget>() {
-          public IsWidget map(P a) {
-            return factory.create(a);
-          }
-        });
-      }
+    b.add(p.addListChangedHandler(e -> {
+      e.getDiff().apply(panel, a -> factory.create(a));
     }));
   }
 
@@ -76,21 +68,17 @@ public class ListPropertyBinder<P> extends PropertyBinder<List<P>> {
         panel.add(child.getView());
       }
     }
-    b.add(p.addListChangedHandler(new ListChangedHandler<P>() {
-      public void onListChanged(ListChangedEvent<P> event) {
-        event.getDiff().apply(adapter, new ListDiff.Mapper<P, IsWidget>() {
-          public IsWidget map(P value) {
-            Presenter child = factory.create(value);
-            parent.addPresenter(child);
-            views.put(value, child);
-            return child.getView();
-          }
-        });
-        for (Location<P> remove : event.getDiff().removed) {
-          Presenter child = views.remove(remove.element);
-          if (child != null) {
-            parent.removePresenter(child);
-          }
+    b.add(p.addListChangedHandler(e -> {
+      e.getDiff().apply(adapter, value -> {
+        Presenter child = factory.create(value);
+        parent.addPresenter(child);
+        views.put(value, child);
+        return child.getView();
+      });
+      for (Location<P> remove : e.getDiff().removed) {
+        Presenter child = views.remove(remove.element);
+        if (child != null) {
+          parent.removePresenter(child);
         }
       }
     }));

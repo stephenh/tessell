@@ -2,8 +2,6 @@ package org.tessell.model.dsl;
 
 import java.util.List;
 
-import org.tessell.model.events.PropertyChangedEvent;
-import org.tessell.model.events.PropertyChangedHandler;
 import org.tessell.model.properties.BooleanProperty;
 
 public class BooleanPropertyToListBinder<V> {
@@ -19,11 +17,7 @@ public class BooleanPropertyToListBinder<V> {
   }
 
   public void has(final V value) {
-    b.add(p.addPropertyChangedHandler(new PropertyChangedHandler<Boolean>() {
-      public void onPropertyChanged(PropertyChangedEvent<Boolean> event) {
-        update(value);
-      }
-    }));
+    b.add(p.addPropertyChangedHandler(e -> update(value)));
     if (b.canSetInitialValue(p)) {
       p.setInitialValue(values.contains(value));
     } else {

@@ -138,25 +138,19 @@ public class Binder extends AbstractBound {
   /** Forces a {@link ValueChangeEvent} (and hence touching) of each {@code source} on blur. */
   public <P, S extends HasBlurHandlers & HasValue<P>> void fireChangeOnBlur(S... sources) {
     for (final S source : sources) {
-      add(source.addBlurHandler(new BlurHandler() {
-        public void onBlur(final BlurEvent event) {
-          ValueChangeEvent.fire(source, source.getValue());
-        }
-      }));
+      add(source.addBlurHandler(e -> ValueChangeEvent.fire(source, source.getValue())));
     }
   }
 
   /** Forces a {@link ValueChangeEvent} (and hence touching) of each {@code source} on key up. */
   public <P, S extends HasKeyUpHandlers & HasValue<P>> void fireChangeOnKeyUp(S... sources) {
     for (final S source : sources) {
-      add(source.addKeyUpHandler(new KeyUpHandler() {
-        public void onKeyUp(final KeyUpEvent event) {
-          if (event.getNativeKeyCode() == KEY_TAB) {
-            return; // ignore tabbing into the field
-          }
-          ValueChangeEvent.fire(source, source.getValue());
-        }
-      }));
+      add(source.addKeyUpHandler(e -> {
+        if (e.getNativeKeyCode() == KEY_TAB) {
+          return; // ignore tabbing into the field
+      }
+      ValueChangeEvent.fire(source, source.getValue());
+    }));
     }
   }
 

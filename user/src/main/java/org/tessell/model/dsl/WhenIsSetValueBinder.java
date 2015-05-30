@@ -1,7 +1,5 @@
 package org.tessell.model.dsl;
 
-import org.tessell.model.events.PropertyChangedEvent;
-import org.tessell.model.events.PropertyChangedHandler;
 import org.tessell.model.properties.Property;
 
 import com.google.gwt.user.client.TakesValue;
@@ -22,11 +20,9 @@ public class WhenIsSetValueBinder<P, Q> {
   }
 
   public void to(final Q newValue) {
-    b.add(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
-      public void onPropertyChanged(final PropertyChangedEvent<P> event) {
-        if (condition.evaluate(property)) {
-          value.setValue(newValue);
-        }
+    b.add(property.addPropertyChangedHandler(e -> {
+      if (condition.evaluate(property)) {
+        value.setValue(newValue);
       }
     }));
     if (condition.evaluate(property)) {
@@ -39,11 +35,9 @@ public class WhenIsSetValueBinder<P, Q> {
   }
 
   public void to(final HasValue<Q> newValue) {
-    b.add(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
-      public void onPropertyChanged(final PropertyChangedEvent<P> event) {
-        if (condition.evaluate(property)) {
-          value.setValue(newValue.getValue());
-        }
+    b.add(property.addPropertyChangedHandler(e -> {
+      if (condition.evaluate(property)) {
+        value.setValue(newValue.getValue());
       }
     }));
     if (condition.evaluate(property)) {
@@ -52,13 +46,8 @@ public class WhenIsSetValueBinder<P, Q> {
   }
 
   public void toOrElse(final Q ifTrue, final Q ifFalse) {
-    b.add(property.addPropertyChangedHandler(new PropertyChangedHandler<P>() {
-      public void onPropertyChanged(final PropertyChangedEvent<P> event) {
-        update(ifTrue, ifFalse);
-      }
-    }));
-    // set initial value
-    update(ifTrue, ifFalse);
+    b.add(property.addPropertyChangedHandler(e -> update(ifTrue, ifFalse)));
+    update(ifTrue, ifFalse); // set initial value
   }
 
   private void update(final Q ifTrue, final Q ifFalse) {

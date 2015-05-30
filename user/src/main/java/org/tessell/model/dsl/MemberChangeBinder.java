@@ -1,8 +1,6 @@
 package org.tessell.model.dsl;
 
 import org.tessell.model.events.HasMemberChangedHandlers;
-import org.tessell.model.events.MemberChangedEvent;
-import org.tessell.model.events.MemberChangedHandler;
 
 import com.google.gwt.event.shared.HandlerRegistration;
 
@@ -17,20 +15,13 @@ public class MemberChangeBinder extends EventBinder {
 
   @Override
   protected HandlerRegistration hookUpRunnable(final Runnable runnable) {
-    return hasMembers.addMemberChangedHandler(new MemberChangedHandler() {
-      public void onMemberChanged(MemberChangedEvent event) {
-        runnable.run();
-      }
-    });
+    return hasMembers.addMemberChangedHandler(e -> runnable.run());
   }
 
   @Override
   protected HandlerRegistration hookUpEventRunnable(final DomEventRunnable runnable) {
-    return hasMembers.addMemberChangedHandler(new MemberChangedHandler() {
-      public void onMemberChanged(MemberChangedEvent event) {
-        runnable.run(null); // we're not technically a dom event...
-      }
-    });
+    // we're not technically a dom event, so pass null
+    return hasMembers.addMemberChangedHandler(e -> runnable.run(null));
   }
 
 }

@@ -1,6 +1,5 @@
 package org.tessell.model.dsl;
 
-import com.google.gwt.event.logical.shared.AttachEvent;
 import com.google.gwt.event.logical.shared.HasAttachHandlers;
 import com.google.gwt.event.shared.HandlerRegistration;
 
@@ -17,24 +16,20 @@ public class AttachBinder extends EventBinder {
 
   @Override
   protected HandlerRegistration hookUpRunnable(final Runnable runnable) {
-    return attachable.addAttachHandler(new AttachEvent.Handler() {
-      public void onAttachOrDetach(AttachEvent event) {
-        if (event.isAttached() == onAttach) {
-          runnable.run();
-        }
+    return attachable.addAttachHandler(e -> {
+      if (e.isAttached() == onAttach) {
+        runnable.run();
       }
     });
   }
 
   @Override
   protected HandlerRegistration hookUpEventRunnable(final DomEventRunnable runnable) {
-    return attachable.addAttachHandler(new AttachEvent.Handler() {
-      public void onAttachOrDetach(AttachEvent event) {
-        if (event.isAttached() == onAttach) {
-          runnable.run(null); // AttachEvent is a GwtEvent, not DomEvent
-        }
-      }
-    });
+    return attachable.addAttachHandler(e -> {
+      if (e.isAttached() == onAttach) {
+        runnable.run(null); // AttachEvent is a GwtEvent, not DomEvent
+    }
+  });
   }
 
 }

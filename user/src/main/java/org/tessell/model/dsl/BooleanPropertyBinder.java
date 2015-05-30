@@ -6,13 +6,9 @@ import java.util.List;
 
 import org.tessell.gwt.user.client.ui.HasCss;
 import org.tessell.gwt.user.client.ui.IsRadioButton;
-import org.tessell.model.events.PropertyChangedEvent;
-import org.tessell.model.events.PropertyChangedHandler;
 import org.tessell.model.properties.BooleanProperty;
 import org.tessell.model.properties.ListProperty;
 
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.HasValue;
 
 /** Binds BooleanProperties to widgets. */
@@ -40,29 +36,23 @@ public class BooleanPropertyBinder extends PropertyBinder<Boolean> {
   }
 
   public void to(final IsRadioButton ifTrue, final IsRadioButton ifFalse) {
-    b.add(ifTrue.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
-      public void onValueChange(ValueChangeEvent<Boolean> event) {
-        if (TRUE.equals(event.getValue())) {
-          bp.set(true);
-          set(ifTrue, ifFalse); // update ifFalse
-        }
+    b.add(ifTrue.addValueChangeHandler(e -> {
+      if (TRUE.equals(e.getValue())) {
+        bp.set(true);
+        set(ifTrue, ifFalse); // update ifFalse
       }
     }));
-    b.add(ifFalse.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
-      public void onValueChange(ValueChangeEvent<Boolean> event) {
-        if (TRUE.equals(event.getValue())) {
-          bp.set(false);
-          set(ifFalse, ifTrue); // update ifTrue
-        }
+    b.add(ifFalse.addValueChangeHandler(e -> {
+      if (TRUE.equals(e.getValue())) {
+        bp.set(false);
+        set(ifFalse, ifTrue); // update ifTrue
       }
     }));
-    b.add(bp.addPropertyChangedHandler(new PropertyChangedHandler<Boolean>() {
-      public void onPropertyChanged(PropertyChangedEvent<Boolean> event) {
-        if (bp.isTrue()) {
-          set(ifTrue, ifFalse);
-        } else {
-          set(ifFalse, ifTrue);
-        }
+    b.add(bp.addPropertyChangedHandler(e -> {
+      if (bp.isTrue()) {
+        set(ifTrue, ifFalse);
+      } else {
+        set(ifFalse, ifTrue);
       }
     }));
     // set the initial value
