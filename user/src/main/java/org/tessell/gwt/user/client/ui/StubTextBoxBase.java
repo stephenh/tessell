@@ -11,6 +11,7 @@ import com.google.gwt.user.client.ui.TextBoxBase.TextAlignConstant;
 public class StubTextBoxBase extends StubValueBoxBase<String> implements IsTextBoxBase {
 
   private int maxLength;
+  private String placeholder;
 
   public StubTextBoxBase() {
     super("");
@@ -107,6 +108,16 @@ public class StubTextBoxBase extends StubValueBoxBase<String> implements IsTextB
   @Override
   public TextBoxBase asWidget() {
     throw new UnsupportedOperationException("This is a stub");
+  }
+
+  @Override
+  public String getPlaceholder() {
+    return placeholder;
+  }
+
+  @Override
+  public void setPlaceholder(String placeholder) {
+    this.placeholder = placeholder;
   }
 
 }

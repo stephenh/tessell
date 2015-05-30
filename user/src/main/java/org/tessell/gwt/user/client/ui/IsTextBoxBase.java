@@ -9,6 +9,10 @@ public interface IsTextBoxBase extends IsValueBoxBase<String> {
   @Deprecated
   void setTextAlignment(TextAlignConstant align);
 
+  void setPlaceholder(String placeholder);
+
+  String getPlaceholder();
+
   int getMaxLength();
 
   void setMaxLength(int length);

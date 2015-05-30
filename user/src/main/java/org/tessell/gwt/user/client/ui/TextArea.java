@@ -37,4 +37,14 @@ public class TextArea extends com.google.gwt.user.client.ui.TextArea implements 
     getElement().setAttribute("maxlength", Integer.toString(length));
   }
 
+  @Override
+  public void setPlaceholder(String placeholder) {
+    getIsElement().setAttribute("placeholder", placeholder);
+  }
+
+  @Override
+  public String getPlaceholder() {
+    return getIsElement().getAttribute("placeholder");
+  }
+
 }

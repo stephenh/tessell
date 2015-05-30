@@ -2,8 +2,6 @@ package org.tessell.model.dsl;
 
 import org.tessell.gwt.user.client.ui.IsPanel;
 import org.tessell.gwt.user.client.ui.IsWidget;
-import org.tessell.model.events.PropertyChangedEvent;
-import org.tessell.model.events.PropertyChangedHandler;
 import org.tessell.model.properties.Property;
 
 /** Adds {@code widget} to a panel based on the {@code value} of a {@code property}. */

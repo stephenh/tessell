@@ -28,4 +28,14 @@ public class TextBox extends com.google.gwt.user.client.ui.TextBox implements Is
     return this;
   }
 
+  @Override
+  public void setPlaceholder(String placeholder) {
+    getIsElement().setAttribute("placeholder", placeholder);
+  }
+
+  @Override
+  public String getPlaceholder() {
+    return getIsElement().getAttribute("placeholder");
+  }
+
 }
