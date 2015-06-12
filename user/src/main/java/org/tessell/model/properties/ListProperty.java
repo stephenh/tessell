@@ -156,6 +156,21 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
     reassess();
   }
 
+  /** @return a derived property of whether at least one element satisfies {@code condition}. */
+  public Property<Boolean> exists(final Condition<E> condition) {
+    return derivedProperty(() -> {
+      List<E> list = get();
+      if (list != null) {
+        for (E element : list) {
+          if (condition.evaluate(element)) {
+            return true;
+          }
+        }
+      }
+      return false;
+    });
+  }
+
   /** @return a derived property of whether {@code item} is in this list. */
   public BooleanProperty contains(final E item) {
     return addDerived(booleanProperty(new Value<Boolean>() {

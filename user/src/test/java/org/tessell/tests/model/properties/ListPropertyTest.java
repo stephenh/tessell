@@ -1193,6 +1193,26 @@ public class ListPropertyTest {
     assertThat(p.toString(), is("p [null]"));
   }
 
+  @Test
+  public void testExists() {
+    Property<Boolean> b = p.exists(s -> s.startsWith("ab"));
+    assertThat(b.get(), is(false));
+    CountingChanges<Boolean> c = new CountingChanges<Boolean>();
+    b.addPropertyChangedHandler(c);
+    // null safe
+    p.set(null);
+    assertThat(c.count, is(0));
+    assertThat(b.get(), is(false));
+    // fired on add
+    p.set(list("ab", "ac"));
+    assertThat(c.count, is(1));
+    assertThat(b.get(), is(true));
+    // fired on remove
+    p.remove("ab");
+    assertThat(c.count, is(2));
+    assertThat(b.get(), is(false));
+  }
+
   public static class CountingChanges<P> implements PropertyChangedHandler<P> {
     public int count;
 
