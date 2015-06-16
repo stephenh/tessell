@@ -20,8 +20,8 @@ import org.tessell.model.validation.events.RuleUntriggeredHandler;
 import org.tessell.model.validation.rules.Required;
 import org.tessell.model.validation.rules.Rule;
 import org.tessell.model.validation.rules.Static;
-import org.tessell.model.values.LambdaValue;
 import org.tessell.model.values.DerivedValue;
+import org.tessell.model.values.LambdaValue;
 import org.tessell.model.values.Value;
 import org.tessell.util.Inflector;
 
@@ -162,6 +162,9 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> exte
 
   @Override
   public void setDefaultValue(final P value) {
+    if (isReadOnly()) {
+      throw new IllegalStateException(this + " is read only");
+    }
     this.defaultValue = value;
     setIfNull(value);
   }

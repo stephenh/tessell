@@ -245,6 +245,16 @@ public class PropertyTest extends AbstractRuleTest {
     assertThat(b.get(), is(true));
   }
 
+  @Test(expected = IllegalStateException.class)
+  public void setDefaultValueForReadOnlyProperty() {
+    final IntegerProperty a = integerProperty(new DerivedValue<Integer>("a") {
+      public Integer get() {
+        return 1;
+      }
+    });
+    a.setDefaultValue(2);
+  }
+
   @Test
   public void testIsValue() {
     final StringProperty s = stringProperty("s");
