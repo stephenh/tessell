@@ -207,6 +207,16 @@ public class RulesTest extends AbstractRuleTest {
   }
 
   @Test
+  public void onlyIfWithLambda() {
+    final BooleanProperty b = booleanProperty("b", false);
+    f.name.addRule(new Required("required").onlyIf(() -> b.isTrue()));
+    f.name.touch();
+    assertMessages("");
+    b.set(true);
+    assertMessages("required");
+  }
+
+  @Test
   public void removeDerivedHandlesMultipleDownstream() {
     final BooleanProperty a = booleanProperty("a", true);
     final BooleanProperty b = booleanProperty("b", true);

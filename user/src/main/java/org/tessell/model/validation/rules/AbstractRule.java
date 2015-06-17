@@ -1,5 +1,7 @@
 package org.tessell.model.validation.rules;
 
+import static org.tessell.model.properties.NewProperty.derivedProperty;
+
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -12,6 +14,7 @@ import org.tessell.model.validation.events.RuleTriggeredEvent;
 import org.tessell.model.validation.events.RuleTriggeredHandler;
 import org.tessell.model.validation.events.RuleUntriggeredEvent;
 import org.tessell.model.validation.events.RuleUntriggeredHandler;
+import org.tessell.model.values.LambdaValue;
 import org.tessell.model.values.Value;
 
 import com.google.gwt.event.shared.EventBus;
@@ -21,7 +24,7 @@ import com.google.gwt.event.shared.SimplerEventBus;
 
 /**
  * A base class with most of the common {@link Rule} functionality implemented
- * 
+ *
  * @param T
  *          the value of the property for this rule
  * @param U
@@ -77,11 +80,17 @@ public abstract class AbstractRule<T> implements Rule<T> {
 
   /** Only run this rule if {@code other} is true */
   @Override
-  public void onlyIf(final Value<Boolean> other) {
+  public Rule<T> onlyIf(final Value<Boolean> other) {
     this.onlyIf.add(other);
     if (property != null) {
       property.reassess();
     }
+    return this;
+  }
+
+  @Override
+  public Rule<T> onlyIf(final LambdaValue<Boolean> other) {
+    return onlyIf(derivedProperty(other));
   }
 
   public void triggerIfNeeded() {
