@@ -18,6 +18,9 @@ public interface Property<P> extends HasHandlers, HasRuleTriggers, Value<P>, Has
   /** Sets {@code value}, with marking touched, and firing events. */
   void set(P value);
 
+  /** Sets {@code value}, conditionally sets touched, and firing events. */
+  void set(P value, boolean shouldTouch);
+
   /** Sets {@code value} and fires events, without marking touched. */
   void setInitialValue(P value);
 

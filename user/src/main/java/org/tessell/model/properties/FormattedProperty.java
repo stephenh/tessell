@@ -62,10 +62,15 @@ public class FormattedProperty<DP, SP> extends AbstractAbstractProperty<DP> {
 
   @Override
   public void set(DP value) {
+    set(value, true);
+  }
+
+  @Override
+  public void set(DP value, boolean shouldTouch) {
     // null and "" are special
     if (value == null || "".equals(value)) {
       isValid.set(true);
-      source.set(null);
+      source.set(null, shouldTouch);
       return;
     }
     final SP parsed;
@@ -73,31 +78,19 @@ public class FormattedProperty<DP, SP> extends AbstractAbstractProperty<DP> {
       parsed = formatter.parse(value);
     } catch (Exception e) {
       isValid.set(false);
-      // we failed to parse the value, but still treat this as touching the source property
-      source.setTouched(true);
+      if (shouldTouch) {
+        // we failed to parse the value, but still treat this as touching the source property
+        source.setTouched(true);
+      }
       return;
     }
     isValid.set(true);
-    source.set(parsed);
+    source.set(parsed, shouldTouch);
   }
 
   @Override
   public void setInitialValue(DP value) {
-    // null and "" are special
-    if (value == null || "".equals(value)) {
-      isValid.set(true);
-      source.setInitialValue(null);
-      return;
-    }
-    final SP parsed;
-    try {
-      parsed = formatter.parse(value);
-    } catch (Exception e) {
-      isValid.set(false);
-      return;
-    }
-    isValid.set(true);
-    source.setInitialValue(parsed);
+    set(value, false);
   }
 
   @Override

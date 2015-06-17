@@ -71,7 +71,7 @@ public class PropertyBinder<P> {
       }));
       if (source instanceof HasKeyUpHandlers) {
         b.add(((HasKeyUpHandlers) source).addKeyUpHandler(e -> {
-          p.setInitialValue(sanitizeIfString(source.getValue()));
+          p.set(sanitizeIfString(source.getValue()), false);
         }));
       }
       if (source instanceof HasFocusHandlers && source instanceof HasBlurHandlers) {

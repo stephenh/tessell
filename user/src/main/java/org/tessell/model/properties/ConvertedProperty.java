@@ -49,6 +49,11 @@ public class ConvertedProperty<DP, SP> extends AbstractAbstractProperty<DP> {
   }
 
   @Override
+  public void set(DP value, boolean shouldTouch) {
+    throw new IllegalStateException(this + " is a derived value");
+  }
+
+  @Override
   public void setInitialValue(DP value) {
     throw new IllegalStateException(this + " is a derived value");
   }

@@ -140,8 +140,13 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> exte
 
   @Override
   public void set(final P value) {
+    set(value, true);
+  }
+
+  @Override
+  public void set(final P value, boolean shouldTouch) {
     this.value.set(copyLastValue(value));
-    if (!touched && !reassessing && !isWithinASetInitial()) {
+    if (shouldTouch && !touched && !reassessing && !isWithinASetInitial()) {
       // even if unchanged, treat this as touching
       setTouched(true);
     } else {
