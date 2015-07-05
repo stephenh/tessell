@@ -1,6 +1,7 @@
 package org.tessell.examples.client.app;
 
 import static org.tessell.examples.client.views.AppViews.newDragAndDropExampleView;
+import static org.tessell.model.properties.NewProperty.draggingOver;
 
 import org.tessell.examples.client.views.IsDragAndDropExampleView;
 import org.tessell.gwt.user.client.ui.IsAnchor;
@@ -10,7 +11,6 @@ import org.tessell.gwt.user.client.ui.IsWidget;
 import org.tessell.presenter.BasicPresenter;
 
 import com.google.gwt.core.shared.GWT;
-import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.event.dom.client.HasAllDragAndDropHandlers;
 
 /** An example of checkbox binding. */
@@ -41,23 +41,10 @@ public class DragAndDropExamplePresenter extends BasicPresenter<IsDragAndDropExa
 
   private <T extends HasAllDragAndDropHandlers & IsWidget> void set(String type, IsFlowPanel root, T[] current, T a) {
     // just to see one of them not be draggable
-    if (a != view.a4()) {
+    if (a != view.a4() && a != view.l4()) {
       a.getIsElement().setAttribute("draggable", "true");
     }
-
-    a.addDragEnterHandler(e -> {
-      GWT.log("data=" + e.getData("text"));
-      if (a != current[0]) {
-        a.getStyle().setFontWeight(FontWeight.BOLD);
-      }
-    });
-    a.addDragLeaveHandler(e -> {
-      a.getStyle().clearFontWeight();
-    });
-    a.addDropHandler(e -> {
-      a.getStyle().clearFontWeight();
-    });
-
+    binder.when(draggingOver(a)).is(true).set(view.style().bold()).on(a);
     a.addDragStartHandler(e -> {
       GWT.log("start");
       e.setData("text", type);
@@ -67,7 +54,6 @@ public class DragAndDropExamplePresenter extends BasicPresenter<IsDragAndDropExa
       GWT.log("end");
       current[0] = null;
     });
-
     a.addDragOverHandler(e -> {
       e.preventDefault();
     });

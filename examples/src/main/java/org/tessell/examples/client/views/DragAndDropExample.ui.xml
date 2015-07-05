@@ -1,6 +1,11 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:gwt="urn:import:com.google.gwt.user.client.ui">
+	<ui:style type="org.tessell.examples.client.views.DragAndDropExampleStyle">
+	.bold {
+	  font-weight: bold;
+	}
+	</ui:style>
 	<gwt:FlowPanel>
 		<gwt:FlowPanel ui:field="rootLabels">
 			<gwt:Label ui:field="l1" text="One" />

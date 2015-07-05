@@ -5,10 +5,12 @@ import static java.lang.Boolean.TRUE;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.tessell.model.values.LambdaValue;
 import org.tessell.model.values.DerivedValue;
+import org.tessell.model.values.LambdaValue;
 import org.tessell.model.values.SetValue;
 import org.tessell.model.values.Value;
+
+import com.google.gwt.event.dom.client.HasAllDragAndDropHandlers;
 
 /** Lots of helper methods to constructor {@link Property}s out of bindings/{@link DerivedValue}s/etc. */
 public class NewProperty {
@@ -100,6 +102,23 @@ public class NewProperty {
         return true;
       }
     });
+  }
+
+  /** @return a {@link BooleanProperty} of whether {@code draggable} is current being dragged over. */
+  public static BooleanProperty draggingOver(HasAllDragAndDropHandlers draggable) {
+    BooleanProperty over = booleanProperty("over");
+    // for ignoring drag enters when we're selected
+    boolean[] current = { false };
+    draggable.addDragStartHandler(e -> current[0] = true);
+    draggable.addDragEndHandler(e -> current[0] = false);
+    draggable.addDragEnterHandler(e -> {
+      if (!current[0]) {
+        over.set(true);
+      }
+    });
+    draggable.addDragLeaveHandler(e -> over.set(false));
+    draggable.addDropHandler(e -> over.set(false));
+    return over;
   }
 
   public static IntegerProperty integerProperty(final String name) {
