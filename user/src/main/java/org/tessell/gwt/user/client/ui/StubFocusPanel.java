@@ -2,30 +2,7 @@ package org.tessell.gwt.user.client.ui;
 
 import org.tessell.gwt.dom.client.StubClickEvent;
 
-import com.google.gwt.event.dom.client.BlurEvent;
-import com.google.gwt.event.dom.client.BlurHandler;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.FocusEvent;
-import com.google.gwt.event.dom.client.FocusHandler;
-import com.google.gwt.event.dom.client.KeyDownEvent;
-import com.google.gwt.event.dom.client.KeyDownHandler;
-import com.google.gwt.event.dom.client.KeyPressEvent;
-import com.google.gwt.event.dom.client.KeyPressHandler;
-import com.google.gwt.event.dom.client.KeyUpEvent;
-import com.google.gwt.event.dom.client.KeyUpHandler;
-import com.google.gwt.event.dom.client.MouseDownEvent;
-import com.google.gwt.event.dom.client.MouseDownHandler;
-import com.google.gwt.event.dom.client.MouseMoveEvent;
-import com.google.gwt.event.dom.client.MouseMoveHandler;
-import com.google.gwt.event.dom.client.MouseOutEvent;
-import com.google.gwt.event.dom.client.MouseOutHandler;
-import com.google.gwt.event.dom.client.MouseOverEvent;
-import com.google.gwt.event.dom.client.MouseOverHandler;
-import com.google.gwt.event.dom.client.MouseUpEvent;
-import com.google.gwt.event.dom.client.MouseUpHandler;
-import com.google.gwt.event.dom.client.MouseWheelEvent;
-import com.google.gwt.event.dom.client.MouseWheelHandler;
+import com.google.gwt.event.dom.client.*;
 import com.google.gwt.event.shared.HandlerRegistration;
 
 public class StubFocusPanel extends StubSimplePanel implements IsFocusPanel {
@@ -106,5 +83,40 @@ public class StubFocusPanel extends StubSimplePanel implements IsFocusPanel {
   }
 
   private class DummyMouseOutEvent extends MouseOutEvent {
+  }
+
+  @Override
+  public HandlerRegistration addDragEndHandler(DragEndHandler handler) {
+    return handlers.addHandler(DragEndEvent.getType(), handler);
+  }
+
+  @Override
+  public HandlerRegistration addDragEnterHandler(DragEnterHandler handler) {
+    return handlers.addHandler(DragEnterEvent.getType(), handler);
+  }
+
+  @Override
+  public HandlerRegistration addDragLeaveHandler(DragLeaveHandler handler) {
+    return handlers.addHandler(DragLeaveEvent.getType(), handler);
+  }
+
+  @Override
+  public HandlerRegistration addDragHandler(DragHandler handler) {
+    return handlers.addHandler(DragEvent.getType(), handler);
+  }
+
+  @Override
+  public HandlerRegistration addDragOverHandler(DragOverHandler handler) {
+    return handlers.addHandler(DragOverEvent.getType(), handler);
+  }
+
+  @Override
+  public HandlerRegistration addDragStartHandler(DragStartHandler handler) {
+    return handlers.addHandler(DragStartEvent.getType(), handler);
+  }
+
+  @Override
+  public HandlerRegistration addDropHandler(DropHandler handler) {
+    return handlers.addHandler(DropEvent.getType(), handler);
   }
 }

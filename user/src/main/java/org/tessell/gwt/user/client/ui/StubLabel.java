@@ -6,22 +6,7 @@ import org.tessell.gwt.dom.client.StubMouseOutEvent;
 import org.tessell.gwt.dom.client.StubMouseOverEvent;
 import org.tessell.widgets.StubWidget;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.DoubleClickEvent;
-import com.google.gwt.event.dom.client.DoubleClickHandler;
-import com.google.gwt.event.dom.client.MouseDownEvent;
-import com.google.gwt.event.dom.client.MouseDownHandler;
-import com.google.gwt.event.dom.client.MouseMoveEvent;
-import com.google.gwt.event.dom.client.MouseMoveHandler;
-import com.google.gwt.event.dom.client.MouseOutEvent;
-import com.google.gwt.event.dom.client.MouseOutHandler;
-import com.google.gwt.event.dom.client.MouseOverEvent;
-import com.google.gwt.event.dom.client.MouseOverHandler;
-import com.google.gwt.event.dom.client.MouseUpEvent;
-import com.google.gwt.event.dom.client.MouseUpHandler;
-import com.google.gwt.event.dom.client.MouseWheelEvent;
-import com.google.gwt.event.dom.client.MouseWheelHandler;
+import com.google.gwt.event.dom.client.*;
 import com.google.gwt.event.shared.HandlerRegistration;
 
 public class StubLabel extends StubWidget implements IsLabel {
@@ -125,6 +110,41 @@ public class StubLabel extends StubWidget implements IsLabel {
   @Override
   public HandlerRegistration addDoubleClickHandler(DoubleClickHandler handler) {
     return handlers.addHandler(DoubleClickEvent.getType(), handler);
+  }
+
+  @Override
+  public HandlerRegistration addDragEndHandler(DragEndHandler handler) {
+    return handlers.addHandler(DragEndEvent.getType(), handler);
+  }
+
+  @Override
+  public HandlerRegistration addDragEnterHandler(DragEnterHandler handler) {
+    return handlers.addHandler(DragEnterEvent.getType(), handler);
+  }
+
+  @Override
+  public HandlerRegistration addDragLeaveHandler(DragLeaveHandler handler) {
+    return handlers.addHandler(DragLeaveEvent.getType(), handler);
+  }
+
+  @Override
+  public HandlerRegistration addDragHandler(DragHandler handler) {
+    return handlers.addHandler(DragEvent.getType(), handler);
+  }
+
+  @Override
+  public HandlerRegistration addDragOverHandler(DragOverHandler handler) {
+    return handlers.addHandler(DragOverEvent.getType(), handler);
+  }
+
+  @Override
+  public HandlerRegistration addDragStartHandler(DragStartHandler handler) {
+    return handlers.addHandler(DragStartEvent.getType(), handler);
+  }
+
+  @Override
+  public HandlerRegistration addDropHandler(DropHandler handler) {
+    return handlers.addHandler(DropEvent.getType(), handler);
   }
 
 }

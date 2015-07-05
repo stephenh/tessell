@@ -235,4 +235,39 @@ public class StubFocusWidget extends StubWidget implements IsFocusWidget {
     keyUp(keyCode);
   }
 
+  @Override
+  public HandlerRegistration addDragEndHandler(DragEndHandler handler) {
+    return handlers.addHandler(DragEndEvent.getType(), handler);
+  }
+
+  @Override
+  public HandlerRegistration addDragEnterHandler(DragEnterHandler handler) {
+    return handlers.addHandler(DragEnterEvent.getType(), handler);
+  }
+
+  @Override
+  public HandlerRegistration addDragLeaveHandler(DragLeaveHandler handler) {
+    return handlers.addHandler(DragLeaveEvent.getType(), handler);
+  }
+
+  @Override
+  public HandlerRegistration addDragHandler(DragHandler handler) {
+    return handlers.addHandler(DragEvent.getType(), handler);
+  }
+
+  @Override
+  public HandlerRegistration addDragOverHandler(DragOverHandler handler) {
+    return handlers.addHandler(DragOverEvent.getType(), handler);
+  }
+
+  @Override
+  public HandlerRegistration addDragStartHandler(DragStartHandler handler) {
+    return handlers.addHandler(DragStartEvent.getType(), handler);
+  }
+
+  @Override
+  public HandlerRegistration addDropHandler(DropHandler handler) {
+    return handlers.addHandler(DropEvent.getType(), handler);
+  }
+
 }
