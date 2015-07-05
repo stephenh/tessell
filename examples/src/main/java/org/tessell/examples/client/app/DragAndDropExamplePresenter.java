@@ -1,6 +1,7 @@
 package org.tessell.examples.client.app;
 
 import static org.tessell.examples.client.views.AppViews.newDragAndDropExampleView;
+import static org.tessell.model.properties.NewProperty.basicProperty;
 import static org.tessell.model.properties.NewProperty.draggingOver;
 
 import org.tessell.examples.client.views.IsDragAndDropExampleView;
@@ -8,6 +9,7 @@ import org.tessell.gwt.user.client.ui.IsAnchor;
 import org.tessell.gwt.user.client.ui.IsFlowPanel;
 import org.tessell.gwt.user.client.ui.IsLabel;
 import org.tessell.gwt.user.client.ui.IsWidget;
+import org.tessell.model.properties.Property;
 import org.tessell.presenter.BasicPresenter;
 
 import com.google.gwt.core.shared.GWT;
@@ -24,14 +26,14 @@ public class DragAndDropExamplePresenter extends BasicPresenter<IsDragAndDropExa
   public void onBind() {
     super.onBind();
     {
-      IsAnchor[] current = { null };
+      Property<IsAnchor> current = basicProperty("current");
       set("anchors", view.rootAnchors(), current, view.a1());
       set("anchors", view.rootAnchors(), current, view.a2());
       set("anchors", view.rootAnchors(), current, view.a3());
       set("anchors", view.rootAnchors(), current, view.a4());
     }
     {
-      IsLabel[] current = { null };
+      Property<IsLabel> current = basicProperty("current");
       set("labels", view.rootLabels(), current, view.l1());
       set("labels", view.rootLabels(), current, view.l2());
       set("labels", view.rootLabels(), current, view.l3());
@@ -39,7 +41,7 @@ public class DragAndDropExamplePresenter extends BasicPresenter<IsDragAndDropExa
     }
   }
 
-  private <T extends HasAllDragAndDropHandlers & IsWidget> void set(String type, IsFlowPanel root, T[] current, T a) {
+  private <T extends HasAllDragAndDropHandlers & IsWidget> void set(String type, IsFlowPanel root, Property<T> current, T a) {
     // just to see one of them not be draggable
     if (a != view.a4() && a != view.l4()) {
       a.getIsElement().setAttribute("draggable", "true");
@@ -48,24 +50,24 @@ public class DragAndDropExamplePresenter extends BasicPresenter<IsDragAndDropExa
     a.addDragStartHandler(e -> {
       GWT.log("start");
       e.setData("text", type);
-      current[0] = a;
+      current.set(a);
     });
     a.addDragEndHandler(e -> {
       GWT.log("end");
-      current[0] = null;
+      current.set(null);
     });
     a.addDragOverHandler(e -> {
       e.preventDefault();
     });
     a.addDropHandler(e -> {
       // invalid drop
-      if (!type.equals(e.getData("text")) || current[0] == a) {
+      if (!type.equals(e.getData("text")) || current.get() == a) {
         e.preventDefault();
         return;
       }
       GWT.log("Dropped " + current + " onto " + a);
-      root.remove(current[0]);
-      root.insert(current[0], root.getWidgetIndex(a));
+      root.remove(current.get());
+      root.insert(current.get(), root.getWidgetIndex(a));
       e.preventDefault();
     });
   }
