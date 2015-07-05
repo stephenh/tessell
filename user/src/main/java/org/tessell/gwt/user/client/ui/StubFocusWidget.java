@@ -11,6 +11,8 @@ import com.google.gwt.user.client.ui.KeyboardListener;
 @SuppressWarnings("deprecation")
 public class StubFocusWidget extends StubWidget implements IsFocusWidget {
 
+  private final StubDragLogic dragLogic = new StubDragLogic(this);
+
   public StubFocusWidget() {
   }
 
@@ -107,6 +109,30 @@ public class StubFocusWidget extends StubWidget implements IsFocusWidget {
   /** Fires down/up events for keyCode. */
   public void press(int keyCode) {
     downUp(keyCode);
+  }
+
+  public void dragStart() {
+    dragLogic.dragStart();
+  }
+
+  public void dragEnd() {
+    dragLogic.dragEnd();
+  }
+
+  public void dragEnter() {
+    dragLogic.dragEnter();
+  }
+
+  public void dragLeave() {
+    dragLogic.dragLeave();
+  }
+
+  public void dragOver() {
+    dragLogic.dragOver();
+  }
+
+  public void drop() {
+    dragLogic.drop();
   }
 
   @Override
@@ -257,6 +283,7 @@ public class StubFocusWidget extends StubWidget implements IsFocusWidget {
 
   @Override
   public HandlerRegistration addDragOverHandler(DragOverHandler handler) {
+    dragLogic.markHasDragOverHandler();
     return handlers.addHandler(DragOverEvent.getType(), handler);
   }
 

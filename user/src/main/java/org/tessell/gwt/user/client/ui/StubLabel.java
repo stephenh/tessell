@@ -11,6 +11,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
 
 public class StubLabel extends StubWidget implements IsLabel {
 
+  private final StubDragLogic dragLogic = new StubDragLogic(this);
   private String text = "";
   private Direction direction;
   private HorizontalAlignmentConstant align;
@@ -30,6 +31,30 @@ public class StubLabel extends StubWidget implements IsLabel {
 
   public void mouseOut() {
     fireEvent(new StubMouseOutEvent());
+  }
+
+  public void dragStart() {
+    dragLogic.dragStart();
+  }
+
+  public void dragEnd() {
+    dragLogic.dragEnd();
+  }
+
+  public void dragEnter() {
+    dragLogic.dragEnter();
+  }
+
+  public void dragLeave() {
+    dragLogic.dragLeave();
+  }
+
+  public void dragOver() {
+    dragLogic.dragOver();
+  }
+
+  public void drop() {
+    dragLogic.drop();
   }
 
   @Override
@@ -134,6 +159,7 @@ public class StubLabel extends StubWidget implements IsLabel {
 
   @Override
   public HandlerRegistration addDragOverHandler(DragOverHandler handler) {
+    dragLogic.markHasDragOverHandler();
     return handlers.addHandler(DragOverEvent.getType(), handler);
   }
 

@@ -7,6 +7,8 @@ import com.google.gwt.event.shared.HandlerRegistration;
 
 public class StubFocusPanel extends StubSimplePanel implements IsFocusPanel {
 
+  private final StubDragLogic dragLogic = new StubDragLogic(this);
+
   public void mouseOver() {
     fireEvent(new DummyMouseOverEvent());
   }
@@ -17,6 +19,30 @@ public class StubFocusPanel extends StubSimplePanel implements IsFocusPanel {
 
   public void click() {
     fireEvent(new StubClickEvent());
+  }
+
+  public void dragStart() {
+    dragLogic.dragStart();
+  }
+
+  public void dragEnd() {
+    dragLogic.dragEnd();
+  }
+
+  public void dragEnter() {
+    dragLogic.dragEnter();
+  }
+
+  public void dragLeave() {
+    dragLogic.dragLeave();
+  }
+
+  public void dragOver() {
+    dragLogic.dragOver();
+  }
+
+  public void drop() {
+    dragLogic.drop();
   }
 
   @Override
@@ -107,6 +133,7 @@ public class StubFocusPanel extends StubSimplePanel implements IsFocusPanel {
 
   @Override
   public HandlerRegistration addDragOverHandler(DragOverHandler handler) {
+    dragLogic.markHasDragOverHandler();
     return handlers.addHandler(DragOverEvent.getType(), handler);
   }
 
