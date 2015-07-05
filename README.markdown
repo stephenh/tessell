@@ -1,12 +1,12 @@
 
 <a href="https://travis-ci.org/stephenh/tessell"><img src="https://api.travis-ci.org/stephenh/tessell.svg"></a>
 
+[![Join the chat at https://gitter.im/stephenh/tessell](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/stephenh/tessell?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 See [tessell.org](http://www.tessell.org).
 
 Eclipse Setup
 -------------
-
-[![Join the chat at https://gitter.im/stephenh/tessell](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/stephenh/tessell?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 After checking Tessell out of git, there are two main projects, `tessell-user` and `tessell-dev`.
 
