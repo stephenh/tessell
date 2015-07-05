@@ -29,15 +29,21 @@ import org.xml.sax.SAXException;
 public class ViewGenerator {
 
   private final String packageName;
-  private final List<UiXmlFile> uiXmlFiles = new ArrayList<UiXmlFile>();
+  private final List<UiXmlFile> uiXmlFiles = new ArrayList<>();
   private final UiXmlCache cache;
   final File input;
   final File output;
   final Cleanup cleanup;
-  final Config config = new Config();
+  final Config config;
   final SAXParser parser;
 
-  public ViewGenerator(final File inputDirectory, final String packageName, final File outputDirectory, final Cleanup cleanup) {
+  public ViewGenerator(
+    final File inputDirectory,
+    final String packageName,
+    final File outputDirectory,
+    final Cleanup cleanup,
+    String[] additionalViewgenFiles) {
+    config = new Config(additionalViewgenFiles);
     input = inputDirectory.getAbsoluteFile();
     output = outputDirectory.getAbsoluteFile();
     cache = UiXmlCache.loadOrCreate(output);
