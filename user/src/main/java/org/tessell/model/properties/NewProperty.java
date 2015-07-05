@@ -121,6 +121,13 @@ public class NewProperty {
     return over;
   }
 
+  public static BooleanProperty dragging(HasAllDragAndDropHandlers draggable) {
+    BooleanProperty dragging = booleanProperty("dragging");
+    draggable.addDragStartHandler(e -> dragging.set(true));
+    draggable.addDragEndHandler(e -> dragging.set(false));
+    return dragging;
+  }
+
   public static IntegerProperty integerProperty(final String name) {
     return new IntegerProperty(new SetValue<Integer>(name));
   }

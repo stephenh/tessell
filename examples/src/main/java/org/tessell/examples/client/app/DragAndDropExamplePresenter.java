@@ -2,6 +2,7 @@ package org.tessell.examples.client.app;
 
 import static org.tessell.examples.client.views.AppViews.newDragAndDropExampleView;
 import static org.tessell.model.properties.NewProperty.basicProperty;
+import static org.tessell.model.properties.NewProperty.dragging;
 import static org.tessell.model.properties.NewProperty.draggingOver;
 
 import org.tessell.examples.client.views.IsDragAndDropExampleView;
@@ -47,27 +48,19 @@ public class DragAndDropExamplePresenter extends BasicPresenter<IsDragAndDropExa
       a.getIsElement().setAttribute("draggable", "true");
     }
     binder.when(draggingOver(a)).is(true).set(view.style().bold()).on(a);
+    binder.when(dragging(a)).is(true).set(current).to(a);
     a.addDragStartHandler(e -> {
-      GWT.log("start");
       e.setData("text", type);
-      current.set(a);
-    });
-    a.addDragEndHandler(e -> {
-      GWT.log("end");
-      current.set(null);
     });
     a.addDragOverHandler(e -> {
       e.preventDefault();
     });
     a.addDropHandler(e -> {
-      // invalid drop
-      if (!type.equals(e.getData("text")) || current.get() == a) {
-        e.preventDefault();
-        return;
+      if (type.equals(e.getData("text")) && current.get() != a) {
+        GWT.log("Dropped " + current + " onto " + a);
+        root.remove(current.get());
+        root.insert(current.get(), root.getWidgetIndex(a));
       }
-      GWT.log("Dropped " + current + " onto " + a);
-      root.remove(current.get());
-      root.insert(current.get(), root.getWidgetIndex(a));
       e.preventDefault();
     });
   }
