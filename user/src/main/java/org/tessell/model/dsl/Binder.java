@@ -148,9 +148,9 @@ public class Binder extends AbstractBound {
       add(source.addKeyUpHandler(e -> {
         if (e.getNativeKeyCode() == KEY_TAB) {
           return; // ignore tabbing into the field
-      }
-      ValueChangeEvent.fire(source, source.getValue());
-    }));
+        }
+        ValueChangeEvent.fire(source, source.getValue());
+      }));
     }
   }
 

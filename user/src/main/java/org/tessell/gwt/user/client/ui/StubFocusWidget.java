@@ -11,6 +11,8 @@ import com.google.gwt.user.client.ui.KeyboardListener;
 @SuppressWarnings("deprecation")
 public class StubFocusWidget extends StubWidget implements IsFocusWidget {
 
+  private final StubDragLogic dragLogic = new StubDragLogic(this);
+
   public StubFocusWidget() {
   }
 
@@ -107,6 +109,30 @@ public class StubFocusWidget extends StubWidget implements IsFocusWidget {
   /** Fires down/up events for keyCode. */
   public void press(int keyCode) {
     downUp(keyCode);
+  }
+
+  public void dragStart() {
+    dragLogic.dragStart();
+  }
+
+  public void dragEnd() {
+    dragLogic.dragEnd();
+  }
+
+  public void dragEnter() {
+    dragLogic.dragEnter();
+  }
+
+  public void dragLeave() {
+    dragLogic.dragLeave();
+  }
+
+  public void dragOver() {
+    dragLogic.dragOver();
+  }
+
+  public void drop() {
+    dragLogic.drop();
   }
 
   @Override
@@ -233,6 +259,42 @@ public class StubFocusWidget extends StubWidget implements IsFocusWidget {
     keyDown(keyCode);
     // keyPress is not useful with key codes anyway
     keyUp(keyCode);
+  }
+
+  @Override
+  public HandlerRegistration addDragEndHandler(DragEndHandler handler) {
+    return handlers.addHandler(DragEndEvent.getType(), handler);
+  }
+
+  @Override
+  public HandlerRegistration addDragEnterHandler(DragEnterHandler handler) {
+    return handlers.addHandler(DragEnterEvent.getType(), handler);
+  }
+
+  @Override
+  public HandlerRegistration addDragLeaveHandler(DragLeaveHandler handler) {
+    return handlers.addHandler(DragLeaveEvent.getType(), handler);
+  }
+
+  @Override
+  public HandlerRegistration addDragHandler(DragHandler handler) {
+    return handlers.addHandler(DragEvent.getType(), handler);
+  }
+
+  @Override
+  public HandlerRegistration addDragOverHandler(DragOverHandler handler) {
+    dragLogic.markHasDragOverHandler();
+    return handlers.addHandler(DragOverEvent.getType(), handler);
+  }
+
+  @Override
+  public HandlerRegistration addDragStartHandler(DragStartHandler handler) {
+    return handlers.addHandler(DragStartEvent.getType(), handler);
+  }
+
+  @Override
+  public HandlerRegistration addDropHandler(DropHandler handler) {
+    return handlers.addHandler(DropEvent.getType(), handler);
   }
 
 }

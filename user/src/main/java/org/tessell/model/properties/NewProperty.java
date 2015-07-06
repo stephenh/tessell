@@ -5,10 +5,12 @@ import static java.lang.Boolean.TRUE;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.tessell.model.values.LambdaValue;
 import org.tessell.model.values.DerivedValue;
+import org.tessell.model.values.LambdaValue;
 import org.tessell.model.values.SetValue;
 import org.tessell.model.values.Value;
+
+import com.google.gwt.event.dom.client.HasAllDragAndDropHandlers;
 
 /** Lots of helper methods to constructor {@link Property}s out of bindings/{@link DerivedValue}s/etc. */
 public class NewProperty {
@@ -37,6 +39,10 @@ public class NewProperty {
     return new BasicProperty<P>(new SetValue<P>(name, initialValue));
   }
 
+  public static <T> BasicProperty<T> basicProperty(final String name, final Getter<T> getter, Setter<T> setter) {
+    return new BasicProperty<T>(new GetSetValue<T>(name, getter, setter));
+  }
+
   public static BooleanProperty booleanProperty(final String name) {
     return new BooleanProperty(new SetValue<Boolean>(name));
   }
@@ -47,6 +53,10 @@ public class NewProperty {
 
   public static BooleanProperty booleanProperty(final Value<Boolean> value) {
     return new BooleanProperty(value);
+  }
+
+  public static BooleanProperty booleanProperty(final String name, final Getter<Boolean> getter, Setter<Boolean> setter) {
+    return new BooleanProperty(new GetSetValue<Boolean>(name, getter, setter));
   }
 
   public static Property<Boolean> not(final Property<Boolean> property) {
@@ -102,6 +112,30 @@ public class NewProperty {
     });
   }
 
+  /** @return a {@link BooleanProperty} of whether {@code draggable} is current being dragged over. */
+  public static BooleanProperty draggingOver(HasAllDragAndDropHandlers draggable) {
+    BooleanProperty over = booleanProperty("over");
+    // for ignoring drag enters when we're selected
+    boolean[] current = { false };
+    draggable.addDragStartHandler(e -> current[0] = true);
+    draggable.addDragEndHandler(e -> current[0] = false);
+    draggable.addDragEnterHandler(e -> {
+      if (!current[0]) {
+        over.set(true);
+      }
+    });
+    draggable.addDragLeaveHandler(e -> over.set(false));
+    draggable.addDropHandler(e -> over.set(false));
+    return over;
+  }
+
+  public static BooleanProperty dragging(HasAllDragAndDropHandlers draggable) {
+    BooleanProperty dragging = booleanProperty("dragging");
+    draggable.addDragStartHandler(e -> dragging.set(true));
+    draggable.addDragEndHandler(e -> dragging.set(false));
+    return dragging;
+  }
+
   public static IntegerProperty integerProperty(final String name) {
     return new IntegerProperty(new SetValue<Integer>(name));
   }
@@ -112,6 +146,10 @@ public class NewProperty {
 
   public static IntegerProperty integerProperty(final Value<Integer> derived) {
     return new IntegerProperty(derived);
+  }
+
+  public static IntegerProperty integerProperty(final String name, final Getter<Integer> getter, Setter<Integer> setter) {
+    return new IntegerProperty(new GetSetValue<Integer>(name, getter, setter));
   }
 
   public static LongProperty longProperty(final String name) {
@@ -126,6 +164,10 @@ public class NewProperty {
     return new LongProperty(derived);
   }
 
+  public static LongProperty longProperty(final String name, final Getter<Long> getter, Setter<Long> setter) {
+    return new LongProperty(new GetSetValue<Long>(name, getter, setter));
+  }
+
   public static StringProperty stringProperty(final String name) {
     return new StringProperty(new SetValue<String>(name));
   }
@@ -138,6 +180,10 @@ public class NewProperty {
     return new StringProperty(value);
   }
 
+  public static StringProperty stringProperty(final String name, final Getter<String> getter, Setter<String> setter) {
+    return new StringProperty(new GetSetValue<String>(name, getter, setter));
+  }
+
   public static <E> ListProperty<E> listProperty(final Value<List<E>> value) {
     return new ListProperty<E>(value);
   }
@@ -148,6 +194,10 @@ public class NewProperty {
 
   public static <E> ListProperty<E> listProperty(final String name) {
     return new ListProperty<E>(new SetValue<List<E>>(name, new ArrayList<E>()));
+  }
+
+  public static <E> ListProperty<E> listProperty(final String name, final Getter<List<E>> getter, Setter<List<E>> setter) {
+    return new ListProperty<E>(new GetSetValue<List<E>>(name, getter, setter));
   }
 
   public static <P> SetValue<P> setValue(String name) {
@@ -168,6 +218,39 @@ public class NewProperty {
 
   public static <E extends Enum<E>> EnumProperty<E> enumProperty(final String name, E initialValue) {
     return new EnumProperty<E>(new SetValue<E>(name, initialValue));
+  }
+
+  /** Takes {@link Getter} and {@link Setter}, ideally provided as lambdas, and adapts them to a {@link Value}. */
+  public static class GetSetValue<T> implements Value<T> {
+    private final String name;
+    private final Getter<T> getter;
+    private final Setter<T> setter;
+
+    GetSetValue(String name, Getter<T> getter, Setter<T> setter) {
+      this.name = name;
+      this.getter = getter;
+      this.setter = setter;
+    }
+
+    @Override
+    public T get() {
+      return getter.get();
+    }
+
+    @Override
+    public void set(T value) {
+      setter.set(value);
+    }
+
+    @Override
+    public String getName() {
+      return name;
+    }
+
+    @Override
+    public boolean isReadOnly() {
+      return setter != null;
+    }
   }
 
 }
