@@ -39,6 +39,10 @@ public class NewProperty {
     return new BasicProperty<P>(new SetValue<P>(name, initialValue));
   }
 
+  public static <T> BasicProperty<T> basicProperty(final String name, final Getter<T> getter, Setter<T> setter) {
+    return new BasicProperty<T>(new GetSetValue<T>(name, getter, setter));
+  }
+
   public static BooleanProperty booleanProperty(final String name) {
     return new BooleanProperty(new SetValue<Boolean>(name));
   }
@@ -49,6 +53,10 @@ public class NewProperty {
 
   public static BooleanProperty booleanProperty(final Value<Boolean> value) {
     return new BooleanProperty(value);
+  }
+
+  public static BooleanProperty booleanProperty(final String name, final Getter<Boolean> getter, Setter<Boolean> setter) {
+    return new BooleanProperty(new GetSetValue<Boolean>(name, getter, setter));
   }
 
   public static Property<Boolean> not(final Property<Boolean> property) {
@@ -140,6 +148,10 @@ public class NewProperty {
     return new IntegerProperty(derived);
   }
 
+  public static IntegerProperty integerProperty(final String name, final Getter<Integer> getter, Setter<Integer> setter) {
+    return new IntegerProperty(new GetSetValue<Integer>(name, getter, setter));
+  }
+
   public static LongProperty longProperty(final String name) {
     return new LongProperty(new SetValue<Long>(name));
   }
@@ -150,6 +162,10 @@ public class NewProperty {
 
   public static LongProperty longProperty(final Value<Long> derived) {
     return new LongProperty(derived);
+  }
+
+  public static LongProperty longProperty(final String name, final Getter<Long> getter, Setter<Long> setter) {
+    return new LongProperty(new GetSetValue<Long>(name, getter, setter));
   }
 
   public static StringProperty stringProperty(final String name) {
@@ -164,6 +180,10 @@ public class NewProperty {
     return new StringProperty(value);
   }
 
+  public static StringProperty stringProperty(final String name, final Getter<String> getter, Setter<String> setter) {
+    return new StringProperty(new GetSetValue<String>(name, getter, setter));
+  }
+
   public static <E> ListProperty<E> listProperty(final Value<List<E>> value) {
     return new ListProperty<E>(value);
   }
@@ -174,6 +194,10 @@ public class NewProperty {
 
   public static <E> ListProperty<E> listProperty(final String name) {
     return new ListProperty<E>(new SetValue<List<E>>(name, new ArrayList<E>()));
+  }
+
+  public static <E> ListProperty<E> listProperty(final String name, final Getter<List<E>> getter, Setter<List<E>> setter) {
+    return new ListProperty<E>(new GetSetValue<List<E>>(name, getter, setter));
   }
 
   public static <P> SetValue<P> setValue(String name) {
@@ -194,6 +218,39 @@ public class NewProperty {
 
   public static <E extends Enum<E>> EnumProperty<E> enumProperty(final String name, E initialValue) {
     return new EnumProperty<E>(new SetValue<E>(name, initialValue));
+  }
+
+  /** Takes {@link Getter} and {@link Setter}, ideally provided as lambdas, and adapts them to a {@link Value}. */
+  public static class GetSetValue<T> implements Value<T> {
+    private final String name;
+    private final Getter<T> getter;
+    private final Setter<T> setter;
+
+    GetSetValue(String name, Getter<T> getter, Setter<T> setter) {
+      this.name = name;
+      this.getter = getter;
+      this.setter = setter;
+    }
+
+    @Override
+    public T get() {
+      return getter.get();
+    }
+
+    @Override
+    public void set(T value) {
+      setter.set(value);
+    }
+
+    @Override
+    public String getName() {
+      return name;
+    }
+
+    @Override
+    public boolean isReadOnly() {
+      return setter != null;
+    }
   }
 
 }
