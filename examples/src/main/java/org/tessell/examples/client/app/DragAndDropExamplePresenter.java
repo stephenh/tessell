@@ -49,12 +49,8 @@ public class DragAndDropExamplePresenter extends BasicPresenter<IsDragAndDropExa
     }
     binder.when(draggingOver(a)).is(true).set(view.style().bold()).on(a);
     binder.when(dragging(a)).is(true).set(current).to(a);
-    a.addDragStartHandler(e -> {
-      e.setData("text", type);
-    });
-    a.addDragOverHandler(e -> {
-      e.preventDefault();
-    });
+    a.addDragStartHandler(e -> e.setData("text", type));
+    a.addDragOverHandler(e -> e.preventDefault());
     a.addDropHandler(e -> {
       if (type.equals(e.getData("text")) && current.get() != a) {
         GWT.log("Dropped " + current + " onto " + a);
