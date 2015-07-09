@@ -6,6 +6,7 @@ import static org.apache.commons.lang.StringUtils.substringBefore;
 import static org.apache.commons.lang.StringUtils.substringBeforeLast;
 import static org.apache.commons.lang.StringUtils.substringBetween;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -18,7 +19,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 
-import org.apache.commons.io.IOUtils;
 import org.tessell.gwt.dom.client.IsElement;
 import org.tessell.gwt.dom.client.StubElement;
 
@@ -28,11 +28,13 @@ import com.google.gwt.dom.client.Element;
 public class Config {
 
   private static String[] viewgenFiles = new String[] { "viewgen.properties", "viewgen-root.properties" };
-  private final Map<String, String> typeToInterface = new HashMap<String, String>();
-  private final Map<String, String> typeToStub = new HashMap<String, String>();
-  private final Map<String, List<String>> stubToCstrParams = new HashMap<String, List<String>>();
+  private final Map<String, String> typeToInterface = new HashMap<>();
+  private final Map<String, String> typeToStub = new HashMap<>();
+  private final Map<String, List<String>> stubToCstrParams = new HashMap<>();
+  private final String[] additionalViewgenFiles;
 
-  public Config() {
+  public Config(String... additionalViewgenFiles) {
+    this.additionalViewgenFiles = additionalViewgenFiles;
     loadViewGenDotProperties();
   }
 
@@ -75,35 +77,41 @@ public class Config {
         while (urls.hasMoreElements()) {
           URL url = urls.nextElement();
           // System.out.println("Loading " + url);
-          InputStream in = url.openStream();
-          try {
-            final Properties p = new Properties();
-            p.load(url.openStream());
-            for (final Entry<Object, Object> e : p.entrySet()) {
-              final String type = e.getKey().toString();
-              final String packageName = substringBeforeLast(type, ".");
-
-              String line = e.getValue().toString();
-              typeToInterface.put(type, prependPackageIfNeeded(packageName, substringBefore(line, ",")));
-
-              // watch for stub with cstr params, e.g. TextLine(AppRegistry)
-              String stub = substringAfter(line, ",");
-              String[] params = new String[] {};
-              if (stub.contains("(")) {
-                params = splitPreserveAllTokens(substringBetween(stub, "(", ")"), ",");
-                stub = substringBefore(stub, "(");
-              }
-              stub = prependPackageIfNeeded(packageName, stub);
-              typeToStub.put(type, stub);
-              stubToCstrParams.put(stub, Arrays.asList(params));
-            }
-          } finally {
-            IOUtils.closeQuietly(in);
+          try (InputStream in = url.openStream()) {
+            loadViewGenFile(in);
           }
+        }
+      }
+      for (String file : additionalViewgenFiles) {
+        try (InputStream in = new FileInputStream(file)) {
+          loadViewGenFile(in);
         }
       }
     } catch (IOException io) {
       throw new RuntimeException(io);
+    }
+  }
+
+  private void loadViewGenFile(InputStream in) throws IOException {
+    final Properties p = new Properties();
+    p.load(in);
+    for (final Entry<Object, Object> e : p.entrySet()) {
+      final String type = e.getKey().toString();
+      final String packageName = substringBeforeLast(type, ".");
+
+      String line = e.getValue().toString();
+      typeToInterface.put(type, prependPackageIfNeeded(packageName, substringBefore(line, ",")));
+
+      // watch for stub with cstr params, e.g. TextLine(AppRegistry)
+      String stub = substringAfter(line, ",");
+      String[] params = new String[] {};
+      if (stub.contains("(")) {
+        params = splitPreserveAllTokens(substringBetween(stub, "(", ")"), ",");
+        stub = substringBefore(stub, "(");
+      }
+      stub = prependPackageIfNeeded(packageName, stub);
+      typeToStub.put(type, stub);
+      stubToCstrParams.put(stub, Arrays.asList(params));
     }
   }
 
