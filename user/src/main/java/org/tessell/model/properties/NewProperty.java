@@ -119,13 +119,23 @@ public class NewProperty {
     boolean[] current = { false };
     draggable.addDragStartHandler(e -> current[0] = true);
     draggable.addDragEndHandler(e -> current[0] = false);
+    // our children will bubble up dragEnters/dragLeaves as well, so keep track
+    // of the "last" drag enter, which will be ours, and ignore them until then
+    int[] count = { 0 };
     draggable.addDragEnterHandler(e -> {
-      if (!current[0]) {
+      if (!current[0] && ++count[0] == 1) {
         over.set(true);
       }
     });
-    draggable.addDragLeaveHandler(e -> over.set(false));
-    draggable.addDropHandler(e -> over.set(false));
+    draggable.addDragLeaveHandler(e -> {
+      if (over.isTrue() && --count[0] == 0) {
+        over.set(false);
+      }
+    });
+    draggable.addDropHandler(e -> {
+      over.set(false);
+      count[0] = 0;
+    });
     return over;
   }
 
