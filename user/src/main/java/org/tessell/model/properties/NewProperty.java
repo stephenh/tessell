@@ -112,18 +112,26 @@ public class NewProperty {
     });
   }
 
+  // We cannot always rely on dragend events to manage "is current" within draggingOver
+  // itself. If we use this static state instead, the next draggable getting a dragstart
+  // event effectively resets "is current" to false for the previous dragstart target.
+  private static HasAllDragAndDropHandlers currentDraggable;
+
   /** @return a {@link BooleanProperty} of whether {@code draggable} is current being dragged over. */
   public static BooleanProperty draggingOver(HasAllDragAndDropHandlers draggable) {
     BooleanProperty over = booleanProperty("over");
     // for ignoring drag enters when we're selected
-    boolean[] current = { false };
-    draggable.addDragStartHandler(e -> current[0] = true);
-    draggable.addDragEndHandler(e -> current[0] = false);
+    draggable.addDragStartHandler(e -> currentDraggable = draggable);
+    // Technically if the draggable element is removed from the DOM (say because the
+    // current drag's drop logic moves it somewhere else), we will not get the dragend
+    // event. So we can set it null here, but we rely on the static currentDraggable
+    // being reset by the next dragstart to handle the "removed from DOM" case.
+    draggable.addDragEndHandler(e -> currentDraggable = null);
     // our children will bubble up dragEnters/dragLeaves as well, so keep track
     // of the "last" drag enter, which will be ours, and ignore them until then
     int[] count = { 0 };
     draggable.addDragEnterHandler(e -> {
-      if (!current[0] && ++count[0] == 1) {
+      if (currentDraggable != draggable && ++count[0] == 1) {
         over.set(true);
       }
     });
