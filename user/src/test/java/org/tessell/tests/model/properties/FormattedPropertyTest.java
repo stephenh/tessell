@@ -225,6 +225,19 @@ public class FormattedPropertyTest extends AbstractRuleTest {
     assertThat(i.isTouched(), is(false));
   }
 
+  @Test
+  public void testSettingValueWithTouchIsFalseWhenBound() {
+    IntegerProperty i = integerProperty("i");
+    Property<String> s = i.asString();
+    StubTextBox textBox = new StubTextBox();
+
+    Binder b = new Binder();
+    b.bind(s).to(textBox);
+
+    i.set(1, false);
+    assertThat(i.isTouched(), is(false));
+  }
+
   private final PropertyFormatter<Integer, String> intToString = new PropertyFormatter<Integer, String>() {
     @Override
     public String format(Integer a) {
