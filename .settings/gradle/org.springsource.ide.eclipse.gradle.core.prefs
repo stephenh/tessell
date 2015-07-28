@@ -1,5 +1,5 @@
 #org.springsource.ide.eclipse.gradle.core.preferences.GradleProjectPreferences
-#Sun Dec 28 20:55:39 CST 2014
+#Tue Jul 28 07:41:54 CDT 2015
 build.family.org.gradle.tooling.model.eclipse.HierarchicalEclipseProject=;dev;examples;user;
 org.springsource.ide.eclipse.gradle.classpath.enableSorting=false
 org.springsource.ide.eclipse.gradle.classpath.jar.remap.gradle.to.maven=true
