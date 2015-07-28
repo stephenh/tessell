@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
+import org.tessell.gwt.user.client.ui.StubTextBox;
+import org.tessell.model.dsl.Binder;
 import org.tessell.model.events.PropertyChangedEvent;
 import org.tessell.model.events.PropertyChangedHandler;
 import org.tessell.model.properties.*;
@@ -671,27 +673,23 @@ public class PropertyTest extends AbstractRuleTest {
   }
 
   @Test
-  public void changedIgnoresSetWithFalseWhenSetIsCalledAfterListening() {
+  public void changedWorksWhenSetWithTouchFalseAndSetIsCalledAfterListening() {
     final IntegerProperty a = integerProperty("a", null);
     final Property<Boolean> b = a.changed();
     a.set(2, false);
-    assertThat(b.get(), is(false));
-    a.set(2);
-    assertThat(b.get(), is(false));
-    a.set(3);
     assertThat(b.get(), is(true));
+    a.set(null, false);
+    assertThat(b.get(), is(false));
   }
 
   @Test
-  public void changedIgnoresSetWithFalseWhenSetIsCalledBeforeListening() {
+  public void changedWorksWhenSetWithTouchFalseAndSetIsCalledBeforeListening() {
     final IntegerProperty a = integerProperty("a", null);
     a.set(2, false);
     final Property<Boolean> b = a.changed();
-    assertThat(b.get(), is(false));
-    a.set(2);
-    assertThat(b.get(), is(false));
-    a.set(3);
     assertThat(b.get(), is(true));
+    a.set(null);
+    assertThat(b.get(), is(false));
   }
 
   @Test
@@ -747,5 +745,19 @@ public class PropertyTest extends AbstractRuleTest {
     assertThat(b.get(), is(true));
     m.merge(new SomeDto("zaz", true));
     assertThat(b.get(), is(false));
+  }
+
+  @Test
+  public void changedWithBinding() {
+    Binder b = new Binder();
+    StringProperty s = stringProperty("s");
+    StubTextBox box = new StubTextBox();
+    b.bind(s).to(box);
+    final Property<Boolean> c = s.changed();
+    assertThat(c.get(), is(false));
+    box.typeEach("foo");
+    assertThat(c.get(), is(true));
+    s.set("foo");
+    assertThat(c.get(), is(true));
   }
 }

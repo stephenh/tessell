@@ -34,6 +34,7 @@ import com.google.gwt.event.shared.GwtEvent.Type;
 public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> extends AbstractAbstractProperty<P> {
 
   public static int outstandingSetInitials = 0;
+  public static int outstandingTouchFalses = 0;
   private static final Logger log = Logger.getLogger("org.tessell.model");
   // handlers
   private final EventBus handlers = new SimplerEventBus();
@@ -151,10 +152,16 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> exte
   @Override
   public void set(final P value, boolean shouldTouch) {
     if (!shouldTouch) {
-      setInitialValue(value);
+      try {
+        outstandingTouchFalses++;
+        this.value.set(copyLastValue(value));
+        reassess();
+      } finally {
+        outstandingTouchFalses--;
+      }
     } else {
       this.value.set(copyLastValue(value));
-      if (!touched && !reassessing && !isWithinASetInitial()) {
+      if (!touched && !reassessing && !isWithinASetInitial() && !isWithinASetTouchFalse()) {
         // even if unchanged, treat this as touching
         setTouched(true);
       } else {
@@ -541,6 +548,10 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> exte
 
   private static boolean isWithinASetInitial() {
     return outstandingSetInitials > 0;
+  }
+
+  private static boolean isWithinASetTouchFalse() {
+    return outstandingTouchFalses > 0;
   }
 
   /** Remembers rules fired against us. */
