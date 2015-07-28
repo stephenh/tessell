@@ -135,6 +135,11 @@ public class ConvertedProperty<DP, SP> extends AbstractAbstractProperty<DP> {
   }
 
   @Override
+  public Property<Boolean> changed() {
+    return source.changed();
+  }
+
+  @Override
   public void fireEvent(GwtEvent<?> event) {
     source.fireEvent(event);
   }

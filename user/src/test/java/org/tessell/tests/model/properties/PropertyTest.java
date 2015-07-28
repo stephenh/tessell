@@ -1,13 +1,11 @@
 package org.tessell.tests.model.properties;
 
+import static joist.util.Copy.list;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;
-import static org.tessell.model.properties.NewProperty.basicProperty;
-import static org.tessell.model.properties.NewProperty.booleanProperty;
-import static org.tessell.model.properties.NewProperty.integerProperty;
-import static org.tessell.model.properties.NewProperty.stringProperty;
+import static org.tessell.model.properties.NewProperty.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -626,5 +624,128 @@ public class PropertyTest extends AbstractRuleTest {
     s.set("1");
     assertThat(invalid.get(), is(false));
     assertThat(s.valid().get(), is(true));
+  }
+
+  @Test
+  public void changedWorksWhenSetIsCalledAfterListening() {
+    final IntegerProperty a = integerProperty("a", null);
+    final Property<Boolean> b = a.changed();
+    a.set(2);
+    assertThat(b.get(), is(true));
+    a.set(null);
+    assertThat(b.get(), is(false));
+  }
+
+  @Test
+  public void changedWorksWhenSetIsCalledBeforeListening() {
+    final IntegerProperty a = integerProperty("a", null);
+    a.set(2);
+    final Property<Boolean> b = a.changed();
+    assertThat(b.get(), is(true));
+    a.set(null);
+    assertThat(b.get(), is(false));
+  }
+
+  @Test
+  public void changedIgnoresSetInitialWhenSetIsCalledAfterListening() {
+    final IntegerProperty a = integerProperty("a", null);
+    final Property<Boolean> b = a.changed();
+    a.setInitialValue(2);
+    assertThat(b.get(), is(false));
+    a.set(2);
+    assertThat(b.get(), is(false));
+    a.set(3);
+    assertThat(b.get(), is(true));
+  }
+
+  @Test
+  public void changedIgnoresSetInitialWhenSetIsCalledBeforeListening() {
+    final IntegerProperty a = integerProperty("a", null);
+    a.setInitialValue(2);
+    final Property<Boolean> b = a.changed();
+    assertThat(b.get(), is(false));
+    a.set(2);
+    assertThat(b.get(), is(false));
+    a.set(3);
+    assertThat(b.get(), is(true));
+  }
+
+  @Test
+  public void changedIgnoresSetWithFalseWhenSetIsCalledAfterListening() {
+    final IntegerProperty a = integerProperty("a", null);
+    final Property<Boolean> b = a.changed();
+    a.set(2, false);
+    assertThat(b.get(), is(false));
+    a.set(2);
+    assertThat(b.get(), is(false));
+    a.set(3);
+    assertThat(b.get(), is(true));
+  }
+
+  @Test
+  public void changedIgnoresSetWithFalseWhenSetIsCalledBeforeListening() {
+    final IntegerProperty a = integerProperty("a", null);
+    a.set(2, false);
+    final Property<Boolean> b = a.changed();
+    assertThat(b.get(), is(false));
+    a.set(2);
+    assertThat(b.get(), is(false));
+    a.set(3);
+    assertThat(b.get(), is(true));
+  }
+
+  @Test
+  public void changedDetectedDuringReassessWhenSetIsCalledAfterListening() {
+    SetValue<Integer> v = new SetValue<Integer>("a", null);
+    final IntegerProperty a = integerProperty(v);
+    final Property<Boolean> b = a.changed();
+    v.set(2);
+    a.reassess();
+    assertThat(b.get(), is(true));
+    v.set(null);
+    a.reassess();
+    assertThat(b.get(), is(false));
+  }
+
+  @Test
+  public void changedDetectedDuringReassessWhenSetIsCalledBeforeListening() {
+    SetValue<Integer> v = new SetValue<Integer>("a", null);
+    final IntegerProperty a = integerProperty(v);
+    v.set(2);
+    final Property<Boolean> b = a.changed();
+    a.reassess();
+    assertThat(b.get(), is(true));
+    v.set(null);
+    a.reassess();
+    assertThat(b.get(), is(false));
+  }
+
+  @Test
+  public void changedWorksForLists() {
+    final ListProperty<Integer> a = listProperty("a");
+    final Property<Boolean> b = a.changed();
+    assertThat(b.get(), is(false));
+    a.setInitialValue(list(1, 2));
+    assertThat(b.get(), is(false));
+    a.remove(2);
+    assertThat(b.get(), is(true));
+    a.add(2);
+    assertThat(b.get(), is(false));
+    a.set(null);
+    assertThat(b.get(), is(true));
+    a.set(list(1, 2));
+    assertThat(b.get(), is(false));
+  }
+
+  @Test
+  public void changedIgnoresDtoModelMerges() {
+    SomeModel m = new SomeModel(new SomeDto(null, false));
+    final Property<Boolean> b = m.name.changed();
+    m.merge(new SomeDto("foo", true));
+    assertThat(b.get(), is(false));
+    m.name.set("bar");
+    assertThat(b.get(), is(true));
+    m.merge(new SomeDto("zaz", true));
+    assertThat(b.get(), is(false));
   }
 }

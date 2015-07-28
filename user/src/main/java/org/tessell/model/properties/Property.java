@@ -67,6 +67,9 @@ public interface Property<P> extends HasHandlers, HasRuleTriggers, Value<P>, Has
   /** @return whether this property has been touched, as a property. */
   Property<Boolean> touched();
 
+  /** @return whether this property has been changed from it's initial value, as a property. */
+  Property<Boolean> changed();
+
   /** Adds {@code downstream} as a derivative of us. */
   <T extends Property<?>> T addDerived(T downstream);
 

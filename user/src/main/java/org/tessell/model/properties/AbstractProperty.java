@@ -33,7 +33,7 @@ import com.google.gwt.event.shared.GwtEvent.Type;
 /** Provides most of the validation/derived/etc. implementation guts of {@link Property}. */
 public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> extends AbstractAbstractProperty<P> {
 
-  private static int outstandingSetInitials = 0;
+  public static int outstandingSetInitials = 0;
   private static final Logger log = Logger.getLogger("org.tessell.model");
   // handlers
   private final EventBus handlers = new SimplerEventBus();
@@ -49,6 +49,8 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> exte
   private P lastValue;
   // what we should use for null
   private P defaultValue;
+  // the initial value
+  private P initialValue;
   // whether the user has touched this field on the screen yet
   private boolean touched;
   // whether this property is required
@@ -65,6 +67,8 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> exte
   private Property<Boolean> validProperty;
   // only used if someone calls .touched()
   private Property<Boolean> touchedProperty;
+  // only used if someone calls .changed()
+  private Property<Boolean> changedProperty;
 
   protected AbstractProperty() {
     // the subclass should call initialize as soon as possible
@@ -81,6 +85,7 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> exte
   protected void initializeValue(final Value<P> value) {
     this.value = value;
     lastValue = copyLastValue(getWithUpstreamTracking());
+    initialValue = copyLastValue(lastValue);
     RuleHandler ruleHandler = new RuleHandler();
     addRuleTriggeredHandler(ruleHandler);
     addRuleUntriggeredHandler(ruleHandler);
@@ -194,6 +199,9 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> exte
       final boolean valueChanged = !eq(lastValue, newValue);
       if (valueChanged) {
         lastValue = copyLastValue(newValue);
+        if (isWithinASetInitial()) {
+          initialValue = copyLastValue(newValue);
+        }
       }
 
       // run validation before firing change so handlers see latest wasValid
@@ -213,6 +221,9 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> exte
 
       if (valueChanged) {
         clearTemporaryError(false);
+        if (changedProperty != null) {
+          changedProperty.set(!eq(newValue, initialValue));
+        }
         fireChanged(oldValue, newValue);
       }
     } finally {
@@ -397,6 +408,14 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> exte
       touchedProperty = booleanProperty(value.getName() + ".touched", touched);
     }
     return touchedProperty;
+  }
+
+  @Override
+  public Property<Boolean> changed() {
+    if (changedProperty == null) {
+      changedProperty = booleanProperty(value.getName() + ".changed", !eq(get(), initialValue));
+    }
+    return changedProperty;
   }
 
   @Override

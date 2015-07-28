@@ -269,6 +269,11 @@ public class NewProperty {
     public boolean isReadOnly() {
       return setter != null;
     }
+
+    @Override
+    public String toString() {
+      return name + " " + getter.get();
+    }
   }
 
 }
