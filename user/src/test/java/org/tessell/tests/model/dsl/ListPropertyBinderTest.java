@@ -2,10 +2,12 @@ package org.tessell.tests.model.dsl;
 
 import static joist.util.Copy.list;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.contains;
 import static org.junit.Assert.assertThat;
 import static org.tessell.model.properties.NewProperty.listProperty;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import joist.util.Copy;
 
@@ -13,6 +15,7 @@ import org.junit.Test;
 import org.tessell.gwt.user.client.ui.IsWidget;
 import org.tessell.gwt.user.client.ui.StubFlowPanel;
 import org.tessell.gwt.user.client.ui.StubLabel;
+import org.tessell.gwt.user.client.ui.StubListBox;
 import org.tessell.model.dsl.Binder;
 import org.tessell.model.dsl.ListPropertyBinder.ListPresenterFactory;
 import org.tessell.model.dsl.ListPropertyBinder.ListViewFactory;
@@ -28,6 +31,7 @@ public class ListPropertyBinderTest {
   final StubViewFactory viewFactory = new StubViewFactory();
   final StubPresenterFactory presenterFactory = new StubPresenterFactory();
   final ParentPresenter parent = bind(new ParentPresenter());
+  final StubListBox box = new StubListBox();
 
   @Test
   public void initialNamesAreAddedToPanel() {
@@ -150,6 +154,34 @@ public class ListPropertyBinderTest {
     binder.bind(names).to(parent, panel, presenterFactory);
     names.set(Copy.list("one"));
     assertThat(panel.getWidgetCount(), is(1));
+  }
+
+  @Test
+  public void toListBox() {
+    List<String> options = Copy.list("one", "two", "three");
+    names.add("one");
+    binder.bind(names).toMultiple(box, options);
+    assertThat(box.getSelectedTexts(), contains("one"));
+
+    names.add("two");
+    assertThat(box.getSelectedTexts(), contains("one", "two"));
+
+    box.setItemSelected(2, true);
+    assertThat(names.get(), contains("one", "two", "three"));
+  }
+
+  @Test
+  public void toListBoxWithAdaptor() {
+    List<String> options = Copy.list("one", "two", "three");
+    names.add("one");
+    binder.bind(names).toMultiple(box, options, o -> o.toUpperCase());
+    assertThat(box.getSelectedTexts(), contains("ONE"));
+
+    names.add("two");
+    assertThat(box.getSelectedTexts(), contains("ONE", "TWO"));
+
+    box.setItemSelected(2, true);
+    assertThat(names.get(), contains("one", "two", "three"));
   }
 
   private static void assertLabel(IsWidget label, String text) {

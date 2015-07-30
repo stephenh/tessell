@@ -1,10 +1,12 @@
 package org.tessell.model.dsl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.tessell.gwt.user.client.ui.IsInsertPanel;
+import org.tessell.gwt.user.client.ui.IsListBox;
 import org.tessell.gwt.user.client.ui.IsWidget;
 import org.tessell.model.properties.ListProperty;
 import org.tessell.presenter.BasicPresenter;
@@ -27,10 +29,51 @@ public class ListPropertyBinder<P> extends PropertyBinder<List<P>> {
   }
 
   private final ListProperty<P> p;
+  private final boolean[] active = { false };
 
   public ListPropertyBinder(final Binder b, final ListProperty<P> p) {
     super(b, p);
     this.p = p;
+  }
+
+  /** Binds our {@code p} to the selection in {@code source}, given the {@code options}. */
+  public void toMultiple(final IsListBox source, final List<P> options) {
+    toMultiple(source, options, new ListBoxIdentityAdaptor<P>());
+  }
+
+  public void toMultiple(final IsListBox source, final List<P> options, final ListBoxLambdaAdaptor<P> adaptor) {
+    toMultiple(source, options, (ListBoxAdaptor<P, P>) adaptor);
+  }
+
+  /** Binds our {@code p} to the selection in {@code source}, given the {@code options}. */
+  public <O> void toMultiple(final IsListBox source, final List<O> options, final ListBoxAdaptor<P, O> adaptor) {
+    source.setMultipleSelect(true);
+    addOptionsAndSetIfNull(source, options, adaptor);
+    b.add(source.addChangeHandler(e -> {
+      if (!active[0]) {
+        active[0] = true;
+        // collect all currently-selected options
+      List<P> newOptions = new ArrayList<P>();
+      for (int i = 0; i < source.getItemCount(); i++) {
+        if (source.isItemSelected(i)) {
+          newOptions.add(adaptor.toValue(options.get(i)));
+        }
+      }
+      p.set(newOptions);
+      active[0] = false;
+    }
+  }));
+    b.add(p.addPropertyChangedHandler(e -> {
+      if (!active[0]) {
+        active[0] = true;
+        setToFirstIfNull(options, adaptor);
+        for (int i = 0; i < options.size(); i++) {
+          boolean contains = p.get().contains(adaptor.toValue(options.get(i)));
+          source.setItemSelected(i, contains);
+        }
+        active[0] = false;
+      }
+    }));
   }
 
   /** Binds each value in {@code p} to a view created by {@code factory}. */
@@ -103,6 +146,33 @@ public class ListPropertyBinder<P> extends PropertyBinder<List<P>> {
     @Override
     public void add(int index, IsWidget a) {
       panel.insert(a, index + offsetForExistingContent);
+    }
+  }
+
+  private <O> void addOptionsAndSetIfNull(final IsListBox source, final List<O> options, final ListBoxAdaptor<P, O> adaptor) {
+    int i = 0;
+    for (final O option : options) {
+      source.addItem(adaptor.toDisplay(option), Integer.toString(i++));
+    }
+    setToFirstIfNull(options, adaptor);
+    for (int j = 0; j < options.size(); j++) {
+      boolean contains = p.get().contains(adaptor.toValue(options.get(j)));
+      source.setItemSelected(j, contains);
+    }
+  }
+
+  /** If our property is null, but the list of options doesn't contain {@code null}, auto-select the first valid value. */
+  private <O> void setToFirstIfNull(List<O> options, final ListBoxAdaptor<P, O> adaptor) {
+    // Just to be cautious, call setInitialValue with an active check to prevent stack overflows
+    // if the application code has a handler that tries to keep setting it back to null
+    if (!active[0]) {
+      active[0] = true;
+      if (p.get() == null && !options.contains(null) && !options.isEmpty()) {
+        List<P> initial = new ArrayList<P>();
+        initial.add(adaptor.toValue(options.get(0)));
+        p.setInitialValue(initial);
+      }
+      active[0] = false;
     }
   }
 
