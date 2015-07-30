@@ -42,4 +42,6 @@ public interface IsListBox extends IsFocusWidget, HasChangeHandlers, HasName {
   void setValue(int index, String value);
 
   void setVisibleItemCount(int visibleItems);
+
+  void setMultipleSelect(boolean multiple);
 }

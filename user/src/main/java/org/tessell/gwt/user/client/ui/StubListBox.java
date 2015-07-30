@@ -16,13 +16,30 @@ public class StubListBox extends StubFocusWidget implements IsListBox {
   private final ArrayList<Item> items = new ArrayList<Item>();
   private int visibleItems = 1;
   private String name;
+  private boolean multiple;
 
   public void select(final String text) {
     setSelectedIndex(getItemIndex(text));
   }
 
+  public void select(final String... texts) {
+    Integer[] indexes = new Integer[texts.length];
+    for (int i = 0; i < texts.length; i++) {
+      indexes[i] = getItemIndex(texts[i]);
+    }
+    setSelectedIndexes(indexes);
+  }
+
   public String getSelectedText() {
     return getItemText(getSelectedIndex());
+  }
+
+  public List<String> getSelectedTexts() {
+    List<String> texts = new ArrayList<String>();
+    for (Integer index : getSelectedIndexes()) {
+      texts.add(getItemText(index));
+    }
+    return texts;
   }
 
   public int getItemIndex(final String text) {
@@ -77,6 +94,16 @@ public class StubListBox extends StubFocusWidget implements IsListBox {
     return -1;
   }
 
+  public List<Integer> getSelectedIndexes() {
+    List<Integer> indexes = new ArrayList<Integer>();
+    for (int i = 0; i < items.size(); i++) {
+      if (items.get(i).selected) {
+        indexes.add(i);
+      }
+    }
+    return indexes;
+  }
+
   @Override
   public String getValue(final int index) {
     return items.get(index).value;
@@ -111,7 +138,7 @@ public class StubListBox extends StubFocusWidget implements IsListBox {
 
   @Override
   public boolean isMultipleSelect() {
-    return visibleItems > 1;
+    return multiple;
   }
 
   @Override
@@ -141,6 +168,16 @@ public class StubListBox extends StubFocusWidget implements IsListBox {
     fireChange();
   }
 
+  public void setSelectedIndexes(final Integer... indexes) {
+    for (final Item i : items) {
+      i.selected = false;
+    }
+    for (Integer index : indexes) {
+      items.get(index).selected = true;
+    }
+    fireChange();
+  }
+
   @Override
   public void setValue(final int index, final String value) {
     items.get(index).value = value;
@@ -164,6 +201,11 @@ public class StubListBox extends StubFocusWidget implements IsListBox {
   @Override
   public void setName(final String name) {
     this.name = name;
+  }
+
+  @Override
+  public void setMultipleSelect(final boolean multiple) {
+    this.multiple = multiple;
   }
 
   private void fireChange() {
