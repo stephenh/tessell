@@ -90,8 +90,11 @@ public interface Property<P> extends HasHandlers, HasRuleTriggers, Value<P>, Has
   /** Adds {@code handler} to be ran immediately and also on property change. */
   HandlerRegistration nowAndOnChange(PropertyValueHandler<P> handler);
 
-  /** @return the name of the property. */
+  /** @return the humanized name of the property. */
   String getName();
+
+  /** @return the value (non-humanized) name of the property. */
+  String getValueName();
 
   /** @return a map of outstanding validation errors. */
   Map<Object, String> getErrors();

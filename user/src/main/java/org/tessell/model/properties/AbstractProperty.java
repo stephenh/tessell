@@ -457,6 +457,11 @@ public abstract class AbstractProperty<P, T extends AbstractProperty<P, T>> exte
   }
 
   @Override
+  public String getValueName() {
+    return value.getName();
+  }
+
+  @Override
   public Map<Object, String> getErrors() {
     return errors;
   }

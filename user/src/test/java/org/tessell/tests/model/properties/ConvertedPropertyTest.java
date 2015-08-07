@@ -26,7 +26,7 @@ public class ConvertedPropertyTest extends AbstractRuleTest {
 
   @Test
   public void testToString() {
-    assertThat(integerProperty("i", 1).as(c).toString(), is("I 1-1"));
+    assertThat(integerProperty("i", 1).as(c).toString(), is("i 1-1"));
   }
 
   @Test

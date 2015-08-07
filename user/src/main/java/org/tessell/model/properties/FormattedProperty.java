@@ -51,7 +51,7 @@ public class FormattedProperty<DP, SP> extends AbstractAbstractProperty<DP> {
 
   @Override
   public String toString() {
-    return source.toString();
+    return source.getValueName() + " " + get();
   }
 
   @Override
@@ -248,6 +248,11 @@ public class FormattedProperty<DP, SP> extends AbstractAbstractProperty<DP> {
     // keep the same name for when formatted properties are put into
     // a FormPresenter, they keep the same name
     return source.getName();
+  }
+
+  @Override
+  public String getValueName() {
+    return source.getValueName();
   }
 
   @Override
