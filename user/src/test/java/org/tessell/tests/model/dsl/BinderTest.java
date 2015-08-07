@@ -280,6 +280,28 @@ public class BinderTest {
   }
 
   @Test
+  public void propertyToListBoxWithTwoLambdas() {
+    final StubListBox listBox = new StubListBox();
+    final ArrayList<Integer> values = list(null, 1, 2);
+
+    binder.bind(s).to(//
+      listBox,
+      values,
+      i -> (i == null) ? "int null" : "int " + i,
+      i -> i.toString());
+    assertThat(listBox.getSelectedIndex(), is(0));
+    assertThat(listBox.getSelectedText(), is("int null"));
+
+    s.set("2");
+    assertThat(listBox.getSelectedIndex(), is(2));
+    assertThat(listBox.getSelectedText(), is("int 2"));
+
+    s.set(null);
+    assertThat(listBox.getSelectedIndex(), is(0));
+    assertThat(listBox.getSelectedText(), is("int null"));
+  }
+
+  @Test
   public void listPropertyToListBoxChangesListBoxContents() {
     final StubListBox listBox = new StubListBox();
     final ListProperty<String> values = listProperty("values", list("a", "b"));

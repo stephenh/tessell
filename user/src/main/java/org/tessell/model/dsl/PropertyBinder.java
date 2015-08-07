@@ -13,6 +13,7 @@ import org.tessell.gwt.user.client.ui.IsTextBox;
 import org.tessell.model.properties.HasMaxLength;
 import org.tessell.model.properties.ListProperty;
 import org.tessell.model.properties.Property;
+import org.tessell.util.Function;
 import org.tessell.util.ObjectUtils;
 import org.tessell.widgets.IsTextList;
 
@@ -104,8 +105,26 @@ public class PropertyBinder<P> {
     to(source, options, new ListBoxIdentityAdaptor<P>());
   }
 
-  public void to(final IsListBox source, final List<P> options, final ListBoxLambdaAdaptor<P> adaptor) {
-    to(source, options, (ListBoxAdaptor<P, P>) adaptor);
+  public void to(final IsListBox source, final List<P> options, final Function<P, String> optionToDisplay) {
+    to(source, options, new ListBoxAdaptor<P, P>() {
+      @Override
+      public String toDisplay(P option) {
+        return optionToDisplay.get(option);
+      }
+
+      @Override
+      public P toValue(P option) {
+        return option;
+      }
+    });
+  }
+
+  public <O> void to(//
+    final IsListBox source,
+    final List<O> options,
+    final Function<O, String> optionToDisplay,
+    final Function<O, P> optionToValue) {
+    to(source, options, new ListBoxFunctionsAdaptor<P, O>(optionToDisplay, optionToValue));
   }
 
   /** Binds our {@code p} to the selection in {@code source}, given the {@code options}. */
@@ -127,6 +146,15 @@ public class PropertyBinder<P> {
   /** Binds our {@code p} to the selection in {@code source}, given the {@code options}. */
   public void to(final IsListBox source, final ListProperty<P> options) {
     to(source, options, new ListBoxIdentityAdaptor<P>());
+  }
+
+  /** Binds our {@code p} to the selection in {@code source}, given the {@code options}. */
+  public <O> void to(
+    final IsListBox source,
+    final ListProperty<O> options,
+    final Function<O, String> optionToDisplay,
+    final Function<O, P> optionToValue) {
+    to(source, options, new ListBoxFunctionsAdaptor<P, O>(optionToDisplay, optionToValue));
   }
 
   /** Binds our {@code p} to the selection in {@code source}, given the {@code options}. */
@@ -247,6 +275,27 @@ public class PropertyBinder<P> {
         p.setInitialValue(adaptor.toValue(options.get(0)));
       }
       active[0] = false;
+    }
+  }
+
+  private static class ListBoxFunctionsAdaptor<P, O> implements ListBoxAdaptor<P, O> {
+    private final Function<O, String> optionToDisplay;
+    private final Function<O, P> optionToValue;
+
+    private ListBoxFunctionsAdaptor(Function<O, String> optionToDisplay, Function<O, P> optionToValue) {
+      this.optionToDisplay = optionToDisplay;
+      this.optionToValue = optionToValue;
+    }
+
+    @Override
+    public String toDisplay(O option) {
+      // don't null check option, so that the lambda can provide it's own default/null value
+      return optionToDisplay.get(option);
+    }
+
+    @Override
+    public P toValue(O option) {
+      return option == null ? null : optionToValue.get(option);
     }
   }
 
