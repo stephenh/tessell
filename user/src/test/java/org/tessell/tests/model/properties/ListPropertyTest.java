@@ -654,13 +654,13 @@ public class ListPropertyTest {
         return element.name.get() != null && element.name.get().startsWith("foo");
       }
     });
-    assertThat(foos.toString(), is("modelsFiltered []"));
+    assertThat(foos.toString(), is("models.filtered []"));
   }
 
   @Test
   public void sizeToString() {
     final ListProperty<DummyModel> models = listProperty("models");
-    assertThat(models.size().toString(), is("modelsSize 0"));
+    assertThat(models.size().toString(), is("models.size 0"));
   }
 
   @Test

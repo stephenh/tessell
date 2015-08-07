@@ -82,10 +82,10 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
   public String toString() {
     List<E> e = getDirect();
     if (e == null) {
-      return getValueObject().getName() + " null";
+      return getValueName() + " null";
     }
     // Janky, but keep ListProperty.toString from being huge and accidentally ruining perf
-    String s = getValueObject().getName() + " [";
+    String s = getValueName() + " [";
     for (int i = 0; i < e.size() && i < 20; i++) {
       s += ObjectUtils.toStr(e.get(i), "null");
       if (i != e.size() - 1) {
@@ -242,7 +242,7 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
   /** @return a derived property that reflects this list's size. */
   public IntegerProperty size() {
     if (size == null) {
-      size = addDerived(integerProperty(new DerivedValue<Integer>(getValueObject().getName() + "Size") {
+      size = addDerived(integerProperty(new DerivedValue<Integer>(getValueName() + ".size") {
         public Integer get() {
           final List<E> current = ListProperty.this.get();
           return (current == null) ? null : current.size();
@@ -490,7 +490,7 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
   }
 
   public ListProperty<E> filter(final ElementFilter<E> filter) {
-    return listProperty(new DerivedValue<List<E>>(getValueObject().getName() + "Filtered") {
+    return listProperty(new DerivedValue<List<E>>(getValueName() + ".filtered") {
       public List<E> get() {
         List<E> filtered = new ArrayList<E>();
         if (ListProperty.this.get() != null) {
@@ -506,7 +506,7 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
   }
 
   public ListProperty<E> prependNull() {
-    return listProperty(new DerivedValue<List<E>>() {
+    return listProperty(new DerivedValue<List<E>>(getValueName() + ".prependNull") {
       public List<E> get() {
         final List<E> listWithNull = new ArrayList<E>();
         listWithNull.add(null);
@@ -522,7 +522,7 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
    */
   public Property<Boolean> allValid() {
     if (allValid == null) {
-      allValid = new PropertyGroup(getValueObject().getName() + ".allValid");
+      allValid = new PropertyGroup(getValueName() + ".allValid");
       allValid.add(this);
       for (E element : getDirect()) {
         addToAllValidIfNeeded(element);
