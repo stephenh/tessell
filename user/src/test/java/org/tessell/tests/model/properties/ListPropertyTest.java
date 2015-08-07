@@ -1213,6 +1213,12 @@ public class ListPropertyTest {
     assertThat(b.get(), is(false));
   }
 
+  @Test
+  public void prependNull() {
+    p.set(list("1", "2"));
+    assertThat(p.prependNull().get(), contains(null, "1", "2"));
+  }
+
   public static class CountingChanges<P> implements PropertyChangedHandler<P> {
     public int count;
 
