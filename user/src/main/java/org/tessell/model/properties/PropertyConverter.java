@@ -8,11 +8,12 @@ package org.tessell.model.properties;
  * @param <A> the source type
  * @param <B> the destination type
  */
-public abstract class PropertyConverter<A, B> {
+@FunctionalInterface
+public interface PropertyConverter<A, B> {
 
-  public abstract B to(A a);
+  abstract B to(A a);
 
-  public B nullValue() {
+  default B nullValue() {
     return null;
   }
 

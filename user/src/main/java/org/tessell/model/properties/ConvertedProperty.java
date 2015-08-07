@@ -34,7 +34,7 @@ public class ConvertedProperty<DP, SP> extends AbstractAbstractProperty<DP> {
 
   @Override
   public String toString() {
-    return source.toString();
+    return source.getName() + " " + get();
   }
 
   @Override
