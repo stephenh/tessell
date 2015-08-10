@@ -232,6 +232,11 @@ public class Binder extends AbstractBound {
     super.registerHandler(registration);
   }
 
+  /** Adds {@code registration} to be removed when this binder is unbound. */
+  public void add(com.google.web.bindery.event.shared.HandlerRegistration registration) {
+    super.registerHandler(registration);
+  }
+
   boolean canSetInitialValue(Property<?> property) {
     return !property.isReadOnly() && !property.isTouched() && property.get() == null;
   }
