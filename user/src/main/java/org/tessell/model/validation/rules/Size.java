@@ -15,10 +15,7 @@ public class Size<E> extends AbstractRule<List<E>> {
 
   @Override
   protected boolean isValid() {
-    final Integer value = property.get().size();
-    if (value == null) {
-      return false;
-    }
+    final int value = property.get().size();
     if (min != null && value < min) {
       return false;
     }
