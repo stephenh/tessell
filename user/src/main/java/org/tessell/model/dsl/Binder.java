@@ -120,12 +120,12 @@ public class Binder extends AbstractBound {
   }
 
   /** @return a fluent {@link EventBinder} against {@code keyDownable}. */
-  public EventBinder onKeyDown(HasKeyDownHandlers keyDownable) {
+  public EventBinder onKeyDown(IsWidget keyDownable) {
     return new KeyDownBinder(this, keyDownable, null);
   }
 
   /** @return a fluent {@link EventBinder} against {@code keyDownable}, when {@code char} is pressed. */
-  public EventBinder onKeyDown(HasKeyDownHandlers keyDownable, Integer... filter) {
+  public EventBinder onKeyDown(IsWidget keyDownable, Integer... filter) {
     return new KeyDownBinder(this, keyDownable, Arrays.asList(filter));
   }
 
