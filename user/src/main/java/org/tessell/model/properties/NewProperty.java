@@ -206,6 +206,10 @@ public class NewProperty {
     return new ListProperty<E>(value);
   }
 
+  public static <E> ListProperty<E> listProperty(final LambdaValue<List<E>> value) {
+    return new ListProperty<E>(value);
+  }
+
   public static <E> ListProperty<E> listProperty(final String name, final List<E> list) {
     return new ListProperty<E>(new SetValue<List<E>>(name, list));
   }

@@ -63,6 +63,14 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
     return readOnly;
   }
 
+  public <E1> ListProperty<E1> asList(final PropertyConverter<List<E>, List<E1>> converter) {
+    return listProperty(new DerivedValue<List<E1>>(getValueName() + ".asList") {
+      public List<E1> get() {
+        return converter.to(ListProperty.this.get());
+      }
+    });
+  }
+
   @Override
   public Property<Boolean> is(final List<E> value) {
     return is(value, new ArrayList<E>());

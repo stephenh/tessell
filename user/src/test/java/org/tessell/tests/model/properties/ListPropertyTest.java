@@ -1,5 +1,6 @@
 package org.tessell.tests.model.properties;
 
+import static java.util.stream.Collectors.toList;
 import static joist.util.Copy.list;
 import static org.hamcrest.CoreMatchers.endsWith;
 import static org.hamcrest.CoreMatchers.is;
@@ -1217,6 +1218,22 @@ public class ListPropertyTest {
   public void prependNull() {
     p.set(list("1", "2"));
     assertThat(p.prependNull().get(), contains(null, "1", "2"));
+  }
+
+  @Test
+  public void asList() {
+    p.set(list("1", "2", "2"));
+    ListProperty<String> is = p.asList(l -> l.stream().map(s -> s.toUpperCase()).distinct().collect(toList()));
+    assertThat(is.get(), contains("1", "2"));
+
+    CountingChanges<List<String>> c = new CountingChanges<List<String>>();
+    is.addPropertyChangedHandler(c);
+
+    p.add("2");
+    assertThat(c.count, is(0));
+
+    p.add("3");
+    assertThat(c.count, is(1));
   }
 
   public static class CountingChanges<P> implements PropertyChangedHandler<P> {
