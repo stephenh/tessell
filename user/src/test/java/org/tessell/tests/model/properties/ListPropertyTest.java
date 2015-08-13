@@ -1222,17 +1222,17 @@ public class ListPropertyTest {
 
   @Test
   public void asList() {
-    p.set(list("1", "2", "2"));
+    p.set(list("A", "B", "b"));
     ListProperty<String> is = p.asList(l -> l.stream().map(s -> s.toUpperCase()).distinct().collect(toList()));
-    assertThat(is.get(), contains("1", "2"));
+    assertThat(is.get(), contains("A", "B"));
 
     CountingChanges<List<String>> c = new CountingChanges<List<String>>();
     is.addPropertyChangedHandler(c);
 
-    p.add("2");
+    p.add("b");
     assertThat(c.count, is(0));
 
-    p.add("3");
+    p.add("C");
     assertThat(c.count, is(1));
   }
 
