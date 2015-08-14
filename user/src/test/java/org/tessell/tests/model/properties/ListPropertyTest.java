@@ -19,6 +19,7 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.tessell.gwt.user.client.ui.StubAnchor;
 import org.tessell.gwt.user.client.ui.StubCheckBox;
 import org.tessell.model.dsl.Binder;
 import org.tessell.model.events.*;
@@ -970,6 +971,29 @@ public class ListPropertyTest {
     assertThat(changes.count, is(3));
     assertThat(adds.count, is(2));
     assertThat(removes.count, is(0));
+  }
+
+  @Test
+  public void testSortOnClick() {
+    StubAnchor a = new StubAnchor();
+    StubAnchor b = new StubAnchor();
+    p.set(list("c", "bb"));
+
+    p.sortOn(a, s -> s.toUpperCase());
+    p.sortOn(b, s -> s.length());
+    assertThat(p.get(), contains("c", "bb"));
+
+    a.click();
+    assertThat(p.get(), contains("bb", "c"));
+
+    a.click();
+    assertThat(p.get(), contains("c", "bb"));
+
+    b.click();
+    assertThat(p.get(), contains("c", "bb"));
+
+    b.click();
+    assertThat(p.get(), contains("bb", "c"));
   }
 
   @Test

@@ -15,6 +15,9 @@ import org.tessell.util.ListDiff;
 import org.tessell.util.ListDiff.Location;
 import org.tessell.util.ObjectUtils;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Ordering;
+import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.shared.HandlerRegistration;
 
 public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> implements HasMemberChangedHandlers {
@@ -361,6 +364,15 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
     Collections.sort(getDirect(), comparator);
     lastComparator = comparator;
     reassess();
+  }
+
+  /**
+   * Sorts our list by {@code f} when {@code clickable} is clicked.
+   */
+  public <C extends Comparable<?>> void sortOn(HasClickHandlers clickable, final Function<E, C> f) {
+    Ordering<E> order = Ordering.natural().nullsFirst().onResultOf(f);
+    clickable.addClickHandler(e -> sort(order));
+    // window.scrollTo(0, view.table().getAbsoluteTop());
   }
 
   /**
