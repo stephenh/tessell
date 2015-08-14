@@ -33,6 +33,8 @@ import org.tessell.model.values.SetValue;
 import org.tessell.util.ListDiff;
 import org.tessell.util.NaturalComparator;
 
+import com.google.gwt.thirdparty.guava.common.collect.FluentIterable;
+
 public class ListPropertyTest {
 
   private static final Comparator<String> naturalComparator = new NaturalComparator<String>();
@@ -1234,6 +1236,26 @@ public class ListPropertyTest {
 
     p.add("C");
     assertThat(c.count, is(1));
+  }
+
+  @Test
+  public void asListThatDependsOnAnother() {
+    p.set(list("a", "b"));
+    StringProperty s = stringProperty("s", "c");
+    ListProperty<String> q = p.asList(l -> FluentIterable.from(l).append(s.get()).toList());
+    assertThat(p.get(), contains("a", "b"));
+    assertThat(q.get(), contains("a", "b", "c"));
+
+    CountingChanges<List<String>> c = new CountingChanges<List<String>>();
+    q.addPropertyChangedHandler(c);
+
+    p.add("b");
+    assertThat(c.count, is(1));
+    assertThat(q.get(), contains("a", "b", "b", "c"));
+
+    s.set("d");
+    assertThat(c.count, is(2));
+    assertThat(q.get(), contains("a", "b", "b", "d"));
   }
 
   public static class CountingChanges<P> implements PropertyChangedHandler<P> {

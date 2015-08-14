@@ -15,6 +15,7 @@ dependencies {
   testCompile 'junit:junit-dep:4.8.2'
   testCompile 'joist:joist-util:1.10.1'
   testCompile 'commons-lang:commons-lang:2.6'
+  testCompile 'com.google.guava:guava-gwt:18.0'
 }
 
 jar {
