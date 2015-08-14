@@ -376,6 +376,15 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
   }
 
   /**
+   * Invoke a sort in case any of our contents have changed. (Eventually this should be done
+   * automatically on MemberChangedEvent.)
+   */
+  public void resort() {
+    Collections.sort(getDirect(), lastComparator);
+    reassess();
+  }
+
+  /**
    * Sorts our values by {@code comparator} (and continually applies
    * the comparator as new values are added/removed/set).
    */
