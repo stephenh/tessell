@@ -31,6 +31,10 @@ public class NewProperty {
     return new BasicProperty<P>(value);
   }
 
+  public static <P> BasicProperty<P> basicProperty(final LambdaValue<P> value) {
+    return new BasicProperty<P>(value);
+  }
+
   public static <P> BasicProperty<P> basicProperty(final String name) {
     return new BasicProperty<P>(new SetValue<P>(name));
   }
@@ -52,6 +56,10 @@ public class NewProperty {
   }
 
   public static BooleanProperty booleanProperty(final Value<Boolean> value) {
+    return new BooleanProperty(value);
+  }
+
+  public static BooleanProperty booleanProperty(final LambdaValue<Boolean> value) {
     return new BooleanProperty(value);
   }
 
@@ -166,6 +174,10 @@ public class NewProperty {
     return new IntegerProperty(derived);
   }
 
+  public static IntegerProperty integerProperty(final LambdaValue<Integer> derived) {
+    return new IntegerProperty(derived);
+  }
+
   public static IntegerProperty integerProperty(final String name, final Getter<Integer> getter, Setter<Integer> setter) {
     return new IntegerProperty(new GetSetValue<Integer>(name, getter, setter));
   }
@@ -182,6 +194,10 @@ public class NewProperty {
     return new LongProperty(derived);
   }
 
+  public static LongProperty longProperty(final LambdaValue<Long> derived) {
+    return new LongProperty(derived);
+  }
+
   public static LongProperty longProperty(final String name, final Getter<Long> getter, Setter<Long> setter) {
     return new LongProperty(new GetSetValue<Long>(name, getter, setter));
   }
@@ -195,6 +211,10 @@ public class NewProperty {
   }
 
   public static StringProperty stringProperty(final Value<String> value) {
+    return new StringProperty(value);
+  }
+
+  public static StringProperty stringProperty(final LambdaValue<String> value) {
     return new StringProperty(value);
   }
 
@@ -231,6 +251,10 @@ public class NewProperty {
   }
 
   public static <E extends Enum<E>> EnumProperty<E> enumProperty(final Value<E> value) {
+    return new EnumProperty<E>(value);
+  }
+
+  public static <E extends Enum<E>> EnumProperty<E> enumProperty(final LambdaValue<E> value) {
     return new EnumProperty<E>(value);
   }
 
