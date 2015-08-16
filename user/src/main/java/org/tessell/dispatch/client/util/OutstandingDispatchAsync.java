@@ -111,6 +111,11 @@ public class OutstandingDispatchAsync implements DispatchAsync {
     eventBus.fireEvent(new DispatchUnhandledFailureEvent(null, caught, null));
   }
 
+  /** @return whether there are any action calls that have not returned from the server */
+  public boolean hasAnyOutstanding() {
+    return !outstanding.isEmpty();
+  }
+
   /** @return whether there are action calls that have not returned from the server for {@code actionType} */
   public <A extends Action<R>, R extends Result> boolean hasOutstanding(final Class<A> actionType) {
     for (final Action<?> action : outstanding) {
