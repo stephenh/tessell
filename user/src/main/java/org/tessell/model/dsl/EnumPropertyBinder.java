@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import org.tessell.gwt.user.client.ui.IsListBox;
 import org.tessell.model.properties.EnumProperty;
+import org.tessell.util.Inflector;
 
 /** Binds {@link EnumProperty}s to widgets. */
 public class EnumPropertyBinder<E extends Enum<E>> extends PropertyBinder<E> {
@@ -18,7 +19,7 @@ public class EnumPropertyBinder<E extends Enum<E>> extends PropertyBinder<E> {
   public void to(final IsListBox source, final E[] values) {
     int i = 0;
     for (E value : values) {
-      source.addItem(value.toString(), Integer.toString(i++));
+      source.addItem(Inflector.humanize(value.toString()), Integer.toString(i++));
     }
     if (ep.get() == null) {
       // TODO don't currently support an empty option

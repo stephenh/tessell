@@ -2,7 +2,11 @@ package org.tessell.tests.model.dsl;
 
 import static com.google.gwt.event.dom.client.KeyCodes.KEY_TAB;
 import static joist.util.Copy.list;
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.hasItem;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.Matchers.contains;
 import static org.junit.Assert.assertThat;
 import static org.tessell.model.dsl.TakesValues.textOf;
@@ -58,7 +62,7 @@ public class BinderTest {
   private final StubAnchor anchor = new StubAnchor();
 
   public static enum Color {
-    Blue, Green
+    BLUE, GREEN
   };
 
   @After
@@ -599,8 +603,8 @@ public class BinderTest {
     final EnumProperty<Color> color = enumProperty("color"); // null so we'll do the initial set
     final ArrayList<String> list = new ArrayList<String>();
     list.add("foo");
-    binder.when(color).is(Color.Blue).add("foo").to(list);
-    assertThat(color.get(), is(Color.Blue));
+    binder.when(color).is(Color.BLUE).add("foo").to(list);
+    assertThat(color.get(), is(Color.BLUE));
     assertThat(color.isTouched(), is(false));
     assertThat(list, contains("foo"));
   }
@@ -610,7 +614,7 @@ public class BinderTest {
     final EnumProperty<Color> color = enumProperty("color");
     final ArrayList<String> list = new ArrayList<String>();
     // foo isn't in the list, so we leave color alone
-    binder.when(color).is(Color.Blue).add("foo").to(list);
+    binder.when(color).is(Color.BLUE).add("foo").to(list);
     assertThat(color.get(), is(nullValue()));
     assertThat(color.isTouched(), is(false));
   }
@@ -619,8 +623,8 @@ public class BinderTest {
   public void whenValueRemoveFromListInitializesProperty() {
     final EnumProperty<Color> color = enumProperty("color");
     final ArrayList<String> list = new ArrayList<String>();
-    binder.when(color).is(Color.Blue).remove("foo").from(list);
-    assertThat(color.get(), is(Color.Blue));
+    binder.when(color).is(Color.BLUE).remove("foo").from(list);
+    assertThat(color.get(), is(Color.BLUE));
     assertThat(color.isTouched(), is(false));
   }
 
@@ -629,8 +633,8 @@ public class BinderTest {
     final EnumProperty<Color> color = enumProperty("color");
     final ListProperty<String> list = listProperty("list");
     list.add("foo");
-    binder.when(color).is(Color.Blue).add("foo").to(list);
-    assertThat(color.get(), is(Color.Blue));
+    binder.when(color).is(Color.BLUE).add("foo").to(list);
+    assertThat(color.get(), is(Color.BLUE));
     assertThat(color.isTouched(), is(false));
   }
 
@@ -638,8 +642,8 @@ public class BinderTest {
   public void whenValueRemoveFromListPropertyInitializesProperty() {
     final EnumProperty<Color> color = enumProperty("color");
     final ListProperty<String> list = listProperty("list");
-    binder.when(color).is(Color.Blue).remove("foo").from(list);
-    assertThat(color.get(), is(Color.Blue));
+    binder.when(color).is(Color.BLUE).remove("foo").from(list);
+    assertThat(color.get(), is(Color.BLUE));
     assertThat(color.isTouched(), is(false));
   }
 
@@ -719,7 +723,7 @@ public class BinderTest {
 
   @Test
   public void bindEnumCreatesItems() {
-    final SetValue<Color> v = new SetValue<Color>("v", Color.Blue);
+    final SetValue<Color> v = new SetValue<Color>("v", Color.BLUE);
     final EnumProperty<Color> e = enumProperty(v);
 
     final StubListBox box = new StubListBox();
@@ -731,7 +735,7 @@ public class BinderTest {
 
   @Test
   public void bindEnumSetsInitialValue() {
-    final SetValue<Color> v = new SetValue<Color>("v", Color.Blue);
+    final SetValue<Color> v = new SetValue<Color>("v", Color.BLUE);
     final EnumProperty<Color> e = enumProperty(v);
 
     final StubListBox box = new StubListBox();
@@ -747,12 +751,12 @@ public class BinderTest {
     final StubListBox box = new StubListBox();
     binder.bind(e).to(box, Color.values());
     assertThat(box.getSelectedIndex(), is(0));
-    assertThat(v.get(), is(Color.Blue));
+    assertThat(v.get(), is(Color.BLUE));
   }
 
   @Test
   public void bindEnumSetsInitialValueToOtherValue() {
-    final SetValue<Color> v = new SetValue<Color>("v", Color.Green);
+    final SetValue<Color> v = new SetValue<Color>("v", Color.GREEN);
     final EnumProperty<Color> e = enumProperty(v);
 
     final StubListBox box = new StubListBox();
@@ -762,24 +766,24 @@ public class BinderTest {
 
   @Test
   public void bindEnumSetsValueOnChange() {
-    final SetValue<Color> v = new SetValue<Color>("v", Color.Green);
+    final SetValue<Color> v = new SetValue<Color>("v", Color.GREEN);
     final EnumProperty<Color> e = enumProperty(v);
 
     final StubListBox box = new StubListBox();
     binder.bind(e).to(box, Color.values());
     box.select("Blue");
-    assertThat(v.get(), is(Color.Blue));
+    assertThat(v.get(), is(Color.BLUE));
   }
 
   @Test
   public void bindEnumUpdatesListBoxOnPropertyChange() {
-    final SetValue<Color> v = new SetValue<Color>("v", Color.Green);
+    final SetValue<Color> v = new SetValue<Color>("v", Color.GREEN);
     final EnumProperty<Color> e = enumProperty(v);
 
     final StubListBox box = new StubListBox();
     binder.bind(e).to(box, Color.values());
     assertThat(box.getSelectedIndex(), is(1));
-    e.set(Color.Blue);
+    e.set(Color.BLUE);
     assertThat(box.getSelectedIndex(), is(0));
   }
 
@@ -1618,8 +1622,8 @@ public class BinderTest {
     final StubWidget v1 = new StubWidget();
     final StubRadioButton b2 = new StubRadioButton();
     final StubWidget v2 = new StubWidget();
-    EnumProperty<Color> color = enumProperty("color", Color.Blue);
-    binder.bind(color).to(b1, Color.Blue, v1).and(b2, Color.Green, v2);
+    EnumProperty<Color> color = enumProperty("color", Color.BLUE);
+    binder.bind(color).to(b1, Color.BLUE, v1).and(b2, Color.GREEN, v2);
     assertThat(v1, is(shown()));
     assertThat(v2, is(hidden()));
     b2.check();
@@ -1633,8 +1637,8 @@ public class BinderTest {
     final StubWidget v1 = new StubWidget();
     final StubRadioButton b2 = new StubRadioButton();
     final StubWidget v2 = new StubWidget();
-    EnumProperty<Color> color = enumProperty("color", Color.Blue);
-    binder.bind(color).to(b1, Color.Blue, v1).and(b2, Color.Green, v2);
+    EnumProperty<Color> color = enumProperty("color", Color.BLUE);
+    binder.bind(color).to(b1, Color.BLUE, v1).and(b2, Color.GREEN, v2);
     assertThat(v1, is(shown()));
     assertThat(v2, is(hidden()));
     b2.check();
