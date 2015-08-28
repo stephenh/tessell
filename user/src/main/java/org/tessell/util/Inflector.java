@@ -18,9 +18,12 @@ public class Inflector {
   public static String humanize(final String camelCased) {
     String name = "";
     for (final Iterator<String> i = split(camelCased).iterator(); i.hasNext();) {
-      name += capitalize(i.next().toLowerCase());
-      if (i.hasNext()) {
-        name += " ";
+      String part = capitalize(i.next().toLowerCase());
+      if (!part.isEmpty()) {
+        name += part;
+        if (i.hasNext()) {
+          name += " ";
+        }
       }
     }
     return name;
