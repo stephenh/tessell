@@ -18,7 +18,7 @@ public class ListBoxIdentityAdaptor<P> implements ListBoxAdaptor<P, P> {
   public String toDisplay(P option) {
     // This is slightly odd, but it makes binding against enums with just the
     // two-arg .to(listBox, listOfEnums) do the right thing by default.
-    if (option instanceof Enum<?>) {
+    if (option instanceof Enum<?> && ((Enum<?>) option).name().equals(option.toString())) {
       return Inflector.humanize(option.toString());
     }
     return option == null ? nullText : option.toString();

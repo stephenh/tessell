@@ -17,10 +17,7 @@ public class ListBoxIdentityAdaptorTest {
   public void testToDisplayOfAnEnumUsesHumanizedOutput() {
     ListBoxIdentityAdaptor<Color> a = new ListBoxIdentityAdaptor<Color>();
     assertThat(a.toDisplay(Color.GREEN), is("Green"));
-  }
-
-  private static enum Color {
-    GREEN, BLUE
+    assertThat(a.toDisplay(Color.BLUE), is("Blue (not green)"));
   };
 
 }

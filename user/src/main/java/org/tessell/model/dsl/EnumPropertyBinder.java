@@ -19,7 +19,13 @@ public class EnumPropertyBinder<E extends Enum<E>> extends PropertyBinder<E> {
   public void to(final IsListBox source, final E[] values) {
     int i = 0;
     for (E value : values) {
-      source.addItem(Inflector.humanize(value.toString()), Integer.toString(i++));
+      final String display;
+      if (value.name().equals(value.toString())) {
+        display = Inflector.humanize(value.name());
+      } else {
+        display = value.toString();
+      }
+      source.addItem(display, Integer.toString(i++));
     }
     if (ep.get() == null) {
       // TODO don't currently support an empty option

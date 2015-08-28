@@ -28,6 +28,7 @@ import org.tessell.gwt.dom.client.StubElement;
 import org.tessell.gwt.user.client.StubCookies;
 import org.tessell.gwt.user.client.ui.*;
 import org.tessell.model.dsl.Binder;
+import org.tessell.model.dsl.Color;
 import org.tessell.model.dsl.ListBoxAdaptor;
 import org.tessell.model.properties.*;
 import org.tessell.model.values.DerivedValue;
@@ -60,10 +61,6 @@ public class BinderTest {
   private final StubTextBox box = new StubTextBox();
   private final StubTextList errors = new StubTextList();
   private final StubAnchor anchor = new StubAnchor();
-
-  public static enum Color {
-    BLUE, GREEN
-  };
 
   @After
   public void tearDown() {
@@ -729,13 +726,13 @@ public class BinderTest {
     final StubListBox box = new StubListBox();
     binder.bind(e).to(box, Color.values());
     assertThat(box.getItemCount(), is(2));
-    assertThat(box.getItemText(0), is("Blue"));
-    assertThat(box.getItemText(1), is("Green"));
+    assertThat(box.getItemText(0), is("Green"));
+    assertThat(box.getItemText(1), is("Blue (not green)"));
   }
 
   @Test
   public void bindEnumSetsInitialValue() {
-    final SetValue<Color> v = new SetValue<Color>("v", Color.BLUE);
+    final SetValue<Color> v = new SetValue<Color>("v", Color.GREEN);
     final EnumProperty<Color> e = enumProperty(v);
 
     final StubListBox box = new StubListBox();
@@ -751,12 +748,12 @@ public class BinderTest {
     final StubListBox box = new StubListBox();
     binder.bind(e).to(box, Color.values());
     assertThat(box.getSelectedIndex(), is(0));
-    assertThat(v.get(), is(Color.BLUE));
+    assertThat(v.get(), is(Color.GREEN));
   }
 
   @Test
   public void bindEnumSetsInitialValueToOtherValue() {
-    final SetValue<Color> v = new SetValue<Color>("v", Color.GREEN);
+    final SetValue<Color> v = new SetValue<Color>("v", Color.BLUE);
     final EnumProperty<Color> e = enumProperty(v);
 
     final StubListBox box = new StubListBox();
@@ -771,19 +768,19 @@ public class BinderTest {
 
     final StubListBox box = new StubListBox();
     binder.bind(e).to(box, Color.values());
-    box.select("Blue");
+    box.select("Blue (not green)");
     assertThat(v.get(), is(Color.BLUE));
   }
 
   @Test
   public void bindEnumUpdatesListBoxOnPropertyChange() {
-    final SetValue<Color> v = new SetValue<Color>("v", Color.GREEN);
+    final SetValue<Color> v = new SetValue<Color>("v", Color.BLUE);
     final EnumProperty<Color> e = enumProperty(v);
 
     final StubListBox box = new StubListBox();
     binder.bind(e).to(box, Color.values());
     assertThat(box.getSelectedIndex(), is(1));
-    e.set(Color.BLUE);
+    e.set(Color.GREEN);
     assertThat(box.getSelectedIndex(), is(0));
   }
 
