@@ -33,6 +33,16 @@ public class TextList extends Widget implements IsTextList {
   }
 
   @Override
+  public void add(final int index, final String text) {
+    final Element child = DOM.createElement(childTag);
+    child.setInnerText(text);
+    if (childStyleName != null) {
+      child.addClassName(childStyleName);
+    }
+    getElement().insertBefore(child, getElement().getChild(index));
+  }
+
+  @Override
   public void remove(final String text) {
     final NodeList<Node> nodes = getElement().getChildNodes();
     for (int i = 0; i < nodes.getLength(); i++) {
@@ -44,6 +54,18 @@ public class TextList extends Widget implements IsTextList {
           break;
         }
       }
+    }
+  }
+
+  @Override
+  public String remove(final int index) {
+    final Node node = getElement().getChildNodes().getItem(index);
+    if (Element.is(node)) {
+      final Element element = Element.as(node);
+      getElement().removeChild(node);
+      return element.getInnerText();
+    } else {
+      return null;
     }
   }
 

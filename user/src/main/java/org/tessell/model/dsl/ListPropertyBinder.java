@@ -53,16 +53,16 @@ public class ListPropertyBinder<P> extends PropertyBinder<List<P>> {
       if (!active[0]) {
         active[0] = true;
         // collect all currently-selected options
-      List<P> newOptions = new ArrayList<P>();
-      for (int i = 0; i < source.getItemCount(); i++) {
-        if (source.isItemSelected(i)) {
-          newOptions.add(adaptor.toValue(options.get(i)));
+        List<P> newOptions = new ArrayList<P>();
+        for (int i = 0; i < source.getItemCount(); i++) {
+          if (source.isItemSelected(i)) {
+            newOptions.add(adaptor.toValue(options.get(i)));
+          }
         }
+        p.set(newOptions);
+        active[0] = false;
       }
-      p.set(newOptions);
-      active[0] = false;
-    }
-  }));
+    }));
     b.add(p.addPropertyChangedHandler(e -> {
       if (!active[0]) {
         active[0] = true;
@@ -89,9 +89,17 @@ public class ListPropertyBinder<P> extends PropertyBinder<List<P>> {
         panel.add(i++, factory.create(value));
       }
     }
-    b.add(p.addListChangedHandler(e -> {
-      e.getDiff().apply(panel, a -> factory.create(a));
-    }));
+    b.add(p.addListChangedHandler(e -> e.getDiff().apply(panel, a -> factory.create(a))));
+  }
+
+  public void to(final ListLike<P> panel) {
+    if (p.get() != null) {
+      int i = 0;
+      for (P value : p.get()) {
+        panel.add(i++, value);
+      }
+    }
+    b.add(p.addListChangedHandler(e -> e.getDiff().apply(panel, a -> a)));
   }
 
   /**

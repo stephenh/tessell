@@ -9,8 +9,6 @@ import static org.tessell.model.properties.NewProperty.listProperty;
 import java.util.ArrayList;
 import java.util.List;
 
-import joist.util.Copy;
-
 import org.junit.Test;
 import org.tessell.gwt.user.client.ui.IsWidget;
 import org.tessell.gwt.user.client.ui.StubFlowPanel;
@@ -22,6 +20,9 @@ import org.tessell.model.dsl.ListPropertyBinder.ListViewFactory;
 import org.tessell.model.properties.ListProperty;
 import org.tessell.presenter.BasicPresenter;
 import org.tessell.presenter.Presenter;
+import org.tessell.widgets.StubTextList;
+
+import joist.util.Copy;
 
 public class ListPropertyBinderTest {
 
@@ -182,6 +183,17 @@ public class ListPropertyBinderTest {
 
     box.setItemSelected(2, true);
     assertThat(names.get(), contains("one", "two", "three"));
+  }
+
+  @Test
+  public void toTextList() {
+    names.add("one");
+    StubTextList list = new StubTextList();
+    binder.bind(names).to(list);
+    assertThat(list.getList(), contains("one"));
+
+    names.add("two");
+    assertThat(list.getList(), contains("one", "two"));
   }
 
   private static void assertLabel(IsWidget label, String text) {

@@ -1,8 +1,9 @@
 package org.tessell.widgets;
 
 import org.tessell.gwt.user.client.ui.IsWidget;
+import org.tessell.util.ListDiff.ListLike;
 
-public interface IsTextList extends IsWidget {
+public interface IsTextList extends IsWidget, ListLike<String> {
 
   boolean hasErrors();
 

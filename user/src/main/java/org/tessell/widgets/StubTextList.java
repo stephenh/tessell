@@ -16,6 +16,16 @@ public class StubTextList extends StubWidget implements IsTextList {
   }
 
   @Override
+  public void add(int i, final String text) {
+    list.add(i, text);
+  }
+
+  @Override
+  public String remove(int i) {
+    return list.remove(i);
+  }
+
+  @Override
   public void remove(final String text) {
     list.remove(text);
   }
