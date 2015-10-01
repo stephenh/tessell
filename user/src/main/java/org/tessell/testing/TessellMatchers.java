@@ -13,6 +13,7 @@ import java.util.List;
 import org.hamcrest.*;
 import org.tessell.bus.StubEventBus;
 import org.tessell.gwt.user.client.ui.HasCss;
+import org.tessell.place.events.PlaceLoadedEvent;
 import org.tessell.place.events.PlaceRequestEvent;
 import org.tessell.widgets.IsTextList;
 import org.tessell.widgets.StubTextList;
@@ -118,6 +119,36 @@ public class TessellMatchers {
           requests.add(e.getRequest().toString());
         }
         return requests;
+      }
+    };
+  }
+
+  /** A matcher to assert place loaded events on the event bus. */
+  public static Matcher<StubEventBus> hasPlaceLoadedEvents(final String... places) {
+    return new TypeSafeMatcher<StubEventBus>() {
+      @Override
+      protected boolean matchesSafely(final StubEventBus bus) {
+        return Arrays.asList(places).equals(getPlaceLoadedEvents(bus));
+      }
+
+      @Override
+      public void describeTo(final Description description) {
+        description.appendText("has places ");
+        description.appendValueList("[", ", ", "]", Arrays.asList(places));
+      }
+
+      @Override
+      protected void describeMismatchSafely(final StubEventBus bus, final Description mismatchDescription) {
+        mismatchDescription.appendText("places are ");
+        mismatchDescription.appendValueList("[", ", ", "]", getPlaceLoadedEvents(bus));
+      }
+
+      private List<String> getPlaceLoadedEvents(final StubEventBus bus) {
+        final List<String> events = new ArrayList<String>();
+        for (final PlaceLoadedEvent e : bus.getEvents(PlaceLoadedEvent.class)) {
+          events.add(e.getPlace().getName());
+        }
+        return events;
       }
     };
   }
