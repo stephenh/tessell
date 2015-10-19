@@ -68,6 +68,10 @@ public abstract class AbstractRule<T> implements Rule<T> {
     this.property = property;
   }
 
+  public void setMessage(String message) {
+    this.message = message;
+  }
+
   @Override
   public HandlerRegistration addRuleTriggeredHandler(final RuleTriggeredHandler handler) {
     return handlers.addHandler(RuleTriggeredEvent.getType(), handler);
