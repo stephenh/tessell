@@ -1490,6 +1490,16 @@ public class BinderTest {
   }
 
   @Test
+  public void whenIsOrElseOnAttributes() {
+    final BooleanProperty b = booleanProperty("b", false);
+    final StubElement e = new StubElement();
+    binder.when(b).is(true).setOrElse("c", "d").onAttribute(e, "foo");
+    assertThat(e.getAttribute("foo"), is("d"));
+    b.set(true);
+    assertThat(e.getAttribute("foo"), is("c"));
+  }
+
+  @Test
   public void whenIsAnyOf() {
     final IntegerProperty i = integerProperty("i");
     final StubWidget w = new StubWidget();

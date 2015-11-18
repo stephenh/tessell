@@ -1,5 +1,6 @@
 package org.tessell.model.dsl;
 
+import org.tessell.gwt.dom.client.IsElement;
 import org.tessell.gwt.user.client.ui.HasCss;
 import org.tessell.model.properties.Property;
 
@@ -26,6 +27,12 @@ public class WhenIsSetOrElseStyleBinder<P> {
     update(css); // set initial value
   }
 
+  /** Sets/removes our {@code attribute} when our property is {@code true}. */
+  public void onAttribute(final IsElement element, String attribute) {
+    b.add(property.addPropertyChangedHandler(e -> update(element, attribute)));
+    update(element, attribute); // set initial value
+  }
+
   private void update(HasCss... csses) {
     if (condition.evaluate(property)) {
       for (HasCss css : csses) {
@@ -38,5 +45,9 @@ public class WhenIsSetOrElseStyleBinder<P> {
         css.addStyleName(ifFalse);
       }
     }
+  }
+
+  private void update(IsElement element, String attribute) {
+    element.setAttribute(attribute, condition.evaluate(property) ? ifTrue : ifFalse);
   }
 }
