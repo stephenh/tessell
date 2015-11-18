@@ -147,4 +147,18 @@ public class TakesValues {
     };
   }
 
+  public static TakesValue<String> attributeOf(final IsElement target, final String attribute) {
+    return new TakesValue<String>() {
+      @Override
+      public String getValue() {
+        return target.getAttribute(attribute);
+      }
+
+      @Override
+      public void setValue(final String value) {
+        target.setAttribute(attribute, value);
+      }
+    };
+  }
+
 }
