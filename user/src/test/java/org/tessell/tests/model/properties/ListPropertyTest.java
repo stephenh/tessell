@@ -1247,6 +1247,12 @@ public class ListPropertyTest {
   }
 
   @Test
+  public void appendNull() {
+    p.set(list("1", "2"));
+    assertThat(p.appendNull().get(), contains("1", "2", null));
+  }
+
+  @Test
   public void asList() {
     p.set(list("A", "B", "b"));
     ListProperty<String> is = p.asList(l -> l.stream().map(s -> s.toUpperCase()).distinct().collect(toList()));

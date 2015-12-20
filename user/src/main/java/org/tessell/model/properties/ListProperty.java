@@ -545,6 +545,17 @@ public class ListProperty<E> extends AbstractProperty<List<E>, ListProperty<E>> 
     });
   }
 
+  public ListProperty<E> appendNull() {
+    return listProperty(new DerivedValue<List<E>>(getValueName() + ".appendNull") {
+      public List<E> get() {
+        final List<E> listWithNull = new ArrayList<E>();
+        listWithNull.addAll(ListProperty.this.get());
+        listWithNull.add(null);
+        return listWithNull;
+      }
+    });
+  }
+
   /**
    * @return a property that, if we contain properties or models, will be true if all
    * contains properties/models (as well as ourself) are valid.
