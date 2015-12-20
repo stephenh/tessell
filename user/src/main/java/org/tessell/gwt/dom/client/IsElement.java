@@ -16,6 +16,10 @@ public interface IsElement extends HasCss, HasText {
 
   int getOffsetHeight();
 
+  int getOffsetTop();
+
+  int getOffsetLeft();
+
   int getClientHeight();
 
   int getClientWidth();

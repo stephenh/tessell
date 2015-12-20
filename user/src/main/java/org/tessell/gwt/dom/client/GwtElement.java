@@ -93,6 +93,16 @@ public class GwtElement implements IsElement {
   }
 
   @Override
+  public int getOffsetTop() {
+    return element.getOffsetTop();
+  }
+
+  @Override
+  public int getOffsetLeft() {
+    return element.getOffsetLeft();
+  }
+
+  @Override
   public String getId() {
     return element.getId();
   }

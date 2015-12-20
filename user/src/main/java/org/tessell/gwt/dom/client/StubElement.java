@@ -24,6 +24,8 @@ public class StubElement implements IsElement {
   public StubElement parent;
   public int offsetHeight;
   public int offsetWidth;
+  public int offsetTop;
+  public int offsetLeft;
   public int clientHeight;
   public int clientWidth;
   public int scrollHeight;
@@ -117,6 +119,16 @@ public class StubElement implements IsElement {
   @Override
   public void setAttribute(final String name, final String value) {
     attributes.put(name, value);
+  }
+
+  @Override
+  public int getOffsetTop() {
+    return offsetTop;
+  }
+
+  @Override
+  public int getOffsetLeft() {
+    return offsetLeft;
   }
 
   @Override
