@@ -211,14 +211,24 @@ public class ResourcesGenerator {
   }
 
   private String getRelativePath(File file) {
-    String path = file.getAbsolutePath();
+    String path = absolutePath(file);
+    String inputDirectoryPath = absolutePath(inputDirectory);
     String relativePath;
-    if (path.contains(inputDirectory.getAbsolutePath())) {
-      relativePath = path.replace(inputDirectory.getAbsolutePath() + "/" + packageName.replace(".", "/") + "/", "");
+    if (path.contains(inputDirectoryPath)) {
+      relativePath = path.replace(inputDirectoryPath + "/" + packageName.replace(".", "/") + "/", "");
     } else {
-      relativePath = path.replace(outputDirectory.getAbsolutePath() + "/" + packageName.replace(".", "/") + "/", "");
+      String outputDirectoryPath = absolutePath(outputDirectory);
+      relativePath = path.replace(outputDirectoryPath + "/" + packageName.replace(".", "/") + "/", "");
     }
-    return relativePath.replace("\\", "/");
+    return relativePath;
+  }
+
+  private String absolutePath(File file) {
+    return slashSanitise(file.getAbsolutePath());
+  }
+
+  private String slashSanitise(String value) {
+    return value.replaceAll("\\\\", "/");
   }
 
   private Collection<File> getFilesInInputDirectory() {
