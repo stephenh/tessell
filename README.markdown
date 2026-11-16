@@ -5,7 +5,7 @@
 
 See [tessell.org](http://www.tessell.org).
 
-Eclipse Setup
+Eclipse Setup!
 -------------
 
 After checking Tessell out of git, there are two main projects, `tessell-user` and `tessell-dev`.
